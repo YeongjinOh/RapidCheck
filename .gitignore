@@ -1,2 +1,8 @@
 images/
 *.avi
+
+# js environments
+.env
+venvOpencv/
+requirements.txt
+
