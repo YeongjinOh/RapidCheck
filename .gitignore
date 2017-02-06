@@ -6,3 +6,4 @@ images/
 venvOpencv/
 requirements.txt
 
+*.pyc
