@@ -8,7 +8,7 @@ def handle_video():
     height = int(cap.get(4))
     fcc = cv2.VideoWriter_fourcc('D','I','V','X')
 
-    out = cv2.VideoWriter('project.avi',fcc,fps,(width,height))
+    out = cv2.VideoWriter('123.avi',fcc,fps,(width,height))
 
     while (cap.isOpened()):
         ret, frame = cap.read()
