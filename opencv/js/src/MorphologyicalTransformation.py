@@ -62,10 +62,10 @@ def closing(img, show=True, iterations=1):
 	return closing_list
 
 if __name__ == '__main__':
-	# erosion('../images/alpha.png')
+	#erosion('../images/alpha.png')
 	# img = cv2.imread('../images/alpha.png')
 	# dilation(img)
 	img = cv2.imread('../images/A_noise.png', 0)
-	# opening(img, iterations=4)
+	opening(img, iterations=4)
 	img2 = cv2.imread('../images/B_noise.png', 0)
-	closing(img2, iterations=4)
+	# closing(img2, iterations=4)
