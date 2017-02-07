@@ -12,20 +12,21 @@ def backSub():
     while True:
         ret, frame = cap.read()
         fgmask = mog.apply(frame)
-        erosion = cv2.erode(fgmask, kernel, iterations=1)
-        dilation = cv2.dilate(erosion, kernel, iterations=1)
+        # erosion = cv2.erode(fgmask, kernel, iterations=1)
+        # dilation = cv2.dilate(erosion, kernel, iterations=1)
+        opening = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel, iterations=2)
+        closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel, iterations=3)
 
         # ret, thresh = cv2.threshold(dilation, 127, 255, 0)
-        _, contours, hierarchy = cv2.findContours(dilation, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        _, contours, hierarchy = cv2.findContours(closing, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(frame, contours, -1, (0,255,0),1)
 #        cv2.drawContours(fgmask, contours, -1, (0,255,0),1)
 #        cv2.drawContours(erosion, contours, -1, (0,255,0),1)
         cv2.imshow('origin',frame)
-        cv2.imshow('fgmask',fgmask)
-        cv2.imshow('erosion', dilation)
+        cv2.imshow('mog',fgmask)
+        cv2.imshow('mog+opening+closing', closing)
 
-        k = cv2.waitKey(5)
-        if k == 27:
+        if cv2.waitKey(3) & 0xFF == 27:
             break;
     cap.release()
     cv2.destroyAllWindows()
