@@ -1,4 +1,9 @@
-images/
+# image ignore
+*.jpg
+*.jpeg
+*.png
+*.gif
+
 *.avi
 
 # js environments

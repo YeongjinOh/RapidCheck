@@ -8,6 +8,7 @@ def show_pictures(plist, block=True, titles=None):
 		else:
 			window_name = titles[i]
 		cv2.imshow(window_name, item)
+		# cv2.resizeWindow(window_name, 500, 500)
 		cv2.moveWindow(window_name, 200*i, 0)
 	if block:
 		cv2.waitKey(0)
