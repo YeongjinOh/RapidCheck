@@ -1,5 +1,10 @@
 import cv2
 import numpy as np
+import argparse
+
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--videos", required=False, help="path to images directory")
+args = vars(ap.parse_args())
 
 def isContained(pt, rect, padding=10):
     x1, y1 = pt
@@ -37,7 +42,10 @@ def mergeAll(rects):
         pass
 
 def test():
-    cap = cv2.VideoCapture('../videos/cctv2.mp4')
+    videoNum = args['videos']
+    if videoNum is None:
+        videoNum = 5
+    cap = cv2.VideoCapture('../videos/cctv%s.mp4'%videoNum)
     mog = cv2.createBackgroundSubtractorMOG2(100,0)
     kernel = np.ones((3,3), np.uint8)
     trackWindow = None
@@ -59,7 +67,7 @@ def test():
             cv2.rectangle(frame, (x,y), (x+w,y+h), (0,255,0),2)
         #cv2.drawContours(frame, contours, -1, (0,255,0),1)
         cv2.imshow('origin',frame)
-        cv2.imshow('mog',fgmask)
+        #cv2.imshow('mog',fgmask)
         k = cv2.waitKey(3) & 0xFF
         if k == 27:
             break;
