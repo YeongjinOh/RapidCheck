@@ -5,7 +5,7 @@ import threading
 
 def thresh_video(modes, dev=0):
 	cap = cv2.VideoCapture(dev)
-	mog = cv2.createBackgroundSubtractorMOG2(500, 0, False)
+	mog = cv2.createBackgroundSubtractorMOG2(100, 0, False)
 	kernel = np.ones((2,2), np.uint8)
 
 	for mode in modes:
@@ -51,7 +51,7 @@ def thresh_video(modes, dev=0):
 			elif mode == 'mog+opening+closing':
 				fgmask = mog.apply(gray_frame)
 				opening = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel, iterations=2)
-				closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel, iterations=3)
+				closing = cv2.morphologyEx(opening, cv2.MORPH_CLOSE, kernel, iterations=2)
 				cv2.imshow(mode, closing)
 			else:
 				print("unknown mode")
@@ -64,6 +64,6 @@ def thresh_video(modes, dev=0):
 
 if __name__ == '__main__':
 	# th = threading.Thread(target=thresh_video, args=('original', 'cctv2.mp4', 'window_original',))
-	thresh_video(modes=['mog', 'mog+opening', 'mog+opening+closing'] ,dev='../videos/cctv5.mp4')
+	thresh_video(modes=['mog', 'mog+opening', 'mog+opening+closing'] ,dev='../videos/cctv2.mp4')
 	# th.start()
 	# th.join()
