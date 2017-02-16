@@ -8,7 +8,7 @@ import imutils
 import cv2
 
 def detect_pedestrian():
-    cap = cv2.VideoCapture('../videos/cctv4.mp4')
+    cap = cv2.VideoCapture('../videos/cctv5.mp4')
 
      # initialize the HOG descriptor/person detector
     hog = cv2.HOGDescriptor()
@@ -27,8 +27,10 @@ def detect_pedestrian():
         # boxes that are still people
         rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
         pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)
+        for (x1, y1, x2, y2) in rects:
+            cv2.rectangle(image, (x1,y1), (x2,y2), (0,0,255), 2)
         for (x1, y1, x2, y2) in pick:
-            cv2.rectangle(image, (x1,y1), (x2,y2), (0,255,0), 2)
+            cv2.rectangle(image, (x1,y1), (x2,y2), (0,255,0), 1)
         cv2.imshow('pedestrian', image)
         k = cv2.waitKey(3) & 0xFF
         if k == 27:
