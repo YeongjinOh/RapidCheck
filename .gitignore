@@ -14,3 +14,6 @@ requirements.txt
 
 *.pyc
 *.mp4
+
+# for jupyter notebook
+.ipynb_checkpoints/
