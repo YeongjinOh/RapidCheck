@@ -37,6 +37,7 @@ if __name__ == "__main__":
             type=int)
     parser.add_argument('-v', '--visualize', help="Visualize the sliding window",
             action="store_true")
+    parser.add_argument('-m', '--model', help="Select the Model Learned", default="LIN_SVM")
     args = vars(parser.parse_args())
 
     # Read the image
@@ -45,7 +46,9 @@ if __name__ == "__main__":
     step_size = (10, 10)
     downscale = args['downscale']
     visualize_det = args['visualize']
-
+    selected_model = args['model'] + ".model"
+    model_path = model_path + selected_model
+    
     # Load the classifier
     clf = joblib.load(model_path)
 
@@ -66,6 +69,7 @@ if __name__ == "__main__":
                 continue
             # Calculate the HOG features
             fd = hog(im_window, orientations, pixels_per_cell, cells_per_block, visualize, normalize)
+            fd = fd.reshape(1, -1)
             pred = clf.predict(fd)
             if pred == 1:
                 print("Detection:: Location -> ({}, {})".format(x, y))

@@ -339,3 +339,4 @@ __pycache__/
 *.tar.gz
 *.pgm
 *.feat
+*.model

@@ -11,8 +11,8 @@ from config import *
 if __name__ == "__main__":
     # Parse the command line arguments
     parser = ap.ArgumentParser()
-    parser.add_argument('-p', "--posfeat", help="Path to the positive features directory", default='../data/features/pos')
-    parser.add_argument('-n', "--negfeat", help="Path to the negative features directory", default='../data/features/neg')
+    parser.add_argument('-p', "--posfeat", help="Path to the positive features directory", default='./features/pos')
+    parser.add_argument('-n', "--negfeat", help="Path to the negative features directory", default='./features/neg')
     parser.add_argument('-c', "--classifier", help="Classifier to be used", default="LIN_SVM")
     args = vars(parser.parse_args())
 
@@ -43,5 +43,7 @@ if __name__ == "__main__":
         # If feature directories don't exist, create them
         if not os.path.isdir(os.path.split(model_path)[0]):
             os.makedirs(os.path.split(model_path)[0])
+            print(os.path.split(model_path)[0], " are created")
+        model_path = model_path + clf_type + ".model"
         joblib.dump(clf, model_path)
         print("Classifier saved to {}".format(model_path))
