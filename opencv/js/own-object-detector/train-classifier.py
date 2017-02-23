@@ -1,6 +1,7 @@
 # Import the required modules
 from skimage.feature import local_binary_pattern
 from sklearn.svm import LinearSVC
+from sklearn import svm
 from sklearn.linear_model import LogisticRegression
 from sklearn.externals import joblib
 import argparse as ap
@@ -36,14 +37,36 @@ if __name__ == "__main__":
         fds.append(fd)
         labels.append(0)
 
-    if clf_type is "LIN_SVM":
-        clf = LinearSVC()
+    if clf_type == "LIN_SVM":
+        # clf = LinearSVC()
+        clf = svm.SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+                    decision_function_shape=None, degree=3, gamma='auto', kernel='linear',
+                    max_iter=-1, probability=False, random_state=None, shrinking=True,
+                    tol=0.001, verbose=True)
         print("Training a Linear SVM Classifier")
         clf.fit(fds, labels)
         # If feature directories don't exist, create them
-        if not os.path.isdir(os.path.split(model_path)[0]):
-            os.makedirs(os.path.split(model_path)[0])
-            print(os.path.split(model_path)[0], " are created")
-        model_path = model_path + clf_type + ".model"
-        joblib.dump(clf, model_path)
-        print("Classifier saved to {}".format(model_path))
+        
+    elif clf_type == "POLY_SVM":
+        print("Training a Polynomial SVM Classifier")
+        clf = svm.SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+                    decision_function_shape=None, degree=3, gamma='auto', kernel='poly',
+                    max_iter=-1, probability=False, random_state=None, shrinking=True,
+                    tol=0.001, verbose=True)
+        clf.fit(fds, labels)
+    
+    elif clf_type == "RBF_SVM":
+        print("Training a RBF SVM Classifier")
+        clf = svm.SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+                decision_function_shape=None, degree=3, gamma='auto', kernel='rbf',
+                max_iter=-1, probability=False, random_state=None, shrinking=True,
+                tol=0.001, verbose=True)
+        clf.fit(fds, labels)
+    else:
+        print("clf type is not defined..")
+    if not os.path.isdir(os.path.split(model_path)[0]):
+        os.makedirs(os.path.split(model_path)[0])
+        print(os.path.split(model_path)[0], " are created")
+    model_path = model_path + clf_type + ".model"
+    joblib.dump(clf, model_path)
+    print("Classifier saved to {}".format(model_path))

@@ -32,21 +32,22 @@ def sliding_window(image, window_size, step_size):
 if __name__ == "__main__":
     # Parse the command line arguments
     parser = ap.ArgumentParser()
-    parser.add_argument('-i', "--image", help="Path to the test image", required=True)
+    parser.add_argument('-i', "--imagepath", help="Path to the test image", default='./dataset/CarData/TestImages/')
+    parser.add_argument('-n', '--number', help='Test Image Number', default=0)
     parser.add_argument('-d','--downscale', help="Downscale ratio", default=1.25,
             type=int)
     parser.add_argument('-v', '--visualize', help="Visualize the sliding window",
             action="store_true")
-    parser.add_argument('-m', '--model', help="Select the Model Learned", default="LIN_SVM")
+    parser.add_argument('-c', '--classifier', help="Select the Model Learned", default="LIN_SVM")
     args = vars(parser.parse_args())
 
     # Read the image
-    im = imread(args["image"], as_grey=True)
+    im = imread(args["imagepath"]+'test-'+args['number']+'.pgm', as_grey=True)
     min_wdw_sz = (100, 40)
     step_size = (10, 10)
     downscale = args['downscale']
     visualize_det = args['visualize']
-    selected_model = args['model'] + ".model"
+    selected_model = args['classifier'] + ".model"
     model_path = model_path + selected_model
     
     # Load the classifier
