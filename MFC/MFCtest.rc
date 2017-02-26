@@ -1,11 +1,11 @@
-//Microsoft Visual C++에서 생성한 리소스 스크립트입니다.
+// Microsoft Visual C++ generated resource script.
 //
 #include "resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
-// TEXTINCLUDE 2 리소스에서 생성되었습니다.
+// Generated from the TEXTINCLUDE 2 resource.
 //
 #ifndef APSTUDIO_INVOKED
 #include "targetver.h"
@@ -16,19 +16,25 @@
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
-#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
 
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+#ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
 // TEXTINCLUDE
 //
 
-1 TEXTINCLUDE
+1 TEXTINCLUDE 
 BEGIN
     "resource.h\0"
 END
 
-2 TEXTINCLUDE
+2 TEXTINCLUDE 
 BEGIN
     "#ifndef APSTUDIO_INVOKED\r\n"
     "#include ""targetver.h""\r\n"
@@ -38,7 +44,7 @@ BEGIN
     "\0"
 END
 
-3 TEXTINCLUDE
+3 TEXTINCLUDE 
 BEGIN
     "#define _AFX_NO_OLE_RESOURCES\r\n"
     "#define _AFX_NO_TRACKER_RESOURCES\r\n"
@@ -58,28 +64,24 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// 아이콘
+// Icon
 //
 
-// 응용 프로그램 아이콘이 모든 시스템에서 일관된 상태를 유지하도록 하기 위해
-// 가장 낮은 ID 값을 갖는 아이콘이 맨 처음 배치됩니다.
-
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
-LANGUAGE 18, 1
-IDR_MAINFRAME           ICON         "res\\MFCtest.ico"
-IDR_MFCtestTYPE         ICON         "res\\MFCtestDoc.ico"
-#endif
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\MFCtest.ico"
+IDR_MFCtestTYPE         ICON                    "res\\MFCtestDoc.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// 비트맵
+// Bitmap
 //
 
 IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// 도구 모음
+// Toolbar
 //
 
 IDR_MAINFRAME TOOLBAR 16, 15
@@ -97,36 +99,33 @@ BEGIN
 END
 
 
-#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
-LANGUAGE 18, 1
-
 /////////////////////////////////////////////////////////////////////////////
 //
-// 메뉴
+// Menu
 //
 
 IDR_MAINFRAME MENU
 BEGIN
     POPUP "파일(&F)"
     BEGIN
-        MENUITEM "새로 만들기(&N)\tCtrl+N",                ID_FILE_NEW
-        MENUITEM "열기(&O)...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "새로 만들기(&N)\tCtrl+N",          ID_FILE_NEW
+        MENUITEM "열기(&O)...\tCtrl+O",           ID_FILE_OPEN
         MENUITEM "닫기(&C)",                      ID_FILE_CLOSE
         MENUITEM SEPARATOR
-        MENUITEM "인쇄 설정(&R)...",             ID_FILE_PRINT_SETUP
+        MENUITEM "인쇄 설정(&R)...",                ID_FILE_PRINT_SETUP
         MENUITEM SEPARATOR
-        MENUITEM "최근에 사용한 파일",                 ID_FILE_MRU_FILE1,GRAYED
+        MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1, GRAYED
         MENUITEM SEPARATOR
-        MENUITEM "끝내기(&X)",                       ID_APP_EXIT
+        MENUITEM "끝내기(&X)",                     ID_APP_EXIT
     END
     POPUP "보기(&V)"
     BEGIN
-        MENUITEM "도구 모음(&T)",                    ID_VIEW_TOOLBAR
-        MENUITEM "상태 표시줄(&S)",                 ID_VIEW_STATUS_BAR
+        MENUITEM "도구 모음(&T)",                   ID_VIEW_TOOLBAR
+        MENUITEM "상태 표시줄(&S)",                  ID_VIEW_STATUS_BAR
     END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "MFCtest 정보(&A)...",          ID_APP_ABOUT
+        MENUITEM "MFCtest 정보(&A)...",           ID_APP_ABOUT
     END
 END
 
@@ -134,84 +133,80 @@ IDR_MFCtestTYPE MENU
 BEGIN
     POPUP "파일(&F)"
     BEGIN
-        MENUITEM "새로 만들기(&N)\tCtrl+N",                ID_FILE_NEW
-        MENUITEM "열기(&O)...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "새로 만들기(&N)\tCtrl+N",          ID_FILE_NEW
+        MENUITEM "열기(&O)...\tCtrl+O",           ID_FILE_OPEN
         MENUITEM "닫기(&C)",                      ID_FILE_CLOSE
-        MENUITEM "저장(&S)\tCtrl+S",               ID_FILE_SAVE
-        MENUITEM "다른 이름으로 저장(&A)...",                 ID_FILE_SAVE_AS
+        MENUITEM "저장(&S)\tCtrl+S",              ID_FILE_SAVE
+        MENUITEM "다른 이름으로 저장(&A)...",           ID_FILE_SAVE_AS
         MENUITEM SEPARATOR
         MENUITEM "인쇄(&P)...\tCtrl+P",           ID_FILE_PRINT
-        MENUITEM "인쇄 미리 보기(&V)",              ID_FILE_PRINT_PREVIEW
-        MENUITEM "인쇄 설정(&R)...",             ID_FILE_PRINT_SETUP
+        MENUITEM "인쇄 미리 보기(&V)",                ID_FILE_PRINT_PREVIEW
+        MENUITEM "인쇄 설정(&R)...",                ID_FILE_PRINT_SETUP
         MENUITEM SEPARATOR
-        MENUITEM "최근에 사용한 파일",                 ID_FILE_MRU_FILE1,GRAYED
+        MENUITEM "최근에 사용한 파일",                  ID_FILE_MRU_FILE1, GRAYED
         MENUITEM SEPARATOR
-        MENUITEM "끝내기(&X)",                       ID_APP_EXIT
+        MENUITEM "끝내기(&X)",                     ID_APP_EXIT
     END
     POPUP "편집(&E)"
     BEGIN
-        MENUITEM "실행 취소(&U)\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM "실행 취소(&U)\tCtrl+Z",           ID_EDIT_UNDO
         MENUITEM SEPARATOR
-        MENUITEM "잘라내기(&T)\tCtrl+X",                ID_EDIT_CUT
-        MENUITEM "복사(&C)\tCtrl+C",               ID_EDIT_COPY
-        MENUITEM "붙여넣기(&P)\tCtrl+V",              ID_EDIT_PASTE
+        MENUITEM "잘라내기(&T)\tCtrl+X",            ID_EDIT_CUT
+        MENUITEM "복사(&C)\tCtrl+C",              ID_EDIT_COPY
+        MENUITEM "붙여넣기(&P)\tCtrl+V",            ID_EDIT_PASTE
     END
     POPUP "보기(&V)"
     BEGIN
-        MENUITEM "도구 모음(&T)",                    ID_VIEW_TOOLBAR
-        MENUITEM "상태 표시줄(&S)",                 ID_VIEW_STATUS_BAR
+        MENUITEM "도구 모음(&T)",                   ID_VIEW_TOOLBAR
+        MENUITEM "상태 표시줄(&S)",                  ID_VIEW_STATUS_BAR
     END
     POPUP "창(&W)"
     BEGIN
-        MENUITEM "새 창(&N)",                 ID_WINDOW_NEW
-        MENUITEM "계단식 배열(&C)",                    ID_WINDOW_CASCADE
-        MENUITEM "바둑판식 배열(&T)",                       ID_WINDOW_TILE_HORZ
-        MENUITEM "아이콘 정렬(&A)",              ID_WINDOW_ARRANGE
+        MENUITEM "새 창(&N)",                     ID_WINDOW_NEW
+        MENUITEM "계단식 배열(&C)",                  ID_WINDOW_CASCADE
+        MENUITEM "바둑판식 배열(&T)",                 ID_WINDOW_TILE_HORZ
+        MENUITEM "아이콘 정렬(&A)",                  ID_WINDOW_ARRANGE
     END
     POPUP "도움말(&H)"
     BEGIN
-        MENUITEM "MFCtest 정보(&A)...",          ID_APP_ABOUT
+        MENUITEM "MFCtest 정보(&A)...",           ID_APP_ABOUT
     END
 END
 
 
-
-
 /////////////////////////////////////////////////////////////////////////////
 //
-// 액셀러레이터 키
+// Accelerator
 //
 
 IDR_MAINFRAME ACCELERATORS
 BEGIN
-    "N",            ID_FILE_NEW,            VIRTKEY,CONTROL
-    "O",            ID_FILE_OPEN,           VIRTKEY,CONTROL
-    "S",            ID_FILE_SAVE,           VIRTKEY,CONTROL
-    "P",            ID_FILE_PRINT,          VIRTKEY,CONTROL
-	"Z",            ID_EDIT_UNDO,           VIRTKEY,CONTROL
-	"X",            ID_EDIT_CUT,            VIRTKEY,CONTROL
-	"C",            ID_EDIT_COPY,           VIRTKEY,CONTROL
-	"V",            ID_EDIT_PASTE,          VIRTKEY,CONTROL
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY,ALT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY,SHIFT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY,CONTROL
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY,SHIFT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY
-    VK_F6,          ID_PREV_PANE,           VIRTKEY,SHIFT
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
 END
-
-
 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// 대화 상자
+// Dialog
 //
 
 IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "MFCtest 정보"
-FONT 9, "MS Shell Dlg"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
     LTEXT           "MFCtest, 버전 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
@@ -219,25 +214,44 @@ BEGIN
     DEFPUSHBUTTON   "확인",IDOK,113,41,50,14,WS_GROUP
 END
 
+IDD_FILE_NEW DIALOGEX 0, 0, 310, 176
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "새로 만들기"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,188,133,50,14
+    PUSHBUTTON      "취소",IDCANCEL,244,133,50,14
+    GROUPBOX        "이미지 크기",IDC_STATIC,182,15,120,54
+    EDITTEXT        IDC_WIDTH,221,29,40,14,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_HEIGHT,221,47,40,14,ES_CENTER | ES_AUTOHSCROLL
+    GROUPBOX        "이미지 속성",IDC_STATIC,181,73,120,54
+    LTEXT           "가로크기",IDC_STATIC,188,32,26,8
+    LTEXT           "세로크기",IDC_STATIC,189,50,26,8
+    LTEXT           "픽셀",IDC_STATIC,266,32,13,8
+    LTEXT           "픽셀",IDC_STATIC,265,50,13,8
+    LTEXT           "색상타입",IDC_STATIC,188,98,26,8
+    COMBOBOX        IDC_IMG_TYPE,222,96,48,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "",IDC_Pic,"Static",SS_BLACKFRAME,20,20,150,130
+END
 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// 버전
+// Version
 //
 
-VS_VERSION_INFO     VERSIONINFO
-  FILEVERSION       1,0,0,1
-  PRODUCTVERSION    1,0,0,1
- FILEFLAGSMASK VS_FFI_FILEFLAGSMASK
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
- FILEFLAGS VS_FF_DEBUG
+ FILEFLAGS 0x1L
 #else
  FILEFLAGS 0x0L
 #endif
- FILEOS VOS_NT_WINDOWS32
- FILETYPE VFT_APP
- FILESUBTYPE VFT2_UNKNOWN
+ FILEOS 0x40004L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
@@ -245,19 +259,20 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "TODO: <회사 이름>"
             VALUE "FileDescription", "MFCtest"
-            VALUE "FileVersion",     "1.0.0.1"
-            VALUE "InternalName",    "MFCtest.exe"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "MFCtest.exe"
             VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
-            VALUE "OriginalFilename","MFCtest.exe"
+            VALUE "OriginalFilename", "MFCtest.exe"
             VALUE "ProductName", "TODO: <제품 이름>"
-            VALUE "ProductVersion",  "1.0.0.1"
+            VALUE "ProductVersion", "1.0.0.1"
         END
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x0412, 1200
+        VALUE "Translation", 0x412, 1200
     END
 END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -274,29 +289,55 @@ BEGIN
         TOPMARGIN, 7
         BOTTOMMARGIN, 55
     END
+
+    IDD_FILE_NEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 303
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 169
+    END
 END
 #endif    // APSTUDIO_INVOKED
 
+
 /////////////////////////////////////////////////////////////////////////////
 //
-// 문자열 테이블
+// Dialog Info
+//
+
+IDD_FILE_NEW DLGINIT
+BEGIN
+    IDC_IMG_TYPE, 0x403, 13, 0
+0xd7b1, 0xb9b7, 0xccc0, 0xbabd, 0xc9c4, 0xcfc0, "\000" 
+    IDC_IMG_TYPE, 0x403, 9, 0
+0xaec6, 0xe7b7, 0xc3c4, 0xafb7, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
 //
 
 STRINGTABLE
 BEGIN
-    IDP_OLE_INIT_FAILED       "OLE를 초기화할 수 없습니다.  OLE 라이브러리 버전이 올바른지 확인하십시오."
+    IDP_OLE_INIT_FAILED     "OLE를 초기화할 수 없습니다.  OLE 라이브러리 버전이 올바른지 확인하십시오."
 END
+
 STRINGTABLE
 BEGIN
-// MAC을 대상으로 하지 않는 응용 프로그램에서는 두 개의 추가 부분 문자열을 제거합니다.
     IDR_MAINFRAME           "MFCtest"
     IDR_MFCtestTYPE         "\nMFCtest\nMFCtest\n\n\nMFCtest.Document\nMFCtest.Document"
 END
+
 STRINGTABLE
 BEGIN
     AFX_IDS_APP_TITLE       "MFCtest"
     AFX_IDS_IDLEMESSAGE     "준비"
 END
+
 STRINGTABLE
 BEGIN
     ID_INDICATOR_EXT        "EXT"
@@ -306,6 +347,7 @@ BEGIN
     ID_INDICATOR_OVR        "OVR"
     ID_INDICATOR_REC        "REC"
 END
+
 STRINGTABLE
 BEGIN
     ID_FILE_NEW             "새 문서를 만듭니다.\n새로 만들기"
@@ -315,11 +357,19 @@ BEGIN
     ID_FILE_SAVE_AS         "활성 문서를 새 이름으로 저장합니다.\n다른 이름으로 저장"
     ID_FILE_PAGE_SETUP      "인쇄 옵션을 변경합니다.\n페이지 설정"
     ID_FILE_PRINT_SETUP     "프린터 및 인쇄 옵션을 변경합니다.\n인쇄 설정"
-    ID_FILE_PRINT_DIRECT    "현재 옵션을 사용하여 활성 문서를 인쇄합니다.\n빠른 인쇄"
     ID_FILE_PRINT           "활성 문서를 인쇄합니다.\n인쇄"
+    ID_FILE_PRINT_DIRECT    "현재 옵션을 사용하여 활성 문서를 인쇄합니다.\n빠른 인쇄"
     ID_FILE_PRINT_PREVIEW   "전체 페이지를 표시합니다.\n인쇄 미리 보기"
+END
+
+STRINGTABLE
+BEGIN
     ID_APP_ABOUT            "프로그램 정보, 버전 번호 및 저작권을 표시합니다.\n정보"
     ID_APP_EXIT             "문서를 저장할지를 묻고 응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE
+BEGIN
     ID_FILE_MRU_FILE1       "현재 문서를 엽니다."
     ID_FILE_MRU_FILE2       "현재 문서를 엽니다."
     ID_FILE_MRU_FILE3       "현재 문서를 엽니다."
@@ -336,14 +386,26 @@ BEGIN
     ID_FILE_MRU_FILE14      "현재 문서를 엽니다."
     ID_FILE_MRU_FILE15      "현재 문서를 엽니다."
     ID_FILE_MRU_FILE16      "현재 문서를 엽니다."
+END
+
+STRINGTABLE
+BEGIN
     ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
     ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE
+BEGIN
     ID_WINDOW_NEW           "활성 문서에 대해 다른 창을 엽니다.\n새 창"
     ID_WINDOW_ARRANGE       "창의 아래쪽에 아이콘을 정렬합니다.\n아이콘 정렬"
     ID_WINDOW_CASCADE       "창이 겹치도록 계단식으로 정렬합니다.\n계단식 창 배열"
     ID_WINDOW_TILE_HORZ     "창이 겹치지 않도록 바둑판식으로 정렬합니다.\n바둑판식 창 배열"
     ID_WINDOW_TILE_VERT     "창이 겹치지 않도록 바둑판식으로 정렬합니다.\n바둑판식 창 배열"
     ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE
+BEGIN
     ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
     ID_EDIT_CLEAR_ALL       "모두 지웁니다.\n모두 지우기"
     ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
@@ -355,6 +417,10 @@ BEGIN
     ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
     ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
     ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE
+BEGIN
     ID_VIEW_TOOLBAR         "도구 모음을 표시하거나 숨깁니다.\n도구 모음 설정/해제"
     ID_VIEW_STATUS_BAR      "상태 표시줄을 표시하거나 숨깁니다.\n상태 표시줄 설정/해제"
 END
@@ -368,29 +434,41 @@ BEGIN
     AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
     AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
     AFX_IDS_SCCLOSE         "문서를 저장할 것인지 확인하고 활성 창을 닫습니다."
+END
+
+STRINGTABLE
+BEGIN
     AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
     AFX_IDS_SCTASKLIST      "작업 목록을 활성화합니다."
     AFX_IDS_MDICHILD        "이 창을 활성화합니다."
+END
+
+STRINGTABLE
+BEGIN
     AFX_IDS_PREVIEW_CLOSE   "인쇄 미리 보기 모드를 닫습니다.\n미리 보기 취소"
 END
 
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
 
-#endif
+
 
 #ifndef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
-// TEXTINCLUDE 3 리소스에서 생성되었습니다.
+// Generated from the TEXTINCLUDE 3 resource.
 //
-
 #define _AFX_NO_OLE_RESOURCES
 #define _AFX_NO_TRACKER_RESOURCES
 #define _AFX_NO_PROPERTY_RESOURCES
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
 LANGUAGE 18, 1
-#include "res\\MFCtest.rc2"  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.
-#include "l.KOR\\afxres.rc"      // 표준 구성 요소입니다.
-#include "l.KOR\\afxprint.rc"  // 인쇄 미리 보기 리소스
+#include "res\MFCtest.rc2"  // Microsoft Visual C++ 이외의 다른 도구에서 편집한 리소스입니다.
+#include "l.KOR\afxres.rc"      // 표준 구성 요소
+#include "l.KOR\afxprint.rc"    // 인쇄 미리 보기 리소스
 #endif
-#endif    // APSTUDIO_INVOKED가 아님
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

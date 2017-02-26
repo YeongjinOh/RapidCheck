@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChildFrm.h" />
+    <ClInclude Include="FileNewDlg.h" />
     <ClInclude Include="MainFrm.h" />
     <ClInclude Include="MFCtest.h" />
     <ClInclude Include="MFCtestDoc.h" />
@@ -112,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ChildFrm.cpp" />
+    <ClCompile Include="FileNewDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MFCtest.cpp" />
     <ClCompile Include="MFCtestDoc.cpp" />
