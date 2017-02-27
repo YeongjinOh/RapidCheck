@@ -1,12 +1,13 @@
 #include<opencv2/core/core.hpp>
+using namespace cv;
 
 class Target
 {
 public:
-	Target(cv::Rect rect);
+	Target(Rect rect);
 	
-	cv::Rect rect;
-	std::vector<cv::Point> centerPositions;
+	Rect rect;
+	std::vector<Point> centerPositions;
 
 	double currentDiagonalSize;
 	double currentAspectRatio;
@@ -14,6 +15,6 @@ public:
 	bool stillBeingTracked;
 	int numOfConsecutiveFramesWithoutAMatch;
 
-	cv::Point predictedNextPosition;
+	Point predictedNextPosition;
 	void predictNextPosition(void);
 };

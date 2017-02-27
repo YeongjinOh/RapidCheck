@@ -1,8 +1,8 @@
 #include "target.h"
 
-Target::Target(cv::Rect rect) :rect(rect)
+Target::Target(Rect rect) :rect(rect)
 {
-	cv::Point currentCenter;
+	Point currentCenter;
 	currentCenter.x = (rect.x + rect.x + rect.width) / 2;
 	currentCenter.y = (rect.y + rect.y + rect.height) / 2;
 	centerPositions.push_back(currentCenter);
@@ -67,7 +67,3 @@ void Target::predictNextPosition(void)
 		predictedNextPosition.y = centerPositions.back().y + deltaY;
 	}
 }
-
-
-
-
