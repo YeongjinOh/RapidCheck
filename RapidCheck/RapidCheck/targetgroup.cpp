@@ -6,7 +6,13 @@ TargetGroup::TargetGroup(std::vector<Rect> rects)
 		targets.push_back(Target(rects[i]));
 	}
 }
-
+TargetGroup::TargetGroup(std::vector<Rect2d> rects)
+{
+	for (int i = 0; i < rects.size(); ++i)
+	{
+		targets.push_back(Target(rects[i]));
+	}
+}
 double distanceBetweenPoints(cv::Point point1, cv::Point point2) {
 
 	int intX = abs(point1.x - point2.x);
@@ -73,7 +79,7 @@ void TargetGroup::match(TargetGroup &currentFrameTargets) {
 		if (existingTarget.currentMatchFoundOrNew == false) {
 			existingTarget.numOfConsecutiveFramesWithoutAMatch++;
 		}
-		if (existingTarget.numOfConsecutiveFramesWithoutAMatch >= 5) {
+		if (existingTarget.numOfConsecutiveFramesWithoutAMatch >= MAX_LOST_FRAMES) {
 			existingTarget.stillBeingTracked = false;
 		}
 	}

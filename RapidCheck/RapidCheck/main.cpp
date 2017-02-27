@@ -8,27 +8,25 @@
 #include <vector>
 
 #include "gpu_hog.h"
+#include "targetgroup.h"
 
 #define VIDEOFILE "videos/street.avi"
-#define DETECTION_PERIOD 5
+#define DETECTION_PERIOD 1
 #define MAX_TRACKER_NUMS 10
 
 using namespace cv;
 
 int main(int argc, char ** argv)
 {
-		// declares all required variables
-	Rect2d roi;
+	// declares all required variables
+	Args args;
+	App app(args);
 	Mat frame;
 
 	// create a tracker object
 	std::vector<Ptr<Tracker> > trackers;
 	for (int i = 0; i < MAX_TRACKER_NUMS; ++i)
 		trackers.push_back(Tracker::create("KCF"));
-
-	Args args;
-	App app(args);
-
 	std::vector<Rect> found;
 	std::vector<Rect2d> found_filtered;
 
@@ -36,18 +34,14 @@ int main(int argc, char ** argv)
 	VideoCapture cap(VIDEOFILE);
 	cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
 	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
-	
-	// get bounding box
 	cap >> frame;
 	
-	// perform the tracking process
-	printf("Start the tracking process, press ESC to quit.\n");
-
+	TargetGroup existingTargets;
 	int frameCnt = 0;
-
 	while (true){
 		// get frame from the video
 		cap >> frame;
+
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
 			break;
@@ -89,13 +83,28 @@ int main(int argc, char ** argv)
 		}
 
 		// implement tracking during remaining (n-1) frames 
-		else {
-			
-						for (int i = 0; i < found_filtered.size() && i < trackers.size(); i++) {
+		else
+		{
+			for (int i = 0; i < found_filtered.size() && i < trackers.size(); i++) {
 				trackers[i]->update(frame, found_filtered[i]);
 				rectangle(frame, found_filtered[i], Scalar(255, 0, 0), 2, 1);
 			}
 
+		}
+		
+		TargetGroup currentFrameTargets(found_filtered);
+		existingTargets.match(currentFrameTargets);
+		for (int i = 0; i < existingTargets.targets.size(); ++i)
+		{
+			Target& existingTarget = existingTargets.targets[i];
+			if (existingTarget.stillBeingTracked && existingTarget.currentMatchFoundOrNew)
+			{
+				int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
+				double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
+				int intFontThickness = (int)std::round(dblFontScale * 1.0);
+
+				cv::putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
+			}			
 		}
 		
 		// draw frame
