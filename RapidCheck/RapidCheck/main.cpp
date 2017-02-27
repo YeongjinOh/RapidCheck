@@ -7,15 +7,32 @@
 #include <cstring>
 #include <vector>
 
-// #define VIDEOFILE "videos/768x576.avi"
+#include "gpu_hog.h"
+
 #define VIDEOFILE "videos/tracking.mp4"
 #define DETECTION_PERIOD 5
 #define MAX_TRACKER_NUMS 10
 
 using namespace cv;
 
-int main(int argc, const char * argv[])
+int main(int argc, char ** argv)
 {
+
+
+	try
+	{
+		Args args;
+		args.src = VIDEOFILE;
+		args.src_is_video = true;
+		App app(args);
+		app.run();
+	}
+	catch (const Exception& e) { return cout << "error: " << e.what() << endl, 1; }
+	catch (const exception& e) { return cout << "error: " << e.what() << endl, 1; }
+	catch (...) { return cout << "unknown exception" << endl, 1; }
+	return 0;
+
+
 	// declares all required variables
 	Rect2d roi;
 	Mat frame;
@@ -26,8 +43,13 @@ int main(int argc, const char * argv[])
 		trackers.push_back(Tracker::create("KCF"));
 
 	// create HOG descriptor
+	cv::Ptr<cv::cuda::HOG> gpu_hog = cv::cuda::HOG::create();
+	Mat detector = gpu_hog->getDefaultPeopleDetector();
+	gpu_hog->setSVMDetector(detector);
+	
 	HOGDescriptor hog;
 	hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
+
 	std::vector<Rect> found;
 	std::vector<Rect2d> found_filtered;
 
