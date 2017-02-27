@@ -1,6 +1,6 @@
-#include "person.h"
+#include "target.h"
 
-Person::Person(cv::Rect rect) :rect(rect)
+Target::Target(cv::Rect rect) :rect(rect)
 {
 	cv::Point currentCenter;
 	currentCenter.x = (rect.x + rect.x + rect.width) / 2;
@@ -15,7 +15,7 @@ Person::Person(cv::Rect rect) :rect(rect)
 	numOfConsecutiveFramesWithoutAMatch = 0;
 }
 
-void Person::predictNextPosition(void)
+void Target::predictNextPosition(void)
 {
 
 	int numPositions = (int)centerPositions.size();

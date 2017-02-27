@@ -1,9 +1,9 @@
 #include<opencv2/core/core.hpp>
 
-class Person
+class Target
 {
 public:
-	Person(cv::Rect rect);
+	Target(cv::Rect rect);
 	
 	cv::Rect rect;
 	std::vector<cv::Point> centerPositions;
