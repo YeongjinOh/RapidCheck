@@ -179,8 +179,24 @@ App::App(const Args& s)
 	cout << "Hit threshold: " << hit_threshold << endl;
 	cout << "Gamma correction: " << gamma_corr << endl;
 	cout << endl;
-}
 
+	// initialize hog
+	Size win_stride(args.win_stride_width, args.win_stride_height);
+	Size win_size(args.win_width, args.win_width * 2);
+	Size block_size(args.block_width, args.block_width);
+	Size block_stride(args.block_stride_width, args.block_stride_height);
+	Size cell_size(args.cell_width, args.cell_width);
+	gpu_hog = cv::cuda::HOG::create(win_size, block_size, block_stride, cell_size, args.nbins);
+	gpu_hog->setNumLevels(nlevels);
+	gpu_hog->setHitThreshold(hit_threshold);
+	gpu_hog->setWinStride(win_stride);
+	gpu_hog->setScaleFactor(scale);
+	gpu_hog->setGroupThreshold(gr_threshold);
+
+	// Create HOG descriptors and detectors here
+	Mat detector = gpu_hog->getDefaultPeopleDetector();
+	gpu_hog->setSVMDetector(detector);
+}
 
 void App::run()
 {
@@ -194,46 +210,11 @@ void App::run()
 	Size cell_size(args.cell_width, args.cell_width);
 
 	cv::Ptr<cv::cuda::HOG> gpu_hog = cv::cuda::HOG::create(win_size, block_size, block_stride, cell_size, args.nbins);
-	cv::HOGDescriptor cpu_hog(win_size, block_size, block_stride, cell_size, args.nbins);
-
-	if (args.svm_load) {
-		std::vector<float> svm_model;
-		const std::string model_file_name = args.svm;
-		FileStorage ifs(model_file_name, FileStorage::READ);
-		if (ifs.isOpened()) {
-			ifs["svm_detector"] >> svm_model;
-		}
-		else {
-			const std::string what =
-				"could not load model for hog classifier from file: "
-				+ model_file_name;
-			throw std::runtime_error(what);
-		}
-
-		// check if the variables are initialized
-		if (svm_model.empty()) {
-			const std::string what =
-				"HoG classifier: svm model could not be loaded from file"
-				+ model_file_name;
-			throw std::runtime_error(what);
-		}
-
-		gpu_hog->setSVMDetector(svm_model);
-		cpu_hog.setSVMDetector(svm_model);
-	}
-	else {
-		// Create HOG descriptors and detectors here
-		Mat detector = gpu_hog->getDefaultPeopleDetector();
-
-		gpu_hog->setSVMDetector(detector);
-		cpu_hog.setSVMDetector(detector);
-	}
-
-	cout << "gpusvmDescriptorSize : " << gpu_hog->getDescriptorSize()
-		<< endl;
-	cout << "cpusvmDescriptorSize : " << cpu_hog.getDescriptorSize()
-		<< endl;
-
+	
+	// Create HOG descriptors and detectors here
+	Mat detector = gpu_hog->getDefaultPeopleDetector();
+	gpu_hog->setSVMDetector(detector);
+	
 	while (running)
 	{
 		VideoCapture vc;
@@ -250,48 +231,21 @@ void App::run()
 				throw runtime_error(string("can't open video file: " + args.src));
 			vc >> frame;
 		}
-		else if (args.src_is_folder) {
-			String folder = args.src;
-			cout << folder << endl;
-			glob(folder, filenames);
-			frame = imread(filenames[count]);	// 0 --> .gitignore
-			if (!frame.data)
-				cerr << "Problem loading image from folder!!!" << endl;
-		}
-		else if (args.src_is_camera)
-		{
-			vc.open(args.camera_id);
-			if (!vc.isOpened())
-			{
-				stringstream msg;
-				msg << "can't open camera: " << args.camera_id;
-				throw runtime_error(msg.str());
-			}
-			vc >> frame;
-		}
-		else
-		{
-			frame = imread(args.src);
-			if (frame.empty())
-				throw runtime_error(string("can't open image file: " + args.src));
-		}
 
 		Mat img_aux, img, img_to_show;
 		cuda::GpuMat gpu_img;
 
-		cout << "make_gray : " << make_gray << ", use_gpu : " << use_gpu << endl;
-		
 		// Iterate over all frames
 		while (running && !frame.empty())
 		{
 			workBegin();
 
-			// Change format of the image
+			// Change format of the image (default use_gpu)
 			if (make_gray) cvtColor(frame, img_aux, COLOR_BGR2GRAY);
 			else if (use_gpu) cvtColor(frame, img_aux, COLOR_BGR2BGRA);
 			else frame.copyTo(img_aux);
 
-			// Resize image
+			// Resize image (default false)
 			if (args.resize_src) resize(img_aux, img, Size(args.width, args.height));
 			else img = img_aux;
 			img_to_show = img;
@@ -310,12 +264,7 @@ void App::run()
 				gpu_hog->setGroupThreshold(gr_threshold);
 				gpu_hog->detectMultiScale(gpu_img, found);
 			}
-			else
-			{
-				cpu_hog.nlevels = nlevels;
-				cpu_hog.detectMultiScale(img, found, hit_threshold, win_stride,
-					Size(0, 0), scale, gr_threshold);
-			}
+			
 			hogWorkEnd();
 
 			// Draw positive classified windows
@@ -333,41 +282,22 @@ void App::run()
 			putText(img_to_show, "FPS total: " + workFps(), Point(5, 105), FONT_HERSHEY_SIMPLEX, 1., Scalar(255, 100, 0), 2);
 			imshow("opencv_gpu_hog", img_to_show);
 
-			if (args.src_is_video || args.src_is_camera) vc >> frame;
-			if (args.src_is_folder) {
-				count++;
-				if (count < filenames.size()) {
-					frame = imread(filenames[count]);
-				}
-				else {
-					Mat empty;
-					frame = empty;
-				}
-			}
-
+			vc >> frame;
+			
 			workEnd();
-
-			if (args.write_video)
-			{
-				if (!video_writer.isOpened())
-				{
-					video_writer.open(args.dst_video, VideoWriter::fourcc('x', 'v', 'i', 'd'), args.dst_video_fps,
-						img_to_show.size(), true);
-					if (!video_writer.isOpened())
-						throw std::runtime_error("can't create video writer");
-				}
-
-				if (make_gray) cvtColor(img_to_show, img, COLOR_GRAY2BGR);
-				else cvtColor(img_to_show, img, COLOR_BGRA2BGR);
-
-				video_writer << img;
-			}
-
 			handleKey((char)waitKey(3));
 		}
 	}
 }
 
+void App::getHogResults(Mat & frame, vector<Rect> & found)
+{
+	Mat img;
+	cuda::GpuMat gpu_img;
+	cvtColor(frame, img, COLOR_BGR2BGRA);
+	gpu_img.upload(img);
+	gpu_hog->detectMultiScale(gpu_img, found);
+}
 
 void App::handleKey(char key)
 {

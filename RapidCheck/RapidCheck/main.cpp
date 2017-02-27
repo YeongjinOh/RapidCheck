@@ -9,7 +9,7 @@
 
 #include "gpu_hog.h"
 
-#define VIDEOFILE "videos/tracking.mp4"
+#define VIDEOFILE "videos/street.avi"
 #define DETECTION_PERIOD 5
 #define MAX_TRACKER_NUMS 10
 
@@ -17,23 +17,7 @@ using namespace cv;
 
 int main(int argc, char ** argv)
 {
-
-
-	try
-	{
-		Args args;
-		args.src = VIDEOFILE;
-		args.src_is_video = true;
-		App app(args);
-		app.run();
-	}
-	catch (const Exception& e) { return cout << "error: " << e.what() << endl, 1; }
-	catch (const exception& e) { return cout << "error: " << e.what() << endl, 1; }
-	catch (...) { return cout << "unknown exception" << endl, 1; }
-	return 0;
-
-
-	// declares all required variables
+		// declares all required variables
 	Rect2d roi;
 	Mat frame;
 
@@ -42,13 +26,8 @@ int main(int argc, char ** argv)
 	for (int i = 0; i < MAX_TRACKER_NUMS; ++i)
 		trackers.push_back(Tracker::create("KCF"));
 
-	// create HOG descriptor
-	cv::Ptr<cv::cuda::HOG> gpu_hog = cv::cuda::HOG::create();
-	Mat detector = gpu_hog->getDefaultPeopleDetector();
-	gpu_hog->setSVMDetector(detector);
-	
-	HOGDescriptor hog;
-	hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
+	Args args;
+	App app(args);
 
 	std::vector<Rect> found;
 	std::vector<Rect2d> found_filtered;
@@ -60,11 +39,7 @@ int main(int argc, char ** argv)
 	
 	// get bounding box
 	cap >> frame;
-	// roi = selectROI("tracker", frame);
-
-	// initialize the tracker
-	// tracker->init(frame, roi);
-
+	
 	// perform the tracking process
 	printf("Start the tracking process, press ESC to quit.\n");
 
@@ -85,7 +60,7 @@ int main(int argc, char ** argv)
 			found_filtered.clear();
 			trackers.clear();
 			
-			hog.detectMultiScale(frame, found, 0, Size(8, 8), Size(32, 32), 1.05, 2);
+			app.getHogResults(frame, found);
 			size_t i, j;
 			for (int i = 0; i<found.size() && i < MAX_TRACKER_NUMS; i++)
 			{

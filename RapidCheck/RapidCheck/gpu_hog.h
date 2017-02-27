@@ -58,9 +58,10 @@ public:
 class App
 {
 public:
+	App();
 	App(const Args& s);
 	void run();
-
+	void getHogResults(Mat& frame, vector<Rect>& found);
 	void handleKey(char key);
 
 	void hogWorkBegin();
@@ -78,6 +79,9 @@ private:
 
 	Args args;
 	bool running;
+
+	// gpu hog
+	cv::Ptr<cv::cuda::HOG> gpu_hog;
 
 	bool use_gpu;
 	bool make_gray;
