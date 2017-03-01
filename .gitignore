@@ -340,3 +340,4 @@ __pycache__/
 *.pgm
 *.feat
 *.model
+*.zip
