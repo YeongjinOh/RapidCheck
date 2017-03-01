@@ -1,4 +1,7 @@
 #include "targetgroup.h"
+#include <opencv2/opencv.hpp>
+
+
 TargetGroup::TargetGroup(std::vector<Rect> rects, std::vector<MatND> hists)
 {
 	for (int i = 0; i < rects.size(); ++i)
@@ -56,10 +59,21 @@ void TargetGroup::match(TargetGroup &currentFrameTargets) {
 		int indexOfLeastDistance = 0;
 		double leastDistance = 100000.0;
 
+		int indexOfLargestSimilarity = 0;
+		double largestSimilarity = 0.0;
+
 		for (unsigned int i = 0; i < targets.size(); i++) {
 			Target& existingTarget = targets[i];
+			
+			
 			if (existingTarget.stillBeingTracked == true) {
 				double distance = distanceBetweenPoints(currentFrameTarget.centerPositions.back(), existingTarget.predictedNextPosition);
+				double similarity = compareHist(currentFrameTarget.hist, existingTarget.hist, 0);
+				// printf("sim:%lf dist%lf\n", sim, distance);
+				if (similarity < largestSimilarity) {
+					largestSimilarity = similarity;
+					indexOfLargestSimilarity = i;
+				}
 				if (distance < leastDistance) {
 					leastDistance = distance;
 					indexOfLeastDistance = i;
@@ -67,7 +81,7 @@ void TargetGroup::match(TargetGroup &currentFrameTargets) {
 			}
 		}
 
-		if (leastDistance < currentFrameTarget.currentDiagonalSize * 1.15) {
+		if (leastDistance < currentFrameTarget.currentDiagonalSize) {
 			addTargetToExistingTarget(currentFrameTarget, indexOfLeastDistance);
 		}
 		else {

@@ -11,7 +11,7 @@
 #include "targetgroup.h"
 
 #define VIDEOFILE "videos/street.avi"
-#define DETECTION_PERIOD 5
+#define DETECTION_PERIOD 3
 #define MAX_TRACKER_NUMS 10
 
 using namespace cv;
@@ -52,7 +52,7 @@ int main(int argc, char ** argv)
 
 	TargetGroup existingTargets;
 	int frameCnt = 0;
-	while (frameCnt < cap.get(CV_CAP_PROP_FRAME_COUNT)-1) {
+	while (frameCnt < 400) {
 		// get frame from the video
 		cap >> frame;
 
