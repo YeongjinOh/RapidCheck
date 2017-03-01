@@ -1,16 +1,16 @@
 #include "targetgroup.h"
-TargetGroup::TargetGroup(std::vector<Rect> rects)
+TargetGroup::TargetGroup(std::vector<Rect> rects, std::vector<MatND> hists)
 {
 	for (int i = 0; i < rects.size(); ++i)
 	{
-		targets.push_back(Target(rects[i]));
+		targets.push_back(Target(rects[i], hists[i]));
 	}
 }
-TargetGroup::TargetGroup(std::vector<Rect2d> rects)
+TargetGroup::TargetGroup(std::vector<Rect2d> rects, std::vector<MatND> hists)
 {
 	for (int i = 0; i < rects.size(); ++i)
 	{
-		targets.push_back(Target(rects[i]));
+		targets.push_back(Target(rects[i], hists[i]));
 	}
 }
 double distanceBetweenPoints(cv::Point point1, cv::Point point2) {

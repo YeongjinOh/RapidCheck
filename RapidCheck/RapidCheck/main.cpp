@@ -11,7 +11,7 @@
 #include "targetgroup.h"
 
 #define VIDEOFILE "videos/street.avi"
-#define DETECTION_PERIOD 1
+#define DETECTION_PERIOD 5
 #define MAX_TRACKER_NUMS 10
 
 using namespace cv;
@@ -32,13 +32,27 @@ int main(int argc, char ** argv)
 
 	// set input video
 	VideoCapture cap(VIDEOFILE);
-	cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
-	cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
+	// cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
+	// cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
 	cap >> frame;
 	
+	// Histogram setting
+	// Using 50 bins for hue and 60 for saturation
+	int h_bins = 50; int s_bins = 60;
+	int histSize[] = { h_bins, s_bins };
+
+	// hue varies from 0 to 179, saturation from 0 to 255
+	float h_ranges[] = { 0, 180 };
+	float s_ranges[] = { 0, 256 };
+
+	const float* ranges[] = { h_ranges, s_ranges };
+
+	// Use the o-th and 1-st channels
+	int channels[] = { 0, 1 };
+
 	TargetGroup existingTargets;
 	int frameCnt = 0;
-	while (true){
+	while (frameCnt < cap.get(CV_CAP_PROP_FRAME_COUNT)-1) {
 		// get frame from the video
 		cap >> frame;
 
@@ -68,7 +82,7 @@ int main(int argc, char ** argv)
 
 			for (i = 0; i<found_filtered.size() && i < MAX_TRACKER_NUMS; i++)
 			{
-				Rect r = found_filtered[i];
+				Rect2d &r = found_filtered[i];
 			
 				r.x += cvRound(r.width*0.1);
 				r.width = cvRound(r.width*0.8);
@@ -78,7 +92,7 @@ int main(int argc, char ** argv)
 				Ptr<Tracker> tracker = Tracker::create("KCF");
 				tracker->init(frame, r);
 				trackers.push_back(tracker);
-				rectangle(frame, r.tl(), r.br(), Scalar(0, 255, 0), 3);
+				rectangle(frame, r, Scalar(0, 255, 0), 3);
 			}
 		}
 
@@ -91,20 +105,31 @@ int main(int argc, char ** argv)
 			}
 
 		}
-		
-		TargetGroup currentFrameTargets(found_filtered);
-		existingTargets.match(currentFrameTargets);
-		for (int i = 0; i < existingTargets.targets.size(); ++i)
-		{
-			Target& existingTarget = existingTargets.targets[i];
-			if (existingTarget.stillBeingTracked && existingTarget.currentMatchFoundOrNew)
+		bool useMatching = true;
+		if (useMatching) {
+			vector<MatND> hists;
+			for (int i = 0; i < found_filtered.size(); ++i) {
+				Mat temp;
+				MatND hist;
+				cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
+				calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+				normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
+				hists.push_back(hist);
+			}
+			TargetGroup currentFrameTargets(found_filtered, hists);
+			existingTargets.match(currentFrameTargets);
+			for (int i = 0; i < existingTargets.targets.size(); ++i)
 			{
-				int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
-				double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
-				int intFontThickness = (int)std::round(dblFontScale * 1.0);
+				Target& existingTarget = existingTargets.targets[i];
+				if (existingTarget.stillBeingTracked && existingTarget.currentMatchFoundOrNew)
+				{
+					int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
+					double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
+					int intFontThickness = (int)std::round(dblFontScale * 1.0);
 
-				cv::putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
-			}			
+					cv::putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
+				}
+			}
 		}
 		
 		// draw frame

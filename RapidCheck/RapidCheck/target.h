@@ -5,6 +5,7 @@ class Target
 {
 public:
 	Target(Rect rect);
+	Target(Rect rect, MatND hist);
 	
 	Rect rect;
 	std::vector<Point> centerPositions;
@@ -17,4 +18,7 @@ public:
 
 	Point predictedNextPosition;
 	void predictNextPosition(void);
+
+	// Histogram for matching
+	MatND hist;
 };
