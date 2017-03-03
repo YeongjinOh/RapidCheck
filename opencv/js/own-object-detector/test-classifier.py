@@ -42,7 +42,7 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
 
     # Read the image
-    im = imread(args["imagepath"]+'test-'+args['number']+'.pgm', as_grey=True)
+    im = imread(args["imagepath"]+'test-'+str(args['number'])+'.pgm', as_grey=True)
     min_wdw_sz = (100, 40)
     step_size = (10, 10)
     downscale = args['downscale']
