@@ -6,6 +6,22 @@ Target::Target(Rect rect) :rect(rect)
 	currentCenter.x = (rect.x + rect.x + rect.width) / 2;
 	currentCenter.y = (rect.y + rect.y + rect.height) / 2;
 	centerPositions.push_back(currentCenter);
+		
+	currentDiagonalSize = sqrt(pow(rect.width, 2) + pow(rect.height, 2));
+	currentAspectRatio = (float)rect.width / (float)rect.height;
+
+	stillBeingTracked = true;
+	currentMatchFoundOrNew = true;
+	numOfConsecutiveFramesWithoutAMatch = 0;
+
+
+}
+Target::Target(Rect rect, MatND hist) :rect(rect), hist(hist)
+{
+	Point currentCenter;
+	currentCenter.x = (rect.x + rect.x + rect.width) / 2;
+	currentCenter.y = (rect.y + rect.y + rect.height) / 2;
+	centerPositions.push_back(currentCenter);
 
 	currentDiagonalSize = sqrt(pow(rect.width, 2) + pow(rect.height, 2));
 	currentAspectRatio = (float)rect.width / (float)rect.height;
