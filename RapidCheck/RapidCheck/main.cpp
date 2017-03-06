@@ -11,7 +11,7 @@
 #include "targetgroup.h"
 
 #define VIDEOFILE "videos/street.avi"
-#define DETECTION_PERIOD 3
+#define DETECTION_PERIOD 1
 #define MAX_TRACKER_NUMS 10
 
 using namespace cv;
@@ -55,7 +55,7 @@ int main(int argc, char ** argv)
 	while (frameCnt < 400) {
 		// get frame from the video
 		cap >> frame;
-
+		Mat clone = frame.clone();
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
 			break;
@@ -101,44 +101,88 @@ int main(int argc, char ** argv)
 		{
 			for (int i = 0; i < found_filtered.size() && i < trackers.size(); i++) {
 				trackers[i]->update(frame, found_filtered[i]);
-				rectangle(frame, found_filtered[i], Scalar(255, 0, 0), 2, 1);
+				rectangle(frame, found_filtered[i], Scalar(0, 255, 0), 2, 1);
 			}
 
 		}
-		bool useMatching = true;
-		if (useMatching) {
-			vector<MatND> hists;
-			for (int i = 0; i < found_filtered.size(); ++i) {
-				Mat temp;
-				MatND hist;
-				cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
-				calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
-				normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-				hists.push_back(hist);
-			}
-			TargetGroup currentFrameTargets(found_filtered, hists);
-			existingTargets.match(currentFrameTargets);
-			for (int i = 0; i < existingTargets.targets.size(); ++i)
+		
+		// matching
+		vector<MatND> hists;
+		for (int i = 0; i < found_filtered.size(); ++i)
+		{
+			Mat temp;
+			MatND hist;
+			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
+			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
+			hists.push_back(hist);
+		}
+		TargetGroup currentFrameTargets(found_filtered, hists);
+		existingTargets.match(currentFrameTargets);
+		for (int i = 0; i < existingTargets.targets.size(); ++i)
+		{
+			Target& existingTarget = existingTargets.targets[i];
+			if (existingTarget.stillBeingTracked && existingTarget.currentMatchFoundOrNew)
 			{
-				Target& existingTarget = existingTargets.targets[i];
-				if (existingTarget.stillBeingTracked && existingTarget.currentMatchFoundOrNew)
-				{
-					int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
-					double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
-					int intFontThickness = (int)std::round(dblFontScale * 1.0);
-
-					cv::putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
-				}
+				int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
+				double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
+				int intFontThickness = (int)std::round(dblFontScale * 1.0);
+				cv::putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
 			}
 		}
 		
+		
 		// draw frame
 		imshow("tracker", frame);
+		frameCnt++;
 
 		//quit on ESC button
-		if (waitKey(3) == 27)break;
+		int key = waitKey(3);
+		if (key == 27) break;
 
-		frameCnt++;
+		// puase on p key pressed
+		if (key == (int)('p')) {
+
+			// target index
+			int idx = 0;
+			key = waitKey(3);
+			while (key != (int)('p')) {
+
+				Target& currentFrameTarget = currentFrameTargets.targets[idx];
+				Mat roi = clone(currentFrameTarget.rect);
+				imshow("target", roi);
+
+				key = waitKey(3);
+				switch (key) {
+				case 27:
+					return 0;
+					break;
+
+				case (int)('n') :
+					if (idx == currentFrameTargets.targets.size() - 1)
+					{
+						cout << "The last target" << endl;
+					}
+					else
+					{
+						cout << "idx++" << endl;
+						idx++;
+					}
+								break;
+				case (int)('b') :
+					if (idx == 0)
+					{
+						cout << "The first target" << endl;
+					}
+					else
+					{
+						cout << "idx--" << endl;
+						idx--;
+					}
+								break;
+				}
+			}
+		}
 	}
 	return 0;
 }
