@@ -14,6 +14,8 @@
 #define DETECTION_PERIOD 10
 #define MAX_TRACKER_NUMS 10
 
+#define MARGIN 50
+
 using namespace cv;
 
 int main(int argc, char ** argv)
@@ -21,9 +23,9 @@ int main(int argc, char ** argv)
 	// declares all required variables
 	Args args;
 	App app(args);
-	Mat frame, status(300, 300, CV_8UC3);
-	Target left, right;
-	bool hasLeft = false, hasRight = false;
+	Mat frame, targetImage;
+	Target target;
+	bool hasTarget = false;
 
 	// create a tracker object
 	std::vector<Ptr<Tracker> > trackers;
@@ -129,7 +131,7 @@ int main(int argc, char ** argv)
 				int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
 				double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
 				int intFontThickness = (int)std::round(dblFontScale * 1.0);
-				cv::putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
+				putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
 			}
 		}
 		
@@ -143,19 +145,48 @@ int main(int argc, char ** argv)
 		if (key == 27) break;
 
 		// puase on p key pressed
-		if (key == (int)('p')) {
+		if (key == (int)('p'))
+		{
 		
 			// target index
 			int idx = 0;
 			key = waitKey(3);
-			while (key != (int)('p')) {
+			while (key != (int)('p'))
+			{
 
-				Target& currentFrameTarget = currentFrameTargets.targets[idx];
-				Rect rect = currentFrameTarget.rect;
-				Mat roi = clone(rect);
-				roi.copyTo(status(Rect(0,0,rect.width,rect.height)));
-				imshow("status", status);
-				resizeWindow("target", 150, 150);
+				int width = 0, height = 0;
+				// calculate width and height
+				for (int i = 0; i < currentFrameTargets.targets.size(); i++)
+				{
+					Target& currentFrameTarget = currentFrameTargets.targets[i];
+					width += currentFrameTarget.rect.width + MARGIN;
+					height = max(height, currentFrameTarget.rect.height);
+				}
+				Mat targets(height + 2*MARGIN, width + MARGIN, CV_8UC3);
+				
+				// draw targets
+				int start = MARGIN;
+				for (int i = 0; i < currentFrameTargets.targets.size(); i++)
+				{
+					Target& currentFrameTarget = currentFrameTargets.targets[i];
+					Rect rect = currentFrameTarget.rect;
+					Mat roi = clone(rect);
+					roi.copyTo(targets(Rect(start, MARGIN, rect.width, rect.height)));
+					
+					if (hasTarget) {
+						// calculate similarity
+						double sim = compareHist(currentFrameTarget.hist, target.hist, 0);
+						//cout << sim << endl;
+						putText(targets, to_string(sim*100).substr(0,5), Point (start, MARGIN), CV_FONT_HERSHEY_SIMPLEX, 0.7, Scalar(255, 0, 0), 2);
+					}
+					start += rect.width + MARGIN;
+				}
+				imshow("Current Frame targets", targets);
+
+				if (hasTarget) {
+					imshow("Existing target", targetImage);
+				}
+		
 				key = waitKey(3);
 				switch (key) {
 				case 27:
@@ -184,23 +215,20 @@ int main(int argc, char ** argv)
 						idx--;
 					}
 					break;
-				case (int)('l') :
-					left = currentFrameTarget;
-					roi.copyTo(status(Rect(100, 0, rect.width, rect.height)));
-					hasLeft = true;
+				case (int)('t') :
+					idx = (idx + 1) % currentFrameTargets.targets.size();
+					target = currentFrameTargets.targets[idx];
+					targetImage = clone(target.rect);
+					hasTarget = true;
 					break;
-				case (int)('r') :
-					right = currentFrameTarget;
-					roi.copyTo(status(Rect(200, 0, rect.width, rect.height)));
-					hasRight = true;
-					break;
+		
 				case (int)('c') :
-					double similarity0 = compareHist(left.hist, right.hist, 0);
-					double similarity1 = compareHist(left.hist, right.hist, 1);
-					double similarity2 = compareHist(left.hist, right.hist, 2);
-					double similarity3 = compareHist(left.hist, right.hist, 3);
-					cout << " - calculate similarities using 4 methods" << endl;
-					printf("s0:%.2lf s1:%.2lf s2:%.2lf s3:%.2lf\n", similarity0, similarity1, similarity2, similarity3);
+					// double similarity0 = compareHist(left.hist, right.hist, 0);
+					// double similarity1 = compareHist(left.hist, right.hist, 1);
+					// double similarity2 = compareHist(left.hist, right.hist, 2);
+					// double similarity3 = compareHist(left.hist, right.hist, 3);
+					// cout << " - calculate similarities using 4 methods" << endl;
+					// printf("s0:%.2lf s1:%.2lf s2:%.2lf s3:%.2lf\n", similarity0, similarity1, similarity2, similarity3);
 					break;
 				}
 
