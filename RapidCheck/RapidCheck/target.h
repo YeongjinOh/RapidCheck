@@ -4,6 +4,7 @@ using namespace cv;
 class Target
 {
 public:
+	Target(){};
 	Target(Rect rect);
 	Target(Rect rect, MatND hist);
 	

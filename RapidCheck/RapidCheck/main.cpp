@@ -11,7 +11,7 @@
 #include "targetgroup.h"
 
 #define VIDEOFILE "videos/street.avi"
-#define DETECTION_PERIOD 1
+#define DETECTION_PERIOD 10
 #define MAX_TRACKER_NUMS 10
 
 using namespace cv;
@@ -21,7 +21,9 @@ int main(int argc, char ** argv)
 	// declares all required variables
 	Args args;
 	App app(args);
-	Mat frame;
+	Mat frame, status(300, 300, CV_8UC3);
+	Target left, right;
+	bool hasLeft = false, hasRight = false;
 
 	// create a tracker object
 	std::vector<Ptr<Tracker> > trackers;
@@ -142,16 +144,18 @@ int main(int argc, char ** argv)
 
 		// puase on p key pressed
 		if (key == (int)('p')) {
-
+		
 			// target index
 			int idx = 0;
 			key = waitKey(3);
 			while (key != (int)('p')) {
 
 				Target& currentFrameTarget = currentFrameTargets.targets[idx];
-				Mat roi = clone(currentFrameTarget.rect);
-				imshow("target", roi);
-
+				Rect rect = currentFrameTarget.rect;
+				Mat roi = clone(rect);
+				roi.copyTo(status(Rect(0,0,rect.width,rect.height)));
+				imshow("status", status);
+				resizeWindow("target", 150, 150);
 				key = waitKey(3);
 				switch (key) {
 				case 27:
@@ -168,7 +172,7 @@ int main(int argc, char ** argv)
 						cout << "idx++" << endl;
 						idx++;
 					}
-								break;
+					break;
 				case (int)('b') :
 					if (idx == 0)
 					{
@@ -179,8 +183,27 @@ int main(int argc, char ** argv)
 						cout << "idx--" << endl;
 						idx--;
 					}
-								break;
+					break;
+				case (int)('l') :
+					left = currentFrameTarget;
+					roi.copyTo(status(Rect(100, 0, rect.width, rect.height)));
+					hasLeft = true;
+					break;
+				case (int)('r') :
+					right = currentFrameTarget;
+					roi.copyTo(status(Rect(200, 0, rect.width, rect.height)));
+					hasRight = true;
+					break;
+				case (int)('c') :
+					double similarity0 = compareHist(left.hist, right.hist, 0);
+					double similarity1 = compareHist(left.hist, right.hist, 1);
+					double similarity2 = compareHist(left.hist, right.hist, 2);
+					double similarity3 = compareHist(left.hist, right.hist, 3);
+					cout << " - calculate similarities using 4 methods" << endl;
+					printf("s0:%.2lf s1:%.2lf s2:%.2lf s3:%.2lf\n", similarity0, similarity1, similarity2, similarity3);
+					break;
 				}
+
 			}
 		}
 	}
