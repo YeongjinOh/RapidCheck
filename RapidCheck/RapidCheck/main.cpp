@@ -9,7 +9,6 @@
 
 #include "gpu_hog.h"
 #include "targetgroup.h"
-
 #define VIDEOFILE "videos/street.avi"
 #define DETECTION_PERIOD 10
 #define MAX_TRACKER_NUMS 10
@@ -17,6 +16,27 @@
 #define MARGIN 50
 
 using namespace cv;
+
+double getPSNR(const Mat& I1, const Mat& I2)
+{
+	Mat s1;
+	absdiff(I1, I2, s1);       // |I1 - I2|
+	s1.convertTo(s1, CV_32F);  // cannot make a square on 8 bits
+	s1 = s1.mul(s1);           // |I1 - I2|^2
+
+	Scalar s = sum(s1);         // sum elements per channel
+
+	double sse = s.val[0] + s.val[1] + s.val[2]; // sum channels
+
+	if (sse <= 1e-10) // for small values return zero
+		return 0;
+	else
+	{
+		double  mse = sse / (double)(I1.channels() * I1.total());
+		double psnr = 10.0*log10((255 * 255) / mse);
+		return psnr;
+	}
+}
 
 int main(int argc, char ** argv)
 {
@@ -221,14 +241,9 @@ int main(int argc, char ** argv)
 					targetImage = clone(target.rect);
 					hasTarget = true;
 					break;
-		
+				
 				case (int)('c') :
-					// double similarity0 = compareHist(left.hist, right.hist, 0);
-					// double similarity1 = compareHist(left.hist, right.hist, 1);
-					// double similarity2 = compareHist(left.hist, right.hist, 2);
-					// double similarity3 = compareHist(left.hist, right.hist, 3);
-					// cout << " - calculate similarities using 4 methods" << endl;
-					// printf("s0:%.2lf s1:%.2lf s2:%.2lf s3:%.2lf\n", similarity0, similarity1, similarity2, similarity3);
+					getPSNR(targetImage, clone(currentFrameTargets.targets[idx].rect));
 					break;
 				}
 
