@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="gpu_hog.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -25,6 +22,15 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="targetgroup.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="detectionAndTracking.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="detectionBasedTracking.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -36,6 +42,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="targetgroup.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="main.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

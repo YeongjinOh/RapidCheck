@@ -144,12 +144,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="detectionBasedTracking.cpp" />
     <ClCompile Include="gpu_hog.cpp" />
+    <ClCompile Include="detectionAndTracking.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="target.cpp" />
     <ClCompile Include="targetgroup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="main.h" />
     <ClInclude Include="targetgroup.h" />
     <ClInclude Include="target.h" />
     <ClInclude Include="gpu_hog.h" />
