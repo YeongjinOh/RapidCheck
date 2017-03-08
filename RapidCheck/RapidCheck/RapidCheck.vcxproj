@@ -145,6 +145,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="detectionBasedTracking.cpp" />
+    <ClCompile Include="frame.cpp" />
     <ClCompile Include="gpu_hog.cpp" />
     <ClCompile Include="detectionAndTracking.cpp" />
     <ClCompile Include="main.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="targetgroup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="frame.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="targetgroup.h" />
     <ClInclude Include="target.h" />

@@ -9,6 +9,7 @@
 
 #include "gpu_hog.h"
 #include "targetgroup.h"
+#include "frame.h"
 
 #define VIDEOFILE "videos/street.avi"
 #define DETECTION_PERIOD 1

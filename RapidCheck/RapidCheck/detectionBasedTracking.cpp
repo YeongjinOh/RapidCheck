@@ -27,7 +27,7 @@ void detectionBasedTracking()
 		// reset vectors
 		found.clear();
 		found_filtered.clear();
-
+		
 		// implement hog detection
 		app.getHogResults(frame, found);
 		size_t i, j;
