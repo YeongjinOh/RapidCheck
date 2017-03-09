@@ -6,10 +6,10 @@ class Frame
 {
 private:
 	int frameNumber;
-	vector<Rect2d> pedestrians;
+	vector<Rect> pedestrians;
 public:
 	Frame(int num);
-	Frame(int num, vector<Rect2d>& pedestrians);
+	Frame(int num, vector<Rect>& pedestrians);
 	int getFrameNumbers();
-	vector<Rect2d>& getPedestrians();
+	vector<Rect>& getPedestrians();
 };
