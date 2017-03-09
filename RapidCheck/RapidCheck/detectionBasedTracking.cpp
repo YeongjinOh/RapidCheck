@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define MAX_FRAMES 100
+#define MAX_FRAMES 50
 
 // set input video
 VideoCapture cap(VIDEOFILE);
@@ -66,35 +66,59 @@ void detectionBasedTracking()
 	cout << "Detection finished" << endl;
 
 	int frameNum = 0;
-	while (true) {
+	while (true)
+	{
 		
 		// set frame number
 		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 
 		// get frame
-		Mat frame, frame_edge;
+		Mat frame, frame_edge, frame_contour;
+	
 		cap >> frame;
 		cvtColor(frame, frame_edge, COLOR_BGR2GRAY);
+		cvtColor(frame, frame_contour, COLOR_BGR2GRAY);
 		vector<Rect> & pedestrians = frames[frameNum].getPedestrians();
-		for (int i = 0; i < pedestrians.size(); i++) {
+		for (int i = 0; i < pedestrians.size(); i++)
+		{
 			rectangle(frame, pedestrians[i], Scalar(0, 255, 0), 2, 1);
 		}
 		
 		// get edge
 		Mat temp;
-		for (int i = 0; i < pedestrians.size(); i++) {
+		for (int i = 0; i < pedestrians.size(); i++)
+		{
 			Rect& rect = pedestrians[i];
 			Canny(frame_edge(rect), frame_edge(rect), 100, 200, 3);
 
 			vector<vector<Point> > contours;
-			findContours(frame_edge(rect), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_SIMPLE);
-			cout << contours.size() << endl;
-			drawContours(frame(rect), contours, -1, (255, 255, 255), 1);
+			findContours(frame_edge(rect), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_TC89_KCOS);
+			
+			/*
+			int maxLen = 0, maxIdx = -1;
+			for (int i = 0; i < contours.size(); i++) {
+				int curLen = contours[i].size();
+				if (maxLen < curLen) {
+					maxLen = curLen;
+					maxIdx = i;
+				}
+			}
+			cout << "maxLen : " << maxLen << endl;
+			*/
+			vector<Point> convex;
+			for (int i = 0; i < contours.size(); i++)
+				for (int j = 0; contours[i].size() > 30 && j < contours[i].size(); j++)
+					convex.push_back(contours[i][j]);
+				
+			convexHull(convex, convex);
+			// drawContours(frame_contour(rect), contours, -1, Scalar(255, 255, 255), 1);
+			polylines(frame_contour(rect), convex, true, Scalar(255, 255, 255), 2);
 		}
 		
 
 
 		imshow("edge", frame_edge);
+		imshow("contour", frame_contour);
 		imshow("result", frame);
 		int key = waitKey(0);
 		if (key == 27) break;
