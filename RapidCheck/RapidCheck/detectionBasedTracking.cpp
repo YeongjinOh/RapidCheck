@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define MAX_FRAMES 400
+#define MAX_FRAMES 100
 
 // set input video
 VideoCapture cap(VIDEOFILE);
@@ -31,6 +31,7 @@ void detectionBasedTracking()
 	//app.run();
 	
 	vector<Frame> frames;
+	vector<Point> traces;
 
 	
 	for (int frameNum = 0; frameNum < MAX_FRAMES; frameNum++) {
@@ -70,7 +71,7 @@ void detectionBasedTracking()
 
 	cout << "Detection finished" << endl;
 
-	int frameNum = 0;
+	int frameNum = 1;
 	while (true)
 	{
 		
@@ -83,7 +84,40 @@ void detectionBasedTracking()
 		cap >> frame;
 		cvtColor(frame, frame_edge, COLOR_BGR2GRAY);
 		cvtColor(frame, frame_contour, COLOR_BGR2GRAY);
-		vector<Rect> & pedestrians = frames[frameNum].getPedestrians();
+		vector<Rect> & pedestrians = frames[frameNum].getPedestrians(), & prevPedestrians = frames[frameNum-1].getPedestrians();
+		
+		// print rect informations
+		cout << "frame Num : " << frameNum << endl;
+		cout << " - previous frame pedestrians : ";
+		for (int i = 0; i < prevPedestrians.size(); i++)
+		{
+			Rect rect = prevPedestrians[i];
+			Point center(rect.x + rect.width / 2, rect.y + rect.height / 2);
+			traces.push_back(center);
+			printf("(%d,%d,%d,%d)\t", rect.x, rect.y, rect.width, rect.height);
+		}
+		cout << endl;
+		cout << " - current frame pedestrians : ";
+		for (int i = 0; i < pedestrians.size(); i++)
+		{
+			Rect rect = pedestrians[i];
+			Point center(rect.x + rect.width / 2, rect.y + rect.height / 2);
+			traces.push_back(center);
+			printf("(%d,%d,%d,%d)\t", rect.x, rect.y, rect.width, rect.height);
+		}
+		cout << endl;
+		for (int i = 0; i < pedestrians.size(); i++)
+		{
+			Rect cur = pedestrians[i];
+			for (int j = 0; j < prevPedestrians.size(); j++)
+			{
+				Rect prev = prevPedestrians[j];
+				int dx = cur.x - prev.x, dy = cur.y - prev.y, distSquare = dx*dx + dy*dy;
+				printf("(%d,%d):%d\t", dx, dy, distSquare);
+			}
+			cout << endl;
+		}
+		
 		for (int i = 0; i < pedestrians.size(); i++)
 		{
 			rectangle(frame, pedestrians[i], Scalar(0, 255, 0), 2, 1);
@@ -125,6 +159,11 @@ void detectionBasedTracking()
 		imshow("edge", frame_edge);
 		imshow("contour", frame_contour);
 		*/
+		// draw traces
+		for (int i = 0; i < traces.size(); i++) {
+			circle(frame, traces[i], 1, Scalar(255, 255, 255), 1);
+		}
+
 
 		imshow("result", frame);
 		int key = waitKey(0);
@@ -136,7 +175,7 @@ void detectionBasedTracking()
 		}
 		else if (key == (int)('b'))
 		{
-			frameNum = max(frameNum - 1, 0);
+			frameNum = max(frameNum - 1, 1);
 		}
 	}
 
