@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define MAX_FRAMES 50
+#define MAX_FRAMES 400
 
 // set input video
 VideoCapture cap(VIDEOFILE);
@@ -20,10 +20,15 @@ Mat getFrame(vector<Frame>& frames, int frameNum) {
 void detectionBasedTracking()
 {
 	Args args;
+	args.hit_threshold = 0.9;
+	args.hit_threshold_auto = false;
+	args.gr_threshold = 6;
 	App app(args);
 	Mat frame, targetImage;
 	Target target;
 	bool hasTarget = false;
+
+	//app.run();
 	
 	vector<Frame> frames;
 
@@ -86,6 +91,7 @@ void detectionBasedTracking()
 		
 		// get edge
 		Mat temp;
+		/*
 		for (int i = 0; i < pedestrians.size(); i++)
 		{
 			Rect& rect = pedestrians[i];
@@ -94,7 +100,7 @@ void detectionBasedTracking()
 			vector<vector<Point> > contours;
 			findContours(frame_edge(rect), contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_TC89_KCOS);
 			
-			/*
+			
 			int maxLen = 0, maxIdx = -1;
 			for (int i = 0; i < contours.size(); i++) {
 				int curLen = contours[i].size();
@@ -104,7 +110,7 @@ void detectionBasedTracking()
 				}
 			}
 			cout << "maxLen : " << maxLen << endl;
-			*/
+			
 			vector<Point> convex;
 			for (int i = 0; i < contours.size(); i++)
 				for (int j = 0; contours[i].size() > 30 && j < contours[i].size(); j++)
@@ -113,18 +119,20 @@ void detectionBasedTracking()
 			convexHull(convex, convex);
 			// drawContours(frame_contour(rect), contours, -1, Scalar(255, 255, 255), 1);
 			polylines(frame_contour(rect), convex, true, Scalar(255, 255, 255), 2);
+			
 		}
 		
-
-
 		imshow("edge", frame_edge);
 		imshow("contour", frame_contour);
+		*/
+
 		imshow("result", frame);
 		int key = waitKey(0);
 		if (key == 27) break;
 		if (key == (int)('n'))
 		{
-			frameNum = min(frameNum + 1, MAX_FRAMES);
+			cout << frameNum << endl;
+			frameNum = min(frameNum + 1, MAX_FRAMES - 1);
 		}
 		else if (key == (int)('b'))
 		{
