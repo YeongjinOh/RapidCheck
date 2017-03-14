@@ -24,16 +24,16 @@
     <ClCompile Include="targetgroup.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="detectionAndTracking.cpp">
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="frame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="detectionBasedTracking.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="frame.cpp">
+    <ClCompile Include="detectionAndTracking.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

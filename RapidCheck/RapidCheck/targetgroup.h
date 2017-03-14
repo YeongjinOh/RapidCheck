@@ -1,4 +1,5 @@
 #include "target.h"
+
 #define MAX_LOST_FRAMES 15
 class TargetGroup
 {

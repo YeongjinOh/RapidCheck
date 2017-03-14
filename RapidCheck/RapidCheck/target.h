@@ -1,3 +1,6 @@
+#ifndef TARGET_H
+#define TARGET_H
+
 #include<opencv2/core/core.hpp>
 using namespace cv;
 
@@ -19,7 +22,11 @@ public:
 
 	Point predictedNextPosition;
 	void predictNextPosition(void);
+	Point getCenterPoint();
 
 	// Histogram for matching
 	MatND hist;
 };
+
+
+#endif

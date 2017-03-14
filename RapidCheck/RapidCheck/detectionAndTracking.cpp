@@ -134,7 +134,7 @@ void detectionAndTracking()
 				int intFontFace = CV_FONT_HERSHEY_SIMPLEX;
 				double dblFontScale = existingTarget.currentDiagonalSize / 60.0;
 				int intFontThickness = (int)std::round(dblFontScale * 1.0);
-				putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
+//				putText(frame, std::to_string(i), existingTarget.centerPositions.back(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 0, 0), 2);
 			}
 		}
 		

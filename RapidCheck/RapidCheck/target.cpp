@@ -83,3 +83,7 @@ void Target::predictNextPosition(void)
 		predictedNextPosition.y = centerPositions.back().y + deltaY;
 	}
 }
+
+Point Target::getCenterPoint() {
+	return Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
+}
