@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
+using OpenCvSharp;
 
 namespace teest2
 {
@@ -12,13 +13,14 @@ namespace teest2
         [DllImport("test1-1.dll")]
         private static extern int ADD(int a, int b);
         [DllImport("test1-1.dll")]
-        private static extern void PRINT();
+        private static extern void asd();
 
         static void Main(string[] args)
         {
             int result = ADD(3 , 2);
-            Console.WriteLine(result);
-            PRINT();
+            Console.Write(result);
+            asd();
+            //Cv2.ImShow("test", test);
         }
     }
 }
