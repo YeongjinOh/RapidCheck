@@ -29,7 +29,23 @@ vector<Rect>& Frame::getPedestrians()
 {
 	return pedestrians;
 }
+Rect & Frame::getPedestrian(int idx)
+{
+	if (idx < pedestrians.size())
+		return pedestrians[idx];
+	// TODO : Error handling
+	printf("***** Error : pedestrians does not have idx elements *****");
+	return Rect();
+}
 vector<Target>& Frame::getTargets()
 {
 	return targets;
+}
+Target & Frame::getTarget(int idx)
+{
+	if (idx < targets.size())
+		return targets[idx];
+	// TODO : Error handling
+	printf("***** Error : targets does not have idx elements *****");
+	return Target();
 }

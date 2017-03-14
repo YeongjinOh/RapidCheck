@@ -17,4 +17,6 @@ public:
 	int getFrameNumbers();
 	vector<Rect>& getPedestrians();
 	vector<Target>& getTargets();
+	Target& getTarget(int idx);
+	Rect& getPedestrian(int idx);
 };

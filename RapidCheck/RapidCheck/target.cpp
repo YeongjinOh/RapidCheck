@@ -14,7 +14,7 @@ Target::Target(Rect rect) :rect(rect)
 	currentMatchFoundOrNew = true;
 	numOfConsecutiveFramesWithoutAMatch = 0;
 
-
+	found = false;
 }
 Target::Target(Rect rect, MatND hist) :rect(rect), hist(hist)
 {
@@ -29,6 +29,8 @@ Target::Target(Rect rect, MatND hist) :rect(rect), hist(hist)
 	stillBeingTracked = true;
 	currentMatchFoundOrNew = true;
 	numOfConsecutiveFramesWithoutAMatch = 0;
+
+	found = false;
 }
 
 void Target::predictNextPosition(void)

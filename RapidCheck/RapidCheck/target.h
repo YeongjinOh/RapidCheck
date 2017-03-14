@@ -14,6 +14,9 @@ public:
 	Rect rect;
 	std::vector<Point> centerPositions;
 
+	bool found;
+
+
 	double currentDiagonalSize;
 	double currentAspectRatio;
 	bool currentMatchFoundOrNew;

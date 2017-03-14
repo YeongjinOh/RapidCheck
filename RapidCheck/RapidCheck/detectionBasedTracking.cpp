@@ -3,10 +3,13 @@
 #define MAX_FRAMES 60
 #define MIXTURE_CONSTANT 0.1
 #define LOW_LEVEL_TRACKLETS 6
+#define CONTINUOUS_MOTION_COST_THRE 100
+#define NUM_OF_COLORS 64
 #define DEBUG false
 
 // set input video
 VideoCapture cap(VIDEOFILE);
+
 
 
 Mat getFrame(vector<Frame>& frames, int frameNum) {
@@ -25,7 +28,7 @@ double getNormValueFromVector (Point p) {
 }
 double costMin = INFINITY;
 
-void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber)
+void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, bool useDummy = false)
 {
 	// (n+1)-th frame
 	int n = selectedTargets.size();
@@ -41,9 +44,9 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 			}
 			for (int j = 1; j < n - 1; j++) 
 			{
-			//	Point motionErrVector = selectedTargets[i].getCenterPoint() - selectedTargets[j].getCenterPoint() - (i - j)*(selectedTargets[j + 1].getCenterPoint() - selectedTargets[j].getCenterPoint());
-				Point motionErrVector = selectedTargets[i].getCenterPoint() - selectedTargets[j].getCenterPoint();
-				costMotion += getNormValueFromVector(motionErrVector);
+				Point motionErrVector = selectedTargets[i].getCenterPoint() - selectedTargets[j].getCenterPoint() - (i - j)*(selectedTargets[j + 1].getCenterPoint() - selectedTargets[j].getCenterPoint());
+				double motionCost = getNormValueFromVector(motionErrVector);
+				costMotion += motionCost;
 			}
 		}
 		double cost = costAppearance + MIXTURE_CONSTANT * costMotion;
@@ -66,10 +69,24 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		return;
 	}
 
-	Frame frame = frames[frameNumber];
-	vector<Target> targets= frame.getTargets();
+	Frame& frame = frames[frameNumber];
+	vector<Target>& targets= frame.getTargets();
 	double cost;
-	for (int i = 0; i < targets.size(); i++) {
+	for (int i = 0; i < targets.size(); i++) 
+	{
+		Target& curTarget = targets[i];
+		if (curTarget.found)
+			continue;
+
+		// branch cutting using simple position comparison
+		if (!useDummy && selectedTargets.size() > 0)
+		{	
+			Target& prevTarget = selectedTargets.back();
+			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
+			double motionCost = getNormValueFromVector(motionErrVector);
+			if (motionCost > CONTINUOUS_MOTION_COST_THRE)
+				continue;
+		}
 		selectedTargets.push_back(targets[i]);
 		selectedIndices.push_back(i);
 		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1);
@@ -90,6 +107,17 @@ void detectionBasedTracking()
 	Mat frame, targetImage;
 	Target target;
 	bool hasTarget = false;
+
+	// initialize colors
+	RNG rng(0xFFFFFFFF);
+	vector<Scalar> colors;
+	for (int i = 0; i < NUM_OF_COLORS; i++) 
+	{
+		int icolor = (unsigned)rng;
+		colors.push_back(Scalar(icolor & 255, (icolor >> 8) & 255, (icolor >> 16) & 255));
+	}
+		
+
 
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
@@ -155,7 +183,7 @@ void detectionBasedTracking()
 
 	cout << "Detection finished" << endl;
 
-	int frameNum = 1;
+	int frameNum = 1, objectId = 0;;
 	while (true)
 	{
 		
@@ -170,7 +198,7 @@ void detectionBasedTracking()
 		cvtColor(frame, frame_contour, COLOR_BGR2GRAY);
 		vector<Rect> & pedestrians = frames[frameNum].getPedestrians(), & prevPedestrians = frames[frameNum-1].getPedestrians();
 		vector<Target> & curFrameTargets = frames[frameNum].getTargets(), prevFrameTargets = frames[frameNum - 1].getTargets();
-
+		
 		/*
 		// print rect informations
 		cout << "frame Num : " << frameNum << endl;
@@ -208,45 +236,64 @@ void detectionBasedTracking()
 		}
 		*/
 		for (int i = 0; i < pedestrians.size(); i++)
-		{
 			rectangle(frame, pedestrians[i], Scalar(0, 255, 0), 2, 1);
-		}
+
 		
 		// create tracklet
 		vector<int> solution;
-		costMin = INFINITY;
-		getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum);
-		printf("cost:%f\n", costMin);
-		for (int i = 0; i < solution.size(); i++) {
-			cout << solution[i] << endl;
-		}
-
-		// draw traces
-		for (int i = 0; i < traces.size(); i++) 
-		{
-			circle(frame, traces[i], 1, Scalar(255, 255, 255), 1);
-		}
-
-		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++) 
+		vector<Mat> segment; // set of k frames
+		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 		{
 			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum+i);
+			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + i);
 			// get frame
-			Mat frame;
-			cap >> frame;
-			vector<Rect> & pedestrians = frames[frameNum + i].getPedestrians();
-			for (int j = 0; j < pedestrians.size(); j++)
-			{
-				Scalar color = Scalar(0, 255, 0);
-				if (j == solution[i])
-					color = Scalar(0, 0, 255);
-				rectangle(frame, pedestrians[j], color, 2, 1);
-			}
-			resize(frame, frame, Size(300, 200));
-			imshow("result" + to_string(i), frame);
-			//resizeWindow("result" + to_string(i), 200, 300);
+			Mat low_level_frame;
+			cap >> low_level_frame;
+			segment.push_back(low_level_frame);
 		}
-		// imshow("result", frame);
+
+		
+		while (true)
+		{
+			costMin = INFINITY;
+			solution.clear();
+			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum);
+			
+			if (solution.size() < LOW_LEVEL_TRACKLETS)
+				break;
+
+			if (DEBUG)
+				printf("cost:%f\n", costMin);
+
+			for (int i = 0; i < solution.size(); i++)
+			{
+				Frame & curFrame = frames[frameNum + i];
+				// draw center points
+				Target & target = curFrame.getTarget(solution[i]);
+				circle(frame, target.getCenterPoint(), 2, Scalar(0, 0, 255), 1);
+
+				// draw found object in each frame
+				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
+				target.found = true;
+
+				// print solution
+				if (DEBUG) 
+					cout << solution[i] << endl;
+				
+			}
+			
+			objectId++;
+		} 
+		
+		
+		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++) 
+		{
+
+			resize(segment[i], segment[i], Size(400, 300));
+			imshow("result" + to_string(i), segment[i]);
+		}
+		
+		imshow("result", frame);
 
 
 		int key = waitKey(0);
@@ -254,7 +301,7 @@ void detectionBasedTracking()
 		if (key == (int)('m'))
 		{
 			cout << frameNum << endl;
-			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, MAX_FRAMES - 1);
+			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, MAX_FRAMES - LOW_LEVEL_TRACKLETS);
 		}
 		if (key == (int)('n'))
 		{
