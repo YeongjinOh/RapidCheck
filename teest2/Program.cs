@@ -13,7 +13,7 @@ namespace teest2
         [DllImport("test1-1.dll")]
         private static extern int ADD(int a, int b);
         [DllImport("test1-1.dll")]
-        private static extern void asd();
+        private static extern Mat asd();
 
         static void Main(string[] args)
         {
