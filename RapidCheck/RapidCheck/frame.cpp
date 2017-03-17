@@ -49,3 +49,11 @@ Target & Frame::getTarget(int idx)
 	printf("***** Error : targets does not have idx elements *****");
 	return Target();
 }
+
+
+// return target size
+int Frame::addTarget(Target target)
+{
+	targets.push_back(target);
+	return targets.size();
+}

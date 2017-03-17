@@ -19,4 +19,5 @@ public:
 	vector<Target>& getTargets();
 	Target& getTarget(int idx);
 	Rect& getPedestrian(int idx);
+	int addTarget(Target target);
 };
