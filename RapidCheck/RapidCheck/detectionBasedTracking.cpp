@@ -3,9 +3,9 @@
 #define MAX_FRAMES 120
 #define MIXTURE_CONSTANT 0.1
 #define LOW_LEVEL_TRACKLETS 6
-#define CONTINUOUS_MOTION_COST_THRE 100
+#define CONTINUOUS_MOTION_COST_THRE 50
 #define NUM_OF_COLORS 64
-#define DEBUG true
+#define DEBUG false
 
 // set input video
 VideoCapture cap(VIDEOFILE);
@@ -33,7 +33,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 {
 
 	if (useDummy) {
-		printf("use dummy called\n");
+		printf("#%d use dummy called : ",frameNumber);
 		for (int i = 0; i < selectedIndices.size(); i++)
 			printf("%d ", selectedIndices[i]);
 		printf("\n");
@@ -47,7 +47,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	if (n == LOW_LEVEL_TRACKLETS) {
 		
 		// handle outlier
-		/*
+		
 		// 1. minimum number of outlier
 		// 2. minimum of maxDist
 		double outlierDistThres = 5.0;
@@ -55,12 +55,16 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		double minMaxDist = INFINITY;
 		int inlierIdx1, inlierIdx2;
 
-		cout << "selectedIndices : ";
-		for (int i = 0; i < n; i++) {
-			printf("%d ", selectedIndices[i]);
+		if (DEBUG)
+		{
+			printf("selectedIndices : ");
+			for (int i = 0; i < n; i++) {
+				printf("%d ", selectedIndices[i]);
+			}
+			printf("\n");
 		}
-		cout << endl;
-
+		
+		/*
 		for (int i = 1; i < n; i++)
 		{
 			for (int j = 0; j < i; j++)
@@ -68,21 +72,21 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				
 				Point p1 = selectedTargets[i].getCenterPoint(), p2 = selectedTargets[j].getCenterPoint();
 				double x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
+				// predict cluster center
+				double x0 = x2 + (x1 - x2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * j) / (2 * (i - j));
+				double y0 = y2 + (y1 - y2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * j) / (2 * (i - j));
 				double maxDist = 0;
-				// calculate maximal distance from line(p1,p2) to point p0
+				// calculate maximal distance from cluster p0 to point pk
 				int cntOutlier = 0;
 				for (int k = 0; k < n; k++)
 				{
-					if (k != i && k != j)
-					{
-						Point p0 = selectedTargets[k].getCenterPoint();
-						double x0 = p0.x, y0 = p0.y;
-						double dist = abs((y2 - y1)*x0 - (x2 - x1)*y0 + x2*y1 - y2*x1) / sqrt((x2 - x1)*(x2 - x1) + (y2 - y1)*(y2 - y1));
-						printf("i:%d j:%d k:%d dist:%.2lf\n", i, j, k, dist);
-						if (dist > outlierDistThres)
-							cntOutlier++;
-						maxDist = max(maxDist, dist);
-					}
+					Point p_k = selectedTargets[k].getCenterPoint();
+					double x_k = p_k.x, y_k = p_k.y;
+					double dist = sqrt((x0 - x_k)*(x0 - x_k) + (y0 - y_k)*(y0 - y_k));
+					// printf("i:%d j:%d k:%d dist:%.2lf\n", i, j, k, dist);
+					if (dist > outlierDistThres)
+						cntOutlier++;
+					maxDist = max(maxDist, dist);	
 				}
 				if (minCntOutlier > cntOutlier || (minCntOutlier == cntOutlier && minMaxDist > maxDist))
 				{
@@ -101,7 +105,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		if (useDummy)
 		{
 			vector<int> dummyIndices;
-			//printf("use dummy\n");
+			
 			for (int i = 0; i < n; i++)
 			{
 				if (selectedIndices[i] == -1)
@@ -149,6 +153,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 					selectedTargets[idx] = target;
 				}
 			}
+			printf("dummy check : ");
 			for (int i = 0; i < n; i++)
 				printf("%d ", selectedIndices[i]);
 			cout << endl;
@@ -173,10 +178,6 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 
 		if (DEBUG)
 		{
-			for (int i = 0; i < selectedIndices.size(); i++)
-			{
-				printf("%d ", selectedIndices[i]);
-			}
 			printf("appearance : %f, motion: %f cost: %f\n", costAppearance, costMotion, cost);
 		}
 		
@@ -194,13 +195,12 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	int cnt = 0;
 	for (int i = 0; i < targets.size(); i++) 
 	{
-		if (useDummy)
-			printf("before %d\n", i);
 		Target& curTarget = targets[i];
-		if (curTarget.found)
+		if (curTarget.found) 
+		{
 			continue;
-		if (useDummy)
-			printf("after %d\n", i);
+		}
+		
 		// branch cutting using simple position comparison
 		if (!useDummy && selectedTargets.size() > 0 && selectedIndices.back() != -1)
 		{	
@@ -221,10 +221,11 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	// if not used, use dummy
 	if (cnt == 0 && useDummy)
 	{
-		printf("dummy insert #f:%d", frameNumber);
 		selectedTargets.push_back(Target());
 		selectedIndices.push_back(-1);
 		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, useDummy);
+		selectedIndices.pop_back();
+		selectedTargets.pop_back();
 	}
 }
 
@@ -316,7 +317,7 @@ void detectionBasedTracking()
 
 	cout << "Detection finished" << endl;
 
-	int frameNum = 1, objectId;
+	int frameNum = 25, objectId;
 	while (true)
 	{
 		printf("Frame #%d\n", frameNum);
@@ -409,10 +410,9 @@ void detectionBasedTracking()
 		{
 			costMin = INFINITY;
 			solution.clear();
-			printf("object %d : \n", objectId);
+			// printf("object %d : \n", objectId);
 			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, useDummy);
-			if (useDummy)
-				printf("size:%d\n", solution.size());
+			
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
 			{
 				if (useDummy)
@@ -425,7 +425,7 @@ void detectionBasedTracking()
 
 			if (DEBUG)
 				printf("cost:%f\n", costMin);
-
+			printf("obj:%d solution\n", objectId);
 			for (int i = 0; i < solution.size(); i++)
 			{
 				Frame & curFrame = frames[frameNum + i];
@@ -436,8 +436,12 @@ void detectionBasedTracking()
 
 				// draw found object in each frame
 				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
+				putText(segment[i], std::to_string(solution[i]), target.getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255,255,255), 3);
 				target.found = true;
+
+				printf("%d ", solution[i]);
 			}
+			cout << endl;
 			objectId++;
 		}
 		
