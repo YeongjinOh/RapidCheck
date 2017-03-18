@@ -110,7 +110,6 @@ System::Drawing::Bitmap^ MatToBitmap(Mat srcImg)
 		System::IO::MemoryStream^ ms = gcnew System::IO::MemoryStream(imageData);
 		output = (System::Drawing::Bitmap^)System::Drawing::Bitmap::FromStream(ms);
 	}
-
 	return output;
 }
 
@@ -129,4 +128,15 @@ System::Drawing::Bitmap^ MyOpenCvWrapper::ApplyFilter(System::Drawing::Bitmap^ b
 	System::Drawing::Bitmap^ output = MatToBitmap(dstImage);
 
 	return output;
+}
+
+Mat MyOpenCvWrapper::ApplyFilter2(Mat test)
+{
+	if (!test.data)
+	{
+		return test;
+	}
+	Mat dstImage;
+	medianBlur(test, dstImage, 25);
+	return dstImage;
 }

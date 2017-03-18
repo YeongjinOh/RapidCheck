@@ -12,6 +12,7 @@ namespace WinFormProject
 {
     public partial class Form1 : Form
     {
+        
         public Form1()
         {
             InitializeComponent();
@@ -32,12 +33,13 @@ namespace WinFormProject
         {
             //allow user to open jpg file 
             OpenFileDialog dlogOpen = new OpenFileDialog();
-            dlogOpen.Filter = "Jpg Files|*.jpg";
+            dlogOpen.Filter = "Jpg Files|*.jpg|MP4 Files|*.mp4|AVI Files|*.avi";
+
             if (dlogOpen.ShowDialog() != System.Windows.Forms.DialogResult.OK)
                 return;
 
             //open jpg file as Bitmap
-            Bitmap img = (Bitmap)Bitmap.FromFile(dlogOpen.FileName);
+            Bitmap img = (Bitmap)Bitmap.FromFile(dlogOpen.FileName);    
 
             pbSrcImg.Image = img;//set picture box image to UI
 
@@ -45,6 +47,39 @@ namespace WinFormProject
             Bitmap processedImg = processor.ApplyFilter(img);//call opencv functions and get filterred image
 
             pbDstImage.Image = processedImg;//set processed image to picture box
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlogOpen = new OpenFileDialog(); //avi
+            if (dlogOpen.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
+            
+            var capture = new OpenCvSharp.VideoCapture(dlogOpen.FileName);
+            int sleepTime = (int)Math.Round(1000 / capture.Fps);
+
+            using (var window = new OpenCvSharp.Window("capture"))
+            {
+                OpenCvSharp.Mat image = new OpenCvSharp.Mat();
+                ClassLibrary1.MyOpenCvWrapper processor = new ClassLibrary1.MyOpenCvWrapper();
+                while (true)
+                {
+                    capture.Read(image);
+                    if (image.Empty() | (OpenCvSharp.Cv2.WaitKey(33)==27))
+                        break;
+                    Bitmap img = MatToBitmap(image);
+                    
+                    Bitmap processedImg = processor.ApplyFilter(img);
+                    OpenCvSharp.Extensions.BitmapConverter.ToMat(processedImg, image);
+                    //pictureBoxIpl.Image = processedImg;
+                    OpenCvSharp.Cv2.ImShow("capture", image);
+                    OpenCvSharp.Cv2.WaitKey(sleepTime);
+                }
+            }
+        }
+        public static Bitmap MatToBitmap(OpenCvSharp.Mat image)
+        {
+            return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
         }
     }
 }
