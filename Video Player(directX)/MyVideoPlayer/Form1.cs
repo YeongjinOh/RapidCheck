@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.DirectX.AudioVideoPlayback;
 using System.IO;
+//using OpenCvSharp;
 
 namespace MyVideoPlayer
 {
@@ -34,14 +35,14 @@ namespace MyVideoPlayer
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(pnlVideo.Width, pnlVideo.Height);
 
-            videoPaths = Directory.GetFiles(folderPath, "*.wmv");
+            videoPaths = Directory.GetFiles(folderPath, "*.avi");
 
             if (videoPaths != null)
             {
                 foreach (string path in videoPaths)
                 {
                     string vid = path.Replace(folderPath, string.Empty);
-                    vid = vid.Replace(".wmv", string.Empty);
+                    vid = vid.Replace(".avi", string.Empty);
                     lstVideos.Items.Add(vid);
                 }
             }
@@ -62,7 +63,7 @@ namespace MyVideoPlayer
             video = new Video(videoPaths[index], false);
             video.Owner = pnlVideo;
             pnlVideo.Size = pnlSize;
-            video.Play();
+            //video.Play();
             tmrVideo.Enabled = true;
             btnPlayPause.Text = "Pause";
             video.Ending += Video_Ending;
@@ -119,9 +120,42 @@ namespace MyVideoPlayer
         {
             if (!video.Playing)
             {
-                video.Play();
-                tmrVideo.Enabled = true;
-                btnPlayPause.Text = "Pause";
+                //test
+                OpenFileDialog dlogOpen = new OpenFileDialog();
+                dlogOpen.Filter = "all|*.*";
+
+                if (dlogOpen.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                    return;
+
+                var capture = new OpenCvSharp.VideoCapture(dlogOpen.FileName);
+                int sleepTime = (int)Math.Round(1000 / capture.Fps);
+                
+                using (var window = new OpenCvSharp.Window("capture"))
+                {
+                    OpenCvSharp.Mat image = new OpenCvSharp.Mat();
+                    while(true)
+                    {
+                        capture.Read(image);
+                        if (image.Empty())
+                            break;
+                        
+                        OpenCvSharp.Cv2.ImShow("ttt", image);
+                        OpenCvSharp.Cv2.WaitKey(sleepTime);
+                        //OpenCvSharp.Window.ShowImages(image);
+                        //OpenCvSharp.Window.WaitKey(sleepTime);
+                    }
+                }
+
+                // Save the bitmap
+                //bitimg.Save(@"C:\Users\trevor\Desktop\Videos\bitmap.png");
+
+
+                //test
+                
+                
+                //video.Play();
+                //tmrVideo.Enabled = true;
+                //btnPlayPause.Text = "Pause";
             }
             else if (video.Playing)
             {
@@ -130,6 +164,11 @@ namespace MyVideoPlayer
                 btnPlayPause.Text = "Play";
             }
         }
+
+        public static Bitmap MatToBitmap(OpenCvSharp.Mat image)
+        {
+            return OpenCvSharp.Extensions.BitmapConverter.ToBitmap(image);
+        } 
 
         private void btnFullscreen_Click(object sender, EventArgs e)
         {

@@ -45,9 +45,10 @@
             // 
             // btnVolume
             // 
-            this.btnVolume.Location = new System.Drawing.Point(336, 381);
+            this.btnVolume.Location = new System.Drawing.Point(560, 528);
+            this.btnVolume.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnVolume.Name = "btnVolume";
-            this.btnVolume.Size = new System.Drawing.Size(75, 23);
+            this.btnVolume.Size = new System.Drawing.Size(125, 32);
             this.btnVolume.TabIndex = 20;
             this.btnVolume.Text = "Volume";
             this.btnVolume.UseVisualStyleBackColor = true;
@@ -55,11 +56,12 @@
             // 
             // trackVolume
             // 
-            this.trackVolume.Location = new System.Drawing.Point(417, 381);
+            this.trackVolume.Location = new System.Drawing.Point(695, 528);
+            this.trackVolume.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.trackVolume.Maximum = 0;
             this.trackVolume.Minimum = -10000;
             this.trackVolume.Name = "trackVolume";
-            this.trackVolume.Size = new System.Drawing.Size(153, 45);
+            this.trackVolume.Size = new System.Drawing.Size(255, 69);
             this.trackVolume.TabIndex = 19;
             this.trackVolume.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackVolume.Visible = false;
@@ -67,9 +69,10 @@
             // 
             // btnNext
             // 
-            this.btnNext.Location = new System.Drawing.Point(174, 381);
+            this.btnNext.Location = new System.Drawing.Point(290, 528);
+            this.btnNext.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnNext.Name = "btnNext";
-            this.btnNext.Size = new System.Drawing.Size(75, 23);
+            this.btnNext.Size = new System.Drawing.Size(125, 32);
             this.btnNext.TabIndex = 18;
             this.btnNext.Text = "Next";
             this.btnNext.UseVisualStyleBackColor = true;
@@ -77,9 +80,10 @@
             // 
             // btnPrevious
             // 
-            this.btnPrevious.Location = new System.Drawing.Point(12, 381);
+            this.btnPrevious.Location = new System.Drawing.Point(20, 528);
+            this.btnPrevious.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnPrevious.Name = "btnPrevious";
-            this.btnPrevious.Size = new System.Drawing.Size(75, 23);
+            this.btnPrevious.Size = new System.Drawing.Size(125, 32);
             this.btnPrevious.TabIndex = 17;
             this.btnPrevious.Text = "Previous";
             this.btnPrevious.UseVisualStyleBackColor = true;
@@ -89,17 +93,19 @@
             // 
             this.lblVideoPosition.AutoSize = true;
             this.lblVideoPosition.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVideoPosition.Location = new System.Drawing.Point(576, 383);
+            this.lblVideoPosition.Location = new System.Drawing.Point(960, 530);
+            this.lblVideoPosition.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblVideoPosition.Name = "lblVideoPosition";
-            this.lblVideoPosition.Size = new System.Drawing.Size(114, 16);
+            this.lblVideoPosition.Size = new System.Drawing.Size(184, 25);
             this.lblVideoPosition.TabIndex = 16;
             this.lblVideoPosition.Text = "00:00:00 / 00:00:00";
             // 
             // btnPlayPause
             // 
-            this.btnPlayPause.Location = new System.Drawing.Point(93, 381);
+            this.btnPlayPause.Location = new System.Drawing.Point(155, 528);
+            this.btnPlayPause.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnPlayPause.Name = "btnPlayPause";
-            this.btnPlayPause.Size = new System.Drawing.Size(75, 23);
+            this.btnPlayPause.Size = new System.Drawing.Size(125, 32);
             this.btnPlayPause.TabIndex = 15;
             this.btnPlayPause.Text = "Play/Pause";
             this.btnPlayPause.UseVisualStyleBackColor = true;
@@ -107,9 +113,10 @@
             // 
             // btnFullscreen
             // 
-            this.btnFullscreen.Location = new System.Drawing.Point(255, 381);
+            this.btnFullscreen.Location = new System.Drawing.Point(425, 528);
+            this.btnFullscreen.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.btnFullscreen.Name = "btnFullscreen";
-            this.btnFullscreen.Size = new System.Drawing.Size(75, 23);
+            this.btnFullscreen.Size = new System.Drawing.Size(125, 32);
             this.btnFullscreen.TabIndex = 14;
             this.btnFullscreen.Text = "Fullscreen";
             this.btnFullscreen.UseVisualStyleBackColor = true;
@@ -118,9 +125,10 @@
             // lblVideo
             // 
             this.lblVideo.Font = new System.Drawing.Font("Verdana", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblVideo.Location = new System.Drawing.Point(12, 417);
+            this.lblVideo.Location = new System.Drawing.Point(20, 577);
+            this.lblVideo.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.lblVideo.Name = "lblVideo";
-            this.lblVideo.Size = new System.Drawing.Size(678, 65);
+            this.lblVideo.Size = new System.Drawing.Size(1130, 90);
             this.lblVideo.TabIndex = 13;
             this.lblVideo.Text = "Video Name";
             this.lblVideo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -128,17 +136,20 @@
             // lstVideos
             // 
             this.lstVideos.FormattingEnabled = true;
-            this.lstVideos.Location = new System.Drawing.Point(696, 10);
+            this.lstVideos.ItemHeight = 18;
+            this.lstVideos.Location = new System.Drawing.Point(1160, 14);
+            this.lstVideos.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.lstVideos.Name = "lstVideos";
-            this.lstVideos.Size = new System.Drawing.Size(203, 472);
+            this.lstVideos.Size = new System.Drawing.Size(336, 652);
             this.lstVideos.TabIndex = 12;
             this.lstVideos.SelectedIndexChanged += new System.EventHandler(this.lstVideos_SelectedIndexChanged);
             // 
             // pnlVideo
             // 
-            this.pnlVideo.Location = new System.Drawing.Point(12, 10);
+            this.pnlVideo.Location = new System.Drawing.Point(20, 14);
+            this.pnlVideo.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.pnlVideo.Name = "pnlVideo";
-            this.pnlVideo.Size = new System.Drawing.Size(678, 355);
+            this.pnlVideo.Size = new System.Drawing.Size(1130, 492);
             this.pnlVideo.TabIndex = 11;
             // 
             // tmrVideo
@@ -147,9 +158,9 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 493);
+            this.ClientSize = new System.Drawing.Size(1518, 683);
             this.Controls.Add(this.btnVolume);
             this.Controls.Add(this.trackVolume);
             this.Controls.Add(this.btnNext);
@@ -161,6 +172,7 @@
             this.Controls.Add(this.lstVideos);
             this.Controls.Add(this.pnlVideo);
             this.KeyPreview = true;
+            this.Margin = new System.Windows.Forms.Padding(5, 4, 5, 4);
             this.Name = "Form1";
             this.Text = "MyVideoPlayer";
             this.Load += new System.EventHandler(this.Form1_Load);
