@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define MAX_FRAMES 300
+#define MAX_FRAMES 500
 #define MIXTURE_CONSTANT 0.1
 #define LOW_LEVEL_TRACKLETS 6
 #define CONTINUOUS_MOTION_COST_THRE 30
@@ -30,6 +30,69 @@ double getNormValueFromVector (Point p) {
 }
 double costMin = INFINITY;
 
+void reconstructLeftDummy(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx)
+{
+	assert(idx >= 0 && idx + 2 < selectedTargets.size());
+	Target target1 = selectedTargets[idx + 1], target2 = selectedTargets[idx + 2];
+	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
+	int width = target1.rect.width, height = target1.rect.height;
+	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
+	Target target(rect, target1.hist);
+	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
+	selectedIndices[idx] = targetSize - 1;
+	selectedTargets[idx] = target;
+}
+
+void reconstructRightDummy(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx)
+{
+	assert(idx >= 2 && idx < selectedTargets.size());
+	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx - 2];
+	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
+	int width = target1.rect.width, height = target1.rect.height;
+	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
+	Target target(rect, target1.hist);
+	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
+	selectedIndices[idx] = targetSize - 1;
+	selectedTargets[idx] = target;
+}
+
+void reconstructMiddleOneDummy(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx)
+{
+	assert(idx > 0 && idx + 1 < selectedTargets.size());
+	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx + 1];
+	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
+	int width = target1.rect.width, height = target1.rect.height;
+	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
+	Target target(rect, target1.hist);
+	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
+	selectedIndices[idx] = targetSize - 1;
+	selectedTargets[idx] = target;
+}
+
+void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx1, int idx2)
+{
+	assert(idx1 > 0 && idx2 < selectedTargets.size() && idx1 + 1 == idx2);
+	Target target1 = selectedTargets[idx1 - 1], target2 = selectedTargets[idx2 + 1];
+	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p_l = (2*p1 + p2) / 3, p_r = (p1 + 2*p2) / 3;
+	int width_l = target1.rect.width, height_l = target1.rect.height, width_r = target2.rect.width, height_r = target2.rect.height;
+	Rect rect_l(p_l.x - width_l / 2, p_l.y - height_l / 2, width_l, height_l), rect_r(p_r.x - width_r / 2, p_r.y - height_r / 2, width_r, height_r);
+	Target target_l(rect_l, target1.hist), target_r(rect_r, target2.hist);
+	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx1].addTarget(target_l);
+	selectedIndices[idx1] = targetSize - 1;
+	selectedTargets[idx1] = target_l;
+	targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx2].addTarget(target_r);
+	selectedIndices[idx2] = targetSize - 1;
+	selectedTargets[idx2] = target_r;
+}
+
+void printIndices(vector<int>& selectedIndices)
+{
+	printf("indices : ");
+	for (int i = 0; i < selectedIndices.size(); i++)
+		printf("%d ", selectedIndices[i]);
+	printf("\n");
+}
+
 void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, bool useDummy = false)
 {
 
@@ -47,7 +110,9 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	// base case
 	if (n == LOW_LEVEL_TRACKLETS) {
 		
-		
+		if (useDummy)
+			printIndices(selectedIndices);
+
 		// handle outlier
 
 		// 1. minimum number of outlier
@@ -56,15 +121,6 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		int minCntOutlier = LOW_LEVEL_TRACKLETS;
 		double minMaxDist = INFINITY;
 		int inlierIdx1 = -1, inlierIdx2 = -1;
-
-		if (DEBUG)
-		{
-			printf("selectedIndices : ");
-			for (int i = 0; i < n; i++) {
-				printf("%d ", selectedIndices[i]);
-			}
-			printf("\n");
-		}
 
 		vector<int> inlierCandidates;
 		for (int i = 0; i < n; i++)
@@ -119,12 +175,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		
 		if (minCntOutlier > 0)
 		{
-			printf("in: ");
-			for (int i = 0; i < inlierCandidates.size(); i++)
-				printf("%d ", inlierCandidates[i]);
-			printf("\nout: ");
-			for (int i = 0; i < minOutliers.size(); i++)
-				printf("%d ", minOutliers[i]);
+			// we can recover at most 2 outliers including dummy nodes
 			if (inlierCandidates.size() - minCntOutlier < 4)
 				return;
 
@@ -134,26 +185,17 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				int outlierIdx = minOutliers[i];
 				inlierCandidates.erase(find(inlierCandidates.begin(), inlierCandidates.end(), outlierIdx));
 			}
-			printf("\nin: ");
-			for (int i = 0; i < inlierCandidates.size(); i++)
-				printf("%d ", inlierCandidates[i]);
-			printf("\n");
-		
-			printf("outlier:%d dist:%.2lf i:%d j:%d\n", minCntOutlier, minMaxDist, inlierIdx1, inlierIdx2);
-			printf("min outliers : ");
+			
+			// change outliers with dummy nodes
 			for (int i = 0; i < minOutliers.size(); i++)
 			{
 				int outlierIdx = minOutliers[i];
-				printf("%d ", outlierIdx);
 				selectedIndices[outlierIdx] = -1;
 				selectedTargets[outlierIdx] = Target();
-
 			}
 			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, useDummy);
 			return;
 		}
-
-
 
 		// reconstruct dummy nodes
 		if (useDummy)
@@ -168,56 +210,59 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 
 			// TODO maximal 2 nodes
 			// dummy maximal 1 nodes
-			if (dummyIndices.size() > 1)
+			if (dummyIndices.size() > 2)
 				return;
 			if (dummyIndices.size() == 1)
 			{
 				int idx = dummyIndices[0];
 				if (idx == 0)
-				{
-					Target target1 = selectedTargets[1], target2 = selectedTargets[2];
-					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-					int width = target1.rect.width, height = target1.rect.height;
-					Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-					Target target(rect, target1.hist);
-					int targetSize = frames[frameNumber - n + idx].addTarget(target);
-					selectedIndices[idx] = targetSize - 1;
-					selectedTargets[idx] = target;
-				}
+					reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
 				else if (idx == n - 1)
+					reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
+				else
+					reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
+			}
+			else if (dummyIndices.size() == 2)
+			{
+				printf("dummy size 2\n");
+				printIndices(selectedIndices);
+				int idx1 = dummyIndices[0], idx2 = dummyIndices[1];
+				if (idx1 + 1 == idx2)
 				{
-					Target target1 = selectedTargets[n - 2], target2 = selectedTargets[n - 3];
-					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-					int width = target1.rect.width, height = target1.rect.height;
-					Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-					Target target(rect, target1.hist);
-					int targetSize = frames[frameNumber - n + idx].addTarget(target);
-					selectedIndices[idx] = targetSize - 1;
-					selectedTargets[idx] = target;
+					if (idx1 == 0 && idx2 == 1)
+					{
+						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+					}
+					else if (idx1 == n - 2 && idx2 == n - 1)
+					{
+						reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+						reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+					}
+					else
+						reconstructMiddleTwoDummies(selectedIndices, selectedTargets, frames, frameNumber, idx1, idx2);
 				}
 				else
 				{
-					Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx + 1];
-					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
-					int width = target1.rect.width, height = target1.rect.height;
-					Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-					Target target(rect, target1.hist);
-					int targetSize = frames[frameNumber - n + idx].addTarget(target);
-					selectedIndices[idx] = targetSize - 1;
-					selectedTargets[idx] = target;
+					if (idx1 == 0)
+					{
+						if (idx2 == n - 1)
+							reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						else
+							reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+					}
+					else {
+						if (idx2 == n - 1)
+							reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						else
+							reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+					}
 				}
 			}
-			if (DEBUG)
-			{
-				printf("dummy check : ");
-				for (int i = 0; i < n; i++)
-					printf("%d ", selectedIndices[i]);
-				cout << endl;
-			}
-		}
-
-		
 			
+		}
 
 		// compute cost
 		double costAppearance = 0.0, costMotion = 0.0;
@@ -279,7 +324,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	}
 	
 	// if not used, use dummy
-	if ((n == 0 || cnt == 0) && useDummy)
+	if ((n < 2 || cnt == 0) && useDummy)
 	{
 		selectedTargets.push_back(Target());
 		selectedIndices.push_back(-1);
@@ -444,9 +489,12 @@ void detectionBasedTracking(App app)
 			}
 			cout << endl;
 
-			if (DEBUG)
+			if (DEBUG) 
+			{
 				printf("cost:%f\n", costMin);
-			printf("obj:%d solution\n", objectId);
+				printf("obj:%d solution\n", objectId);
+
+			}
 			for (int i = 0; i < solution.size(); i++)
 			{
 				Frame & curFrame = frames[frameNum + i];
@@ -459,7 +507,7 @@ void detectionBasedTracking(App app)
 				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
 				target.found = true;
 
-				printf("%d ", solution[i]);
+				// printf("%d ", solution[i]);
 			}
 			cout << endl;
 			objectId++;
@@ -479,6 +527,10 @@ void detectionBasedTracking(App app)
 		if (key == (int)('m'))
 		{
 			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, MAX_FRAMES - LOW_LEVEL_TRACKLETS);
+		}
+		else if (key == (int)('v'))
+		{
+			frameNum = max(frameNum - LOW_LEVEL_TRACKLETS, 1);
 		}
 		else if (key == (int)('n'))
 		{
