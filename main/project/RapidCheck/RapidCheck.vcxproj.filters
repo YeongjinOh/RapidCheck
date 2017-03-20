@@ -39,6 +39,9 @@
     <ClCompile Include="tracking_utils.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="showTracklet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gpu_hog.h">
