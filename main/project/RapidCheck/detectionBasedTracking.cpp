@@ -1,12 +1,10 @@
-#include "main.h"
+#include "tracking_utils.h"
 
-#define MAX_FRAMES 500
-#define MIXTURE_CONSTANT 0.1
-#define LOW_LEVEL_TRACKLETS 6
-#define CONTINUOUS_MOTION_COST_THRE 30
+#define MAX_FRAMES 60
 #define NUM_OF_COLORS 64
 #define DEBUG false
 #define start 0 // start frame number
+
 
 // set input video
 VideoCapture cap(VIDEOFILE);
@@ -14,325 +12,7 @@ VideoCapture cap(VIDEOFILE);
 // random number generator
 RNG rng(0xFFFFFFFF);
 
-Mat getFrame(vector<Frame>& frames, int frameNum) {
-	
-	Mat frame;
-	cap >> frame;
-	vector<Rect> & pedestrians = frames[frameNum].getPedestrians();
-	for (int i = 0; i < pedestrians.size(); i++) {
-		rectangle(frame, pedestrians[i], Scalar(0, 255, 0), 2, 1);
-	}
-	return frame;
-}
 
-double getNormValueFromVector (Point p) {
-	return sqrt(p.x*p.x + p.y*p.y);
-}
-double costMin = INFINITY;
-
-void reconstructLeftDummy(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx)
-{
-	assert(idx >= 0 && idx + 2 < selectedTargets.size());
-	Target target1 = selectedTargets[idx + 1], target2 = selectedTargets[idx + 2];
-	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-	int width = target1.rect.width, height = target1.rect.height;
-	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-	Target target(rect, target1.hist);
-	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
-	selectedIndices[idx] = targetSize - 1;
-	selectedTargets[idx] = target;
-}
-
-void reconstructRightDummy(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx)
-{
-	assert(idx >= 2 && idx < selectedTargets.size());
-	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx - 2];
-	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-	int width = target1.rect.width, height = target1.rect.height;
-	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-	Target target(rect, target1.hist);
-	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
-	selectedIndices[idx] = targetSize - 1;
-	selectedTargets[idx] = target;
-}
-
-void reconstructMiddleOneDummy(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx)
-{
-	assert(idx > 0 && idx + 1 < selectedTargets.size());
-	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx + 1];
-	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
-	int width = target1.rect.width, height = target1.rect.height;
-	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-	Target target(rect, target1.hist);
-	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
-	selectedIndices[idx] = targetSize - 1;
-	selectedTargets[idx] = target;
-}
-
-void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, int idx1, int idx2)
-{
-	assert(idx1 > 0 && idx2 < selectedTargets.size() && idx1 + 1 == idx2);
-	Target target1 = selectedTargets[idx1 - 1], target2 = selectedTargets[idx2 + 1];
-	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p_l = (2*p1 + p2) / 3, p_r = (p1 + 2*p2) / 3;
-	int width_l = target1.rect.width, height_l = target1.rect.height, width_r = target2.rect.width, height_r = target2.rect.height;
-	Rect rect_l(p_l.x - width_l / 2, p_l.y - height_l / 2, width_l, height_l), rect_r(p_r.x - width_r / 2, p_r.y - height_r / 2, width_r, height_r);
-	Target target_l(rect_l, target1.hist), target_r(rect_r, target2.hist);
-	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx1].addTarget(target_l);
-	selectedIndices[idx1] = targetSize - 1;
-	selectedTargets[idx1] = target_l;
-	targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx2].addTarget(target_r);
-	selectedIndices[idx2] = targetSize - 1;
-	selectedTargets[idx2] = target_r;
-}
-
-void printIndices(vector<int>& selectedIndices)
-{
-	printf("indices : ");
-	for (int i = 0; i < selectedIndices.size(); i++)
-		printf("%d ", selectedIndices[i]);
-	printf("\n");
-}
-
-void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, bool useDummy = false)
-{
-
-	if (DEBUG && useDummy) {
-		printf("#%d use dummy called : ",frameNumber);
-		for (int i = 0; i < selectedIndices.size(); i++)
-			printf("%d ", selectedIndices[i]);
-		printf("\n");
-	}
-
-
-	// (n+1)-th frame
-	int n = selectedTargets.size();
-
-	// base case
-	if (n == LOW_LEVEL_TRACKLETS) {
-		
-		if (useDummy)
-			printIndices(selectedIndices);
-
-		// handle outlier
-
-		// 1. minimum number of outlier
-		// 2. minimum of maxDist
-		double outlierDistThres = 50.0;
-		int minCntOutlier = LOW_LEVEL_TRACKLETS;
-		double minMaxDist = INFINITY;
-		int inlierIdx1 = -1, inlierIdx2 = -1;
-
-		vector<int> inlierCandidates;
-		for (int i = 0; i < n; i++)
-			if (selectedIndices[i] != -1)
-				inlierCandidates.push_back(i);
-
-		// at least 4 inliers needed
-		if (inlierCandidates.size() < 4)
-			return;
-
-		vector<int> minOutliers, outliers;
-		for (int i = 1; i < inlierCandidates.size(); i++)
-		{
-			for (int j = 0; j < i; j++)
-			{
-				int idx1 = inlierCandidates[i], idx2 = inlierCandidates[j];
-				Point p1 = selectedTargets[idx1].getCenterPoint(), p2 = selectedTargets[idx2].getCenterPoint();
-				double x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
-				// predict cluster center
-				double x0 = x2 + (x1 - x2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * idx2) / (2 * (idx1 - idx2));
-				double y0 = y2 + (y1 - y2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * idx2) / (2 * (idx1 - idx2));
-				double maxDist = 0;
-				// calculate maximal distance from cluster p0 to point pk
-				int cntOutlier = 0;
-				outliers.clear();
-				for (int k = 0; k < inlierCandidates.size(); k++)
-				{
-					int idx0 = inlierCandidates[k];
-					Point p_k = selectedTargets[idx0].getCenterPoint();
-					double x_k = p_k.x, y_k = p_k.y;
-					double dist = sqrt((x0 - x_k)*(x0 - x_k) + (y0 - y_k)*(y0 - y_k));
-
-					if (dist > outlierDistThres)
-					{
-						outliers.push_back(idx0);
-						cntOutlier++;
-					}
-
-					maxDist = max(maxDist, dist);
-				}
-				if (minCntOutlier > cntOutlier || (minCntOutlier == cntOutlier && minMaxDist > maxDist))
-				{
-					minCntOutlier = cntOutlier;
-					minMaxDist = maxDist;
-					inlierIdx1 = idx1;
-					inlierIdx2 = idx2;
-					minOutliers.clear();
-					minOutliers.assign(outliers.begin(), outliers.end());
-				}
-			}
-		}
-		
-		if (minCntOutlier > 0)
-		{
-			// we can recover at most 2 outliers including dummy nodes
-			if (inlierCandidates.size() - minCntOutlier < 4)
-				return;
-
-			// erase outliers
-			for (int i = 0; i < minOutliers.size(); i++)
-			{
-				int outlierIdx = minOutliers[i];
-				inlierCandidates.erase(find(inlierCandidates.begin(), inlierCandidates.end(), outlierIdx));
-			}
-			
-			// change outliers with dummy nodes
-			for (int i = 0; i < minOutliers.size(); i++)
-			{
-				int outlierIdx = minOutliers[i];
-				selectedIndices[outlierIdx] = -1;
-				selectedTargets[outlierIdx] = Target();
-			}
-			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, useDummy);
-			return;
-		}
-
-		// reconstruct dummy nodes
-		if (useDummy)
-		{
-			vector<int> dummyIndices;
-
-			for (int i = 0; i < n; i++)
-			{
-				if (selectedIndices[i] == -1)
-					dummyIndices.push_back(i);
-			}
-
-			// TODO maximal 2 nodes
-			// dummy maximal 1 nodes
-			if (dummyIndices.size() > 2)
-				return;
-			if (dummyIndices.size() == 1)
-			{
-				int idx = dummyIndices[0];
-				if (idx == 0)
-					reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
-				else if (idx == n - 1)
-					reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
-				else
-					reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
-			}
-			else if (dummyIndices.size() == 2)
-			{
-				printf("dummy size 2\n");
-				printIndices(selectedIndices);
-				int idx1 = dummyIndices[0], idx2 = dummyIndices[1];
-				if (idx1 + 1 == idx2)
-				{
-					if (idx1 == 0 && idx2 == 1)
-					{
-						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
-						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
-					}
-					else if (idx1 == n - 2 && idx2 == n - 1)
-					{
-						reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
-						reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
-					}
-					else
-						reconstructMiddleTwoDummies(selectedIndices, selectedTargets, frames, frameNumber, idx1, idx2);
-				}
-				else
-				{
-					if (idx1 == 0)
-					{
-						if (idx2 == n - 1)
-							reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
-						else
-							reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
-						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
-					}
-					else {
-						if (idx2 == n - 1)
-							reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
-						else
-							reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
-						reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
-					}
-				}
-			}
-			
-		}
-
-		// compute cost
-		double costAppearance = 0.0, costMotion = 0.0;
-		for (int i = 0; i < n; i++) 
-		{
-			for (int j = 0; j < i; j++) 
-			{
-				costAppearance += compareHist(selectedTargets[i].hist, selectedTargets[j].hist, 0);
-			}
-			for (int j = 1; j < n - 1; j++) 
-			{
-				Point motionErrVector = selectedTargets[i].getCenterPoint() - selectedTargets[j].getCenterPoint() - (i - j)*(selectedTargets[j + 1].getCenterPoint() - selectedTargets[j].getCenterPoint());
-				double motionCost = getNormValueFromVector(motionErrVector);
-				costMotion += motionCost;
-			}
-		}
-		double cost = costAppearance + MIXTURE_CONSTANT * costMotion;
-
-		if (DEBUG)
-		{
-			printf("appearance : %f, motion: %f cost: %f\n", costAppearance, costMotion, cost);
-		}
-		
-		if (costMin > cost)
-		{
-			costMin = cost;
-			solution.assign(selectedIndices.begin(), selectedIndices.end());
-		}
-		return;
-	}
-
-	Frame& frame = frames[frameNumber];
-	vector<Target>& targets= frame.getTargets();
-	double cost;
-	int cnt = 0;
-	for (int i = 0; i < targets.size(); i++) 
-	{
-		Target& curTarget = targets[i];
-		if (curTarget.found) 
-		{
-			continue;
-		}
-		
-		// branch cutting using simple position comparison
-		if (selectedTargets.size() > 0 && selectedIndices.back() != -1)
-		{	
-			Target& prevTarget = selectedTargets.back();
-			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
-			double motionCost = getNormValueFromVector(motionErrVector);
-			if (motionCost > CONTINUOUS_MOTION_COST_THRE)
-				continue;
-		}
-		selectedTargets.push_back(targets[i]);
-		selectedIndices.push_back(i);
-		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, useDummy);
-		selectedIndices.pop_back();
-		selectedTargets.pop_back();
-		cnt++;
-	}
-	
-	// if not used, use dummy
-	if ((n < 2 || cnt == 0) && useDummy)
-	{
-		selectedTargets.push_back(Target());
-		selectedIndices.push_back(-1);
-		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, useDummy);
-		selectedIndices.pop_back();
-		selectedTargets.pop_back();
-	}
-}
 
 void detectionBasedTracking(App app)
 {
@@ -350,8 +30,6 @@ void detectionBasedTracking(App app)
 		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
 	}
 		
-
-
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
 	int h_bins = 50; int s_bins = 60;
@@ -420,7 +98,7 @@ void detectionBasedTracking(App app)
 	int frameNum = 1, objectId;
 	while (true)
 	{
-		printf("Frame #%d\n", frameNum);
+		printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
 		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum+start);
@@ -474,27 +152,24 @@ void detectionBasedTracking(App app)
 
 		while (true)
 		{
-			costMin = INFINITY;
+			double costMin = INFINITY;
 			solution.clear();
-			// printf("object %d : \n", objectId);
-			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, useDummy);
+			
+			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
 			
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
 			{
 				if (useDummy)
 					break;
 				useDummy = true;
-				cout << "Now, use dummy" << endl;
+				printf("\nSolutions from dummy nodes reconstruction");
 				continue;
 			}
 			cout << endl;
 
 			if (DEBUG) 
-			{
 				printf("cost:%f\n", costMin);
-				printf("obj:%d solution\n", objectId);
-
-			}
+			printf("object %d : ", objectId);
 			for (int i = 0; i < solution.size(); i++)
 			{
 				Frame & curFrame = frames[frameNum + i];
@@ -507,9 +182,8 @@ void detectionBasedTracking(App app)
 				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
 				target.found = true;
 
-				// printf("%d ", solution[i]);
+				printf("%d ", solution[i]);
 			}
-			cout << endl;
 			objectId++;
 		}
 		

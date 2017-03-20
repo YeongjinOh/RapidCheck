@@ -1,3 +1,6 @@
+#ifndef MAIN_H
+#define MAIN_H
+
 #include <opencv2/opencv.hpp>
 #include <opencv2/core/utility.hpp>
 #include <opencv2/tracking.hpp>
@@ -20,3 +23,5 @@
 
 void detectionAndTracking(App app);
 void detectionBasedTracking(App app);
+
+#endif

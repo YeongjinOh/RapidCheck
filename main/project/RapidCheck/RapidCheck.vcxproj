@@ -151,6 +151,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="target.cpp" />
     <ClCompile Include="targetgroup.cpp" />
+    <ClCompile Include="tracking_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="frame.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="targetgroup.h" />
     <ClInclude Include="target.h" />
     <ClInclude Include="gpu_hog.h" />
+    <ClInclude Include="tracking_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
