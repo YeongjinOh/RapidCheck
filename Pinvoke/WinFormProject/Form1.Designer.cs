@@ -32,8 +32,11 @@
             this.button2 = new System.Windows.Forms.Button();
             this.pbSrcImg = new System.Windows.Forms.PictureBox();
             this.pbDstImage = new System.Windows.Forms.PictureBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.pictureBoxIpl = new OpenCvSharp.UserInterface.PictureBoxIpl();
             ((System.ComponentModel.ISupportInitialize)(this.pbSrcImg)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDstImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIpl)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -60,25 +63,45 @@
             // 
             this.pbSrcImg.Location = new System.Drawing.Point(33, 104);
             this.pbSrcImg.Name = "pbSrcImg";
-            this.pbSrcImg.Size = new System.Drawing.Size(414, 500);
+            this.pbSrcImg.Size = new System.Drawing.Size(350, 500);
             this.pbSrcImg.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbSrcImg.TabIndex = 2;
             this.pbSrcImg.TabStop = false;
             // 
             // pbDstImage
             // 
-            this.pbDstImage.Location = new System.Drawing.Point(471, 104);
+            this.pbDstImage.Location = new System.Drawing.Point(405, 104);
             this.pbDstImage.Name = "pbDstImage";
-            this.pbDstImage.Size = new System.Drawing.Size(496, 500);
+            this.pbDstImage.Size = new System.Drawing.Size(378, 500);
             this.pbDstImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbDstImage.TabIndex = 3;
             this.pbDstImage.TabStop = false;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(274, 13);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(143, 55);
+            this.button3.TabIndex = 4;
+            this.button3.Text = "button3";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // pictureBoxIpl
+            // 
+            this.pictureBoxIpl.Location = new System.Drawing.Point(789, 104);
+            this.pictureBoxIpl.Name = "pictureBoxIpl";
+            this.pictureBoxIpl.Size = new System.Drawing.Size(388, 500);
+            this.pictureBoxIpl.TabIndex = 5;
+            this.pictureBoxIpl.TabStop = false;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1014, 704);
+            this.ClientSize = new System.Drawing.Size(1189, 704);
+            this.Controls.Add(this.pictureBoxIpl);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.pbDstImage);
             this.Controls.Add(this.pbSrcImg);
             this.Controls.Add(this.button2);
@@ -87,6 +110,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pbSrcImg)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDstImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxIpl)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -97,6 +121,9 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.PictureBox pbSrcImg;
         private System.Windows.Forms.PictureBox pbDstImage;
+        
+        private System.Windows.Forms.Button button3;
+        private OpenCvSharp.UserInterface.PictureBoxIpl pictureBoxIpl;
     }
 }
 
