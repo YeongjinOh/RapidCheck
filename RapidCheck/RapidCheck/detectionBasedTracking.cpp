@@ -3,7 +3,7 @@
 #define MAX_FRAMES 120
 #define MIXTURE_CONSTANT 0.1
 #define LOW_LEVEL_TRACKLETS 6
-#define CONTINUOUS_MOTION_COST_THRE 50
+#define CONTINUOUS_MOTION_COST_THRE 30
 #define NUM_OF_COLORS 64
 #define DEBUG false
 
@@ -32,7 +32,7 @@ double costMin = INFINITY;
 void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, bool useDummy = false)
 {
 
-	if (useDummy) {
+	if (DEBUG && useDummy) {
 		printf("#%d use dummy called : ",frameNumber);
 		for (int i = 0; i < selectedIndices.size(); i++)
 			printf("%d ", selectedIndices[i]);
@@ -46,14 +46,15 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	// base case
 	if (n == LOW_LEVEL_TRACKLETS) {
 		
-		// handle outlier
 		
+		// handle outlier
+
 		// 1. minimum number of outlier
 		// 2. minimum of maxDist
-		double outlierDistThres = 5.0;
-		int minCntOutlier = INFINITY;
+		double outlierDistThres = 50.0;
+		int minCntOutlier = LOW_LEVEL_TRACKLETS;
 		double minMaxDist = INFINITY;
-		int inlierIdx1, inlierIdx2;
+		int inlierIdx1 = -1, inlierIdx2 = -1;
 
 		if (DEBUG)
 		{
@@ -63,49 +64,101 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 			}
 			printf("\n");
 		}
-		
-		/*
-		for (int i = 1; i < n; i++)
+
+		vector<int> inlierCandidates;
+		for (int i = 0; i < n; i++)
+			if (selectedIndices[i] != -1)
+				inlierCandidates.push_back(i);
+
+		// at least 4 inliers needed
+		if (inlierCandidates.size() < 4)
+			return;
+
+		vector<int> minOutliers, outliers;
+		for (int i = 1; i < inlierCandidates.size(); i++)
 		{
 			for (int j = 0; j < i; j++)
 			{
-				
-				Point p1 = selectedTargets[i].getCenterPoint(), p2 = selectedTargets[j].getCenterPoint();
+				int idx1 = inlierCandidates[i], idx2 = inlierCandidates[j];
+				Point p1 = selectedTargets[idx1].getCenterPoint(), p2 = selectedTargets[idx2].getCenterPoint();
 				double x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
 				// predict cluster center
-				double x0 = x2 + (x1 - x2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * j) / (2 * (i - j));
-				double y0 = y2 + (y1 - y2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * j) / (2 * (i - j));
+				double x0 = x2 + (x1 - x2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * idx2) / (2 * (idx1 - idx2));
+				double y0 = y2 + (y1 - y2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * idx2) / (2 * (idx1 - idx2));
 				double maxDist = 0;
 				// calculate maximal distance from cluster p0 to point pk
 				int cntOutlier = 0;
-				for (int k = 0; k < n; k++)
+				outliers.clear();
+				for (int k = 0; k < inlierCandidates.size(); k++)
 				{
-					Point p_k = selectedTargets[k].getCenterPoint();
+					int idx0 = inlierCandidates[k];
+					Point p_k = selectedTargets[idx0].getCenterPoint();
 					double x_k = p_k.x, y_k = p_k.y;
 					double dist = sqrt((x0 - x_k)*(x0 - x_k) + (y0 - y_k)*(y0 - y_k));
-					// printf("i:%d j:%d k:%d dist:%.2lf\n", i, j, k, dist);
+
 					if (dist > outlierDistThres)
+					{
+						outliers.push_back(idx0);
 						cntOutlier++;
-					maxDist = max(maxDist, dist);	
+					}
+
+					maxDist = max(maxDist, dist);
 				}
 				if (minCntOutlier > cntOutlier || (minCntOutlier == cntOutlier && minMaxDist > maxDist))
 				{
 					minCntOutlier = cntOutlier;
 					minMaxDist = maxDist;
-					inlierIdx1 = i;
-					inlierIdx2 = j;
+					inlierIdx1 = idx1;
+					inlierIdx2 = idx2;
+					minOutliers.clear();
+					minOutliers.assign(outliers.begin(), outliers.end());
 				}
 			}
 		}
 		
-		//printf("\ni:%d j:%d\n", inlierIdx1, inlierIdx2);
-		*/
-		
-		// dummy check
+		if (minCntOutlier > 0)
+		{
+			printf("in: ");
+			for (int i = 0; i < inlierCandidates.size(); i++)
+				printf("%d ", inlierCandidates[i]);
+			printf("\nout: ");
+			for (int i = 0; i < minOutliers.size(); i++)
+				printf("%d ", minOutliers[i]);
+			if (inlierCandidates.size() - minCntOutlier < 4)
+				return;
+
+			// erase outliers
+			for (int i = 0; i < minOutliers.size(); i++)
+			{
+				int outlierIdx = minOutliers[i];
+				inlierCandidates.erase(find(inlierCandidates.begin(), inlierCandidates.end(), outlierIdx));
+			}
+			printf("\nin: ");
+			for (int i = 0; i < inlierCandidates.size(); i++)
+				printf("%d ", inlierCandidates[i]);
+			printf("\n");
+		return;
+		printf("outlier:%d dist:%.2lf i:%d j:%d\n", minCntOutlier, minMaxDist, inlierIdx1, inlierIdx2);
+		printf("min outliers : ");
+		for (int i = 0; i < minOutliers.size(); i++)
+		{
+		int outlierIdx = minOutliers[i];
+		printf("%d ", outlierIdx);
+		selectedIndices[outlierIdx] = -1;
+		selectedTargets[outlierIdx] = Target();
+
+		}
+		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, useDummy);
+		return;
+		}
+
+
+
+		// reconstruct dummy nodes
 		if (useDummy)
 		{
 			vector<int> dummyIndices;
-			
+
 			for (int i = 0; i < n; i++)
 			{
 				if (selectedIndices[i] == -1)
@@ -122,9 +175,9 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				if (idx == 0)
 				{
 					Target target1 = selectedTargets[1], target2 = selectedTargets[2];
-					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2*p1 - p2);
+					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
 					int width = target1.rect.width, height = target1.rect.height;
-					Rect rect(p0.x - width/2, p0.y - height/2, width, height);
+					Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 					Target target(rect, target1.hist);
 					int targetSize = frames[frameNumber - n + idx].addTarget(target);
 					selectedIndices[idx] = targetSize - 1;
@@ -143,8 +196,8 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				}
 				else
 				{
-					Target target1 = selectedTargets[idx-1], target2 = selectedTargets[idx+1];
-					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2)/2;
+					Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx + 1];
+					Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
 					int width = target1.rect.width, height = target1.rect.height;
 					Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 					Target target(rect, target1.hist);
@@ -153,11 +206,17 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 					selectedTargets[idx] = target;
 				}
 			}
-			printf("dummy check : ");
-			for (int i = 0; i < n; i++)
-				printf("%d ", selectedIndices[i]);
-			cout << endl;
+			if (DEBUG)
+			{
+				printf("dummy check : ");
+				for (int i = 0; i < n; i++)
+					printf("%d ", selectedIndices[i]);
+				cout << endl;
+			}
 		}
+
+		
+			
 
 		// compute cost
 		double costAppearance = 0.0, costMotion = 0.0;
@@ -202,7 +261,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		}
 		
 		// branch cutting using simple position comparison
-		if (!useDummy && selectedTargets.size() > 0 && selectedIndices.back() != -1)
+		if (selectedTargets.size() > 0 && selectedIndices.back() != -1)
 		{	
 			Target& prevTarget = selectedTargets.back();
 			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
@@ -219,7 +278,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	}
 	
 	// if not used, use dummy
-	if (cnt == 0 && useDummy)
+	if ((n == 0 || cnt == 0) && useDummy)
 	{
 		selectedTargets.push_back(Target());
 		selectedIndices.push_back(-1);
@@ -317,15 +376,13 @@ void detectionBasedTracking()
 
 	cout << "Detection finished" << endl;
 
-	int frameNum = 25, objectId;
+	int frameNum = 1, objectId;
 	while (true)
 	{
 		printf("Frame #%d\n", frameNum);
 
 		// set frame number
 		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-
-		
 
 		// get frame
 		Mat frame, frame_edge, frame_contour;
@@ -336,42 +393,6 @@ void detectionBasedTracking()
 		vector<Rect> & pedestrians = frames[frameNum].getPedestrians(), & prevPedestrians = frames[frameNum-1].getPedestrians();
 		vector<Target> & curFrameTargets = frames[frameNum].getTargets(), prevFrameTargets = frames[frameNum - 1].getTargets();
 		
-		/*
-		// print rect informations
-		cout << "frame Num : " << frameNum << endl;
-		cout << " - previous frame pedestrians : ";
-		for (int i = 0; i < prevPedestrians.size(); i++)
-		{
-			Rect rect = prevPedestrians[i];
-			Point center(rect.x + rect.width / 2, rect.y + rect.height / 2);
-			traces.push_back(center);
-			printf("(%d,%d,%d,%d)\t", rect.x, rect.y, rect.width, rect.height);
-		}
-		cout << endl;
-		cout << " - current frame pedestrians : ";
-		for (int i = 0; i < pedestrians.size(); i++)
-		{
-			Rect rect = pedestrians[i];
-			Point center(rect.x + rect.width / 2, rect.y + rect.height / 2);
-			traces.push_back(center);
-			printf("(%d,%d,%d,%d)\t", rect.x, rect.y, rect.width, rect.height);
-		}
-		cout << endl;
-		for (int i = 0; i < pedestrians.size(); i++)
-		{
-			Rect curRect = pedestrians[i];
-			MatND curHist = curFrameTargets[i].hist;
-			for (int j = 0; j < prevPedestrians.size(); j++)
-			{
-				Rect prevRect = prevPedestrians[j];
-				MatND prevHist = prevFrameTargets[j].hist;
-				int dx = curRect.x - prevRect.x, dy = curRect.y - prevRect.y, distSquare = dx*dx + dy*dy;
-				double similarity = compareHist(curHist, prevHist, 0);
-				printf("(%d,%d):%d\t%.2lf\t", dx, dy, distSquare, similarity);
-			}
-			cout << endl;
-		}
-		*/
 		for (int i = 0; i < pedestrians.size(); i++)
 			rectangle(frame, pedestrians[i], Scalar(0, 255, 0), 2, 1);
 
@@ -392,7 +413,10 @@ void detectionBasedTracking()
 			vector<Rect>& pedestrians = frames[frameNum + i].getPedestrians();
 			for (int j = 0; j < pedestrians.size(); j++)
 			{
-				rectangle(cluster, pedestrians[j], Scalar(255, 255, 255), 2);
+				Rect rect = pedestrians[j];
+				rectangle(cluster, Rect(rect.x-10, rect.y-10, rect.width+20, rect.height+20), Scalar(255, 255, 255), 2);
+				// rectangle(cluster, rect, Scalar(255, 255, 255), 2);
+				
 			}
 
 			// reset 
@@ -400,6 +424,7 @@ void detectionBasedTracking()
 			for (int j = 0; j < targets.size(); j++)
 			{
 				targets[j].found = false;
+				putText(cluster, std::to_string(j), targets[j].getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 255), 3);
 			}
 		}
 
@@ -436,7 +461,6 @@ void detectionBasedTracking()
 
 				// draw found object in each frame
 				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
-				putText(segment[i], std::to_string(solution[i]), target.getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255,255,255), 3);
 				target.found = true;
 
 				printf("%d ", solution[i]);
@@ -469,5 +493,4 @@ void detectionBasedTracking()
 			frameNum = max(frameNum - 1, 1);
 		}
 	}
-
 }
