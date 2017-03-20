@@ -21,11 +21,9 @@ double getPSNR(const Mat& I1, const Mat& I2)
 	}
 }
 
-void detectionAndTracking()
+void detectionAndTracking(App app)
 {
-	// declares all required variables
-	Args args;
-	App app(args);
+	
 	Mat frame, targetImage;
 	Target target;
 	bool hasTarget = false;

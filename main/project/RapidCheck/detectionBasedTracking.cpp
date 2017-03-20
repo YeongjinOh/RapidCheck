@@ -1,11 +1,12 @@
 #include "main.h"
 
-#define MAX_FRAMES 120
+#define MAX_FRAMES 300
 #define MIXTURE_CONSTANT 0.1
 #define LOW_LEVEL_TRACKLETS 6
 #define CONTINUOUS_MOTION_COST_THRE 30
 #define NUM_OF_COLORS 64
 #define DEBUG false
+#define start 0 // start frame number
 
 // set input video
 VideoCapture cap(VIDEOFILE);
@@ -137,19 +138,19 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 			for (int i = 0; i < inlierCandidates.size(); i++)
 				printf("%d ", inlierCandidates[i]);
 			printf("\n");
-		return;
-		printf("outlier:%d dist:%.2lf i:%d j:%d\n", minCntOutlier, minMaxDist, inlierIdx1, inlierIdx2);
-		printf("min outliers : ");
-		for (int i = 0; i < minOutliers.size(); i++)
-		{
-		int outlierIdx = minOutliers[i];
-		printf("%d ", outlierIdx);
-		selectedIndices[outlierIdx] = -1;
-		selectedTargets[outlierIdx] = Target();
+		
+			printf("outlier:%d dist:%.2lf i:%d j:%d\n", minCntOutlier, minMaxDist, inlierIdx1, inlierIdx2);
+			printf("min outliers : ");
+			for (int i = 0; i < minOutliers.size(); i++)
+			{
+				int outlierIdx = minOutliers[i];
+				printf("%d ", outlierIdx);
+				selectedIndices[outlierIdx] = -1;
+				selectedTargets[outlierIdx] = Target();
 
-		}
-		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, useDummy);
-		return;
+			}
+			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, useDummy);
+			return;
 		}
 
 
@@ -288,15 +289,9 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	}
 }
 
-void detectionBasedTracking()
+void detectionBasedTracking(App app)
 {
 	
-	// set gpu_hog
-	Args args;
-	args.hit_threshold = 0.9;
-	args.hit_threshold_auto = false;
-	args.gr_threshold = 6;
-	App app(args);
 	Mat frame, targetImage;
 	Target target;
 	bool hasTarget = false;
@@ -326,8 +321,9 @@ void detectionBasedTracking()
 	vector<Frame> frames;
 	vector<Point> traces;
 
-	
-	for (int frameNum = 0; frameNum < MAX_FRAMES; frameNum++) {
+	cap.set(CV_CAP_PROP_POS_FRAMES, start);
+
+	for (int frameNum = start; frameNum < start + MAX_FRAMES; frameNum++) {
 		
 		// get frame from the video
 		cap >> frame;
@@ -375,14 +371,14 @@ void detectionBasedTracking()
 	}
 
 	cout << "Detection finished" << endl;
-
+	
 	int frameNum = 1, objectId;
 	while (true)
 	{
 		printf("Frame #%d\n", frameNum);
 
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum+start);
 
 		// get frame
 		Mat frame, frame_edge, frame_contour;
@@ -403,7 +399,7 @@ void detectionBasedTracking()
 		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 		{
 			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + i);
+			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start + i);
 			// get frame
 			Mat cluster;
 			cap >> cluster;
@@ -484,13 +480,17 @@ void detectionBasedTracking()
 		{
 			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, MAX_FRAMES - LOW_LEVEL_TRACKLETS);
 		}
-		if (key == (int)('n'))
+		else if (key == (int)('n'))
 		{
 			frameNum = min(frameNum + 1, MAX_FRAMES - 1);
 		}
 		else if (key == (int)('b'))
 		{
 			frameNum = max(frameNum - 1, 1);
+		}
+		else if (key == (int)('r'))
+		{
+			frameNum = 1;
 		}
 	}
 }
