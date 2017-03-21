@@ -1,6 +1,6 @@
 #include "tracking_utils.h"
 
-#define MAX_FRAMES 500
+#define MAX_FRAMES 481
 #define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
 #define NUM_OF_COLORS 64
 #define DEBUG false
@@ -98,6 +98,7 @@ void showTracklet(App app)
 	// build all segments
 	vector<Segment> segments;
 	int frameNum = 1;
+	
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
 		// set frame number
@@ -105,7 +106,6 @@ void showTracklet(App app)
 		Segment segment(frameNum + start);
 
 		// get frame
-		Mat frame;
 		cap >> frame;
 
 		// create tracklet
@@ -146,7 +146,9 @@ void showTracklet(App app)
 	}
 
 	cout << "Tracklets built" << endl;
-
+	vector<Point> centers;
+	vector<int> objectIds;
+	int objectId = 0;
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 	{
 		Segment & segment = segments[segmentNumber];
@@ -161,8 +163,14 @@ void showTracklet(App app)
 			{
 				tracklet& pedestrianTracklet = pedestrianTracklets[pedestrianNum];
 				Target& currentFramePedestrian = pedestrianTracklet[frameIdx - 1];
-				rectangle(frame, currentFramePedestrian.rect, RED, 2);
+				rectangle(frame, currentFramePedestrian.rect, colors[(objectId + pedestrianNum) % NUM_OF_COLORS], 2);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
+				centers.push_back(currentFramePedestrian.getCenterPoint());
+				objectIds.push_back(objectId + pedestrianNum);
+			}
+			for (int i = 0; i < centers.size() && i < objectIds.size(); i++)
+			{
+				circle(frame, centers[i], 1, colors[objectIds[i]%NUM_OF_COLORS], 2);
 			}
 			imshow("tracklets", frame);
 
@@ -171,9 +179,19 @@ void showTracklet(App app)
 			if (key == 27) break;
 			else if (key == (int)('r'))
 			{
+				centers.clear();
+				objectIds.clear();
 				segmentNumber = 0;
 				break;
 			}
+			else if (key == (int)('c'))
+			{
+				centers.clear();
+				objectIds.clear();
+				break;
+			}
+			if (frameIdx == LOW_LEVEL_TRACKLETS)
+				objectId += pedestrianTracklets.size();
 		}
 	}
 }
