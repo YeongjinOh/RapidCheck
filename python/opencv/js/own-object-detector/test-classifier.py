@@ -8,6 +8,8 @@ import argparse as ap
 from nms import nms
 from config import *
 
+# python3 test-classifier.py -i ./dataset/car_test1.jpg -v -c RBF_SVM_gray400600
+
 def sliding_window(image, window_size, step_size):
     '''
     This function returns a patch of the input image `image` of size equal
@@ -32,7 +34,7 @@ def sliding_window(image, window_size, step_size):
 if __name__ == "__main__":
     # Parse the command line arguments
     parser = ap.ArgumentParser()
-    parser.add_argument('-i', "--imagepath", help="Path to the test image", default='./dataset/CarData/TestImages/')
+    parser.add_argument('-i', "--imagepath", help="Path to the test image", default='./dataset/ColorCars/Validations/pos')
     parser.add_argument('-n', '--number', help='Test Image Number', default=0)
     parser.add_argument('-d','--downscale', help="Downscale ratio", default=1.25,
             type=int)
@@ -42,9 +44,10 @@ if __name__ == "__main__":
     args = vars(parser.parse_args())
 
     # Read the image
-    im = imread(args["imagepath"]+'test-'+str(args['number'])+'.pgm', as_grey=True)
-    min_wdw_sz = (100, 40)
-    step_size = (10, 10)
+    # im = imread(args["imagepath"]+'test-'+str(args['number'])+'.pgm', as_grey=True)
+    im = imread(args["imagepath"], as_grey=True)
+    min_wdw_sz = (150, 150)
+    step_size = (30, 30)
     downscale = args['downscale']
     visualize_det = args['visualize']
     selected_model = args['classifier'] + ".model"
@@ -70,7 +73,9 @@ if __name__ == "__main__":
                 continue
             # Calculate the HOG features
             fd = hog(im_window, orientations, pixels_per_cell, cells_per_block, visualize, normalize)
+            print(fd.shape)
             fd = fd.reshape(1, -1)
+            print(fd.shape)
             pred = clf.predict(fd)
             if pred == 1:
                 print("Detection:: Location -> ({}, {})".format(x, y))
@@ -90,8 +95,8 @@ if __name__ == "__main__":
                 cv2.rectangle(clone, (x, y), (x + im_window.shape[1], y +
                     im_window.shape[0]), (255, 255, 255), thickness=2)
                 cv2.imshow("Sliding Window in Progress", clone)
-                cv2.waitKey(30)
-        # Move the the next scale
+                cv2.waitKey(5)
+        # Move the the next scale_
         scale+=1
 
     # Display the results before performing NMS
@@ -103,6 +108,7 @@ if __name__ == "__main__":
     cv2.waitKey()
 
     # Perform Non Maxima Suppression
+    threshold = 0.5
     detections = nms(detections, threshold)
 
     # Display the results after performing NMS
