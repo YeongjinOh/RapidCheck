@@ -22,6 +22,9 @@ if __name__ == "__main__":
 	
     des_type = args["descriptor"]
 
+    pos_feat_ph = './features/ColorCars/pos'
+    neg_feat_ph = './features/ColorCars/neg'
+
     # If feature directories don't exist, create them
     if not os.path.isdir(pos_feat_ph):
         os.makedirs(pos_feat_ph)

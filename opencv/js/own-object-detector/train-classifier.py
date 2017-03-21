@@ -9,12 +9,16 @@ import glob
 import os
 from config import *
 
+# python3 train-classifier.py -p ./features/ColorCars10040/pos -n ./features/ColorCars10040/neg -m gray10040
+# python3 train-classifier.py -p ./features/ColorCars150150/pos -n ./features/ColorCars150150/neg -m gray150150 -c RBF_SVM
+
 if __name__ == "__main__":
     # Parse the command line arguments
     parser = ap.ArgumentParser()
-    parser.add_argument('-p', "--posfeat", help="Path to the positive features directory", default='./features/pos')
-    parser.add_argument('-n', "--negfeat", help="Path to the negative features directory", default='./features/neg')
+    parser.add_argument('-p', "--posfeat", help="Path to the positive features directory", default='./features/ColorCars/pos')
+    parser.add_argument('-n', "--negfeat", help="Path to the negative features directory", default='./features/ColorCars/neg')
     parser.add_argument('-c', "--classifier", help="Classifier to be used", default="LIN_SVM")
+    parser.add_argument('-m', "--modelname", help="Define Model name in here", required=True)
     args = vars(parser.parse_args())
 
     pos_feat_path =  args["posfeat"]
@@ -67,6 +71,6 @@ if __name__ == "__main__":
     if not os.path.isdir(os.path.split(model_path)[0]):
         os.makedirs(os.path.split(model_path)[0])
         print(os.path.split(model_path)[0], " are created")
-    model_path = model_path + clf_type + ".model"
+    model_path = model_path + clf_type + '_' +args['modelname']+ ".model"
     joblib.dump(clf, model_path)
     print("Classifier saved to {}".format(model_path))

@@ -1,9 +1,9 @@
 import glob
 import os
 from shutil import copyfile, rmtree
-train_img_path = './dataset/CarData/TrainImages/'
-train_dir_path = './dataset/CarData/Trains/'
-validation_dir_path = './dataset/CarData/Validations/'
+train_img_path = './dataset/ColorCars/TrainResized/'
+train_dir_path = './dataset/ColorCars/Trains/'
+validation_dir_path = './dataset/ColorCars/Validations/'
 pos_img_cnt = 0 
 neg_img_cnt = 0
 
