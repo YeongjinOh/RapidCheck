@@ -1,36 +1,37 @@
 #include "tracking_utils.h"
 
-#define MAX_FRAMES 60
+#define MAX_FRAMES 481
+#define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
 #define NUM_OF_COLORS 64
 #define DEBUG false
 #define start 0 // start frame number
 
 /**
-	Show how to build tracklet from given detection results
+	Build tracklets of all segements and then, show trace of tracklets
 
 	@param app frame reader with basic parameters set
 */
-void detectionBasedTracking(App app)
+void showTracklet(App app)
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
 	// random number generator
 	RNG rng(0xFFFFFFFF);
-	
+
 	Mat frame, targetImage;
 	Target target;
 	bool hasTarget = false;
 
 	// initialize colors	
 	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++) 
+	for (int i = 0; i < NUM_OF_COLORS; i++)
 	{
 		int icolor = (unsigned)rng;
 		int minimumColor = 0;
 		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
 	}
-		
+
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
 	int h_bins = 50; int s_bins = 60;
@@ -41,14 +42,14 @@ void detectionBasedTracking(App app)
 	const float* ranges[] = { h_ranges, s_ranges };
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
-	
+
 	vector<Frame> frames;
 	cap.set(CV_CAP_PROP_POS_FRAMES, start);
 	for (int frameNum = start; frameNum < start + MAX_FRAMES; frameNum++) {
-		
+
 		// get frame from the video
 		cap >> frame;
-	
+
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
 			break;
@@ -87,124 +88,110 @@ void detectionBasedTracking(App app)
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			hists.push_back(hist);
 		}
-	
+
 		frames.push_back(Frame(frameNum, found_filtered, hists));
 	}
 
 	cout << "Detection finished" << endl;
-	
-	int frameNum = 1, objectId;
-	while (true)
-	{
-		printf("\n\nFrame #%d", frameNum);
 
+	
+	// build all segments
+	vector<Segment> segments;
+	int frameNum = 1;
+	
+	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
+	{
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum+start);
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start);
+		Segment segment(frameNum + start);
 
 		// get frame
-		Mat frame;
 		cap >> frame;
-
-		// draw detection responses of the first frame in this segment with green rectangle
-		vector<Rect> & pedestrians = frames[frameNum].getPedestrians(), & prevPedestrians = frames[frameNum-1].getPedestrians();
-		for (int i = 0; i < pedestrians.size(); i++)
-			rectangle(frame, pedestrians[i], GREEN, 2, 1);
 
 		// create tracklet
 		vector<int> solution;
-		vector<Mat> segment; // set of k frames
-		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
-		{
-			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start + i);
-			// get frame
-			Mat cluster;
-			cap >> cluster;
-			segment.push_back(cluster);
-
-			// draw detection responses with white rectangle in each cluster
-			vector<Rect>& pedestrians = frames[frameNum + i].getPedestrians();
-			for (int j = 0; j < pedestrians.size(); j++)
-			{
-				Rect rect = pedestrians[j];
-				rectangle(cluster, Rect(rect.x-10, rect.y-10, rect.width+20, rect.height+20), WHITE, 2);
-			}
-
-			vector<Target>& targets = frames[frameNum + i].getTargets();
-			for (int j = 0; j < targets.size(); j++)
-			{
-				// reset found flag
-				targets[j].found = false;
-				putText(cluster, std::to_string(j), targets[j].getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 255), 3);
-			}
-		}
 
 		// do not use dummy until no more solution built to optimize
 		bool useDummy = false;
-		objectId = 0;
 		while (true)
 		{
 			double costMin = INFINITY;
 			solution.clear();
-			
+
 			// build solution
 			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
-			
+
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
 			{
 				if (useDummy)
 					break;
 				useDummy = true;
-				printf("\nSolutions from dummy nodes reconstruction");
 				continue;
 			}
-			cout << endl;
-
-			if (DEBUG) 
-				printf("cost:%f\n", costMin);
-			printf("object %d : ", objectId);
-
+			
 			// for each solution
+			tracklet pedestrianTracklet;
 			for (int i = 0; i < solution.size(); i++)
 			{
 				Frame & curFrame = frames[frameNum + i];
-				// draw center points
 				Target & target = curFrame.getTarget(solution[i]);
-				circle(frame, target.getCenterPoint(), 2, Scalar(255,255,255), 2);
-				circle(frame, target.getCenterPoint(), 1, colors[objectId], 2);
-
-				// draw found object in each frame
-				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
 				target.found = true;
-
-				printf("%d ", solution[i]);
+				pedestrianTracklet.push_back(target);
 			}
-			objectId++;
+			segment.addTracklet(pedestrianTracklet);
+			
 		}
-		
-		// show all clusters
-		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++) 
+		segments.push_back(segment);
+	}
+
+	cout << "Tracklets built" << endl;
+	vector<Point> centers;
+	vector<int> objectIds;
+	int objectId = 0;
+	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+	{
+		Segment & segment = segments[segmentNumber];
+		for (int frameIdx = 1; frameIdx <= LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
-			resize(segment[i], segment[i], Size(400, 300));
-			imshow("cluster-" + to_string(i+1), segment[i]);
+			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + start;
+			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+			cap >> frame;
+
+			vector<tracklet>& pedestrianTracklets = segment.tracklets;
+			for (int pedestrianNum = 0; pedestrianNum < pedestrianTracklets.size(); pedestrianNum++)
+			{
+				tracklet& pedestrianTracklet = pedestrianTracklets[pedestrianNum];
+				Target& currentFramePedestrian = pedestrianTracklet[frameIdx - 1];
+				rectangle(frame, currentFramePedestrian.rect, colors[(objectId + pedestrianNum) % NUM_OF_COLORS], 2);
+				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
+				centers.push_back(currentFramePedestrian.getCenterPoint());
+				objectIds.push_back(objectId + pedestrianNum);
+			}
+			for (int i = 0; i < centers.size() && i < objectIds.size(); i++)
+			{
+				circle(frame, centers[i], 1, colors[objectIds[i]%NUM_OF_COLORS], 2);
+			}
+			imshow("tracklets", frame);
+
+			// key handling
+			int key = waitKey(10);
+			if (key == 27) break;
+			else if (key == (int)('r'))
+			{
+				centers.clear();
+				objectIds.clear();
+				segmentNumber = 0;
+				break;
+			}
+			else if (key == (int)('c'))
+			{
+				centers.clear();
+				objectIds.clear();
+				break;
+			}
+			if (frameIdx == LOW_LEVEL_TRACKLETS)
+				objectId += pedestrianTracklets.size();
 		}
-
-		// show result trace
-		imshow("result", frame);
-
-		// key handling
-		int key = waitKey(0);
-		if (key == 27) break;
-		if (key == (int)('m'))
-			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, MAX_FRAMES - LOW_LEVEL_TRACKLETS);
-		else if (key == (int)('v'))
-			frameNum = max(frameNum - LOW_LEVEL_TRACKLETS, 1);
-		else if (key == (int)('n'))
-			frameNum = min(frameNum + 1, MAX_FRAMES - 1);
-		else if (key == (int)('b'))
-			frameNum = max(frameNum - 1, 1);
-		else if (key == (int)('r'))
-			frameNum = 1;
 	}
 }

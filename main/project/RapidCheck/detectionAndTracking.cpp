@@ -1,5 +1,12 @@
 #include "main.h"
 
+/**
+	Calculate PSNR similarity
+
+	@param l1 subimage of target1
+	@param l2 subimage of target2
+	@return similarity value
+*/
 double getPSNR(const Mat& I1, const Mat& I2)
 {
 	Mat s1;
@@ -21,6 +28,11 @@ double getPSNR(const Mat& I1, const Mat& I2)
 	}
 }
 
+/**
+	Show similarities of given target paris
+
+	@param app frame reader with basic parameters set
+*/
 void detectionAndTracking(App app)
 {
 	

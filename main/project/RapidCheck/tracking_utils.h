@@ -9,6 +9,12 @@ typedef vector<Target> tracklet;
 struct Segment {
 	vector<tracklet> tracklets;
 	int startFrameNumber;
+
+	Segment(int frameNum) : startFrameNumber(frameNum) { }
+	void addTracklet(tracklet tr)
+	{
+		tracklets.push_back(tr);
+	}
 };
 
 /**
