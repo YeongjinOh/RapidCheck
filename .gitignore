@@ -12,10 +12,10 @@
 venvOpencv/
 requirements.txt
 videos/
-
+*.h5
 *.pyc
 *.mp4
-
+dataset/
 # for jupyter notebook
 .ipynb_checkpoints/
 
