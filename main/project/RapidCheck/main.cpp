@@ -11,14 +11,13 @@ int main(int argc, char ** argv)
 	args.gr_threshold = 6;
 	args.scale = 1.05;
 	
-
-	
 	// args.src_is_video = true;
 	// args.src = VIDEOFILE;
 
 	App app(args);
 
-	showTracklet(app);
+	buildTrajectory(app);
+	//showTracklet(app);
 	//detectionBasedTracking(app);
 	//detectionAndTracking(app);
 

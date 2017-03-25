@@ -1,8 +1,17 @@
+#ifndef TRACKING_UTILS_H
+#define TRACKING_UTILS_H
+
 #include "main.h"
 
 #define MIXTURE_CONSTANT 0.1
 #define LOW_LEVEL_TRACKLETS 6
 #define CONTINUOUS_MOTION_COST_THRE 30
+
+#define MAX_FRAMES 61
+#define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
+#define NUM_OF_COLORS 64
+#define DEBUG false
+#define start 0 // start frame number
 
 typedef vector<Target> tracklet;
 
@@ -90,3 +99,23 @@ void printIndices(vector<int>& selectedIndices);
 	@param useDummy boolean flag. if true, add dummy nodes and reconrstruct them.
 */
 void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy = false);
+
+/**
+	Detect targets in MAX_FRAMES frames
+
+	@param app frame reader with basic parameters set
+	@param cap video variable
+	@param list of frames to be implemented detection
+*/
+void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
+
+/**
+	Build all tracklets of given frames
+
+	@param cap video variable
+	@param list of frames to be implemented detection
+*/
+void buildTracklets(vector<Frame>& frames, vector<Segment>& segments);
+
+
+#endif

@@ -1,6 +1,6 @@
 #include "tracking_utils.h"
 
-#define MAX_FRAMES 60
+#define MAX_FRAMES 120
 #define NUM_OF_COLORS 64
 #define DEBUG false
 #define start 0 // start frame number

@@ -30,4 +30,6 @@ void detectionAndTracking(App app);
 void detectionBasedTracking(App app);
 void showTracklet(App app);
 
+void buildTrajectory(App app);
+
 #endif
