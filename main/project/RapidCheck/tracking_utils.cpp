@@ -321,8 +321,8 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	int channels[] = { 0, 1 };
 
 	Mat frame;
-	cap.set(CV_CAP_PROP_POS_FRAMES, start);
-	for (int frameNum = start; frameNum < start + MAX_FRAMES; frameNum++) {
+	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
+	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
 
 		// get frame from the video
 		cap >> frame;
@@ -378,7 +378,7 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		Segment segment(frameNum + start);
+		Segment segment(frameNum + START_FRAME_NUM);
 
 		// create tracklet
 		vector<int> solution;

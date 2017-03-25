@@ -7,11 +7,11 @@
 #define LOW_LEVEL_TRACKLETS 6
 #define CONTINUOUS_MOTION_COST_THRE 30
 
-#define MAX_FRAMES 61
+#define MAX_FRAMES 181
 #define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
 #define NUM_OF_COLORS 64
 #define DEBUG false
-#define start 0 // start frame number
+#define START_FRAME_NUM 0 // start frame number
 
 typedef vector<Target> tracklet;
 
@@ -25,6 +25,21 @@ struct Segment {
 		tracklets.push_back(tr);
 	}
 };
+
+
+// Trajectory is already defined in cv
+struct RPTrajectory
+{
+	int startSegmentNum, endSegmentNum;
+	vector<Target> targets;
+	RPTrajectory(vector<Target>& tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum) { }
+	void merge(tracklet tr)
+	{
+		targets.insert(targets.end(), tr.begin(), tr.end());
+		endSegmentNum++;
+	}
+};
+
 
 /**
 	Calculate 2-d norm value of given vector

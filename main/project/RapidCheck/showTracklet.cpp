@@ -43,7 +43,7 @@ void showTracklet(App app)
 		Segment & segment = segments[segmentNumber];
 		for (int frameIdx = 1; frameIdx <= LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
-			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + start;
+			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + START_FRAME_NUM;
 			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 			cap >> frame;
 
