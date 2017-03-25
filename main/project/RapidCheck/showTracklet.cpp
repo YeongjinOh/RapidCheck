@@ -1,37 +1,25 @@
 #include "tracking_utils.h"
 
-#define MAX_FRAMES 481
+#ifndef TRACKING_VARIABLES
+#define TRACKING_VARIABLES
+
+#define MAX_FRAMES 361
 #define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
 #define NUM_OF_COLORS 64
 #define DEBUG false
 #define start 0 // start frame number
 
+#endif
+
 /**
-	Build tracklets of all segements and then, show trace of tracklets
+	Detect targets in MAX_FRAMES frames
 
 	@param app frame reader with basic parameters set
+	@param cap video variable
+	@param list of frames to be implemented detection
 */
-void showTracklet(App app)
+void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 {
-	// set input video
-	VideoCapture cap(VIDEOFILE);
-
-	// random number generator
-	RNG rng(0xFFFFFFFF);
-
-	Mat frame, targetImage;
-	Target target;
-	bool hasTarget = false;
-
-	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++)
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
 	int h_bins = 50; int s_bins = 60;
@@ -42,8 +30,8 @@ void showTracklet(App app)
 	const float* ranges[] = { h_ranges, s_ranges };
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
-
-	vector<Frame> frames;
+	
+	Mat frame;
 	cap.set(CV_CAP_PROP_POS_FRAMES, start);
 	for (int frameNum = start; frameNum < start + MAX_FRAMES; frameNum++) {
 
@@ -91,22 +79,22 @@ void showTracklet(App app)
 
 		frames.push_back(Frame(frameNum, found_filtered, hists));
 	}
+}
 
-	cout << "Detection finished" << endl;
+/**
+	Build all tracklets of given frames
 
-	
+	@param cap video variable
+	@param list of frames to be implemented detection
+*/
+void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
+{
 	// build all segments
-	vector<Segment> segments;
 	int frameNum = 1;
-	
+
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start);
 		Segment segment(frameNum + start);
-
-		// get frame
-		cap >> frame;
 
 		// create tracklet
 		vector<int> solution;
@@ -129,7 +117,7 @@ void showTracklet(App app)
 				useDummy = true;
 				continue;
 			}
-			
+
 			// for each solution
 			tracklet pedestrianTracklet;
 			for (int i = 0; i < solution.size(); i++)
@@ -140,14 +128,49 @@ void showTracklet(App app)
 				pedestrianTracklet.push_back(target);
 			}
 			segment.addTracklet(pedestrianTracklet);
-			
+
 		}
 		segments.push_back(segment);
 	}
+}
 
+/**
+	Build tracklets of all segements and then, show trace of tracklets
+
+	@param app frame reader with basic parameters set
+*/
+void showTracklet(App app)
+{
+	// set input video
+	VideoCapture cap(VIDEOFILE);
+
+	// random number generator
+	RNG rng(0xFFFFFFFF);
+
+	// initialize colors	
+	vector<Scalar> colors;
+	for (int i = 0; i < NUM_OF_COLORS; i++)
+	{
+		int icolor = (unsigned)rng;
+		int minimumColor = 0;
+		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
+	}
+
+	// build target detected frames
+	vector<Frame> frames;
+	detectTargets(app, cap, frames);
+	cout << "Detection finished" << endl;
+
+	// build all tracklets
+	vector<Segment> segments;
+	buildTracklets(frames, segments);
 	cout << "Tracklets built" << endl;
+
+	// show tracklets
+	Mat frame;
 	vector<Point> centers;
 	vector<int> objectIds;
+	vector<tracklet> entirePedestrianTracklets;
 	int objectId = 0;
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 	{
