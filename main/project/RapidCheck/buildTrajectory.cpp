@@ -51,14 +51,12 @@ void buildTrajectory(App app)
 			RPTrajectory& trajectory = *itTrajectories;
 			int diffSegmentNum = segmentNum - trajectory.endSegmentNum;
 			// if trajectory is finished
-			if (diffSegmentNum > 1)
+			if (diffSegmentNum > 2)
 			{
-				if (diffSegmentNum == 2)
-					trajectoriesFinished.push_back(trajectory);
+				// trajectoriesFinished.push_back(trajectory);
 				// trajectoriesStillBeingTracked.erase(itTrajectories);
 				continue;
 			}
-			
 			
 			
 			tracklet& curTrajectory = trajectory.targets;
@@ -69,9 +67,7 @@ void buildTrajectory(App app)
 			{
 				// explore each tracklet in this segment
 				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
-//				for (int trackletNum = 0; trackletNum < tracklets.size(); trackletNum++)
 				{
-					printf("TRK\n");
 					tracklet& tr = *itTracklets;
 					double costForward, costBackward, curCost;
 					Point pr1 = tr[0].getCenterPoint(), pr2 = tr[1].getCenterPoint();
@@ -96,7 +92,18 @@ void buildTrajectory(App app)
 			}
 			else if (diffSegmentNum == 2)
 			{
-				// TODO
+				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
+				{
+					tracklet& tr = *itTracklets;
+					
+					Point pr1 = tr[0].getCenterPoint(), pr2 = tr[1].getCenterPoint();
+					double curCost = getNormValueFromVector((9*pl2 - 7*pl1) - (9*pr1 - 7*pr2));
+					if (minCost > curCost)
+					{
+						minCost = curCost;
+						minTrackletIt = itTracklets;
+					}
+				}
 			}
 			
 
@@ -113,6 +120,8 @@ void buildTrajectory(App app)
 
 
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
+	cout << "Built Trajectories" << endl;
+
 
 	// show trajectories
 	Mat frame;
@@ -134,13 +143,14 @@ void buildTrajectory(App app)
 
 				Target& currentFramePedestrian = trajectory.targets[6 * (segmentNumber - trajectory.startSegmentNum) + frameIdx - 1];
 				rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
+				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint(), 1, 1, WHITE, 1);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 			}
 			
 			imshow("tracklets", frame);
 
 			// key handling
-			int key = waitKey(100);
+			int key = waitKey(10);
 			if (key == 27) break;
 			else if (key == (int)('r'))
 			{

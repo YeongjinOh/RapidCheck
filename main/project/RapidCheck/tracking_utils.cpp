@@ -378,6 +378,7 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
+		printf("segnum:%d\n", segmentNumber);
 		Segment segment(frameNum + START_FRAME_NUM);
 
 		// create tracklet
@@ -387,6 +388,10 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 		bool useDummy = false;
 		while (true)
 		{
+			if (segmentNumber == 28) 
+			{
+				printf("segnum:%d\n", segmentNumber);
+			}
 			double costMin = INFINITY;
 			solution.clear();
 
