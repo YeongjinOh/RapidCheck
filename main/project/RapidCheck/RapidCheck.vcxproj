@@ -144,6 +144,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="buildTrajectory.cpp" />
     <ClCompile Include="detectionAndTracking.cpp" />
     <ClCompile Include="detectionBasedTracking.cpp" />
     <ClCompile Include="frame.cpp" />
