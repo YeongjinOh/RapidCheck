@@ -52,10 +52,12 @@ class Darknet(object):
 		given path to binaries/ and configs/
 		"""
 		args = [model, FLAGS.binary]
-		layer, meta = parser(model)
-		print("Darkent::parse_cfg >> layer : ");print(layer)
-		print("layer 0 ## : ", layer[0])
-		print("layer 1 ## : ", layer[1])
-		print("layer 2 ## : ", layer[2])
-		# print("Darkent::parse_cfg >> meta : ");print(meta)
+		layers, meta = parser(model)
+		# print("Darkent::parse_cfg >> layer : ");print(layer)
+		# print("layers 0 ## : ", layers[0])
+		# print("layers 1 ## : ", layers[1])
+		# print("layers 2 ## : ", layers[2])
+		# print("layers len : ", len(layer))
+		print("Darkent::parse_cfg >> meta : ");print(meta)
+		print("meta anchors ## : ", meta['anchors'])
 		
