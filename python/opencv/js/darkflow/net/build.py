@@ -1,5 +1,6 @@
 import tensorflow as tf
 import time
+from dark.darknet import Darknet
 
 class dotdict(dict):
 	"""dot.notation access to dictionary attributes to replace FLAGS when not needed"""
@@ -31,6 +32,7 @@ class TFNet(object):
 			FLAGS = dotdict(defaultSettings)
 
 		if darkent is None:
-			print("Darket is empty yet..")
+			print("Initialize Darkent..")
+			darknet = Darknet(FLAGS)
 
 		print("This is FLAGS : ", FLAGS)
