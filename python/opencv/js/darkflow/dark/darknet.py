@@ -1,5 +1,6 @@
-from cfg.process import parser
+from cfg.process import parser, cfg_yielder
 from utils import loader
+from dark.darkop import create_darkop
 import warnings
 import time
 import os
@@ -52,12 +53,25 @@ class Darknet(object):
 		given path to binaries/ and configs/
 		"""
 		args = [model, FLAGS.binary]
-		layers, meta = parser(model)
-		# print("Darkent::parse_cfg >> layer : ");print(layer)
+		layers, meta2 = parser(model)
+		# print("Darkent::parse_cfg >> layers : ");print(layers)
 		# print("layers 0 ## : ", layers[0])
 		# print("layers 1 ## : ", layers[1])
 		# print("layers 2 ## : ", layers[2])
-		# print("layers len : ", len(layer))
-		print("Darkent::parse_cfg >> meta : ");print(meta)
-		print("meta anchors ## : ", meta['anchors'])
+		# print("layers len : ", len(layers))
+		cfg_layers = cfg_yielder(*args)
+		meta = dict(); layers = list()
+		for i, info in enumerate(cfg_layers):
+			print("{} ## info : {} ".format(i,info))
+			if i == 0: meta = info; continue
+			else: new = create_darkop(*info)
+			layers.append(new)
+		print("layers : "); print(layers) # 각각의 layer 에 대한 함수포인터값이 리턴된다.
+		print("meta : {}".format(len(meta))); print(meta)
+		print("meta2 : {}".format(len(meta2))); print(meta2)
+		print(meta2['out_size'])
+		print(meta2 == meta)
+		# print("meta : ", meta)
+		# print("Darkent::parse_cfg >> meta : ");print(meta)
+		# print("meta anchors ## : ", meta['anchors'])
 		
