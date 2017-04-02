@@ -11,9 +11,23 @@ class Darknet(object):
 	def __init__(self, FLAGS):
 		self.get_weight_src(FLAGS)
 		self.modify = False
-		print('Parsing {}'.format(self.src_cfg))
-		self.parse_cfg(self.src_cfg, FLAGS)
 
+		print('Parsing {}'.format(self.src_cfg))
+		src_parsed = self.parse_cfg(self.src_cfg, FLAGS)
+		self.src_meta, self.src_layers = src_parsed
+
+		if self.src_cfg == FLAGS.model:
+			print("in self.src_cfg == FLAGS.model...")
+			self.meta, self.layers = src_parsed
+		else: 
+			print('Parsing {}'.format(FLAGS.model))
+			print("in self.src_cfg != FLAGS.model...")
+			des_parsed = self.parse_cfg(FLAGS.model, FLAGS)
+			self.meta, self.layers = des_parsed
+
+		self.load_weights()
+		print("self.load_weights() done...")
+		print("[Darkent Init Done]..")
 
 	def get_weight_src(self, FLAGS):
 		"""
@@ -62,16 +76,32 @@ class Darknet(object):
 		cfg_layers = cfg_yielder(*args)
 		meta = dict(); layers = list()
 		for i, info in enumerate(cfg_layers):
-			print("{} ## info : {} ".format(i,info))
+			# print("{} ## info : {} ".format(i,info))
 			if i == 0: meta = info; continue
 			else: new = create_darkop(*info)
 			layers.append(new)
-		print("layers : "); print(layers) # 각각의 layer 에 대한 함수포인터값이 리턴된다.
-		print("meta : {}".format(len(meta))); print(meta)
-		print("meta2 : {}".format(len(meta2))); print(meta2)
-		print(meta2['out_size'])
-		print(meta2 == meta)
+		# print("layers : "); print(layers) # 각각의 layer 에 대한 함수포인터값이 리턴된다.
+		# print("meta : {}".format(len(meta))); print(meta)
+		# print("meta2 : {}".format(len(meta2))); print(meta2)
+		# print(meta2['out_size'])
+		# print(meta2 == meta)
+
+		return meta, layers
 		# print("meta : ", meta)
 		# print("Darkent::parse_cfg >> meta : ");print(meta)
 		# print("meta anchors ## : ", meta['anchors'])
+	
+	def load_weights(self):
+		"""
+		Use `layers` and Loader to load .weights file
+		"""
+		print('Loading {} ...'.format(self.src_bin))
+		start = time.time()
+
+		args = [self.src_bin, self.src_layers]
+		wgts_loader = loader.create_loader(*args)
+		for layer in self.layers: layer.load(wgts_loader)
+
+		stop = time.time()
+		print('Finished in {}s'.format(stop - start))
 		
