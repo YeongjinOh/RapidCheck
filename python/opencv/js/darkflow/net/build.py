@@ -2,6 +2,7 @@ import tensorflow as tf
 import time
 from dark.darknet import Darknet
 from .framework import create_framework
+from . import flow
 
 class dotdict(dict):
 	"""dot.notation access to dictionary attributes to replace FLAGS when not needed"""
@@ -22,6 +23,7 @@ class TFNet(object):
 	})
 
 	# import methods
+	return_predict = flow.return_predict
 
 	def __init__(self, FLAGS, darkent=None):
 		self.ntrain = 0

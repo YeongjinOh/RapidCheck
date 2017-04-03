@@ -9,3 +9,6 @@ options = {"model": "cfg{}yolo-tiny.cfg".format(sep),
 		"gpu":1.0}
 
 tfnet = TFNet(options)
+im  = cv2.imread('test/dog.jpg')
+print(type(im), im.shape)
+print(tfnet.return_predict(im))
