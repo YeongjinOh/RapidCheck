@@ -1,5 +1,6 @@
 from . import train
 from . import misc
+from . import test
 import numpy as np
 
 """ YOLO framework __init__ equivalent"""
@@ -22,6 +23,9 @@ def constructor(self, meta, FLAGS):
 	colors = list()
 	base = int(np.ceil(pow(meta['classes'], 1./3)))
 	print("base : ", base)
+	print("meta[labels] : ", meta['labels'])
+	print("meta[classes] : ", meta['classes'])
+	print("meta[model] : ", meta['model'])
 	for x in range(len(meta['labels'])): 
 		colors += [_to_color(x, base)]
 	meta['colors'] = colors

@@ -21,7 +21,8 @@ class framework(object):
 class YOLO(framework):
 	constructor = yolo.constructor
 	loss = yolo.train.loss
-
+	resize_input = yolo.test.resize_input
+	
 
 
 """
