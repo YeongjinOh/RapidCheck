@@ -9,21 +9,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-using Microsoft.DirectX.AudioVideoPlayback;
-using Microsoft.DirectX;
 using System.IO;
 using System.Runtime.InteropServices;
+
+//DirectX
+using Microsoft.DirectX.AudioVideoPlayback;
+using Microsoft.DirectX;
+//MYSQL
+using MySql.Data.MySqlClient;
+
 
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
     {
-
+        //DirectX
         private Video video;
         private Size formSize;
         private Size pnlSize;
+
+        //Video File Path
         private string path;
+
+        //MySQL
+        private string strConn = "Server=localhost;Database=test;Uid=root;Pwd=1234;";
+
         public Form1()
         {
             InitializeComponent();
@@ -33,9 +43,16 @@ namespace RapidCheck
             skinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             skinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
 
-            tabPage1.Text = @"검색조건?";
-            tabPage2.Text = @"요약?";
-            tabPage3.Text = @"영상 ㄱ?";
+            tabPage1.Text = "검색";
+            tabPage2.Text = "요약";
+            tabPage3.Text = "영상";
+
+            //SQL
+            MySqlConnection conn = new MySqlConnection(strConn);
+            conn.Open();
+            MySqlCommand cmd = new MySqlCommand("INSERT INTO test_table VALUES (11, 'tasdad1')", conn);
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -46,14 +63,13 @@ namespace RapidCheck
 
         private void videoBtn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog pFileDlg = new OpenFileDialog();
-            pFileDlg.Filter = "All Files(*.*)|*.*";
-            pFileDlg.InitialDirectory = @"C:\Users\trevor\Desktop\Videos";
-            pFileDlg.Title = "inputinput~.";
-            if (pFileDlg.ShowDialog() == DialogResult.OK)
-            {
-                path = pFileDlg.FileName;
-            }
+            MySqlConnection conn = new MySqlConnection(strConn);
+            conn.Open();
+
+            MySqlCommand cmd = new MySqlCommand("UPDATE test_table SET name='Tim' WHERE id=11");
+            cmd.ExecuteNonQuery();
+
+            conn.Close();
         }
         private void materialFlatButton2_Click(object sender, EventArgs e)
         {

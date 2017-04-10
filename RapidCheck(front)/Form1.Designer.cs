@@ -32,7 +32,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.videoPanel = new System.Windows.Forms.Panel();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
             this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.materialRadioButton1 = new MaterialSkin.Controls.MaterialRadioButton();
@@ -40,8 +42,6 @@
             this.materialCheckBox1 = new MaterialSkin.Controls.MaterialCheckBox();
             this.videoBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.materialFlatButton2 = new MaterialSkin.Controls.MaterialFlatButton();
-            this.videoPanel = new System.Windows.Forms.Panel();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.materialTabControl1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.SuspendLayout();
@@ -68,7 +68,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(900, 281);
+            this.tabPage1.Size = new System.Drawing.Size(900, 293);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -78,7 +78,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(900, 281);
+            this.tabPage2.Size = new System.Drawing.Size(900, 293);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -94,6 +94,16 @@
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // videoPanel
+            // 
+            this.videoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.videoPanel.Location = new System.Drawing.Point(3, 3);
+            this.videoPanel.Name = "videoPanel";
+            this.videoPanel.Size = new System.Drawing.Size(894, 287);
+            this.videoPanel.TabIndex = 1;
+            // 
             // materialTabSelector1
             // 
             this.materialTabSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
@@ -106,6 +116,10 @@
             this.materialTabSelector1.TabIndex = 1;
             this.materialTabSelector1.Text = "materialTabSelector1";
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // materialLabel1
             // 
             this.materialLabel1.AutoSize = true;
@@ -115,9 +129,9 @@
             this.materialLabel1.Location = new System.Drawing.Point(12, 79);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
-            this.materialLabel1.Size = new System.Drawing.Size(173, 24);
+            this.materialLabel1.Size = new System.Drawing.Size(102, 24);
             this.materialLabel1.TabIndex = 3;
-            this.materialLabel1.Text = "조건 입력 할거?안할거?";
+            this.materialLabel1.Text = "Just..Label";
             // 
             // materialFlatButton1
             // 
@@ -129,9 +143,9 @@
             this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialFlatButton1.Name = "materialFlatButton1";
             this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(145, 36);
+            this.materialFlatButton1.Size = new System.Drawing.Size(46, 36);
             this.materialFlatButton1.TabIndex = 4;
-            this.materialFlatButton1.Text = "분석ㄱㄱ해야지";
+            this.materialFlatButton1.Text = "BTN";
             this.materialFlatButton1.UseVisualStyleBackColor = true;
             // 
             // materialRadioButton1
@@ -145,10 +159,10 @@
             this.materialRadioButton1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialRadioButton1.Name = "materialRadioButton1";
             this.materialRadioButton1.Ripple = true;
-            this.materialRadioButton1.Size = new System.Drawing.Size(118, 30);
+            this.materialRadioButton1.Size = new System.Drawing.Size(68, 30);
             this.materialRadioButton1.TabIndex = 5;
             this.materialRadioButton1.TabStop = true;
-            this.materialRadioButton1.Text = "사람? ㄱㄱ";
+            this.materialRadioButton1.Text = "사람";
             this.materialRadioButton1.UseVisualStyleBackColor = true;
             // 
             // materialRadioButton2
@@ -162,10 +176,10 @@
             this.materialRadioButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialRadioButton2.Name = "materialRadioButton2";
             this.materialRadioButton2.Ripple = true;
-            this.materialRadioButton2.Size = new System.Drawing.Size(118, 30);
+            this.materialRadioButton2.Size = new System.Drawing.Size(87, 30);
             this.materialRadioButton2.TabIndex = 5;
             this.materialRadioButton2.TabStop = true;
-            this.materialRadioButton2.Text = "자동차? ㄱ";
+            this.materialRadioButton2.Text = "자동차";
             this.materialRadioButton2.UseVisualStyleBackColor = true;
             // 
             // materialCheckBox1
@@ -179,9 +193,9 @@
             this.materialCheckBox1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialCheckBox1.Name = "materialCheckBox1";
             this.materialCheckBox1.Ripple = true;
-            this.materialCheckBox1.Size = new System.Drawing.Size(199, 30);
+            this.materialCheckBox1.Size = new System.Drawing.Size(108, 30);
             this.materialCheckBox1.TabIndex = 6;
-            this.materialCheckBox1.Text = "뭘 체크하는 박스지?";
+            this.materialCheckBox1.Text = "CheckBox";
             this.materialCheckBox1.UseVisualStyleBackColor = true;
             // 
             // videoBtn
@@ -194,9 +208,9 @@
             this.videoBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.videoBtn.Name = "videoBtn";
             this.videoBtn.Primary = false;
-            this.videoBtn.Size = new System.Drawing.Size(63, 36);
+            this.videoBtn.Size = new System.Drawing.Size(45, 36);
             this.videoBtn.TabIndex = 7;
-            this.videoBtn.Text = "Input";
+            this.videoBtn.Text = "SQL";
             this.videoBtn.UseVisualStyleBackColor = true;
             this.videoBtn.Click += new System.EventHandler(this.videoBtn_Click);
             // 
@@ -215,20 +229,6 @@
             this.materialFlatButton2.Text = "ㄱㄱ";
             this.materialFlatButton2.UseVisualStyleBackColor = true;
             this.materialFlatButton2.Click += new System.EventHandler(this.materialFlatButton2_Click);
-            // 
-            // videoPanel
-            // 
-            this.videoPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.videoPanel.Location = new System.Drawing.Point(3, 3);
-            this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(894, 287);
-            this.videoPanel.TabIndex = 1;
-            // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             // 
             // Form1
             // 
@@ -262,16 +262,16 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private MaterialSkin.Controls.MaterialTabSelector materialTabSelector1;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Panel videoPanel;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
         private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
         private MaterialSkin.Controls.MaterialRadioButton materialRadioButton1;
         private MaterialSkin.Controls.MaterialRadioButton materialRadioButton2;
         private MaterialSkin.Controls.MaterialCheckBox materialCheckBox1;
-        private System.Windows.Forms.TabPage tabPage3;
         private MaterialSkin.Controls.MaterialFlatButton videoBtn;
         private MaterialSkin.Controls.MaterialFlatButton materialFlatButton2;
-        private System.Windows.Forms.Panel videoPanel;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 
