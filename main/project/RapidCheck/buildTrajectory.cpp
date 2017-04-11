@@ -124,7 +124,7 @@ void buildTrajectory(App app)
 
 
 	// show trajectories
-	Mat frame;
+	Mat frame, frameOrigin;
 	int objectId = 0;
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 	{
@@ -134,6 +134,8 @@ void buildTrajectory(App app)
 			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + START_FRAME_NUM;
 			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 			cap >> frame;
+
+			frame.copyTo(frameOrigin);
 
 			// vector<tracklet>& pedestrianTracklets = segment.tracklets;
 			for (int objectId = 0; objectId < trajectoriesStillBeingTracked.size(); objectId++)
@@ -146,11 +148,16 @@ void buildTrajectory(App app)
 				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint(), 1, 1, WHITE, 1);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 			}
+			vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+			for (int i = 0; i < pedestrians.size(); i++) {
+				rectangle(frameOrigin, pedestrians[i], WHITE, 2);
+			}
 			
 			imshow("tracklets", frame);
+			imshow("origin", frameOrigin);
 
 			// key handling
-			int key = waitKey(10);
+			int key = waitKey(0);
 			if (key == 27) break;
 			else if (key == (int)('r'))
 			{
