@@ -18,7 +18,9 @@ videos/
 dataset/
 # for jupyter notebook
 .ipynb_checkpoints/
-
+data/
+models/
+.DS_Store/
 
 
 # Created by https://www.gitignore.io/api/c++,visualstudio
