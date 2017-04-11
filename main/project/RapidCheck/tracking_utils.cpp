@@ -321,8 +321,10 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	int channels[] = { 0, 1 };
 
 	Mat frame;
-	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
+	
 	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
+
+		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP*frameNum);
 
 		// get frame from the video
 		cap >> frame;
@@ -388,15 +390,20 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 		bool useDummy = false;
 		while (true)
 		{
-			if (segmentNumber == 28) 
+			if (segmentNumber == 12) 
 			{
 				printf("segnum:%d\n", segmentNumber);
 			}
 			double costMin = INFINITY;
 			solution.clear();
 
+			
 			// build solution
 			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+			if (segmentNumber == 12)
+			{
+				printf("after:%d\n", segmentNumber);
+			}
 
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
