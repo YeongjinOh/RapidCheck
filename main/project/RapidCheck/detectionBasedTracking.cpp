@@ -1,9 +1,9 @@
 #include "tracking_utils.h"
 
-#define MAX_FRAMES 120
+#define MAX_FRAMES 30
 #define NUM_OF_COLORS 64
 #define DEBUG false
-#define start 0 // start frame number
+#define start 468 // start frame number
 
 /**
 	Show how to build tracklet from given detection results
@@ -16,7 +16,7 @@ void detectionBasedTracking(App app)
 	VideoCapture cap(VIDEOFILE);
 
 	// random number generator
-	RNG rng(0xFFFFFFFF);
+	RNG rng(0xFFFFF0FF);
 	
 	Mat frame, targetImage;
 	Target target;
@@ -99,16 +99,17 @@ void detectionBasedTracking(App app)
 		printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum+start);
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start + LOW_LEVEL_TRACKLETS - 1);
 
 		// get frame
 		Mat frame;
 		cap >> frame;
 
 		// draw detection responses of the first frame in this segment with green rectangle
-		vector<Rect> & pedestrians = frames[frameNum].getPedestrians(), & prevPedestrians = frames[frameNum-1].getPedestrians();
-		for (int i = 0; i < pedestrians.size(); i++)
-			rectangle(frame, pedestrians[i], GREEN, 2, 1);
+		vector<Rect> & pedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1].getPedestrians();
+		// &prevPedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1 - 1].getPedestrians();
+		//for (int i = 0; i < pedestrians.size(); i++)
+		//	rectangle(frame, pedestrians[i], GREEN, 2, 1);
 
 		// create tracklet
 		vector<int> solution;
@@ -135,7 +136,7 @@ void detectionBasedTracking(App app)
 			{
 				// reset found flag
 				targets[j].found = false;
-				putText(cluster, std::to_string(j), targets[j].getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 255), 3);
+				// putText(cluster, std::to_string(j), targets[j].getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 1, Scalar(255, 255, 255), 3);
 			}
 		}
 
@@ -175,7 +176,8 @@ void detectionBasedTracking(App app)
 				circle(frame, target.getCenterPoint(), 1, colors[objectId], 2);
 
 				// draw found object in each frame
-				rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
+				 rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
+				 putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.rect.height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
 				target.found = true;
 
 				printf("%d ", solution[i]);
@@ -187,11 +189,11 @@ void detectionBasedTracking(App app)
 		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++) 
 		{
 			resize(segment[i], segment[i], Size(400, 300));
-			imshow("cluster-" + to_string(i+1), segment[i]);
+			imshow("Frame #" + to_string(i+1), segment[i]);
 		}
 
 		// show result trace
-		imshow("result", frame);
+		imshow("tracklet", frame);
 
 		// key handling
 		int key = waitKey(0);

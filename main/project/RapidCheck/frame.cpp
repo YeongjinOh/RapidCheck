@@ -54,6 +54,8 @@ Target & Frame::getTarget(int idx)
 // return target size
 int Frame::addTarget(Target target)
 {
+	if (targets.size() > 10)
+		return targets.size();
 	targets.push_back(target);
 	pedestrians.push_back(target.rect);
 	return targets.size();
