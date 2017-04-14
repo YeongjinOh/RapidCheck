@@ -77,7 +77,16 @@ class TFNet(object):
 		roof = self.num_layer - self.ntrain
 		self.say("roof : ", roof)
 		self.say(HEADER, LINE)
-
+		print(self.darknet.layers)
+		for i, each_layer in enumerate(self.darknet.layers):
+			scope = '{}-{}'.format(str(i), each_layer.type)
+			print(scope)
+			args = [each_layer, state, i, roof, self.feed]
+			print(args)
+			state = op_create(*args)
+			mess = state.verbalise()
+			self.say(mess)
+		self.say(LINE)
 
 	def setup_meta_ops(self):
 		pass
