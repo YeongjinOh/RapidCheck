@@ -42,21 +42,24 @@ def find_boxes(net_out, threshold = 0.01, sqrt=2,C=20, B=2, S=7):
 	prob_size = SS * C # class probabilities
 	conf_size = SS * B # confidences for each grid cell
 
-	probs = net_out[0, :, :, 0:20]
-	print("probs : ", probs.shape)
+	# probs = net_out[0,:,:,0:20]
+	probs = net_out[0:prob_size]
+	# print("probs : ", probs.shape)
 	probs = probs.reshape([SS, C])
-	print("probs : ", probs.shape)
+	# print("probs : ", probs.shape)
 
-	confs = net_out[0, :, :, 20:22]
-	print("confs : ", confs.shape)
+	# confs = net_out[0, :, :, 20:22]
+	confs = net_out[prob_size:(prob_size+conf_size)]
+	# print("confs : ", confs.shape)
 	confs = confs.reshape([SS, B])
-	print("confs : ", confs.shape)
+	# print("confs : ", confs.shape)
 
 
-	cords = net_out[0, :, :, 22:]
-	print("cords : ", cords.shape)
+	# cords = net_out[0, :, :, 22:]
+	cords = net_out[(prob_size+conf_size):]
+	# print("cords : ", cords.shape)
 	cords = cords.reshape([SS, B, 4])
-	print("cords : ", cords.shape)
+	# print("cords : ", cords.shape)
 
 	for grid in range(SS):
 		for b in range(B):
@@ -75,7 +78,7 @@ def find_boxes(net_out, threshold = 0.01, sqrt=2,C=20, B=2, S=7):
 			# print("p : ", p.shape, p)
 			p *= (p > threshold)
 			bx.probs = p
-			print(bx.probs)
+			# print(bx.probs)
 			boxes.append(bx)
 
 	for c in range(C):
@@ -87,8 +90,8 @@ def find_boxes(net_out, threshold = 0.01, sqrt=2,C=20, B=2, S=7):
 			if boxi.probs[c] == 0: continue
 			for j in range(i + 1, len(boxes)):
 				boxj = boxes[j]
-			if box_iou(boxi, boxj) >= .4:
-				boxes[j].probs[c] = 0.
+				if box_iou(boxi, boxj) >= .4:
+					boxes[j].probs[c] = 0.
 	return boxes
 
 def overlap(x1,w1,x2,w2):
@@ -120,9 +123,9 @@ def process_box(b, h, w, threshold):
 	max_prob = b.probs[max_indx]
 
 	if max_prob > threshold:
-		print(b.x)
-		print(b.w)
-		print(w)
+		# print(b.x)
+		# print(b.w)
+		# print(w)
 		left  = int ((b.x - b.w/2.) * w)
 		right = int ((b.x + b.w/2.) * w)
 		top   = int ((b.y - b.h/2.) * h)
@@ -156,9 +159,9 @@ def post_progress(net_out, im, is_save = True, threshold=0.01):
 		cv2.rectangle(imgcv,
 	  		(left, top), (right, bot),
 	  		class_color, thick)
-	# cv2.putText(imgcv, max_indx, (left, top - 12),
-	#    2, 1.5, (0, 0, 255))
-	cv2.putText(imgcv, class_name, (int(left), int(top-12)), 2, 1.5, class_color)
+		# cv2.putText(imgcv, max_indx, (left, top - 12),
+		#    2, 1.5, (0, 0, 255))
+		cv2.putText(imgcv, class_name, (int(left), int(top-12)), 2, 1.5, class_color)
 	if not is_save: 
 		return imgcv
 	else:
