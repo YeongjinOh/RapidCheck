@@ -68,11 +68,11 @@ def find_boxes(net_out, threshold = 0.01, sqrt=2,C=20, B=2, S=7):
 			bx.x = (cords[grid, b, 0] + grid %  S) / S
 			bx.y = (cords[grid, b, 1] + grid // S) / S
 			bx.w =  cords[grid, b, 2]** sqrt
+			bx.h =  cords[grid, b, 3]** sqrt
 			if np.isnan(bx.w):
 				print(cords[grid, b,2], cords[grid, b, 2] ** 1.8)
 				print("----------")
 				exit(0) 
-			bx.h =  cords[grid, b, 3]** sqrt
 			# print("probs[{},:] : ".format(grid), probs[grid, :])
 			p = probs[grid, :] * bx.c
 			# print("p : ", p.shape, p)
