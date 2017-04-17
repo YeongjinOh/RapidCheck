@@ -14,8 +14,10 @@
 #include "targetgroup.h"
 #include "frame.h"
 
+
 //#define VIDEOFILE "videos/street.avi"
 #define VIDEOFILE "videos/tracking.mp4"
+
 #define DETECTION_PERIOD 1
 #define MAX_TRACKER_NUMS 10
 #define MARGIN 50
