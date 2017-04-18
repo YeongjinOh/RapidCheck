@@ -1,10 +1,5 @@
 #include "tracking_utils.h"
 
-#define MAX_FRAMES 30
-#define NUM_OF_COLORS 64
-#define DEBUG false
-#define start 468 // start frame number
-
 /**
 	Show how to build tracklet from given detection results
 
@@ -43,8 +38,8 @@ void detectionBasedTracking(App app)
 	int channels[] = { 0, 1 };
 	
 	vector<Frame> frames;
-	cap.set(CV_CAP_PROP_POS_FRAMES, start);
-	for (int frameNum = start; frameNum < start + MAX_FRAMES; frameNum++) {
+	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
+	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
 		
 		// get frame from the video
 		cap >> frame;
@@ -99,7 +94,7 @@ void detectionBasedTracking(App app)
 		printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start + LOW_LEVEL_TRACKLETS - 1);
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
 
 		// get frame
 		Mat frame;
@@ -117,7 +112,7 @@ void detectionBasedTracking(App app)
 		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 		{
 			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + start + i);
+			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + START_FRAME_NUM + i);
 			// get frame
 			Mat cluster;
 			cap >> cluster;

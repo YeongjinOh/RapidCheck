@@ -157,6 +157,7 @@
     <ClCompile Include="tracking_utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
     <ClInclude Include="frame.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="targetgroup.h" />

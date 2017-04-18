@@ -161,6 +161,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				int outlierIdx = minOutliers[i];
 				selectedIndices[outlierIdx] = -1;
 				selectedTargets[outlierIdx] = Target();
+				useDummy = true;
 			}
 			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
 			return;
@@ -240,7 +241,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < i; j++)
-			{
+			{ 
 				costAppearance += compareHist(selectedTargets[i].hist, selectedTargets[j].hist, 0);
 			}
 			for (int j = 1; j < n - 1; j++)
@@ -295,7 +296,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	}
 
 	// if not used, use dummy
-	if ((n < 2 || cnt == 0) && useDummy)
+	if (useDummy && (n < 2 || cnt == 0))
 	{
 		// recursive backtracking
 		selectedTargets.push_back(Target());
@@ -322,9 +323,17 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 
 	Mat frame;
 	
-	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
-
-		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP*frameNum);
+	int frameNum = START_FRAME_NUM;
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 
 		// get frame from the video
 		cap >> frame;
@@ -338,7 +347,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		// implement hog detection
 		app.getHogResults(frame, found);
 		size_t i, j;
-		for (int i = 0; i<found.size(); i++)
+		for (i = 0; i<found.size(); i++)
 		{
 			Rect r = found[i];
 			for (j = 0; j<found.size(); j++)
@@ -384,14 +393,13 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 {
 	// build all segments
 	int frameNum = 0;
-
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
+	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
 		Segment segment(frameNum + START_FRAME_NUM);
 
 		// create tracklet
 		vector<int> solution;
-
+		
 		// do not use dummy until no more solution built to optimize
 		bool useDummy = false;
 		while (true)

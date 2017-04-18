@@ -1,8 +1,6 @@
 #include "tracking_utils.h"
 #include <time.h>
 
-#define TRAJECTORY_MATCH_THRES 500
-
 /**
 	calculate forward deviation error between two tracklets
 
@@ -78,7 +76,7 @@ void compareSimilarity(App app)
 	clock_t t = clock();
 	detectTargets(app, cap, frames);
 	t = clock() - t;
-	cout << "Detection finished " << t << endl;
+	cout << "Detection finished " << t << " with size of " << frames.size() << " frames" << endl;
 
 	// build all tracklets
 	vector<Segment> segments;
@@ -103,6 +101,7 @@ void compareSimilarity(App app)
 		cap >> frameNext;
 
 		// show tracklet
+		if (segments.size() <= segmentIdxNext) break;
 		Segment &segmentPrev = segments[segmentIdxPrev], &segmentNext = segments[segmentIdxNext];
 		vector<tracklet> &trackletsPrev = segmentPrev.tracklets, &trackletsNext = segmentNext.tracklets;
 		

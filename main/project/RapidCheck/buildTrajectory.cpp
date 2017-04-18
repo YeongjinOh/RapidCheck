@@ -1,8 +1,6 @@
 #include "tracking_utils.h"
 #include <time.h>
 
-#define TRAJECTORY_MATCH_THRES 500
-
 /**
 	Build trajectories of all segements and then, show trace of tracklets
 
