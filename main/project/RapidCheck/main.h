@@ -24,6 +24,7 @@
 
 // set basic colors
 #define WHITE Scalar(255,255,255)
+#define BLACK Scalar(0,0,0)
 #define BLUE Scalar(255,0,0)
 #define GREEN Scalar(0,255,0)
 #define RED Scalar(0,0,255)
@@ -33,5 +34,6 @@ void detectionBasedTracking(App app);
 void showTracklet(App app);
 
 void buildTrajectory(App app);
+void compareSimilarity(App app);
 
 #endif
