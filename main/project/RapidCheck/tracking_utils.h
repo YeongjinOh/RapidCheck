@@ -9,13 +9,13 @@
 #define CONTINUOUS_MOTION_COST_THRE 30
 
 
-#define MAX_FRAMES 31
+#define MAX_FRAMES 121
 #define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
 #define NUM_OF_MID_LEVEL_SEGMENTS NUM_OF_SEGMENTS/MID_LEVEL_TRACKLETS
 #define NUM_OF_COLORS 64
 #define DEBUG false
 #define START_FRAME_NUM 0 // start frame number
-#define FRAME_STEP 1
+#define FRAME_STEP 5
 
 
 typedef vector<Target> tracklet;

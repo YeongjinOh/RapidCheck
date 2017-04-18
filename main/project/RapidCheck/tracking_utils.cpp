@@ -311,7 +311,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
+	int h_bins = 18; int s_bins = 6;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -362,7 +362,14 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		{
 			Mat temp;
 			MatND hist;
-			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
+			//Rect r = found_filtered[i];
+			Rect &r = found_filtered[i];
+			r.x += r.width / 5;
+			r.width = r.width * 3 / 5;
+			r.y += r.height / 10;
+			r.height = r.height * 4 / 5;
+
+			cvtColor(frame(r), temp, COLOR_BGR2HSV);
 			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			hists.push_back(hist);
@@ -376,7 +383,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 {
 	// build all segments
-	int frameNum = 1;
+	int frameNum = 0;
 
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{

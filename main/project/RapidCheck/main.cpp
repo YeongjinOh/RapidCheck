@@ -18,8 +18,8 @@ int main(int argc, char ** argv)
 
 	compareSimilarity(app);
 	//buildTrajectory(app);
-	// showTracklet(app);
-	 //detectionBasedTracking(app);
+	//showTracklet(app);
+	//detectionBasedTracking(app);
 	//detectionAndTracking(app);
 
 

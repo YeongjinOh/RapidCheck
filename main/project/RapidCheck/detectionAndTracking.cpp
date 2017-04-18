@@ -162,7 +162,7 @@ void detectionAndTracking(App app)
 		frameCnt++;
 
 		//quit on ESC button
-		int key = waitKey(3);
+		int key = waitKey(0);
 		if (key == 27) break;
 
 		// puase on p key pressed

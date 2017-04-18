@@ -4,6 +4,54 @@
 #define TRAJECTORY_MATCH_THRES 500
 
 /**
+	calculate forward deviation error between two tracklets
+
+	@param segmentIndexDiff how many segments segmentNext is far away from segmentPrev (segmentIndexNext - segmentIndexPrev)
+*/
+double calcForwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
+{
+	double forwardDeviationError = 0.0;
+	// calculate forwardDeviation
+	for (int i = 0; i < LOW_LEVEL_TRACKLETS / 2; i++)
+	{
+		int targetIdxPrev = LOW_LEVEL_TRACKLETS - 1 - i;
+		Point& centerPointPrev = trackletPrev[targetIdxPrev].getCenterPoint();
+		Point motionVectorPrev = centerPointPrev - trackletPrev[targetIdxPrev - 1].getCenterPoint();
+		for (int j = 0; j < LOW_LEVEL_TRACKLETS / 2; j++)
+		{
+			int targetIdxNext = LOW_LEVEL_TRACKLETS*segmentIndexDiff + j;
+			Point& centerPointNext = trackletNext[j].getCenterPoint();
+			forwardDeviationError += getNormValueFromVector(centerPointPrev + (targetIdxNext - targetIdxPrev)*motionVectorPrev - centerPointNext);
+		}
+	}
+	return forwardDeviationError;
+}
+
+/**
+	calculate backward deviation error between two tracklets
+
+	@param segmentIndexDiff how many segments segmentNext is far away from segmentPrev (segmentIndexNext - segmentIndexPrev)
+*/
+double calcBackwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
+{
+	double backwardDeviationError = 0.0;
+	// calculate forwardDeviation
+	for (int i = 0; i < LOW_LEVEL_TRACKLETS / 2; i++)
+	{
+		int targetIdxNext = LOW_LEVEL_TRACKLETS*segmentIndexDiff + i;
+		Point& centerPointNext = trackletNext[i].getCenterPoint();
+		Point motionBackwardVectorNext = centerPointNext - trackletNext[i + 1].getCenterPoint();
+		for (int j = 0; j < LOW_LEVEL_TRACKLETS / 2; j++)
+		{
+			int targetIdxPrev = LOW_LEVEL_TRACKLETS - 1 - j;
+			Point& centerPointPrev = trackletPrev[targetIdxPrev].getCenterPoint();
+			backwardDeviationError += getNormValueFromVector(centerPointNext + motionBackwardVectorNext * (targetIdxNext - targetIdxPrev) - centerPointPrev);
+		}
+	}
+	return backwardDeviationError;
+}
+
+/**
 	calculate and compare similarity between two tracklets
 
 	@param app frame reader with basic parameters set
@@ -41,11 +89,14 @@ void compareSimilarity(App app)
 
 	int segmentIdxPrev = 0, segmentIdxNext = 1, targetIdxPrev = 0;
 	Mat framePrev, frameNext;
+	int compareHistMethods[4] = {CV_COMP_CORREL, CV_COMP_CHISQR, CV_COMP_INTERSECT, CV_COMP_BHATTACHARYYA };
+	int compareHistMethod = compareHistMethods[0];
+	bool switchS = true, switchF = true, switchB = true; // switch for similarity, forward, backward error
 	while (true)
 	{
 		// set frame
-		int prevFrameNum = LOW_LEVEL_TRACKLETS * segmentIdxPrev + (LOW_LEVEL_TRACKLETS/2)  + START_FRAME_NUM;
-		int nextFrameNum = LOW_LEVEL_TRACKLETS * segmentIdxNext + (LOW_LEVEL_TRACKLETS / 2) + START_FRAME_NUM;
+		int prevFrameNum = FRAME_STEP*(LOW_LEVEL_TRACKLETS * segmentIdxPrev + (LOW_LEVEL_TRACKLETS / 2)) + START_FRAME_NUM;
+		int nextFrameNum = FRAME_STEP*(LOW_LEVEL_TRACKLETS * segmentIdxNext + (LOW_LEVEL_TRACKLETS / 2)) + START_FRAME_NUM;
 		cap.set(CV_CAP_PROP_POS_FRAMES, prevFrameNum);
 		cap >> framePrev;
 		cap.set(CV_CAP_PROP_POS_FRAMES, nextFrameNum);
@@ -66,18 +117,18 @@ void compareSimilarity(App app)
 			segmentIdxNext++;
 			continue;
 		}
-		int objId = 0;
+
+		// draw tracklets
+		int objectId = 0;
 		for (int i = 0; i < trackletsPrev.size(); i++)
 		{
 			tracklet &trackletPrev = trackletsPrev[i];
 			for (int j = 0; j < trackletPrev.size(); j++) 
 			{
 				circle(framePrev, trackletPrev[j].getCenterPoint(), 2, WHITE, 2);
-				circle(framePrev, trackletPrev[j].getCenterPoint(), 1, colors[objId], 2);
+				circle(framePrev, trackletPrev[j].getCenterPoint(), 1, colors[objectId], 2);
 			}
-			if (i == targetIdxPrev)
-				rectangle(framePrev, trackletPrev[LOW_LEVEL_TRACKLETS/2].rect, colors[objId], 2);
-			objId++;
+			objectId++;
 		}
 		for (int i = 0; i < trackletsNext.size(); i++) 
 		{
@@ -85,17 +136,47 @@ void compareSimilarity(App app)
 			for (int j = 0; j < trackletNext.size(); j++) 
 			{
 				circle(frameNext, trackletNext[j].getCenterPoint(), 2, WHITE, 2);
-				circle(frameNext, trackletNext[j].getCenterPoint(), 1, colors[objId], 2);
+				circle(frameNext, trackletNext[j].getCenterPoint(), 1, colors[objectId], 2);
 			}
-			objId++;
+			objectId++;
+		}
+		tracklet& trackletPrev = trackletsPrev[targetIdxPrev];
+		Target& targetPrev = trackletPrev[LOW_LEVEL_TRACKLETS / 2];
+		rectangle(framePrev, targetPrev.rect, colors[targetIdxPrev], 2);
+		MatND histSumPrev = trackletsPrev[targetIdxPrev][0].hist;
+		for (int i = 1; i < trackletsPrev[targetIdxPrev].size(); i++)
+			histSumPrev += trackletsPrev[targetIdxPrev][i].hist;
+		normalize(histSumPrev, histSumPrev, 0, 1, NORM_MINMAX, -1, Mat());
+
+		// calculate similarities
+		for (int i = 0; i < trackletsNext.size(); i++)
+		{
+			MatND histSumNext = trackletsNext[i][0].hist;;
+			for (int j = 1; j < trackletsNext[i].size(); j++)
+				histSumNext += trackletsNext[i][j].hist;
+			normalize(histSumNext, histSumNext, 0, 1, NORM_MINMAX, -1, Mat());
+			double similarity = compareHist(histSumPrev, histSumNext, compareHistMethod);			
+			Target & targetNext = trackletsNext[i][LOW_LEVEL_TRACKLETS / 2];
+			if (switchS)
+				putText(frameNext, to_string(similarity), targetNext.getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 0.7, GREEN, 2);
+
+			tracklet& trackletNext = trackletsNext[i];
+			double forwardDeviationError = calcForwardDeviationError(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
+			double backwardDeviationError = calcBackwardDeviationError(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
+			if (switchF)
+				putText(frameNext, to_string(forwardDeviationError), targetNext.getCenterPoint() + Point(0, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, RED, 2);
+			if (switchB)
+				putText(frameNext, to_string(backwardDeviationError), targetNext.getCenterPoint() + Point(0, 40), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
+
 		}
 
 		// put frame number
-
 		rectangle(framePrev, Rect(0, 0, 150, 30), WHITE, -1);
 		rectangle(frameNext, Rect(0, 0, 150, 30), WHITE, -1);
 		putText(framePrev, "Frame #" + to_string(prevFrameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
 		putText(frameNext, "Frame #" + to_string(nextFrameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
+
+		// show result
 		imshow("prev", framePrev);
 		imshow("next", frameNext);
 
@@ -103,23 +184,44 @@ void compareSimilarity(App app)
 		switch ((char)key) {
 			case 'i': // prev Up
 				if (segmentIdxPrev < segmentIdxNext)
-					segmentIdxPrev++;	
+					segmentIdxPrev++;
+				while (segments[segmentIdxPrev].tracklets.size() == 0) { segmentIdxPrev++; }
+				targetIdxPrev = 0;
 				break;
 			case 'o': // next Up
 				if (segmentIdxNext + 1 < segments.size())
 					segmentIdxNext++;
+				while (segments[segmentIdxNext].tracklets.size() == 0) { segmentIdxNext++; }
 				break;
 			case 'k': // prev Down
 				if (segmentIdxPrev > 0)
 					segmentIdxPrev--;
+				targetIdxPrev = 0;
+				while (segments[segmentIdxPrev].tracklets.size() == 0) { segmentIdxPrev--; }
 				break;
 			case 'l': // next Down
 				if (segmentIdxPrev < segmentIdxNext)
 					segmentIdxNext--;
+				while (segments[segmentIdxNext].tracklets.size() == 0) { segmentIdxNext--; }
 				break;
 			case 't': // move target
 				targetIdxPrev = (targetIdxPrev + 1) % trackletsPrev.size();
 				break;
+			case 'c':
+				compareHistMethod = (compareHistMethod + 1) % 4;
+				break;
+			case 's':
+				cout << switchS << endl;
+				switchS = !switchS;
+				cout << switchS << endl;
+				break;
+			case 'f':
+				switchF = !switchF;
+				break;
+			case 'b':
+				switchB = !switchB;
+				break;
+
 		}
 	}
 
