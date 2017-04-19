@@ -161,6 +161,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				int outlierIdx = minOutliers[i];
 				selectedIndices[outlierIdx] = -1;
 				selectedTargets[outlierIdx] = Target();
+				useDummy = true;
 			}
 			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
 			return;
@@ -240,7 +241,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < i; j++)
-			{
+			{ 
 				costAppearance += compareHist(selectedTargets[i].hist, selectedTargets[j].hist, 0);
 			}
 			for (int j = 1; j < n - 1; j++)
@@ -295,7 +296,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	}
 
 	// if not used, use dummy
-	if ((n < 2 || cnt == 0) && useDummy)
+	if (useDummy && (n < 2 || cnt == 0))
 	{
 		// recursive backtracking
 		selectedTargets.push_back(Target());
@@ -311,7 +312,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
+	int h_bins = 18; int s_bins = 6;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -322,9 +323,17 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 
 	Mat frame;
 	
-	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
-
-		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP*frameNum);
+	int frameNum = START_FRAME_NUM;
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 
 		// get frame from the video
 		cap >> frame;
@@ -338,7 +347,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		// implement hog detection
 		app.getHogResults(frame, found);
 		size_t i, j;
-		for (int i = 0; i<found.size(); i++)
+		for (i = 0; i<found.size(); i++)
 		{
 			Rect r = found[i];
 			for (j = 0; j<found.size(); j++)
@@ -362,7 +371,14 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		{
 			Mat temp;
 			MatND hist;
-			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
+			//Rect r = found_filtered[i];
+			Rect &r = found_filtered[i];
+			r.x += r.width / 5;
+			r.width = r.width * 3 / 5;
+			r.y += r.height / 10;
+			r.height = r.height * 4 / 5;
+
+			cvtColor(frame(r), temp, COLOR_BGR2HSV);
 			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			hists.push_back(hist);
@@ -376,34 +392,24 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 {
 	// build all segments
-	int frameNum = 1;
-
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
+	int frameNum = 0;
+	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		printf("segnum:%d\n", segmentNumber);
 		Segment segment(frameNum + START_FRAME_NUM);
 
 		// create tracklet
 		vector<int> solution;
-
+		
 		// do not use dummy until no more solution built to optimize
 		bool useDummy = false;
 		while (true)
 		{
-			if (segmentNumber == 12) 
-			{
-				printf("segnum:%d\n", segmentNumber);
-			}
 			double costMin = INFINITY;
 			solution.clear();
 
 			
 			// build solution
 			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
-			if (segmentNumber == 12)
-			{
-				printf("after:%d\n", segmentNumber);
-			}
 
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
@@ -427,5 +433,55 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 
 		}
 		segments.push_back(segment);
+	}
+}
+
+// Build one optimal trajectory of given mid-level segment
+void getTrajectory(vector<int>& solution) {
+	// TODO
+}
+
+// Build all trajectories
+void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& mlSegments)
+{
+
+	for (int segmentNumber = 0; segmentNumber + MID_LEVEL_TRACKLETS <= segments.size(); segmentNumber += MID_LEVEL_TRACKLETS)
+	{
+		// create tracklet
+		vector<int> solution;
+		MidLevelSegemet mlSegment;
+
+		// do not use dummy until no more solution built to optimize
+		bool useDummy = false;
+		while (true)
+		{
+			double costMin = INFINITY;
+			solution.clear();
+
+			// build solution
+			getTrajectory(solution);
+
+			// if no more solution
+			if (solution.size() < LOW_LEVEL_TRACKLETS)
+			{
+				if (useDummy)
+					break;
+				useDummy = true;
+				continue;
+			}
+
+			// for each solution
+			RPTrajectory trajectory(segmentNumber);
+			for (int i = 0; i < solution.size(); i++)
+			{
+				Segment& curSegment = segments[segmentNumber + i];
+				tracklet& tracklet = curSegment.getTracklet(solution[i]);
+				trajectory.merge(tracklet);
+				// TODO : set found trues
+			}
+			mlSegment.addTrajectory(trajectory);
+		}
+		// TODO : not-found segments
+		mlSegments.push_back(mlSegment);
 	}
 }

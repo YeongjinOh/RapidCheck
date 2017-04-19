@@ -1,8 +1,6 @@
 #include "tracking_utils.h"
 #include <time.h>
 
-#define TRAJECTORY_MATCH_THRES 500
-
 /**
 	Build trajectories of all segements and then, show trace of tracklets
 
@@ -37,14 +35,21 @@ void buildTrajectory(App app)
 	buildTracklets(frames, segments);
 	cout << "Tracklets built" << endl;
 
-	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked;
-
-	// build trajectories
-	for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++)
+	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked, trajectories;
+	bool useOnlineTracking = true;
+	if (!useOnlineTracking)
 	{
-		printf("segnum:%d\n", segmentNum);
-		printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
+		for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++) 
+		{
+			vector<tracklet>& tracklets = segments[segmentNum].tracklets;
+			for (int t = 0; t < tracklets.size(); t++)
+				trajectories.push_back(RPTrajectory(tracklets[t], segmentNum));
+		}
+	}
 
+	// build trajectories if use online tracking
+	for (int segmentNum = 0; segmentNum < segments.size() && useOnlineTracking; segmentNum++)
+	{
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& tracklets = segment.tracklets;
 
@@ -84,7 +89,7 @@ void buildTrajectory(App app)
 					}
 				}
 
-				printf("minCost : %.2lf\n", minCost);
+				// printf("minCost : %.2lf\n", minCost);
 				if (minCost < TRAJECTORY_MATCH_THRES)
 				{
 					// merge
@@ -120,31 +125,32 @@ void buildTrajectory(App app)
 
 		
 	}
-
-
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
+	trajectories = trajectoriesStillBeingTracked;
 
 
 	// show trajectories
-	Mat frame;
+	Mat frame, frameOrigin;
 	int objectId = 0;
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 	{
 		Segment & segment = segments[segmentNumber];
-		for (int frameIdx = 1; frameIdx <= LOW_LEVEL_TRACKLETS; frameIdx++)
+		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
-			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + START_FRAME_NUM;
-			cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * frameNum);
+			int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 			cap >> frame;
 
+			frame.copyTo(frameOrigin);
+
 			// vector<tracklet>& pedestrianTracklets = segment.tracklets;
-			for (int objectId = 0; objectId < trajectoriesStillBeingTracked.size(); objectId++)
+			for (int objectId = 0; objectId < trajectories.size(); objectId++)
 			{
-				RPTrajectory& trajectory = trajectoriesStillBeingTracked[objectId];
+				RPTrajectory& trajectory = trajectories[objectId];
 				if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
 
-				Target& currentFramePedestrian = trajectory.targets[6 * (segmentNumber - trajectory.startSegmentNum) + frameIdx - 1];
+				Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
 				
 
 				// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
@@ -154,13 +160,17 @@ void buildTrajectory(App app)
 				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 			}
-			
-
+			vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+			for (int i = 0; i < pedestrians.size(); i++) {
+				rectangle(frameOrigin, pedestrians[i], WHITE, 2);
+			}
 
 			imshow("tracklets", frame);
+			imshow("origin", frameOrigin);
 
 			// key handling
 			int key = waitKey(130);
+
 			if (key == 27) break;
 			else if (key == (int)('r'))
 			{

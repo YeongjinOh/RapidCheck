@@ -55,7 +55,7 @@ void detectionAndTracking(App app)
 	
 	// Histogram setting
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
+	int h_bins = 18; int s_bins = 6;
 	int histSize[] = { h_bins, s_bins };
 
 	// hue varies from 0 to 179, saturation from 0 to 255
@@ -69,7 +69,10 @@ void detectionAndTracking(App app)
 
 	TargetGroup existingTargets;
 	int frameCnt = 0;
-	while (frameCnt < 400) {
+	while (frameCnt < MAX_FRAMES)
+	{
+		int frameNumber = START_FRAME_NUM + frameCnt*FRAME_STEP;
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNumber);
 		// get frame from the video
 		cap >> frame;
 		Mat clone = frame.clone();
@@ -129,7 +132,15 @@ void detectionAndTracking(App app)
 		{
 			Mat temp;
 			MatND hist;
-			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
+			Rect2d& r = found_filtered[i];
+			r.x += r.width / 5;
+			r.width = r.width * 3/5;
+			r.y += r.height / 10;
+			r.height = r.height * 4/5;
+
+			
+			rectangle(frame, r, Scalar(0, 255, 255), 2, 1);
+			cvtColor(frame(r), temp, COLOR_BGR2HSV);
 			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			hists.push_back(hist);
@@ -188,7 +199,7 @@ void detectionAndTracking(App app)
 					
 					if (hasTarget) {
 						// calculate similarity
-						double sim = compareHist(currentFrameTarget.hist, target.hist, 0);
+						double sim = compareHist(currentFrameTarget.hist, target.hist, CV_COMP_INTERSECT);
 						//cout << sim << endl;
 						putText(targets, to_string(sim*100).substr(0,5), Point (start, MARGIN), CV_FONT_HERSHEY_SIMPLEX, 0.7, Scalar(255, 0, 0), 2);
 					}
