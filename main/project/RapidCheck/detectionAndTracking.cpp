@@ -69,7 +69,10 @@ void detectionAndTracking(App app)
 
 	TargetGroup existingTargets;
 	int frameCnt = 0;
-	while (frameCnt < 400) {
+	while (frameCnt < MAX_FRAMES)
+	{
+		int frameNumber = START_FRAME_NUM + frameCnt*FRAME_STEP;
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNumber);
 		// get frame from the video
 		cap >> frame;
 		Mat clone = frame.clone();
@@ -162,7 +165,7 @@ void detectionAndTracking(App app)
 		frameCnt++;
 
 		//quit on ESC button
-		int key = waitKey(0);
+		int key = waitKey(3);
 		if (key == 27) break;
 
 		// puase on p key pressed

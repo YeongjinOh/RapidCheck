@@ -16,10 +16,10 @@ int main(int argc, char ** argv)
 
 	App app(args);
 
-	//compareSimilarity(app);
+	compareSimilarity(app);
 	//buildTrajectory(app);
 	//showTracklet(app);
-	detectionBasedTracking(app);
+	//detectionBasedTracking(app);
 	//detectionAndTracking(app);
 
 

@@ -19,7 +19,10 @@ double calcForwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext,
 		{
 			int targetIdxNext = LOW_LEVEL_TRACKLETS*segmentIndexDiff + j;
 			Point& centerPointNext = trackletNext[j].getCenterPoint();
-			forwardDeviationError += getNormValueFromVector(centerPointPrev + (targetIdxNext - targetIdxPrev)*motionVectorPrev - centerPointNext);
+			
+			double err = getNormValueFromVector(centerPointPrev + (targetIdxNext - targetIdxPrev)*motionVectorPrev - centerPointNext);
+			cout << centerPointPrev << endl << centerPointNext << endl << motionVectorPrev << endl << err << endl << endl;
+			forwardDeviationError += err;
 		}
 	}
 	return forwardDeviationError;
@@ -49,6 +52,11 @@ double calcBackwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext
 	return backwardDeviationError;
 }
 
+double calcSimilarityMotion(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
+{
+	double deviationError = calcForwardDeviationError(trackletPrev, trackletNext, segmentIndexDiff) + calcBackwardDeviationError(trackletPrev, trackletNext, segmentIndexDiff);
+	return exp(-deviationError / STANDARD_DEVIATION);
+}
 /**
 	calculate and compare similarity between two tracklets
 
@@ -89,7 +97,7 @@ void compareSimilarity(App app)
 	Mat framePrev, frameNext;
 	int compareHistMethods[4] = {CV_COMP_CORREL, CV_COMP_CHISQR, CV_COMP_INTERSECT, CV_COMP_BHATTACHARYYA };
 	int compareHistMethod = compareHistMethods[0];
-	bool switchS = true, switchF = true, switchB = true; // switch for similarity, forward, backward error
+	bool switchM = true, switchS = true, switchF = false, switchB = false; // switch for similarity, forward, backward error
 	while (true)
 	{
 		// set frame
@@ -154,18 +162,23 @@ void compareSimilarity(App app)
 			for (int j = 1; j < trackletsNext[i].size(); j++)
 				histSumNext += trackletsNext[i][j].hist;
 			normalize(histSumNext, histSumNext, 0, 1, NORM_MINMAX, -1, Mat());
-			double similarity = compareHist(histSumPrev, histSumNext, compareHistMethod);			
+			double similarityAppearance = compareHist(histSumPrev, histSumNext, compareHistMethod);			
 			Target & targetNext = trackletsNext[i][LOW_LEVEL_TRACKLETS / 2];
 			if (switchS)
-				putText(frameNext, to_string(similarity), targetNext.getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 0.7, GREEN, 2);
-
+				putText(frameNext, to_string(similarityAppearance), targetNext.getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 0.7, GREEN, 2);
+			
+			
 			tracklet& trackletNext = trackletsNext[i];
+			double similarityMotion = calcSimilarityMotion(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
+			if (switchM)
+				putText(frameNext, to_string(similarityMotion), targetNext.getCenterPoint() + Point(0, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, RED, 2);
 			double forwardDeviationError = calcForwardDeviationError(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
 			double backwardDeviationError = calcBackwardDeviationError(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
 			if (switchF)
-				putText(frameNext, to_string(forwardDeviationError), targetNext.getCenterPoint() + Point(0, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, RED, 2);
+				putText(frameNext, to_string(forwardDeviationError), targetNext.getCenterPoint() + Point(0, 40), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
 			if (switchB)
-				putText(frameNext, to_string(backwardDeviationError), targetNext.getCenterPoint() + Point(0, 40), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
+				putText(frameNext, to_string(backwardDeviationError), targetNext.getCenterPoint() + Point(0, 60), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
+			
 
 		}
 
@@ -210,9 +223,10 @@ void compareSimilarity(App app)
 				compareHistMethod = (compareHistMethod + 1) % 4;
 				break;
 			case 's':
-				cout << switchS << endl;
 				switchS = !switchS;
-				cout << switchS << endl;
+				break;
+			case 'm':
+				switchM = !switchM;
 				break;
 			case 'f':
 				switchF = !switchF;

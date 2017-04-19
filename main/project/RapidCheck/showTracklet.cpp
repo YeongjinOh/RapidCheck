@@ -41,9 +41,9 @@ void showTracklet(App app)
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 	{
 		Segment & segment = segments[segmentNumber];
-		for (int frameIdx = 1; frameIdx <= LOW_LEVEL_TRACKLETS; frameIdx++)
+		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
-			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + START_FRAME_NUM;
+			int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
 			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 			cap >> frame;
 
@@ -51,7 +51,7 @@ void showTracklet(App app)
 			for (int pedestrianNum = 0; pedestrianNum < pedestrianTracklets.size(); pedestrianNum++)
 			{
 				tracklet& pedestrianTracklet = pedestrianTracklets[pedestrianNum];
-				Target& currentFramePedestrian = pedestrianTracklet[frameIdx - 1];
+				Target& currentFramePedestrian = pedestrianTracklet[frameIdx];
 				rectangle(frame, currentFramePedestrian.rect, colors[(objectId + pedestrianNum) % NUM_OF_COLORS], 2);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 				centers.push_back(currentFramePedestrian.getCenterPoint());
@@ -79,7 +79,7 @@ void showTracklet(App app)
 				objectIds.clear();
 				break;
 			}
-			if (frameIdx == LOW_LEVEL_TRACKLETS)
+			if (frameIdx == LOW_LEVEL_TRACKLETS - 1)
 				objectId += pedestrianTracklets.size();
 		}
 	}
