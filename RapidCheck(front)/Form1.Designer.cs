@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -42,8 +43,12 @@
             this.materialCheckBox1 = new MaterialSkin.Controls.MaterialCheckBox();
             this.videoBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.materialFlatButton2 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.overBtn = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.materialTabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
             this.tabPage3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -65,6 +70,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.pictureBox1);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -230,11 +236,32 @@
             this.materialFlatButton2.UseVisualStyleBackColor = true;
             this.materialFlatButton2.Click += new System.EventHandler(this.materialFlatButton2_Click);
             // 
+            // overBtn
+            // 
+            this.overBtn.Location = new System.Drawing.Point(725, 123);
+            this.overBtn.Name = "overBtn";
+            this.overBtn.Size = new System.Drawing.Size(172, 34);
+            this.overBtn.TabIndex = 8;
+            this.overBtn.Text = "overlay test";
+            this.overBtn.UseVisualStyleBackColor = true;
+            this.overBtn.Click += new System.EventHandler(this.overBtn_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(894, 287);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(932, 523);
+            this.Controls.Add(this.overBtn);
             this.Controls.Add(this.materialFlatButton2);
             this.Controls.Add(this.videoBtn);
             this.Controls.Add(this.materialCheckBox1);
@@ -250,7 +277,9 @@
             this.Text = "RapidCheck";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.materialTabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -272,6 +301,8 @@
         private MaterialSkin.Controls.MaterialCheckBox materialCheckBox1;
         private MaterialSkin.Controls.MaterialFlatButton videoBtn;
         private MaterialSkin.Controls.MaterialFlatButton materialFlatButton2;
+        private System.Windows.Forms.Button overBtn;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

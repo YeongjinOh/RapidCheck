@@ -18,6 +18,8 @@ using Microsoft.DirectX;
 //MYSQL
 using MySql.Data.MySqlClient;
 
+//CMD command
+using System.Diagnostics;
 
 namespace RapidCheck
 {
@@ -29,10 +31,13 @@ namespace RapidCheck
         private Size pnlSize;
 
         //Video File Path
-        private string path;
+        //private string path;
 
         //MySQL
         private string strConn = "Server=localhost;Database=test;Uid=root;Pwd=1234;";
+
+        //overlay test
+        private Bitmap overlay = null;
 
         public Form1()
         {
@@ -47,28 +52,31 @@ namespace RapidCheck
             tabPage2.Text = "요약";
             tabPage3.Text = "영상";
 
-            //SQL
-            MySqlConnection conn = new MySqlConnection(strConn);
-            conn.Open();
-            MySqlCommand cmd = new MySqlCommand("INSERT INTO test_table VALUES (11, 'tasdad1')", conn);
-            cmd.ExecuteNonQuery();
-            conn.Close();
-        }
+            //CMD
+            //Process test = new Process();
+            //test.StartInfo.FileName = "test.bat";
+            //test.StartInfo.WorkingDirectory = @"C:\Users\trevor\Desktop";
+            ////test.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;
+            //test.Start();
 
+            //SQL
+            //MySqlConnection conn = new MySqlConnection(strConn);
+            //conn.Open();
+            //MySqlCommand cmd = new MySqlCommand("INSERT INTO test_table VALUES (11, 'tasdad1')", conn);
+            //cmd.ExecuteNonQuery();
+            //conn.Close();
+        }
         private void Form1_Load(object sender, EventArgs e)
         {
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(tabPage3.Width, tabPage3.Height);
         }
-
         private void videoBtn_Click(object sender, EventArgs e)
         {
             MySqlConnection conn = new MySqlConnection(strConn);
             conn.Open();
-
-            MySqlCommand cmd = new MySqlCommand("UPDATE test_table SET name='Tim' WHERE id=11");
+            MySqlCommand cmd = new MySqlCommand("UPDATE test_table SET name='sss' WHERE id=11", conn);
             cmd.ExecuteNonQuery();
-
             conn.Close();
         }
         private void materialFlatButton2_Click(object sender, EventArgs e)
@@ -85,7 +93,6 @@ namespace RapidCheck
                 {
                     video.Dispose();
                 }
-
                 try
                 {
                     // open a new video
@@ -108,6 +115,49 @@ namespace RapidCheck
             }
             // enable video buttons
             //ControlLogic();
+        }
+        
+        //overlay test
+        private void overBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                overlay = new Bitmap(@"C:\Users\trevor\Desktop\Videos\overlay.png");
+                pictureBox1.Cursor = Cursors.Cross;
+                
+                ShowCombinedImage();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Error opening file.\n" + ex.Message,
+                "Open Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            }
+        }
+
+        private Bitmap CombinedBitmap = null;
+        //ShowCombinedImage
+        private void ShowCombinedImage()
+        {
+            // If there's no background image, do nothing
+            if (pictureBox1.Image == null)
+            {
+                MessageBox.Show("pictureBox1 image is nulln");
+                return;
+            }
+            CombinedBitmap = new Bitmap(pictureBox1.Image);
+
+            Point overlayLocation = new Point(10,10);
+
+            //Add the overlay
+            if(overlay != null)
+            {
+                using(Graphics gr = Graphics.FromImage(CombinedBitmap))
+                {
+                    gr.DrawImage(overlay, overlayLocation);
+                }
+            }
+            pictureBox1.Image = CombinedBitmap;
         }
     }
 }
