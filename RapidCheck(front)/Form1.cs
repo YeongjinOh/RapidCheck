@@ -52,12 +52,7 @@ namespace RapidCheck
             tabPage2.Text = "요약";
             tabPage3.Text = "영상";
 
-            //CMD
-            //Process test = new Process();
-            //test.StartInfo.FileName = "test.bat";
-            //test.StartInfo.WorkingDirectory = @"C:\Users\trevor\Desktop";
-            ////test.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;
-            //test.Start();
+           
 
             //SQL
             //MySqlConnection conn = new MySqlConnection(strConn);
@@ -118,8 +113,52 @@ namespace RapidCheck
         }
         
         //overlay test
-        private void overBtn_Click(object sender, EventArgs e)
+        private async void overBtn_Click(object sender, EventArgs e)
         {
+            //CMD
+            var test = new Process()
+            {
+                EnableRaisingEvents = true
+            };
+
+            test.StartInfo.FileName = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug\RapidCheck.exe";
+            test.StartInfo.WorkingDirectory = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug";
+            test.StartInfo.RedirectStandardOutput = true;
+            test.StartInfo.UseShellExecute = false;
+            //test.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;\
+
+            test.OutputDataReceived += test_OutputDataReceived;
+
+            test.Start();
+            //test.BeginOutputReadLine();
+            //test.WaitForExit();
+
+            while (!test.HasExited)
+            {
+                await Task.Delay(500);
+
+                test.Refresh();
+            }
+
+            MessageBox.Show("Exited");
+
+            
+            Process test1 = new Process();
+            test1.StartInfo.FileName = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe C:\Users\SoMa\myworkspace\darkflow\test.py";
+            //test1.StartInfo.WorkingDirectory = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug";
+            //test1.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;
+            try
+            {
+                test1.Start();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(" junsu");
+            }
+            
+            
+            
+            /*
             try
             {
                 overlay = new Bitmap(@"C:\Users\trevor\Desktop\Videos\overlay.png");
@@ -133,6 +172,17 @@ namespace RapidCheck
                 "Open Error", MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             }
+             */
+        }
+
+        void test_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Console.WriteLine(e.Data);
+        }
+
+        void test_Exited(object sender, EventArgs e)
+        {
+            MessageBox.Show("wwwwwwwwwwww");
         }
 
         private Bitmap CombinedBitmap = null;
