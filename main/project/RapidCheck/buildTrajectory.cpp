@@ -1,4 +1,5 @@
 #include "tracking_utils.h"
+#include <time.h>
 
 #define TRAJECTORY_MATCH_THRES 500
 
@@ -26,22 +27,27 @@ void buildTrajectory(App app)
 
 	// build target detected frames
 	vector<Frame> frames;
+	clock_t t = clock();
 	detectTargets(app, cap, frames);
-	cout << "Detection finished" << endl;
-
+	t = clock() - t;
+	cout << "Detection finished " << t << endl;
+	
 	// build all tracklets
 	vector<Segment> segments;
 	buildTracklets(frames, segments);
 	cout << "Tracklets built" << endl;
 
-	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked;
+	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked, trajectories;
+	for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++) {
+		vector<tracklet>& tracklets = segments[segmentNum].tracklets;
+		for (int t = 0; t < tracklets.size(); t++)
+			trajectories.push_back(RPTrajectory(tracklets[t], segmentNum));
+	}
 
 	// build trajectories
+	/*
 	for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++)
 	{
-		printf("segnum:%d\n", segmentNum);
-		printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
-
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& tracklets = segment.tracklets;
 
@@ -81,7 +87,7 @@ void buildTrajectory(App app)
 					}
 				}
 
-				printf("minCost : %.2lf\n", minCost);
+				// printf("minCost : %.2lf\n", minCost);
 				if (minCost < TRAJECTORY_MATCH_THRES)
 				{
 					// merge
@@ -117,14 +123,14 @@ void buildTrajectory(App app)
 
 		
 	}
-
-
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
+	trajectories = trajectoriesStillBeingTracked;
+	*/
 
 
 	// show trajectories
-	Mat frame;
+	Mat frame, frameOrigin;
 	int objectId = 0;
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 	{
@@ -132,25 +138,40 @@ void buildTrajectory(App app)
 		for (int frameIdx = 1; frameIdx <= LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
 			int frameNum = LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx + START_FRAME_NUM;
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+			cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * frameNum);
 			cap >> frame;
 
+			frame.copyTo(frameOrigin);
+
 			// vector<tracklet>& pedestrianTracklets = segment.tracklets;
-			for (int objectId = 0; objectId < trajectoriesStillBeingTracked.size(); objectId++)
+			for (int objectId = 0; objectId < trajectories.size(); objectId++)
 			{
-				RPTrajectory& trajectory = trajectoriesStillBeingTracked[objectId];
+				RPTrajectory& trajectory = trajectories[objectId];
 				if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
 
 				Target& currentFramePedestrian = trajectory.targets[6 * (segmentNumber - trajectory.startSegmentNum) + frameIdx - 1];
+				
+
+				// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
+				// Scalar mean = cv::mean(frame(roi));
+				// rectangle(frame, currentFramePedestrian.rect, mean, 2);
 				rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
-				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint(), 1, 1, WHITE, 1);
+				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 			}
+			vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+			for (int i = 0; i < pedestrians.size(); i++) {
+				rectangle(frameOrigin, pedestrians[i], WHITE, 2);
+			}
 			
+
+
 			imshow("tracklets", frame);
+			imshow("origin", frameOrigin);
 
 			// key handling
-			int key = waitKey(10);
+			int key = waitKey(130);
+
 			if (key == 27) break;
 			else if (key == (int)('r'))
 			{

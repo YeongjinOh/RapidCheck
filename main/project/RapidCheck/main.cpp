@@ -17,8 +17,8 @@ int main(int argc, char ** argv)
 	App app(args);
 
 	buildTrajectory(app);
-	//showTracklet(app);
-	//  detectionBasedTracking(app);
+	// showTracklet(app);
+	 //detectionBasedTracking(app);
 	//detectionAndTracking(app);
 
 

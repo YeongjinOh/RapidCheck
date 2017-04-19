@@ -321,8 +321,10 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	int channels[] = { 0, 1 };
 
 	Mat frame;
-	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
+	
 	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
+
+		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP*frameNum);
 
 		// get frame from the video
 		cap >> frame;
@@ -378,7 +380,6 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 
 	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		printf("segnum:%d\n", segmentNumber);
 		Segment segment(frameNum + START_FRAME_NUM);
 
 		// create tracklet
@@ -388,13 +389,10 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 		bool useDummy = false;
 		while (true)
 		{
-			if (segmentNumber == 28) 
-			{
-				printf("segnum:%d\n", segmentNumber);
-			}
 			double costMin = INFINITY;
 			solution.clear();
 
+			
 			// build solution
 			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
 
@@ -420,5 +418,55 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 
 		}
 		segments.push_back(segment);
+	}
+}
+
+// Build one optimal trajectory of given mid-level segment
+void getTrajectory(vector<int>& solution) {
+	// TODO
+}
+
+// Build all trajectories
+void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& mlSegments)
+{
+
+	for (int segmentNumber = 0; segmentNumber + MID_LEVEL_TRACKLETS <= segments.size(); segmentNumber += MID_LEVEL_TRACKLETS)
+	{
+		// create tracklet
+		vector<int> solution;
+		MidLevelSegemet mlSegment;
+
+		// do not use dummy until no more solution built to optimize
+		bool useDummy = false;
+		while (true)
+		{
+			double costMin = INFINITY;
+			solution.clear();
+
+			// build solution
+			getTrajectory(solution);
+
+			// if no more solution
+			if (solution.size() < LOW_LEVEL_TRACKLETS)
+			{
+				if (useDummy)
+					break;
+				useDummy = true;
+				continue;
+			}
+
+			// for each solution
+			RPTrajectory trajectory(segmentNumber);
+			for (int i = 0; i < solution.size(); i++)
+			{
+				Segment& curSegment = segments[segmentNumber + i];
+				tracklet& tracklet = curSegment.getTracklet(solution[i]);
+				trajectory.merge(tracklet);
+				// TODO : set found trues
+			}
+			mlSegment.addTrajectory(trajectory);
+		}
+		// TODO : not-found segments
+		mlSegments.push_back(mlSegment);
 	}
 }
