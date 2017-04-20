@@ -11,7 +11,8 @@
 #include "opencv2/imgproc.hpp"
 
 using namespace std;
-using namespace cv;
+using cv::Mat;
+using cv::Rect;
 
 class Args
 {

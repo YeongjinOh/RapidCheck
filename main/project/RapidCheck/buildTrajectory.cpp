@@ -1,5 +1,9 @@
 #include "tracking_utils.h"
 #include <time.h>
+#include "database.h"
+using namespace cv;
+
+int fileId = 2;
 
 /**
 	Build trajectories of all segements and then, show trace of tracklets
@@ -8,6 +12,8 @@
 */
 void buildTrajectory(App app)
 {
+	DB db;
+
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
@@ -132,53 +138,60 @@ void buildTrajectory(App app)
 
 	// show trajectories
 	Mat frame, frameOrigin;
-	int objectId = 0;
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
-	{
-		Segment & segment = segments[segmentNumber];
-		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
+	while (true) {
+		int objectId = 0;
+		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 		{
-			int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-			cap >> frame;
-
-			frame.copyTo(frameOrigin);
-
-			// vector<tracklet>& pedestrianTracklets = segment.tracklets;
-			for (int objectId = 0; objectId < trajectories.size(); objectId++)
+			Segment & segment = segments[segmentNumber];
+			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 			{
-				RPTrajectory& trajectory = trajectories[objectId];
-				if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
+				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+				cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+				cap >> frame;
 
-				Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
-				
+				frame.copyTo(frameOrigin);
 
-				// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
-				// Scalar mean = cv::mean(frame(roi));
-				// rectangle(frame, currentFramePedestrian.rect, mean, 2);
-				rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
-				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
-				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
+				// vector<tracklet>& pedestrianTracklets = segment.tracklets;
+				for (int objectId = 0; objectId < trajectories.size(); objectId++)
+				{
+					RPTrajectory& trajectory = trajectories[objectId];
+					if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
+
+					Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
+
+
+					// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
+					// Scalar mean = cv::mean(frame(roi));
+					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
+					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
+
+					// db.insert(fileId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
+
+					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
+					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
+				}
+				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+				for (int i = 0; i < pedestrians.size(); i++) {
+					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
+				}
+
+				imshow("tracklets", frame);
+				imshow("origin", frameOrigin);
+
+				// key handling
+				int key = waitKey(130);
+
+				if (key == 27) break;
+				else if (key == (int)('r'))
+				{
+					segmentNumber = 0;
+					break;
+				}
+
 			}
-			vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
-			for (int i = 0; i < pedestrians.size(); i++) {
-				rectangle(frameOrigin, pedestrians[i], WHITE, 2);
-			}
-
-			imshow("tracklets", frame);
-			imshow("origin", frameOrigin);
-
-			// key handling
-			int key = waitKey(130);
-
-			if (key == 27) break;
-			else if (key == (int)('r'))
-			{
-				segmentNumber = 0;
-				break;
-			}
-			
 		}
+		waitKey(0);
 	}
+	
 	
 }

@@ -1,7 +1,7 @@
 // VideoCapture configuration
-#define MAX_FRAMES 121
-#define START_FRAME_NUM 100 // start frame number
-#define FRAME_STEP 3
+#define MAX_FRAMES 361
+#define START_FRAME_NUM 0 // start frame number
+#define FRAME_STEP 1
 #define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
 #define NUM_OF_MID_LEVEL_SEGMENTS NUM_OF_SEGMENTS/MID_LEVEL_TRACKLETS
 #define NUM_OF_COLORS 64

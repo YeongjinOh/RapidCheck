@@ -1,5 +1,7 @@
 #include "gpu_hog.h"
 
+using namespace cv;
+
 bool help_showed = false;
 
 static void printHelp()
@@ -233,7 +235,7 @@ void App::run()
 		}
 
 		Mat img_aux, img, img_to_show;
-		cuda::GpuMat gpu_img;
+		cv::cuda::GpuMat gpu_img;
 
 		// Iterate over all frames
 		while (running && !frame.empty())

@@ -2,7 +2,11 @@
 #define TARGET_H
 
 #include<opencv2/core/core.hpp>
-using namespace cv;
+using cv::Point;
+using cv::Point2d;
+using cv::Rect2d;
+using cv::Rect;
+using cv::MatND;
 
 class Target
 {

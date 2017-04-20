@@ -1,8 +1,9 @@
 #include <opencv2/core/core.hpp>
 #include "target.h"
 
-using namespace cv;
 using namespace std;
+using cv::Rect;
+using cv::MatND;
 
 class Frame 
 {
