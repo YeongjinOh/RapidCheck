@@ -1,5 +1,5 @@
 #include "frame.h"
-
+using namespace cv;
 Frame::Frame(int num = 0)
 {
 	frameNumber = num;

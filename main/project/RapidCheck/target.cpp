@@ -1,5 +1,5 @@
 #include "target.h"
-
+using namespace cv;
 Target::Target(Rect rect) :rect(rect)
 {
 	Point currentCenter;

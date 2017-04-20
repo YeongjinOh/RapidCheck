@@ -1,5 +1,5 @@
 #include "tracking_utils.h"
-
+using namespace cv;
 /**
 	Build tracklets of all segements and then, show trace of tracklets
 

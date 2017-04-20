@@ -1,5 +1,5 @@
 #include "tracking_utils.h"
-
+using namespace cv;
 /**
 	Show how to build tracklet from given detection results
 

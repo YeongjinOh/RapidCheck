@@ -15,6 +15,9 @@
 #include "frame.h"
 #include "config.h"
 
+using cv::VideoCapture;
+using cv::Scalar;
+using cv::RNG;
 
 // set basic colors
 #define WHITE Scalar(255,255,255)

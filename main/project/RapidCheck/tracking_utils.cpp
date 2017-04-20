@@ -1,4 +1,5 @@
 #include "tracking_utils.h"
+using namespace cv;
 
 // Calculate 2-d norm value of given vector
 double getNormValueFromVector(Point p) {

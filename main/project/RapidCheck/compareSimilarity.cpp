@@ -1,6 +1,6 @@
 #include "tracking_utils.h"
 #include <time.h>
-
+using namespace cv;
 /**
 	calculate forward deviation error between two tracklets
 

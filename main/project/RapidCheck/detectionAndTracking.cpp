@@ -1,5 +1,5 @@
 #include "main.h"
-
+using namespace cv;
 /**
 	Calculate PSNR similarity
 

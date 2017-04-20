@@ -1,6 +1,6 @@
 #include "targetgroup.h"
 #include <opencv2/opencv.hpp>
-
+using namespace cv;
 
 TargetGroup::TargetGroup(std::vector<Rect> rects, std::vector<MatND> hists)
 {

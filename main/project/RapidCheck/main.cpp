@@ -1,9 +1,9 @@
 #include "main.h"
 
-using namespace cv;
-
 int main(int argc, char ** argv)
 {
+
+
 	// set gpu_hog
 	Args args;
 	args.hit_threshold = 0.9;
@@ -14,15 +14,14 @@ int main(int argc, char ** argv)
 	// args.src_is_video = true;
 	// args.src = VIDEOFILE;
 
+
 	App app(args);
 
-	compareSimilarity(app);
-	//buildTrajectory(app);
+	//compareSimilarity(app);
+	buildTrajectory(app);
 	//showTracklet(app);
 	//detectionBasedTracking(app);
 	//detectionAndTracking(app);
-
-
 
 	// App app(args);
 	// app.run();
