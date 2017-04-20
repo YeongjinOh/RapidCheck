@@ -1,7 +1,7 @@
 import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
-import config as cfg
+import yolo.config as cfg
 
 def darkeras_loss(y_labels, y_preds):
 	
