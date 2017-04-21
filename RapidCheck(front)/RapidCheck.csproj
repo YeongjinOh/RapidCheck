@@ -45,6 +45,24 @@
       <HintPath>..\..\Downloads\DirectX\Microsoft.DirectX.AudioVideoPlayback.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
+    <Reference Include="Overlay.NET">
+      <HintPath>packages\Overlay.NET.1.0.2\lib\Overlay.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="Process.NET">
+      <HintPath>packages\Overlay.NET.1.0.2\lib\Process.NET.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct2D1">
+      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI">
+      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics">
+      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.Mathematics.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

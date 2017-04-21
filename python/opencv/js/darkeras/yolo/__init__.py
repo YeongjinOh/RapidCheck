@@ -1,2 +1,2 @@
-__all__ = ['training',
+__all__ = ['training_v1',
 		'config']
