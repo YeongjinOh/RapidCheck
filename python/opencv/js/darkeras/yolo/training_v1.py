@@ -3,7 +3,23 @@ import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import yolo.config as cfg
 
-def darkeras_loss(y_labels, y_preds):
+_TRAINER = dict({
+		'rmsprop': tf.train.RMSPropOptimizer,
+		'adadelta': tf.train.AdadeltaOptimizer,
+		'adagrad': tf.train.AdagradOptimizer,
+		'adagradDA': tf.train.AdagradDAOptimizer,
+		'momentum': tf.train.MomentumOptimizer,
+		'adam': tf.train.AdamOptimizer,
+		'ftrl': tf.train.FtrlOptimizer,
+	})
+
+def _to_tensor(x, dtype):
+	x = tf.convert_to_tensor(x)
+	if x.dtype != dtype:
+		x = tf.cast(x, dtype)
+	return x
+
+def darkeras_loss(net_out):
 	
 	sprob = float(cfg.class_scale)
 	sconf = float(cfg.object_scale)
@@ -15,17 +31,54 @@ def darkeras_loss(y_labels, y_preds):
 	size1 = [None, SS, C]
 	size2 = [None, SS, B]
 
+	# return the below placeholders
+	_probs = tf.placeholder(tf.float32, size1)
+	_confs = tf.placeholder(tf.float32, size2)
+	_coord = tf.placeholder(tf.float32, size2 + [4])
+	# weights term for L2 loss
+	_proid = tf.placeholder(tf.float32, size1)
+	# material calculating IOU
+	_areas = tf.placeholder(tf.float32, size2)
+	_upleft = tf.placeholder(tf.float32, size2 + [2])
+	_botright = tf.placeholder(tf.float32, size2 + [2])
+
+	placeholders = {
+		'probs':_probs, 'confs':_confs, 'coord':_coord, 'proid':_proid,
+		'areas':_areas, 'upleft':_upleft, 'botright':_botright
+	}
+
     # mapping y_labels -> each feed dict members
 	# return the below placeholders
-	_probs = y_labels['probs']
-	_confs = y_labels['confs']
-	_coord = y_labels['coord']
-	# weights term for L2 loss
-	_proid = y_labels['proid']
-	# material calculating IOU
-	_areas = y_labels['areas']
-	_upleft = y_labels['upleft']
-	_botright = y_labels['botright']
+	
+	# _probs = _to_tensor(y_labels[0], tf.float32)
+	# _confs = _to_tensor(y_labels[1], tf.float32)#, shape=size2)
+	# _coord = _to_tensor(y_labels[2], tf.float32) #, shape=(siez2+[4]))
+	# # weights term for L2 loss
+	# _proid = _to_tensor(y_labels[3], tf.float32) # , shape=size1)
+	# # material calculating IOU
+	# _areas = _to_tensor(y_labels[4], tf.float32) # , shape=size2)
+	# _upleft = _to_tensor(y_labels[5], tf.float32) #, shape=(size2+[2]))
+	# _botright = _to_tensor(y_labels[6], tf.float32) # , shape=(size2+[2]))
+
+	# _probs = y_labels[0]
+	# _confs = y_labels[1]
+	# _coord = y_labels[2]
+	# # weights term for L2 loss
+	# _proid = y_labels[3]
+	# # material calculating IOU
+	# _areas = y_labels[4]
+	# _upleft = y_labels[5]
+	# _botright = y_labels[6]
+
+	# _probs = y_labels['probs']
+	# _confs = y_labels['confs']
+	# _coord = y_labels['coord']
+	# # weights term for L2 loss
+	# _proid = y_labels['proid']
+	# # material calculating IOU
+	# _areas = y_labels['areas']
+	# _upleft = y_labels['upleft']
+	# _botright = y_labels['botright']
 
 	# Extract the coordinate prediction from net.out
 	coords = net_out[:, SS * (C + B):]
@@ -63,6 +116,14 @@ def darkeras_loss(y_labels, y_preds):
 	coord = slim.flatten(_coord)
 	cooid = slim.flatten(cooid)
 
+	# reshape 1 dim vevtor
+	# probs = tf.reshape(_probs, [-1])
+	# proid = tf.reshape(proid, [-1])
+	# confs = tf.reshape(confs, [-1])
+	# conid = tf.reshape(conid, [-1])
+	# coord = tf.reshape(_coord, [-1])
+	# cooid = tf.reshape(cooid, [-1])
+
 	true = tf.concat([probs, confs, coord], 1)
 	wght = tf.concat([proid, conid, cooid], 1)
 
@@ -70,7 +131,7 @@ def darkeras_loss(y_labels, y_preds):
 	loss = tf.pow(net_out - true, 2)
 	loss = tf.multiply(loss, wght)
 	loss = tf.reduce_sum(loss, 1)
-	return .5 * tf.reduce_mean(loss)
+	return placeholders, .5 * tf.reduce_mean(loss)
 
 
 if __name__ == '__main__':
