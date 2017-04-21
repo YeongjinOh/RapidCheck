@@ -7,6 +7,11 @@ int calcInternalDivision(int a, int b, int m, int n)
 	return (a*n + b*m) / (m + n);
 }
 
+// Calculate Internal Divison from a to b with m:n
+double calcInternalDivision(double a, double b, int m, int n)
+{
+	return (a*n + b*m) / (m + n);
+}
 // Generate random colors
 vector<Scalar> getRandomColors()
 {

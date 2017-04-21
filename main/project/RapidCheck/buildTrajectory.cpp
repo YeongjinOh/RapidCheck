@@ -1,4 +1,5 @@
 #include "tracking_utils.h"
+#include "similarity_utils.h"
 
 using namespace cv;
 
@@ -55,7 +56,7 @@ void buildTrajectory(App app)
 			RPTrajectory& rpTrajectory = *itTrajectories;
 			int diffSegmentNum = segmentNum - rpTrajectory.endSegmentNum;
 			// if trajectory is finished
-			if (diffSegmentNum > 12)
+			if (diffSegmentNum > 5)
 			{
 				// trajectoriesFinished.push_back(trajectory);
 				// trajectoriesStillBeingTracked.erase(itTrajectories);
@@ -67,6 +68,7 @@ void buildTrajectory(App app)
 			Point pl1 = curTrajectory[curTrajectory.size() - 2].getCenterPoint(), pl2 = curTrajectory[curTrajectory.size() - 1].getCenterPoint();
 			double minCost = INFINITY;
 			vector<tracklet>::iterator minTrackletIt;
+			vector<tracklet>::iterator maxTrackletIt;
 			if (diffSegmentNum == 1)
 			{
 				// explore each tracklet in this segment
@@ -94,31 +96,28 @@ void buildTrajectory(App app)
 					continue;
 				}
 			}
-			else if (diffSegmentNum >= 2)
+			else
 			{
+				double maxSimilarity = 0.0;
 				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
 				{
 					tracklet& tr = *itTracklets;
-					
-					Point pr1 = tr[0].getCenterPoint(), pr2 = tr[1].getCenterPoint();
-					double curCost = getNormValueFromVector((9*pl2 - 7*pl1) - (9*pr1 - 7*pr2));
-					if (minCost > curCost)
+					double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
+					if (maxSimilarity < curSimilarity)
 					{
-						minCost = curCost;
-						minTrackletIt = itTracklets;
+						maxSimilarity = curSimilarity;
+						maxTrackletIt = itTracklets;
 					}
 				}
-				if (minCost < TRAJECTORY_MATCH_THRES)
+				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
 				{
 					// merge
-					rpTrajectory.mergeWithSegmentGap(*minTrackletIt, diffSegmentNum);
-					tracklets.erase(minTrackletIt);
-					printf("diff:%d minCost:%.2lf\n", diffSegmentNum, minCost);
+					rpTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
+					tracklets.erase(maxTrackletIt);
+					printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
 					continue;
 				}
 			}
-			
-
 		}
 
 		// push unselected tracklets
@@ -126,8 +125,6 @@ void buildTrajectory(App app)
 		{
 			trajectoriesStillBeingTracked.push_back(RPTrajectory(tracklets[trackletNum], segmentNum));
 		}
-
-		
 	}
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;

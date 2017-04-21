@@ -27,6 +27,7 @@ struct Segment {
 };
 
 int calcInternalDivision(int a, int b, int m, int n);
+double calcInternalDivision(double a, double b, int m, int n);
 
 // Trajectory is already defined in cv
 struct RPTrajectory

@@ -48,6 +48,9 @@
     <ClCompile Include="showTrackletClusters.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="similarity_utils.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gpu_hog.h">
@@ -72,6 +75,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="database.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="similarity_utils.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
