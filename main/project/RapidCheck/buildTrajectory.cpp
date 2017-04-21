@@ -1,9 +1,7 @@
 #include "tracking_utils.h"
 #include <time.h>
-#include "database.h"
-using namespace cv;
 
-int fileId = 2;
+using namespace cv;
 
 /**
 	Build trajectories of all segements and then, show trace of tracklets
@@ -12,8 +10,6 @@ int fileId = 2;
 */
 void buildTrajectory(App app)
 {
-	DB db;
-
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
@@ -165,7 +161,7 @@ void buildTrajectory(App app)
 					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
 					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
 
-					// db.insert(fileId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
+					// db.insertTracking(fileId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
 
 					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);

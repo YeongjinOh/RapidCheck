@@ -14,6 +14,7 @@
 #include "targetgroup.h"
 #include "frame.h"
 #include "config.h"
+#include "database.h"
 
 using cv::VideoCapture;
 using cv::Scalar;
@@ -32,5 +33,10 @@ void showTracklet(App app);
 
 void buildTrajectory(App app);
 void compareSimilarity(App app);
+
+// Database
+
+const int fileId = 2;
+static DB db;
 
 #endif

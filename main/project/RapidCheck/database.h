@@ -12,8 +12,8 @@
 
 class DB {
 	MYSQL *connection = NULL, conn;
-	//MYSQL_RES *sql_result;
-	//MYSQL_ROW sql_row;
+	MYSQL_RES *sql_result;
+	MYSQL_ROW sql_row;
 public:
 	DB() {
 		mysql_init(&conn);
@@ -33,7 +33,7 @@ public:
 			return;
 		}
 	}
-	void insert(int fileId, int objectId, int frameNum, int x, int y, int width, int height) {
+	void insertTracking(int fileId, int objectId, int frameNum, int x, int y, int width, int height) {
 		char query[200];
 		sprintf(query, "INSERT INTO tracking VALUES (%d,%d,%d,%d,%d,%d,%d);", fileId, objectId, frameNum, x, y, width, height);
 		int query_stat = mysql_query(connection, query);
@@ -41,6 +41,29 @@ public:
 		{
 			fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
 			return;
+		}
+	}
+	void selectTracking(char * query, vector<vector<int> >& rows) {
+		
+		int query_stat = mysql_query(connection, query);
+		if (query_stat != 0)
+		{
+			fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
+			return;
+		}
+		sql_result = mysql_store_result(connection);
+		int num_fileds = mysql_num_fields(sql_result);
+
+		// read row
+		while (sql_row = mysql_fetch_row(sql_result))
+		{
+			vector<int> row;
+			for (int i = 0; i < num_fileds; i++)
+			{
+				int val = sql_row[i] ? atoi(sql_row[i]) : 0;
+				row.push_back(val);
+			}
+			rows.push_back(row);
 		}
 	}
 	~DB() {
