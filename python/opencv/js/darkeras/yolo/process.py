@@ -70,5 +70,6 @@ def preprocess(im, allobj = None):
 		im = imcv2_recolor(im)
 
 	im = resize_input(im)
+	im = np.transpose(im,(2,0,1))
 	if allobj is None: return im
 	return im#, np.array(im) # for unit testing
