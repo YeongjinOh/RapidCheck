@@ -14,6 +14,10 @@ struct Segment {
 	{
 		tracklets.push_back(tr);
 	}
+	vector<tracklet> getTracklets()
+	{
+		return tracklets;
+	}
 	tracklet getTracklet(int idx)
 	{
 		if (idx<tracklets.size())
@@ -22,6 +26,7 @@ struct Segment {
 	}
 };
 
+int calcInternalDivision(int a, int b, int m, int n);
 
 // Trajectory is already defined in cv
 struct RPTrajectory
@@ -34,6 +39,24 @@ struct RPTrajectory
 	{
 		targets.insert(targets.end(), tr.begin(), tr.end());
 		endSegmentNum++;
+	}
+	void mergeWithSegmentGap(tracklet tr, int diffNumSegment)
+	{
+		Rect RectPrev = targets.back().rect, RectNext = tr[0].rect;
+		// check where merge starts
+		// RectPrev.x -= RectPrev.width;
+		// RectPrev.width *= 3;
+		int numberOfDummies = (diffNumSegment - 1) * LOW_LEVEL_TRACKLETS;	
+		for (int i = 1; i <= numberOfDummies; i++) {
+			int predictedX = calcInternalDivision(RectPrev.x, RectNext.x, i, numberOfDummies + 1 - i),
+				predictedY = calcInternalDivision(RectPrev.y, RectNext.y, i, numberOfDummies + 1 - i),
+				predictedWidth = calcInternalDivision(RectPrev.width, RectNext.width, i, numberOfDummies + 1 - i),
+				predictedHeight = calcInternalDivision(RectPrev.height, RectNext.height, i, numberOfDummies + 1 - i);
+			Rect predictedRect(predictedX, predictedY, predictedWidth, predictedHeight);
+			targets.push_back(Target(predictedRect));
+		}
+		targets.insert(targets.end(), tr.begin(), tr.end());
+		endSegmentNum += diffNumSegment;
 	}
 };
 

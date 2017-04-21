@@ -2,8 +2,8 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-#define MAX_FRAMES 150
-#define START_FRAME_NUM 0 // start frame number
+#define MAX_FRAMES 50
+#define START_FRAME_NUM 60 // start frame number
 #define FRAME_STEP 1
 #define VIDEOID 1
 
@@ -28,7 +28,7 @@ const static int videoId = VIDEOID;
 #define CONTINUOUS_MOTION_COST_THRE 30
 
 // Trajectory
-#define TRAJECTORY_MATCH_THRES 500
+#define TRAJECTORY_MATCH_THRES 200
 #define MAXIMUM_LOST_SEGMENTS 10
 #define STANDARD_DEVIATION 2000
 

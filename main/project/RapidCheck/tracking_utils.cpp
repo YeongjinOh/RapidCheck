@@ -1,6 +1,12 @@
 #include "tracking_utils.h"
 using namespace cv;
 
+// Calculate Internal Divison from a to b with m:n
+int calcInternalDivision(int a, int b, int m, int n)
+{
+	return (a*n + b*m) / (m + n);
+}
+
 // Generate random colors
 vector<Scalar> getRandomColors()
 {

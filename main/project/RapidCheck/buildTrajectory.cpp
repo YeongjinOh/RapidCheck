@@ -47,15 +47,15 @@ void buildTrajectory(App app)
 	for (int segmentNum = 0; segmentNum < segments.size() && useOnlineTracking; segmentNum++)
 	{
 		Segment& segment = segments[segmentNum];
-		vector<tracklet>& tracklets = segment.tracklets;
+		vector<tracklet>& tracklets = segment.getTracklets();
 
 		// for each trajectory still being tracked
 		for (vector<RPTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 		{
-			RPTrajectory& trajectory = *itTrajectories;
-			int diffSegmentNum = segmentNum - trajectory.endSegmentNum;
+			RPTrajectory& rpTrajectory = *itTrajectories;
+			int diffSegmentNum = segmentNum - rpTrajectory.endSegmentNum;
 			// if trajectory is finished
-			if (diffSegmentNum > 2)
+			if (diffSegmentNum > 12)
 			{
 				// trajectoriesFinished.push_back(trajectory);
 				// trajectoriesStillBeingTracked.erase(itTrajectories);
@@ -63,7 +63,7 @@ void buildTrajectory(App app)
 			}
 			
 			
-			tracklet& curTrajectory = trajectory.targets;
+			tracklet& curTrajectory = rpTrajectory.targets;
 			Point pl1 = curTrajectory[curTrajectory.size() - 2].getCenterPoint(), pl2 = curTrajectory[curTrajectory.size() - 1].getCenterPoint();
 			double minCost = INFINITY;
 			vector<tracklet>::iterator minTrackletIt;
@@ -89,12 +89,12 @@ void buildTrajectory(App app)
 				if (minCost < TRAJECTORY_MATCH_THRES)
 				{
 					// merge
-					trajectory.merge(*minTrackletIt);
+					rpTrajectory.merge(*minTrackletIt);
 					tracklets.erase(minTrackletIt);
 					continue;
 				}
 			}
-			else if (diffSegmentNum == 2)
+			else if (diffSegmentNum >= 2)
 			{
 				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
 				{
@@ -107,6 +107,14 @@ void buildTrajectory(App app)
 						minCost = curCost;
 						minTrackletIt = itTracklets;
 					}
+				}
+				if (minCost < TRAJECTORY_MATCH_THRES)
+				{
+					// merge
+					rpTrajectory.mergeWithSegmentGap(*minTrackletIt, diffSegmentNum);
+					tracklets.erase(minTrackletIt);
+					printf("diff:%d minCost:%.2lf\n", diffSegmentNum, minCost);
+					continue;
 				}
 			}
 			
