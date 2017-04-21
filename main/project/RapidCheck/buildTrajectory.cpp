@@ -1,5 +1,4 @@
 #include "tracking_utils.h"
-#include <time.h>
 
 using namespace cv;
 
@@ -13,29 +12,24 @@ void buildTrajectory(App app)
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
-	// random number generator
-	RNG rng(0xFFFFFFFF);
-
 	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++)
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-
+	vector<Scalar> colors = getRandomColors();
+	
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
-	detectTargets(app, cap, frames);
+	//detectAndInsertResultIntoDB(app, cap);
+	//detectTargets(app, cap, frames);
+	readTargets(cap, frames);
 	t = clock() - t;
-	cout << "Detection finished " << t << endl;
-	
+	printf("Detection takes %d(ms)\n", t);
+
 	// build all tracklets
 	vector<Segment> segments;
+	t = clock();
 	buildTracklets(frames, segments);
-	cout << "Tracklets built" << endl;
+	t = clock() - t;
+	printf("Tracking takes %d(ms)\n", t);
 
 	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked, trajectories;
 	bool useOnlineTracking = true;
@@ -161,7 +155,7 @@ void buildTrajectory(App app)
 					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
 					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
 
-					// db.insertTracking(fileId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
+					// db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
 
 					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);

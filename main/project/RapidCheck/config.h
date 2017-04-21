@@ -1,12 +1,18 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
 // VideoCapture configuration
-#define MAX_FRAMES 61
+#define MAX_FRAMES 150
 #define START_FRAME_NUM 0 // start frame number
 #define FRAME_STEP 1
+#define VIDEOID 1
 
 #define NUM_OF_COLORS 64
 #define DEBUG false
-//#define VIDEOFILE "videos/street.avi"
-#define VIDEOFILE "videos/tracking.mp4"
+
+const static char* VIDEOFILES[2] = { "videos/street.avi", "videos/tracking.mp4" };
+const static int videoId = VIDEOID;
+#define VIDEOFILE VIDEOFILES[videoId]
 
 // Detection And Tracking Method
 #define DETECTION_PERIOD 1
@@ -27,3 +33,5 @@
 #define STANDARD_DEVIATION 2000
 
 static int totalFrameCount;
+
+#endif

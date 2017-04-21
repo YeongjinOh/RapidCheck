@@ -9,12 +9,14 @@
 #include <iostream>
 #include <cstring>
 #include <vector>
-
+#include <map>
+#include <time.h>
 #include "gpu_hog.h"
 #include "targetgroup.h"
 #include "frame.h"
 #include "config.h"
 #include "database.h"
+
 
 using cv::VideoCapture;
 using cv::Scalar;
@@ -28,15 +30,13 @@ using cv::RNG;
 #define RED Scalar(0,0,255)
 
 void detectionAndTracking(App app);
-void detectionBasedTracking(App app);
+void showTrackletClusters(App app);
 void showTracklet(App app);
-
 void buildTrajectory(App app);
 void compareSimilarity(App app);
 
 // Database
 
-const int fileId = 2;
 static DB db;
 
 #endif

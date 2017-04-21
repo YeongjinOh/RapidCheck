@@ -10,21 +10,13 @@ void showTracklet(App app)
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
-	// random number generator
-	RNG rng(0xFFFFFFFF);
-
 	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++)
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-
+	vector<Scalar> colors = getRandomColors();
+	
 	// build target detected frames
 	vector<Frame> frames;
-	detectTargets(app, cap, frames);
+	//detectTargets(app, cap, frames);
+	readTargets(cap, frames);
 	cout << "Detection finished" << endl;
 
 	// build all tracklets
