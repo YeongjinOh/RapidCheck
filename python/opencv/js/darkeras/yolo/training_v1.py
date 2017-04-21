@@ -3,13 +3,23 @@ import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import yolo.config as cfg
 
+_TRAINER = dict({
+		'rmsprop': tf.train.RMSPropOptimizer,
+		'adadelta': tf.train.AdadeltaOptimizer,
+		'adagrad': tf.train.AdagradOptimizer,
+		'adagradDA': tf.train.AdagradDAOptimizer,
+		'momentum': tf.train.MomentumOptimizer,
+		'adam': tf.train.AdamOptimizer,
+		'ftrl': tf.train.FtrlOptimizer,
+	})
+
 def _to_tensor(x, dtype):
 	x = tf.convert_to_tensor(x)
 	if x.dtype != dtype:
 		x = tf.cast(x, dtype)
 	return x
 
-def darkeras_loss(y_labels, net_out):
+def darkeras_loss(net_out):
 	
 	sprob = float(cfg.class_scale)
 	sconf = float(cfg.object_scale)
@@ -31,6 +41,11 @@ def darkeras_loss(y_labels, net_out):
 	_areas = tf.placeholder(tf.float32, size2)
 	_upleft = tf.placeholder(tf.float32, size2 + [2])
 	_botright = tf.placeholder(tf.float32, size2 + [2])
+
+	placeholders = {
+		'probs':_probs, 'confs':_confs, 'coord':_coord, 'proid':_proid,
+		'areas':_areas, 'upleft':_upleft, 'botright':_botright
+	}
 
     # mapping y_labels -> each feed dict members
 	# return the below placeholders
@@ -116,7 +131,7 @@ def darkeras_loss(y_labels, net_out):
 	loss = tf.pow(net_out - true, 2)
 	loss = tf.multiply(loss, wght)
 	loss = tf.reduce_sum(loss, 1)
-	return .5 * tf.reduce_mean(loss)
+	return placeholders, .5 * tf.reduce_mean(loss)
 
 
 if __name__ == '__main__':
