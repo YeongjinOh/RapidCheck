@@ -121,43 +121,34 @@ namespace RapidCheck
                 EnableRaisingEvents = true
             };
 
-            test.StartInfo.FileName = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug\RapidCheck.exe";
-            test.StartInfo.WorkingDirectory = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug";
+            //test.StartInfo.FileName = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug\RapidCheck.exe";
+            test.StartInfo.FileName = @"C:\Users\trevor\Desktop\cpp.bat";
             test.StartInfo.RedirectStandardOutput = true;
             test.StartInfo.UseShellExecute = false;
             //test.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;\
 
-            test.OutputDataReceived += test_OutputDataReceived;
+            //test.OutputDataReceived += test_OutputDataReceived;
 
             test.Start();
             //test.BeginOutputReadLine();
             //test.WaitForExit();
 
+            /*
             while (!test.HasExited)
             {
                 await Task.Delay(500);
 
                 test.Refresh();
             }
-
-            MessageBox.Show("Exited");
-
-            
+            */
+           
+            //another pro.
             Process test1 = new Process();
-            test1.StartInfo.FileName = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe C:\Users\SoMa\myworkspace\darkflow\test.py";
-            //test1.StartInfo.WorkingDirectory = @"C:\Users\SoMa\Desktop\RapidCheck\main\project\x64\Debug";
+            //test1.StartInfo.FileName = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe C:\Users\SoMa\myworkspace\darkflow\test.py";
+            test1.StartInfo.FileName = @"C:\Users\trevor\Desktop\python.bat";
             //test1.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;
-            try
-            {
-                test1.Start();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show(" junsu");
-            }
-            
-            
-            
+            test1.Start();
+
             /*
             try
             {
@@ -182,7 +173,7 @@ namespace RapidCheck
 
         void test_Exited(object sender, EventArgs e)
         {
-            MessageBox.Show("wwwwwwwwwwww");
+            MessageBox.Show("test_Exited");
         }
 
         private Bitmap CombinedBitmap = null;

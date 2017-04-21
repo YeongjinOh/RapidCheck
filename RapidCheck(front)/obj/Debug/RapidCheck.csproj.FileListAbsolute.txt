@@ -8,3 +8,13 @@ C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\RapidCheck.pdb
 C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\MaterialSkin.dll
 C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.exe
 C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.pdb
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\RapidCheck.exe.config
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.exe
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.pdb
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.csprojResolveAssemblyReference.cache
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.Form1.resources
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.Properties.Resources.resources
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\RapidCheck.csproj.GenerateResource.Cache
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\RapidCheck.exe
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\RapidCheck.pdb
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\MaterialSkin.dll
