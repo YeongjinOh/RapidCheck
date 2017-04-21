@@ -1,6 +1,22 @@
 #include "tracking_utils.h"
 using namespace cv;
 
+// Generate random colors
+vector<Scalar> getRandomColors()
+{
+	// random number generator
+	RNG rng(0xFFFFFFFF);
+
+	// initialize colors	
+	vector<Scalar> colors;
+	for (int i = 0; i < NUM_OF_COLORS; i++)
+	{
+		int icolor = (unsigned)rng;
+		int minimumColor = 0;
+		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
+	}
+	return colors;
+}
 // Calculate 2-d norm value of given vector
 double getNormValueFromVector(Point p) {
 	return sqrt(p.x*p.x + p.y*p.y);
@@ -347,19 +363,21 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 
 		// implement hog detection
 		app.getHogResults(frame, found);
+		
+
 		size_t i, j;
 		for (i = 0; i<found.size(); i++)
 		{
-			Rect r = found[i];
-			for (j = 0; j<found.size(); j++)
-				if (j != i && (r & found[j]) == r)
-					break;
-			if (j == found.size())
+			Rect& r = found[i];
+			//for (j = 0; j<found.size(); j++)
+		   	//	if (j != i && (r & found[j]) == r)
+			//		break;
+			//if (j == found.size())
 				found_filtered.push_back(r);
 		}
 		for (i = 0; i<found_filtered.size(); i++)
 		{
-			Rect &r = found_filtered[i];
+			Rect& r = found_filtered[i];
 			r.x += cvRound(r.width*0.1);
 			r.width = cvRound(r.width*0.8);
 			r.y += cvRound(r.height*0.07);
@@ -387,6 +405,114 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 
 		frames.push_back(Frame(frameNum, found_filtered, hists));
 	}
+}
+
+// Read targets in MAX_FRAMES frames from DataBase
+void readTargets(VideoCapture& cap, vector<Frame>& frames)
+{
+	// initialize variables for histogram
+	// Using 50 bins for hue and 60 for saturation
+	int h_bins = 18; int s_bins = 6;
+	int histSize[] = { h_bins, s_bins };
+	// hue varies from 0 to 179, saturation from 0 to 255
+	float h_ranges[] = { 0, 180 };
+	float s_ranges[] = { 0, 256 };
+	const float* ranges[] = { h_ranges, s_ranges };
+	// Use the o-th and 1-st channels
+	int channels[] = { 0, 1 };
+
+	Mat frame;
+
+	int frameNum = START_FRAME_NUM;
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+
+	// read result from database and build mapFrameNumToPedestrians
+	vector<vector<int > > res;
+	map<int, vector<Rect> > mapFrameNumToPedestrians;
+	db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	for (int i = 0; i < res.size(); i++)
+	{
+		int frameNum = res[i][2], x = res[i][3], y = res[i][4], width = res[i][5], height = res[i][6];
+		mapFrameNumToPedestrians[frameNum].push_back(Rect(x, y, width, height));
+	}
+
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+
+		// get frame from the video
+		cap >> frame;
+		
+		// create histograms
+		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
+		vector<MatND> hists;
+
+		// shrink rect smaller
+		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
+		for (int i = 0; i < found.size(); ++i)
+		{
+			Mat temp;
+			MatND hist;
+			//Rect r = found_filtered[i];
+			Rect& r = found[i];
+			r.x += r.width * (1-widthRatio) / 2;
+			r.width = r.width * widthRatio;
+			r.y += r.height * (1-heightRatio) / 2 - r.height * shiftUpperRatio;
+			r.height = r.height * heightRatio;
+
+			cvtColor(frame(r), temp, COLOR_BGR2HSV);
+			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
+			hists.push_back(hist);
+		}
+
+		frames.push_back(Frame(frameNum, found, hists));
+	}
+}
+
+// Detect targets in MAX_FRAMES frames and insert result into DB
+void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
+{
+	
+	Mat frame;
+	int frameNum = START_FRAME_NUM;
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+	int classId = 0;
+	time_t t = clock();
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+
+		// get frame from the video
+		cap >> frame;
+
+		// stop the program if no more images
+		if (frame.rows == 0 || frame.cols == 0)
+			break;
+
+		vector<Rect> found;
+		// implement hog detection
+		app.getHogResults(frame, found);
+		for (int i = 0; i<found.size(); i++)
+		{
+			Rect& r = found[i];
+			db.insertDetection(videoId, frameNum, classId, r.x, r.y, r.width, r.height);
+		}
+	}
+	t = clock() - t;
+	printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
 }
 
 // Build all tracklets of given frames

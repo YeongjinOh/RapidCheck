@@ -47,6 +47,12 @@ struct MidLevelSegemet
 	}
 };
 
+/** Generate random colors
+	
+	@return list of colors
+*/
+vector<Scalar> getRandomColors();
+
 /**
 	Calculate 2-d norm value of given vector
 
@@ -130,6 +136,23 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 */
 void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
 
+
+/**
+	Detect targets in MAX_FRAMES frames and insert result into DataBase
+
+	@param app frame reader with basic parameters set
+	@param cap video variable
+*/
+void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
+
+
+/**
+	Read targets in MAX_FRAMES frames from DataBase
+
+	@param cap video variable
+	@param frames list of frames to be implemented detection
+*/
+void readTargets(VideoCapture& cap, vector<Frame>& frames);
 /**
 	Build all tracklets of given frames
 

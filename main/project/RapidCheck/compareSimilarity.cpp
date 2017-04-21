@@ -67,31 +67,23 @@ void compareSimilarity(App app)
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
-	// random number generator
-	RNG rng(0xFFFFFFFF);
-
 	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++)
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-
+	vector<Scalar> colors = getRandomColors();
+	
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
-	detectTargets(app, cap, frames);
+	// detectTargets(app, cap, frames);
+	readTargets(cap, frames);
 	t = clock() - t;
-	cout << "Detection finished " << t << " with size of " << frames.size() << " frames" << endl;
+	printf("Detection takes %d(ms)\n", t);
 
 	// build all tracklets
 	vector<Segment> segments;
 	t = clock();
 	buildTracklets(frames, segments);
 	t = clock() - t;
-	cout << "Tracklets built " << t << endl;
+	printf("Tracking takes %d(ms)\n", t);
 
 	int segmentIdxPrev = 0, segmentIdxNext = 1, targetIdxPrev = 0;
 	Mat framePrev, frameNext;

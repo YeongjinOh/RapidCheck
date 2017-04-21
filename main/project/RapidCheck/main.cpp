@@ -2,29 +2,32 @@
 
 int main(int argc, char ** argv)
 {
-
-
 	// set gpu_hog
 	Args args;
 	args.hit_threshold = 0.9;
 	args.hit_threshold_auto = false;
 	args.gr_threshold = 6;
 	args.scale = 1.05;
-	
-	// args.src_is_video = true;
-	// args.src = VIDEOFILE;
-
-
 	App app(args);
 
-	//compareSimilarity(app);
-	buildTrajectory(app);
-	//showTracklet(app);
-	//detectionBasedTracking(app);
-	//detectionAndTracking(app);
-
-	// App app(args);
-	// app.run();
-	
+	int operationNum = 1;
+	switch (operationNum)
+	{
+		case 0:
+			compareSimilarity(app);
+			break;
+		case 1:
+			buildTrajectory(app);
+			break;
+		case 2:
+			showTracklet(app);
+			break;
+		case 3:
+			showTrackletClusters(app);
+			break;
+		case 4:
+			detectionAndTracking(app);
+			break;
+	}
 	return 0;
 }

@@ -5,7 +5,7 @@ using namespace cv;
 
 	@param app frame reader with basic parameters set
 */
-void detectionBasedTracking(App app)
+void showTrackletClusters(App app)
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
