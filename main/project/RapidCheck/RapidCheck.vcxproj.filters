@@ -30,9 +30,6 @@
     <ClCompile Include="frame.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="detectionBasedTracking.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="detectionAndTracking.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -46,6 +43,12 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="compareSimilarity.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="showTrackletClusters.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="similarity_utils.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -72,6 +75,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="database.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="similarity_utils.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

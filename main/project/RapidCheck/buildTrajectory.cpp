@@ -1,9 +1,7 @@
 #include "tracking_utils.h"
-#include <time.h>
-#include "database.h"
-using namespace cv;
+#include "similarity_utils.h"
 
-int fileId = 2;
+using namespace cv;
 
 /**
 	Build trajectories of all segements and then, show trace of tracklets
@@ -12,34 +10,27 @@ int fileId = 2;
 */
 void buildTrajectory(App app)
 {
-	DB db;
-
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
-	// random number generator
-	RNG rng(0xFFFFFFFF);
-
 	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++)
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-
+	vector<Scalar> colors = getRandomColors();
+	
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
-	detectTargets(app, cap, frames);
+	//detectAndInsertResultIntoDB(app, cap);
+	//detectTargets(app, cap, frames);
+	readTargets(cap, frames);
 	t = clock() - t;
-	cout << "Detection finished " << t << endl;
-	
+	printf("Detection takes %d(ms)\n", t);
+
 	// build all tracklets
 	vector<Segment> segments;
+	t = clock();
 	buildTracklets(frames, segments);
-	cout << "Tracklets built" << endl;
+	t = clock() - t;
+	printf("Tracking takes %d(ms)\n", t);
 
 	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked, trajectories;
 	bool useOnlineTracking = true;
@@ -57,15 +48,15 @@ void buildTrajectory(App app)
 	for (int segmentNum = 0; segmentNum < segments.size() && useOnlineTracking; segmentNum++)
 	{
 		Segment& segment = segments[segmentNum];
-		vector<tracklet>& tracklets = segment.tracklets;
+		vector<tracklet>& tracklets = segment.getTracklets();
 
 		// for each trajectory still being tracked
 		for (vector<RPTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 		{
-			RPTrajectory& trajectory = *itTrajectories;
-			int diffSegmentNum = segmentNum - trajectory.endSegmentNum;
+			RPTrajectory& rpTrajectory = *itTrajectories;
+			int diffSegmentNum = segmentNum - rpTrajectory.endSegmentNum;
 			// if trajectory is finished
-			if (diffSegmentNum > 2)
+			if (diffSegmentNum > 5)
 			{
 				// trajectoriesFinished.push_back(trajectory);
 				// trajectoriesStillBeingTracked.erase(itTrajectories);
@@ -73,10 +64,11 @@ void buildTrajectory(App app)
 			}
 			
 			
-			tracklet& curTrajectory = trajectory.targets;
+			tracklet& curTrajectory = rpTrajectory.targets;
 			Point pl1 = curTrajectory[curTrajectory.size() - 2].getCenterPoint(), pl2 = curTrajectory[curTrajectory.size() - 1].getCenterPoint();
 			double minCost = INFINITY;
 			vector<tracklet>::iterator minTrackletIt;
+			vector<tracklet>::iterator maxTrackletIt;
 			if (diffSegmentNum == 1)
 			{
 				// explore each tracklet in this segment
@@ -99,28 +91,33 @@ void buildTrajectory(App app)
 				if (minCost < TRAJECTORY_MATCH_THRES)
 				{
 					// merge
-					trajectory.merge(*minTrackletIt);
+					rpTrajectory.merge(*minTrackletIt);
 					tracklets.erase(minTrackletIt);
 					continue;
 				}
 			}
-			else if (diffSegmentNum == 2)
+			else
 			{
+				double maxSimilarity = 0.0;
 				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
 				{
 					tracklet& tr = *itTracklets;
-					
-					Point pr1 = tr[0].getCenterPoint(), pr2 = tr[1].getCenterPoint();
-					double curCost = getNormValueFromVector((9*pl2 - 7*pl1) - (9*pr1 - 7*pr2));
-					if (minCost > curCost)
+					double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
+					if (maxSimilarity < curSimilarity)
 					{
-						minCost = curCost;
-						minTrackletIt = itTracklets;
+						maxSimilarity = curSimilarity;
+						maxTrackletIt = itTracklets;
 					}
 				}
+				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
+				{
+					// merge
+					rpTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
+					tracklets.erase(maxTrackletIt);
+					printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
+					continue;
+				}
 			}
-			
-
 		}
 
 		// push unselected tracklets
@@ -128,8 +125,6 @@ void buildTrajectory(App app)
 		{
 			trajectoriesStillBeingTracked.push_back(RPTrajectory(tracklets[trackletNum], segmentNum));
 		}
-
-		
 	}
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
@@ -165,7 +160,7 @@ void buildTrajectory(App app)
 					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
 					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
 
-					// db.insert(fileId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
+					// db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
 
 					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);

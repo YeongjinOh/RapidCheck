@@ -21,3 +21,6 @@ inp_size = 448, 448, 3
 batch_size = 32
 epochs=100
 
+lr=0.0001
+trainer='adam'
+

@@ -1,62 +1,8 @@
 #include "tracking_utils.h"
+#include "similarity_utils.h"
 #include <time.h>
 using namespace cv;
-/**
-	calculate forward deviation error between two tracklets
 
-	@param segmentIndexDiff how many segments segmentNext is far away from segmentPrev (segmentIndexNext - segmentIndexPrev)
-*/
-double calcForwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
-{
-	double forwardDeviationError = 0.0;
-	// calculate forwardDeviation
-	for (int i = 0; i < LOW_LEVEL_TRACKLETS / 2; i++)
-	{
-		int targetIdxPrev = LOW_LEVEL_TRACKLETS - 1 - i;
-		Point& centerPointPrev = trackletPrev[targetIdxPrev].getCenterPoint();
-		Point motionVectorPrev = centerPointPrev - trackletPrev[targetIdxPrev - 1].getCenterPoint();
-		for (int j = 0; j < LOW_LEVEL_TRACKLETS / 2; j++)
-		{
-			int targetIdxNext = LOW_LEVEL_TRACKLETS*segmentIndexDiff + j;
-			Point& centerPointNext = trackletNext[j].getCenterPoint();
-			
-			double err = getNormValueFromVector(centerPointPrev + (targetIdxNext - targetIdxPrev)*motionVectorPrev - centerPointNext);
-			cout << centerPointPrev << endl << centerPointNext << endl << motionVectorPrev << endl << err << endl << endl;
-			forwardDeviationError += err;
-		}
-	}
-	return forwardDeviationError;
-}
-
-/**
-	calculate backward deviation error between two tracklets
-
-	@param segmentIndexDiff how many segments segmentNext is far away from segmentPrev (segmentIndexNext - segmentIndexPrev)
-*/
-double calcBackwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
-{
-	double backwardDeviationError = 0.0;
-	// calculate forwardDeviation
-	for (int i = 0; i < LOW_LEVEL_TRACKLETS / 2; i++)
-	{
-		int targetIdxNext = LOW_LEVEL_TRACKLETS*segmentIndexDiff + i;
-		Point& centerPointNext = trackletNext[i].getCenterPoint();
-		Point motionBackwardVectorNext = centerPointNext - trackletNext[i + 1].getCenterPoint();
-		for (int j = 0; j < LOW_LEVEL_TRACKLETS / 2; j++)
-		{
-			int targetIdxPrev = LOW_LEVEL_TRACKLETS - 1 - j;
-			Point& centerPointPrev = trackletPrev[targetIdxPrev].getCenterPoint();
-			backwardDeviationError += getNormValueFromVector(centerPointNext + motionBackwardVectorNext * (targetIdxNext - targetIdxPrev) - centerPointPrev);
-		}
-	}
-	return backwardDeviationError;
-}
-
-double calcSimilarityMotion(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
-{
-	double deviationError = calcForwardDeviationError(trackletPrev, trackletNext, segmentIndexDiff) + calcBackwardDeviationError(trackletPrev, trackletNext, segmentIndexDiff);
-	return exp(-deviationError / STANDARD_DEVIATION);
-}
 /**
 	calculate and compare similarity between two tracklets
 
@@ -67,31 +13,23 @@ void compareSimilarity(App app)
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
-	// random number generator
-	RNG rng(0xFFFFFFFF);
-
 	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++)
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-
+	vector<Scalar> colors = getRandomColors();
+	
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
-	detectTargets(app, cap, frames);
+	// detectTargets(app, cap, frames);
+	readTargets(cap, frames);
 	t = clock() - t;
-	cout << "Detection finished " << t << " with size of " << frames.size() << " frames" << endl;
+	printf("Detection takes %d(ms)\n", t);
 
 	// build all tracklets
 	vector<Segment> segments;
 	t = clock();
 	buildTracklets(frames, segments);
 	t = clock() - t;
-	cout << "Tracklets built " << t << endl;
+	printf("Tracking takes %d(ms)\n", t);
 
 	int segmentIdxPrev = 0, segmentIdxNext = 1, targetIdxPrev = 0;
 	Mat framePrev, frameNext;
@@ -150,36 +88,43 @@ void compareSimilarity(App app)
 		tracklet& trackletPrev = trackletsPrev[targetIdxPrev];
 		Target& targetPrev = trackletPrev[LOW_LEVEL_TRACKLETS / 2];
 		rectangle(framePrev, targetPrev.rect, colors[targetIdxPrev], 2);
+		/*
 		MatND histSumPrev = trackletsPrev[targetIdxPrev][0].hist;
 		for (int i = 1; i < trackletsPrev[targetIdxPrev].size(); i++)
 			histSumPrev += trackletsPrev[targetIdxPrev][i].hist;
 		normalize(histSumPrev, histSumPrev, 0, 1, NORM_MINMAX, -1, Mat());
-
+		*/
 		// calculate similarities
 		for (int i = 0; i < trackletsNext.size(); i++)
 		{
+			/*
 			MatND histSumNext = trackletsNext[i][0].hist;;
 			for (int j = 1; j < trackletsNext[i].size(); j++)
 				histSumNext += trackletsNext[i][j].hist;
 			normalize(histSumNext, histSumNext, 0, 1, NORM_MINMAX, -1, Mat());
 			double similarityAppearance = compareHist(histSumPrev, histSumNext, compareHistMethod);			
+			*/
+
+			tracklet& trackletNext = trackletsNext[i];
+			double similarityAppearance = calcSimilarityAppearance(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
 			Target & targetNext = trackletsNext[i][LOW_LEVEL_TRACKLETS / 2];
 			if (switchS)
 				putText(frameNext, to_string(similarityAppearance), targetNext.getCenterPoint(), CV_FONT_HERSHEY_SIMPLEX, 0.7, GREEN, 2);
 			
-			
-			tracklet& trackletNext = trackletsNext[i];
 			double similarityMotion = calcSimilarityMotion(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
 			if (switchM)
 				putText(frameNext, to_string(similarityMotion), targetNext.getCenterPoint() + Point(0, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, RED, 2);
+			
+			double similarity = calcSimilarity(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
+			if (switchS && switchM)
+				putText(frameNext, to_string(similarity), targetNext.getCenterPoint() + Point(0, 40), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
+			
 			double forwardDeviationError = calcForwardDeviationError(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
 			double backwardDeviationError = calcBackwardDeviationError(trackletPrev, trackletNext, segmentIdxNext - segmentIdxPrev);
 			if (switchF)
-				putText(frameNext, to_string(forwardDeviationError), targetNext.getCenterPoint() + Point(0, 40), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
+				putText(frameNext, to_string(forwardDeviationError), targetNext.getCenterPoint() + Point(0, 60), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
 			if (switchB)
-				putText(frameNext, to_string(backwardDeviationError), targetNext.getCenterPoint() + Point(0, 60), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
-			
-
+				putText(frameNext, to_string(backwardDeviationError), targetNext.getCenterPoint() + Point(0, 80), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLUE, 2);
 		}
 
 		// put frame number
@@ -218,6 +163,7 @@ void compareSimilarity(App app)
 				break;
 			case 't': // move target
 				targetIdxPrev = (targetIdxPrev + 1) % trackletsPrev.size();
+				printf("targetIdx:%d\n", targetIdxPrev);
 				break;
 			case 'c':
 				compareHistMethod = (compareHistMethod + 1) % 4;
@@ -234,8 +180,6 @@ void compareSimilarity(App app)
 			case 'b':
 				switchB = !switchB;
 				break;
-
 		}
 	}
-
 }
