@@ -69,6 +69,18 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1CMD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1overlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1SQL.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1Video.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -83,6 +95,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
