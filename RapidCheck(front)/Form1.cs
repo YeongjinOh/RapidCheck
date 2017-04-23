@@ -21,6 +21,15 @@ using MySql.Data.MySqlClient;
 //CMD command
 using System.Diagnostics;
 
+//overlay
+using DirectXOverlayWindow;
+
+//picker
+//using Windows.Media.Editing;
+//using Windows.Media.Core;
+//using Windows.Media.Playback;
+using System.Threading.Tasks;
+
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
@@ -29,10 +38,7 @@ namespace RapidCheck
         private Video video;
         private Size formSize;
         private Size pnlSize;
-
-        //Video File Path
-        //private string path;
-
+        
         //MySQL
         private string strConn = "Server=localhost;Database=test;Uid=root;Pwd=1234;";
 
@@ -60,6 +66,7 @@ namespace RapidCheck
             //MySqlCommand cmd = new MySqlCommand("INSERT INTO test_table VALUES (11, 'tasdad1')", conn);
             //cmd.ExecuteNonQuery();
             //conn.Close();
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -99,6 +106,7 @@ namespace RapidCheck
                     videoPanel.Height = height;
                     // play the first frame of the video so we can identify it
                     video.Play();
+                    video.CurrentPosition = 200/60;
                     //video.Pause();
                 }
                 catch (Exception ex)
@@ -116,7 +124,7 @@ namespace RapidCheck
         private async void overBtn_Click(object sender, EventArgs e)
         {
             //CMD
-            var test = new Process()
+            var test = new System.Diagnostics.Process()
             {
                 EnableRaisingEvents = true
             };
@@ -143,7 +151,8 @@ namespace RapidCheck
             */
            
             //another pro.
-            Process test1 = new Process();
+
+            System.Diagnostics.Process test1 = new System.Diagnostics.Process();
             //test1.StartInfo.FileName = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe C:\Users\SoMa\myworkspace\darkflow\test.py";
             test1.StartInfo.FileName = @"C:\Users\trevor\Desktop\python.bat";
             //test1.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;
@@ -164,6 +173,56 @@ namespace RapidCheck
                 MessageBoxIcon.Error);
             }
              */
+
+
+
+
+
+
+            //overlay test
+            OverlayWindow overlay = new OverlayWindow(false);
+
+            Stopwatch watch = Stopwatch.StartNew();
+
+            int redBrush = overlay.Graphics.CreateBrush(0x7FFF0000);
+            int redOpacityBrush = overlay.Graphics.CreateBrush(System.Drawing.Color.FromArgb(80, 255, 0, 0));
+            int yellowBrush = overlay.Graphics.CreateBrush(0x7FFFFF00);
+
+            int font = overlay.Graphics.CreateFont("Arial", 20);
+            int hugeFont = overlay.Graphics.CreateFont("Arial", 50, true);
+
+            float rotation = 0.0f;
+            int fps = 0;
+            int displayFPS = 0;
+
+            while (true)
+            {
+                overlay.Graphics.BeginScene();
+                overlay.Graphics.ClearScene();
+
+                overlay.Graphics.DrawText("RotateSwastika", font, redBrush, 50, 450);
+                overlay.Graphics.RotateSwastika(150, 600, 50, 2, rotation, redBrush);
+
+                Console.WriteLine(overlay.ParentWindow);
+
+                rotation += 0.03f;//related to speed
+                if (rotation > 50.0f)//size of the swastika
+                    rotation = -50.0f;
+
+                if (watch.ElapsedMilliseconds > 1000)
+                {
+                    displayFPS = fps;
+                    fps = 0;
+                    watch.Restart();
+                }
+                else
+                {
+                    fps++;
+                }
+
+                overlay.Graphics.DrawText("FPS: " + displayFPS.ToString(), hugeFont, redBrush, 400, 600, false);
+                overlay.Graphics.EndScene();
+            }
         }
 
         void test_OutputDataReceived(object sender, DataReceivedEventArgs e)
