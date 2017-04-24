@@ -45,6 +45,8 @@
             this.sqlBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.VideoBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.overBtn = new System.Windows.Forms.Button();
+            this.SQLAdapter = new MaterialSkin.Controls.MaterialFlatButton();
+            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -220,7 +222,7 @@
             this.sqlBtn.AutoSize = true;
             this.sqlBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sqlBtn.Depth = 0;
-            this.sqlBtn.Location = new System.Drawing.Point(725, 79);
+            this.sqlBtn.Location = new System.Drawing.Point(562, 116);
             this.sqlBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.sqlBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.sqlBtn.Name = "sqlBtn";
@@ -236,7 +238,7 @@
             this.VideoBtn.AutoSize = true;
             this.VideoBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.VideoBtn.Depth = 0;
-            this.VideoBtn.Location = new System.Drawing.Point(796, 79);
+            this.VideoBtn.Location = new System.Drawing.Point(690, 76);
             this.VideoBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.VideoBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.VideoBtn.Name = "VideoBtn";
@@ -249,13 +251,45 @@
             // 
             // overBtn
             // 
-            this.overBtn.Location = new System.Drawing.Point(725, 123);
+            this.overBtn.Location = new System.Drawing.Point(784, 80);
             this.overBtn.Name = "overBtn";
-            this.overBtn.Size = new System.Drawing.Size(172, 34);
+            this.overBtn.Size = new System.Drawing.Size(136, 34);
             this.overBtn.TabIndex = 8;
             this.overBtn.Text = "overlay test";
             this.overBtn.UseVisualStyleBackColor = true;
             this.overBtn.Click += new System.EventHandler(this.overBtn_Click);
+            // 
+            // SQLAdapter
+            // 
+            this.SQLAdapter.AutoSize = true;
+            this.SQLAdapter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SQLAdapter.Depth = 0;
+            this.SQLAdapter.Location = new System.Drawing.Point(562, 76);
+            this.SQLAdapter.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.SQLAdapter.MouseState = MaterialSkin.MouseState.HOVER;
+            this.SQLAdapter.Name = "SQLAdapter";
+            this.SQLAdapter.Primary = false;
+            this.SQLAdapter.Size = new System.Drawing.Size(120, 36);
+            this.SQLAdapter.TabIndex = 7;
+            this.SQLAdapter.Text = "SQLAdapter";
+            this.SQLAdapter.UseVisualStyleBackColor = true;
+            this.SQLAdapter.Click += new System.EventHandler(this.sqlAdapterBtn_Click);
+            // 
+            // materialFlatButton1
+            // 
+            this.materialFlatButton1.AutoSize = true;
+            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialFlatButton1.Depth = 0;
+            this.materialFlatButton1.Location = new System.Drawing.Point(690, 116);
+            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialFlatButton1.Name = "materialFlatButton1";
+            this.materialFlatButton1.Primary = false;
+            this.materialFlatButton1.Size = new System.Drawing.Size(79, 36);
+            this.materialFlatButton1.TabIndex = 7;
+            this.materialFlatButton1.Text = "DiShow";
+            this.materialFlatButton1.UseVisualStyleBackColor = true;
+            this.materialFlatButton1.Click += new System.EventHandler(this.Video2Btn_Click);
             // 
             // Form1
             // 
@@ -263,7 +297,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(932, 523);
             this.Controls.Add(this.overBtn);
+            this.Controls.Add(this.materialFlatButton1);
             this.Controls.Add(this.VideoBtn);
+            this.Controls.Add(this.SQLAdapter);
             this.Controls.Add(this.sqlBtn);
             this.Controls.Add(this.materialCheckBox1);
             this.Controls.Add(this.materialRadioButton2);
@@ -304,6 +340,8 @@
         private MaterialSkin.Controls.MaterialFlatButton VideoBtn;
         private System.Windows.Forms.Button overBtn;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private MaterialSkin.Controls.MaterialFlatButton SQLAdapter;
+        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
     }
 }
 

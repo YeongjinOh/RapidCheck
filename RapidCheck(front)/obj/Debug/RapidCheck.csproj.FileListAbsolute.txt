@@ -26,3 +26,4 @@ C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.DXGI.xml
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\DirectXOverlayWindow.pdb
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\DirectShowLib-2005.dll
