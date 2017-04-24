@@ -15,7 +15,6 @@ namespace RapidCheck
     public partial class Form1
     {
         private Bitmap overlay = null;
-
         //overlay test
         private async void overBtn_Click(object sender, EventArgs e)
         {
