@@ -4,6 +4,74 @@
 using namespace cv;
 
 /**
+	Show trajectory
+*/
+void showTrajectory(vector<Frame>& frames, vector<RPTrajectory>& trajectories)
+{
+	VideoCapture cap(VIDEOFILE);
+
+	// initialize colors	
+	vector<Scalar> colors = getRandomColors();
+
+	// show trajectories
+	Mat frame, frameOrigin;
+	while (true) {
+		int objectId = 0;
+		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+		{
+			// Segment & segment = segments[segmentNumber];
+			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
+			{
+				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+				cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+				cap >> frame;
+
+				frame.copyTo(frameOrigin);
+
+				// vector<tracklet>& pedestrianTracklets = segment.tracklets;
+				for (int objectId = 0; objectId < trajectories.size(); objectId++)
+				{
+					RPTrajectory& trajectory = trajectories[objectId];
+					if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
+
+					Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
+
+
+					// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
+					// Scalar mean = cv::mean(frame(roi));
+					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
+					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
+
+					//db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
+
+					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
+					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
+				}
+				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+				for (int i = 0; i < pedestrians.size(); i++) {
+					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
+				}
+
+				imshow("tracklets", frame);
+				imshow("origin", frameOrigin);
+
+				// key handling
+				int key = waitKey(130);
+
+				if (key == 27) break;
+				else if (key == (int)('r'))
+				{
+					segmentNumber = 0;
+					break;
+				}
+
+			}
+		}
+		waitKey(0);
+	}
+}
+
+/**
 	Build trajectories of all segements and then, show trace of tracklets
 
 	@param app frame reader with basic parameters set
@@ -13,9 +81,6 @@ void buildTrajectory(App app)
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 
-	// initialize colors	
-	vector<Scalar> colors = getRandomColors();
-	
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
@@ -32,7 +97,8 @@ void buildTrajectory(App app)
 	t = clock() - t;
 	printf("Tracking takes %d(ms)\n", t);
 
-	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked, trajectories;
+	// build Trajectory
+	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked;
 	bool useOnlineTracking = true;
 	if (!useOnlineTracking)
 	{
@@ -40,7 +106,7 @@ void buildTrajectory(App app)
 		{
 			vector<tracklet>& tracklets = segments[segmentNum].tracklets;
 			for (int t = 0; t < tracklets.size(); t++)
-				trajectories.push_back(RPTrajectory(tracklets[t], segmentNum));
+				trajectoriesStillBeingTracked.push_back(RPTrajectory(tracklets[t], segmentNum));
 		}
 	}
 
@@ -112,6 +178,7 @@ void buildTrajectory(App app)
 				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
 				{
 					// merge
+
 					rpTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
 					tracklets.erase(maxTrackletIt);
 					printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
@@ -128,65 +195,7 @@ void buildTrajectory(App app)
 	}
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
-	trajectories = trajectoriesStillBeingTracked;
-
-
-	// show trajectories
-	Mat frame, frameOrigin;
-	while (true) {
-		int objectId = 0;
-		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
-		{
-			Segment & segment = segments[segmentNumber];
-			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
-			{
-				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
-				cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-				cap >> frame;
-
-				frame.copyTo(frameOrigin);
-
-				// vector<tracklet>& pedestrianTracklets = segment.tracklets;
-				for (int objectId = 0; objectId < trajectories.size(); objectId++)
-				{
-					RPTrajectory& trajectory = trajectories[objectId];
-					if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
-
-					Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
-
-
-					// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
-					// Scalar mean = cv::mean(frame(roi));
-					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
-					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
-
-					// db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
-
-					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
-					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
-				}
-				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
-				for (int i = 0; i < pedestrians.size(); i++) {
-					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
-				}
-
-				imshow("tracklets", frame);
-				imshow("origin", frameOrigin);
-
-				// key handling
-				int key = waitKey(130);
-
-				if (key == 27) break;
-				else if (key == (int)('r'))
-				{
-					segmentNumber = 0;
-					break;
-				}
-
-			}
-		}
-		waitKey(0);
-	}
 	
-	
+	// show Trajectory
+	showTrajectory(frames, trajectoriesStillBeingTracked);
 }
