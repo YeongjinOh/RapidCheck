@@ -1,2 +1,2 @@
 __all__ = ['BoxUtils',
-	'utils']
+	'help']
