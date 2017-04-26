@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DirectShowLib-2005">
+      <HintPath>.\DirectShowLib-2005.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
       <Private>True</Private>
@@ -51,18 +54,6 @@
     <Reference Include="Process.NET">
       <HintPath>packages\Overlay.NET.1.0.2\lib\Process.NET.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Direct2D1">
-      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.Direct2D1.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.DXGI">
-      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.DXGI.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Mathematics">
-      <HintPath>packages\Overlay.NET.1.0.2\lib\SharpDX.Mathematics.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -81,6 +72,21 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Form1CMD.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1DirectShow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1overlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1SQL.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1Video.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
@@ -95,6 +101,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -110,6 +117,12 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\overlay\DirectXOverlay\DirectXOverlayWindow\DirectXOverlayWindow\DirectXOverlayWindow.csproj">
+      <Project>{12150582-7a7b-445a-b9ad-678aa8b87f6f}</Project>
+      <Name>DirectXOverlayWindow</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

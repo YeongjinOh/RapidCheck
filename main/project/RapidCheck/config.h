@@ -2,10 +2,10 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-#define MAX_FRAMES 150
+#define MAX_FRAMES 200
 #define START_FRAME_NUM 0 // start frame number
 #define FRAME_STEP 1
-#define VIDEOID 1
+#define VIDEOID 0
 
 #define NUM_OF_COLORS 64
 #define DEBUG false
@@ -28,7 +28,8 @@ const static int videoId = VIDEOID;
 #define CONTINUOUS_MOTION_COST_THRE 30
 
 // Trajectory
-#define TRAJECTORY_MATCH_THRES 500
+#define TRAJECTORY_MATCH_THRES 200
+#define TRAJECTORY_MATCH_SIMILARITY_THRES 0.75
 #define MAXIMUM_LOST_SEGMENTS 10
 #define STANDARD_DEVIATION 2000
 

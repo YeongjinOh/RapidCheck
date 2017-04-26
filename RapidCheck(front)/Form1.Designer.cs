@@ -31,24 +31,27 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.videoPanel = new System.Windows.Forms.Panel();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.materialLabel1 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.CMDBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.materialRadioButton1 = new MaterialSkin.Controls.MaterialRadioButton();
             this.materialRadioButton2 = new MaterialSkin.Controls.MaterialRadioButton();
             this.materialCheckBox1 = new MaterialSkin.Controls.MaterialCheckBox();
-            this.videoBtn = new MaterialSkin.Controls.MaterialFlatButton();
-            this.materialFlatButton2 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.sqlBtn = new MaterialSkin.Controls.MaterialFlatButton();
+            this.VideoBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.overBtn = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.SQLAdapter = new MaterialSkin.Controls.MaterialFlatButton();
+            this.materialFlatButton1 = new MaterialSkin.Controls.MaterialFlatButton();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabPage3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -78,6 +81,16 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(894, 287);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // tabPage2
             // 
@@ -139,20 +152,21 @@
             this.materialLabel1.TabIndex = 3;
             this.materialLabel1.Text = "Just..Label";
             // 
-            // materialFlatButton1
+            // CMDBtn
             // 
-            this.materialFlatButton1.AutoSize = true;
-            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialFlatButton1.Depth = 0;
-            this.materialFlatButton1.Location = new System.Drawing.Point(12, 116);
-            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialFlatButton1.Name = "materialFlatButton1";
-            this.materialFlatButton1.Primary = false;
-            this.materialFlatButton1.Size = new System.Drawing.Size(46, 36);
-            this.materialFlatButton1.TabIndex = 4;
-            this.materialFlatButton1.Text = "BTN";
-            this.materialFlatButton1.UseVisualStyleBackColor = true;
+            this.CMDBtn.AutoSize = true;
+            this.CMDBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.CMDBtn.Depth = 0;
+            this.CMDBtn.Location = new System.Drawing.Point(12, 116);
+            this.CMDBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.CMDBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.CMDBtn.Name = "CMDBtn";
+            this.CMDBtn.Primary = false;
+            this.CMDBtn.Size = new System.Drawing.Size(51, 36);
+            this.CMDBtn.TabIndex = 4;
+            this.CMDBtn.Text = "CMD";
+            this.CMDBtn.UseVisualStyleBackColor = true;
+            this.CMDBtn.Click += new System.EventHandler(this.CMDBtn_Click);
             // 
             // materialRadioButton1
             // 
@@ -204,70 +218,102 @@
             this.materialCheckBox1.Text = "CheckBox";
             this.materialCheckBox1.UseVisualStyleBackColor = true;
             // 
-            // videoBtn
+            // sqlBtn
             // 
-            this.videoBtn.AutoSize = true;
-            this.videoBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.videoBtn.Depth = 0;
-            this.videoBtn.Location = new System.Drawing.Point(725, 79);
-            this.videoBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.videoBtn.MouseState = MaterialSkin.MouseState.HOVER;
-            this.videoBtn.Name = "videoBtn";
-            this.videoBtn.Primary = false;
-            this.videoBtn.Size = new System.Drawing.Size(45, 36);
-            this.videoBtn.TabIndex = 7;
-            this.videoBtn.Text = "SQL";
-            this.videoBtn.UseVisualStyleBackColor = true;
-            this.videoBtn.Click += new System.EventHandler(this.videoBtn_Click);
+            this.sqlBtn.AutoSize = true;
+            this.sqlBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.sqlBtn.Depth = 0;
+            this.sqlBtn.Location = new System.Drawing.Point(562, 116);
+            this.sqlBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.sqlBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.sqlBtn.Name = "sqlBtn";
+            this.sqlBtn.Primary = false;
+            this.sqlBtn.Size = new System.Drawing.Size(45, 36);
+            this.sqlBtn.TabIndex = 7;
+            this.sqlBtn.Text = "SQL";
+            this.sqlBtn.UseVisualStyleBackColor = true;
+            this.sqlBtn.Click += new System.EventHandler(this.sqlBtn_Click);
             // 
-            // materialFlatButton2
+            // VideoBtn
             // 
-            this.materialFlatButton2.AutoSize = true;
-            this.materialFlatButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.materialFlatButton2.Depth = 0;
-            this.materialFlatButton2.Location = new System.Drawing.Point(796, 79);
-            this.materialFlatButton2.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.materialFlatButton2.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialFlatButton2.Name = "materialFlatButton2";
-            this.materialFlatButton2.Primary = false;
-            this.materialFlatButton2.Size = new System.Drawing.Size(51, 36);
-            this.materialFlatButton2.TabIndex = 7;
-            this.materialFlatButton2.Text = "ㄱㄱ";
-            this.materialFlatButton2.UseVisualStyleBackColor = true;
-            this.materialFlatButton2.Click += new System.EventHandler(this.materialFlatButton2_Click);
+            this.VideoBtn.AutoSize = true;
+            this.VideoBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.VideoBtn.Depth = 0;
+            this.VideoBtn.Location = new System.Drawing.Point(690, 76);
+            this.VideoBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.VideoBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.VideoBtn.Name = "VideoBtn";
+            this.VideoBtn.Primary = false;
+            this.VideoBtn.Size = new System.Drawing.Size(62, 36);
+            this.VideoBtn.TabIndex = 7;
+            this.VideoBtn.Text = "Video";
+            this.VideoBtn.UseVisualStyleBackColor = true;
+            this.VideoBtn.Click += new System.EventHandler(this.VideoBtn_Click);
             // 
             // overBtn
             // 
-            this.overBtn.Location = new System.Drawing.Point(725, 123);
+            this.overBtn.Location = new System.Drawing.Point(784, 80);
             this.overBtn.Name = "overBtn";
-            this.overBtn.Size = new System.Drawing.Size(172, 34);
+            this.overBtn.Size = new System.Drawing.Size(136, 34);
             this.overBtn.TabIndex = 8;
             this.overBtn.Text = "overlay test";
             this.overBtn.UseVisualStyleBackColor = true;
             this.overBtn.Click += new System.EventHandler(this.overBtn_Click);
             // 
-            // pictureBox1
+            // SQLAdapter
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(894, 287);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.SQLAdapter.AutoSize = true;
+            this.SQLAdapter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SQLAdapter.Depth = 0;
+            this.SQLAdapter.Location = new System.Drawing.Point(562, 76);
+            this.SQLAdapter.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.SQLAdapter.MouseState = MaterialSkin.MouseState.HOVER;
+            this.SQLAdapter.Name = "SQLAdapter";
+            this.SQLAdapter.Primary = false;
+            this.SQLAdapter.Size = new System.Drawing.Size(120, 36);
+            this.SQLAdapter.TabIndex = 7;
+            this.SQLAdapter.Text = "SQLAdapter";
+            this.SQLAdapter.UseVisualStyleBackColor = true;
+            this.SQLAdapter.Click += new System.EventHandler(this.sqlAdapterBtn_Click);
+            // 
+            // materialFlatButton1
+            // 
+            this.materialFlatButton1.AutoSize = true;
+            this.materialFlatButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialFlatButton1.Depth = 0;
+            this.materialFlatButton1.Location = new System.Drawing.Point(690, 116);
+            this.materialFlatButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialFlatButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialFlatButton1.Name = "materialFlatButton1";
+            this.materialFlatButton1.Primary = false;
+            this.materialFlatButton1.Size = new System.Drawing.Size(79, 36);
+            this.materialFlatButton1.TabIndex = 7;
+            this.materialFlatButton1.Text = "DiShow";
+            this.materialFlatButton1.UseVisualStyleBackColor = true;
+            this.materialFlatButton1.Click += new System.EventHandler(this.Video2Btn_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(380, 127);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(106, 27);
+            this.textBox1.TabIndex = 9;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(932, 523);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.overBtn);
-            this.Controls.Add(this.materialFlatButton2);
-            this.Controls.Add(this.videoBtn);
+            this.Controls.Add(this.materialFlatButton1);
+            this.Controls.Add(this.VideoBtn);
+            this.Controls.Add(this.SQLAdapter);
+            this.Controls.Add(this.sqlBtn);
             this.Controls.Add(this.materialCheckBox1);
             this.Controls.Add(this.materialRadioButton2);
             this.Controls.Add(this.materialRadioButton1);
-            this.Controls.Add(this.materialFlatButton1);
+            this.Controls.Add(this.CMDBtn);
             this.Controls.Add(this.materialLabel1);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
@@ -278,8 +324,8 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tabPage3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -295,14 +341,17 @@
         private System.Windows.Forms.Panel videoPanel;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private MaterialSkin.Controls.MaterialLabel materialLabel1;
-        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
+        private MaterialSkin.Controls.MaterialFlatButton CMDBtn;
         private MaterialSkin.Controls.MaterialRadioButton materialRadioButton1;
         private MaterialSkin.Controls.MaterialRadioButton materialRadioButton2;
         private MaterialSkin.Controls.MaterialCheckBox materialCheckBox1;
-        private MaterialSkin.Controls.MaterialFlatButton videoBtn;
-        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton2;
+        private MaterialSkin.Controls.MaterialFlatButton sqlBtn;
+        private MaterialSkin.Controls.MaterialFlatButton VideoBtn;
         private System.Windows.Forms.Button overBtn;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private MaterialSkin.Controls.MaterialFlatButton SQLAdapter;
+        private MaterialSkin.Controls.MaterialFlatButton materialFlatButton1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
