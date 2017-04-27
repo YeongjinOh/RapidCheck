@@ -12,13 +12,16 @@ using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
 
+//
+using DirectShowLib;
+
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
     {
         private Size formSize;
         private Size pnlSize;
-        
+
         public Form1()
         {
             InitializeComponent();
@@ -36,6 +39,6 @@ namespace RapidCheck
         {
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(tabPage3.Width, tabPage3.Height);
-        }        
+        }
     }
 }

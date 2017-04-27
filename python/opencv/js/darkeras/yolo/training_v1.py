@@ -13,11 +13,11 @@ _TRAINER = dict({
 		'ftrl': tf.train.FtrlOptimizer,
 	})
 
-def _to_tensor(x, dtype):
-	x = tf.convert_to_tensor(x)
-	if x.dtype != dtype:
-		x = tf.cast(x, dtype)
-	return x
+# def _to_tensor(x, dtype):
+# 	x = tf.convert_to_tensor(x)
+# 	if x.dtype != dtype:
+# 		x = tf.cast(x, dtype)
+# 	return x
 
 def darkeras_loss(net_out):
 	
@@ -47,39 +47,7 @@ def darkeras_loss(net_out):
 		'areas':_areas, 'upleft':_upleft, 'botright':_botright
 	}
 
-    # mapping y_labels -> each feed dict members
-	# return the below placeholders
 	
-	# _probs = _to_tensor(y_labels[0], tf.float32)
-	# _confs = _to_tensor(y_labels[1], tf.float32)#, shape=size2)
-	# _coord = _to_tensor(y_labels[2], tf.float32) #, shape=(siez2+[4]))
-	# # weights term for L2 loss
-	# _proid = _to_tensor(y_labels[3], tf.float32) # , shape=size1)
-	# # material calculating IOU
-	# _areas = _to_tensor(y_labels[4], tf.float32) # , shape=size2)
-	# _upleft = _to_tensor(y_labels[5], tf.float32) #, shape=(size2+[2]))
-	# _botright = _to_tensor(y_labels[6], tf.float32) # , shape=(size2+[2]))
-
-	# _probs = y_labels[0]
-	# _confs = y_labels[1]
-	# _coord = y_labels[2]
-	# # weights term for L2 loss
-	# _proid = y_labels[3]
-	# # material calculating IOU
-	# _areas = y_labels[4]
-	# _upleft = y_labels[5]
-	# _botright = y_labels[6]
-
-	# _probs = y_labels['probs']
-	# _confs = y_labels['confs']
-	# _coord = y_labels['coord']
-	# # weights term for L2 loss
-	# _proid = y_labels['proid']
-	# # material calculating IOU
-	# _areas = y_labels['areas']
-	# _upleft = y_labels['upleft']
-	# _botright = y_labels['botright']
-
 	# Extract the coordinate prediction from net.out
 	coords = net_out[:, SS * (C + B):]
 	coords = tf.reshape(coords, [-1, SS, B, 4])

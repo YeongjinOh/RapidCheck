@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -45,6 +44,10 @@
             this.sqlBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.VideoBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.overBtn = new System.Windows.Forms.Button();
+            this.SQLAdapter = new MaterialSkin.Controls.MaterialFlatButton();
+            this.DirectShowBtn = new MaterialSkin.Controls.MaterialFlatButton();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.captureBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -82,7 +85,6 @@
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(894, 287);
@@ -170,7 +172,7 @@
             this.materialRadioButton1.AutoSize = true;
             this.materialRadioButton1.Depth = 0;
             this.materialRadioButton1.Font = new System.Drawing.Font("Roboto", 10F);
-            this.materialRadioButton1.Location = new System.Drawing.Point(241, 79);
+            this.materialRadioButton1.Location = new System.Drawing.Point(127, 76);
             this.materialRadioButton1.Margin = new System.Windows.Forms.Padding(0);
             this.materialRadioButton1.MouseLocation = new System.Drawing.Point(-1, -1);
             this.materialRadioButton1.MouseState = MaterialSkin.MouseState.HOVER;
@@ -187,7 +189,7 @@
             this.materialRadioButton2.AutoSize = true;
             this.materialRadioButton2.Depth = 0;
             this.materialRadioButton2.Font = new System.Drawing.Font("Roboto", 10F);
-            this.materialRadioButton2.Location = new System.Drawing.Point(241, 109);
+            this.materialRadioButton2.Location = new System.Drawing.Point(127, 106);
             this.materialRadioButton2.Margin = new System.Windows.Forms.Padding(0);
             this.materialRadioButton2.MouseLocation = new System.Drawing.Point(-1, -1);
             this.materialRadioButton2.MouseState = MaterialSkin.MouseState.HOVER;
@@ -204,7 +206,7 @@
             this.materialCheckBox1.AutoSize = true;
             this.materialCheckBox1.Depth = 0;
             this.materialCheckBox1.Font = new System.Drawing.Font("Roboto", 10F);
-            this.materialCheckBox1.Location = new System.Drawing.Point(391, 80);
+            this.materialCheckBox1.Location = new System.Drawing.Point(224, 77);
             this.materialCheckBox1.Margin = new System.Windows.Forms.Padding(0);
             this.materialCheckBox1.MouseLocation = new System.Drawing.Point(-1, -1);
             this.materialCheckBox1.MouseState = MaterialSkin.MouseState.HOVER;
@@ -220,7 +222,7 @@
             this.sqlBtn.AutoSize = true;
             this.sqlBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.sqlBtn.Depth = 0;
-            this.sqlBtn.Location = new System.Drawing.Point(725, 79);
+            this.sqlBtn.Location = new System.Drawing.Point(362, 113);
             this.sqlBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.sqlBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.sqlBtn.Name = "sqlBtn";
@@ -236,7 +238,7 @@
             this.VideoBtn.AutoSize = true;
             this.VideoBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.VideoBtn.Depth = 0;
-            this.VideoBtn.Location = new System.Drawing.Point(796, 79);
+            this.VideoBtn.Location = new System.Drawing.Point(508, 76);
             this.VideoBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.VideoBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.VideoBtn.Name = "VideoBtn";
@@ -249,21 +251,80 @@
             // 
             // overBtn
             // 
-            this.overBtn.Location = new System.Drawing.Point(725, 123);
+            this.overBtn.Location = new System.Drawing.Point(508, 123);
             this.overBtn.Name = "overBtn";
-            this.overBtn.Size = new System.Drawing.Size(172, 34);
+            this.overBtn.Size = new System.Drawing.Size(136, 34);
             this.overBtn.TabIndex = 8;
             this.overBtn.Text = "overlay test";
             this.overBtn.UseVisualStyleBackColor = true;
             this.overBtn.Click += new System.EventHandler(this.overBtn_Click);
+            // 
+            // SQLAdapter
+            // 
+            this.SQLAdapter.AutoSize = true;
+            this.SQLAdapter.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.SQLAdapter.Depth = 0;
+            this.SQLAdapter.Location = new System.Drawing.Point(362, 73);
+            this.SQLAdapter.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.SQLAdapter.MouseState = MaterialSkin.MouseState.HOVER;
+            this.SQLAdapter.Name = "SQLAdapter";
+            this.SQLAdapter.Primary = false;
+            this.SQLAdapter.Size = new System.Drawing.Size(120, 36);
+            this.SQLAdapter.TabIndex = 7;
+            this.SQLAdapter.Text = "SQLAdapter";
+            this.SQLAdapter.UseVisualStyleBackColor = true;
+            this.SQLAdapter.Click += new System.EventHandler(this.sqlAdapterBtn_Click);
+            // 
+            // DirectShowBtn
+            // 
+            this.DirectShowBtn.AutoSize = true;
+            this.DirectShowBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.DirectShowBtn.Depth = 0;
+            this.DirectShowBtn.Location = new System.Drawing.Point(707, 79);
+            this.DirectShowBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.DirectShowBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.DirectShowBtn.Name = "DirectShowBtn";
+            this.DirectShowBtn.Primary = false;
+            this.DirectShowBtn.Size = new System.Drawing.Size(79, 36);
+            this.DirectShowBtn.TabIndex = 7;
+            this.DirectShowBtn.Text = "DiShow";
+            this.DirectShowBtn.UseVisualStyleBackColor = true;
+            this.DirectShowBtn.Click += new System.EventHandler(this.Video2Btn_Click);
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(707, 121);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(106, 27);
+            this.textBox1.TabIndex = 9;
+            // 
+            // captureBtn
+            // 
+            this.captureBtn.AutoSize = true;
+            this.captureBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.captureBtn.Depth = 0;
+            this.captureBtn.Location = new System.Drawing.Point(794, 79);
+            this.captureBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.captureBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.captureBtn.Name = "captureBtn";
+            this.captureBtn.Primary = false;
+            this.captureBtn.Size = new System.Drawing.Size(89, 36);
+            this.captureBtn.TabIndex = 10;
+            this.captureBtn.Text = "capture";
+            this.captureBtn.UseVisualStyleBackColor = true;
+            this.captureBtn.Click += new System.EventHandler(this.captureBtn_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(932, 523);
+            this.Controls.Add(this.captureBtn);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.overBtn);
+            this.Controls.Add(this.DirectShowBtn);
             this.Controls.Add(this.VideoBtn);
+            this.Controls.Add(this.SQLAdapter);
             this.Controls.Add(this.sqlBtn);
             this.Controls.Add(this.materialCheckBox1);
             this.Controls.Add(this.materialRadioButton2);
@@ -304,6 +365,10 @@
         private MaterialSkin.Controls.MaterialFlatButton VideoBtn;
         private System.Windows.Forms.Button overBtn;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private MaterialSkin.Controls.MaterialFlatButton SQLAdapter;
+        private MaterialSkin.Controls.MaterialFlatButton DirectShowBtn;
+        private System.Windows.Forms.TextBox textBox1;
+        private MaterialSkin.Controls.MaterialFlatButton captureBtn;
     }
 }
 
