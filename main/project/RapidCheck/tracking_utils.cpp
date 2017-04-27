@@ -487,6 +487,27 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	}
 }
 
+// Read trajectories in MAX_FRAMES frames from DataBase
+void readTrajectories(vector<RPTrajectory>& trajectories)
+{
+	vector<vector<int > > res;
+	map<int, int> objectIdToIdx; // convert objectId to index of trajectories
+	db.selectTracking(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	for (int i = 0; i < res.size(); i++) {
+		int objectId = res[i][1], frameNum = res[i][2], x = res[i][3], y = res[i][4], width = res[i][5], height = res[i][6];
+		Target target(Rect(x, y, width, height));
+		if (objectIdToIdx.find(objectId) == objectIdToIdx.end())  {
+			objectIdToIdx[objectId] = trajectories.size();
+			int segmentNum = (frameNum - START_FRAME_NUM) / (FRAME_STEP*LOW_LEVEL_TRACKLETS);
+			RPTrajectory newTrajectory(segmentNum);
+			trajectories.push_back(newTrajectory);
+		}
+		trajectories[objectIdToIdx[objectId]].addTarget(target);
+	}
+
+}
+
+
 // Detect targets in MAX_FRAMES frames and insert result into DB
 void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 {

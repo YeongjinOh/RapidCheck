@@ -59,6 +59,15 @@ struct RPTrajectory
 		targets.insert(targets.end(), tr.begin(), tr.end());
 		endSegmentNum += diffNumSegment;
 	}
+	void addTarget(Target target)
+	{
+		targets.push_back(target);
+		int numOfTargets = targets.size();
+		if (numOfTargets % 6 == 1)
+		{
+			endSegmentNum = startSegmentNum + (numOfTargets / 6);
+		}
+	}
 };
 
 // Mid-level segments which consist of LOW_LEVEL_TRACKLETS*MID_LEVEL_TRACKLETS(36) frames
@@ -177,6 +186,13 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
 	@param frames list of frames to be implemented detection
 */
 void readTargets(VideoCapture& cap, vector<Frame>& frames);
+/**
+	Read trajectories in MAX_FRAMES frames from DataBase
+
+	@param cap video variable
+	@param trajectories list of trajectories to be implemented tracking
+*/
+void readTrajectories(vector<RPTrajectory>& trajectories);
 /**
 	Build all tracklets of given frames
 

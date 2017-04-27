@@ -73,9 +73,11 @@ public:
 		insert(query);
 	}
 	
-	void selectTracking(vector<vector<int> >& rows)
+	void selectTracking(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
 	{
-		select("SELECT * FROM tracking;", rows);
+		char query[200];
+		sprintf(query, "SELECT * FROM tracking WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
+		select(query, rows);
 	}
 	void selectDetection(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
 	{

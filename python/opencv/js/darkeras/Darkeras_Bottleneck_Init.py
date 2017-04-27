@@ -84,7 +84,7 @@ model.summary()
 # In[6]:
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
-from yolo.dataset.data import shuffle
+from yolo.datacenter.data import shuffle
 
 
 # In[7]:
