@@ -24,6 +24,7 @@ namespace RapidCheck
         DirectShowLib.IMediaPosition pMediaPosition = null; // play time...
 
         DirectShowLib.IVideoFrameStep pVideoFrameStep = null; // video stream을 진행시킨다...
+        DirectShowLib.IMediaSeeking pMediaSeeking = null;
 
         //capture
         //DirectShowLib.IBasicVideo pBasicVideo = null;
@@ -110,8 +111,12 @@ namespace RapidCheck
             pMediaControl = (DirectShowLib.IMediaControl)pGraphBuilder;
             pVideoWindow = (DirectShowLib.IVideoWindow)pGraphBuilder;
             pVideoFrameStep = (DirectShowLib.IVideoFrameStep)pGraphBuilder; // video frame...
+            pMediaPosition = (DirectShowLib.IMediaPosition)pGraphBuilder;
             //DirectShowLib.IBaseFilter pBaseFilter = (DirectShowLib.IBaseFilter)pGraphBuilder;
 
+            //pMediaSeeking = (DirectShowLib.IMediaSeeking)pGraphBuilder;
+            //pMediaSeeking.SetPositions(5000, AMSeekingSeekingFlags.AbsolutePositioning, 6000, AMSeekingSeekingFlags.AbsolutePositioning);
+            
             //test
             DirectShowLib.ICaptureGraphBuilder2 pCaptureGraphBuilder2;
             DirectShowLib.IBaseFilter pRenderer;
@@ -174,6 +179,8 @@ namespace RapidCheck
             pMediaPosition.get_Duration(out Length);
             String str2 = string.Format("play time: {0}", Length);
             textBox1.Text = str2;
+
+            pMediaPosition.put_CurrentPosition(5.0); //set current Position
         }
         #region 그래프와 프로그램 종료
         private void CloseInterface()
@@ -206,7 +213,6 @@ namespace RapidCheck
         #endregion
         private void pCapture()
         {
-            //IVideoFrameStep test;
             int bufSize = 0;
             IntPtr imgData;
             pSampleGrabber.GetCurrentBuffer(ref bufSize, IntPtr.Zero);
