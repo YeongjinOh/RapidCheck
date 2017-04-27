@@ -110,7 +110,7 @@ plt.show()
 
 # In[18]:
 
-weigths_path2 = 'yolo-tiny2-epoch10.h5'
+weigths_path2 = 'yolo-tiny3-epoch12.h5'
 model.load_weights(weigths_path2)
 model.summary()
 
@@ -132,7 +132,7 @@ print("4", batch.shape)
 out = model.predict(batch)
 print("5", out.shape)
 
-out_img = post_progress(out[0], im=image, is_save=False, threshold=0.1)
+out_img = post_progress(out[0], im=image, is_save=False, threshold=0.05)
 print("6", out_img.shape)
 out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
 plt.imshow(out_img)

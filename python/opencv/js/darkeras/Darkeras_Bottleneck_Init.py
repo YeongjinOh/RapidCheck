@@ -138,13 +138,15 @@ for i, (x_batch, datum) in enumerate(batches):
     loss_val = fetched[1]
     say("step {} - loss {}".format(i, loss_val), verbalise=True)
     if i == 1:
-        save_step_weigths_path = 'yolo-tiny-step{}.h5'.format(i)
+        save_step_weigths_path = 'yolo-tiny4-step{}.h5'.format(i)
         model.save_weights(save_step_weigths_path)
         print("Saved weigths : ", save_step_weigths_path)
-    if i % 310 == 0:
-        model.save_weights('yolo-tiny-epoch{}.h5'.format(i//310))
-        say("Save weights : ", 'yolo-tiny-epoch{}.h5'.format(i//310), verbalise=verbalise)
+    if i % 3100 == 0:
+        model.save_weights('yolo-tiny4-epoch{}.h5'.format(i//3100))
+        say("Save weights : ", 'yolo-tiny4-epoch{}.h5'.format(i//3100), verbalise=verbalise)
 
+model.save('yolo-tiny4-model.h5')
+say("Save Full Model : ", 'yolo-tiny4-model.h5', verbalise=verbalise)
 
 # In[10]:
 
