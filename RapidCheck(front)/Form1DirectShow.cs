@@ -24,6 +24,7 @@ namespace RapidCheck
         DirectShowLib.IMediaPosition pMediaPosition = null; // play time...
 
         DirectShowLib.IVideoFrameStep pVideoFrameStep = null; // video stream을 진행시킨다...
+        DirectShowLib.IMediaSeeking pMediaSeeking = null;
 
         //capture
         //DirectShowLib.IBasicVideo pBasicVideo = null;
@@ -110,11 +111,35 @@ namespace RapidCheck
             pMediaControl = (DirectShowLib.IMediaControl)pGraphBuilder;
             pVideoWindow = (DirectShowLib.IVideoWindow)pGraphBuilder;
             pVideoFrameStep = (DirectShowLib.IVideoFrameStep)pGraphBuilder; // video frame...
+            pMediaPosition = (DirectShowLib.IMediaPosition)pGraphBuilder;
+            //DirectShowLib.IBaseFilter pBaseFilter = (DirectShowLib.IBaseFilter)pGraphBuilder;
+
+            //pMediaSeeking = (DirectShowLib.IMediaSeeking)pGraphBuilder;
+            //pMediaSeeking.SetPositions(5000, AMSeekingSeekingFlags.AbsolutePositioning, 6000, AMSeekingSeekingFlags.AbsolutePositioning);
             
-            for(int i = 10;i<100;i++)
-            {
-                pVideoFrameStep.Step(i, null);
-            }
+            //test
+            DirectShowLib.ICaptureGraphBuilder2 pCaptureGraphBuilder2;
+            DirectShowLib.IBaseFilter pRenderer;
+            DirectShowLib.IVMRFilterConfig9 pIVMRFilterConfig9;
+            DirectShowLib.IVMRWindowlessControl9 pVMRWC9;
+
+            pCaptureGraphBuilder2 = (DirectShowLib.ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+            pCaptureGraphBuilder2.SetFiltergraph(pGraphBuilder);     // CaptureGraph를  GraphBuilder에 붙인다.
+            
+            //pGraphBuilder.AddFilter(pMediaControl "SDZ 375 Source");  // GraphBuilder에 영상장치필터를 추가한다.
+            pRenderer = (DirectShowLib.IBaseFilter)new DirectShowLib.VideoMixingRenderer9();       // 믹서 필터를 생성 한다.
+            pIVMRFilterConfig9 = (DirectShowLib.IVMRFilterConfig9)pRenderer;         // 믹서 필터의 속성을 설정한다.
+            pIVMRFilterConfig9.SetRenderingMode(VMR9Mode.Windowless);
+            //pIVMRFilterConfig9.SetRenderingMode(VMR9Mode.Windowed);
+            pIVMRFilterConfig9.SetNumberOfStreams(2);
+
+            pVMRWC9 = (DirectShowLib.IVMRWindowlessControl9)pRenderer;              // 오버레이 평면의 속성을 설정한다.
+            pVMRWC9.SetVideoClippingWindow(hWin.Handle);
+            pVMRWC9.SetBorderColor(0);
+            pVMRWC9.SetVideoPosition(null, hWin.ClientRectangle);
+            pGraphBuilder.AddFilter(pRenderer, "Video Mixing Renderer"); // GraphBuilder에 믹스 필터를 추가한다.
+            pCaptureGraphBuilder2.RenderStream(null, MediaType.Video, pGraphBuilder , null, pRenderer);   // 영상표시를 위한 필터를 설정한다.
+            ///test
 
             //sampleGrabber
             AMMediaType am_media_type = new AMMediaType();
@@ -128,6 +153,7 @@ namespace RapidCheck
             pGraphBuilder.AddFilter(pSampleGrabberFilter, "Sample Grabber");
 
             pMediaControl.RenderFile(filename);
+            
 
             pVideoWindow.put_Owner(hWin.Handle);
             pVideoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
@@ -153,6 +179,8 @@ namespace RapidCheck
             pMediaPosition.get_Duration(out Length);
             String str2 = string.Format("play time: {0}", Length);
             textBox1.Text = str2;
+
+            pMediaPosition.put_CurrentPosition(5.0); //set current Position
         }
         #region 그래프와 프로그램 종료
         private void CloseInterface()
@@ -185,7 +213,6 @@ namespace RapidCheck
         #endregion
         private void pCapture()
         {
-            //IVideoFrameStep test;
             int bufSize = 0;
             IntPtr imgData;
             pSampleGrabber.GetCurrentBuffer(ref bufSize, IntPtr.Zero);
@@ -196,6 +223,7 @@ namespace RapidCheck
             }
             imgData = Marshal.AllocCoTaskMem(bufSize);
             pSampleGrabber.GetCurrentBuffer(ref bufSize, imgData);
+
             saveToJpg(imgData, bufSize, Video_Height, Video_Width);
             Marshal.FreeCoTaskMem(imgData);
         }
@@ -204,7 +232,8 @@ namespace RapidCheck
             int stride = -3 * width;
             IntPtr Scan0 = (IntPtr)(((int)Source) + (Size - (3 * width)));
             Bitmap img = new Bitmap(width, height, stride, System.Drawing.Imaging.PixelFormat.Format24bppRgb, Scan0);
-            img.Save("test.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
+            Bitmap croppedImage = img.Clone(new Rectangle(30,40,100,200), img.PixelFormat);
+            croppedImage.Save("test.jpg", System.Drawing.Imaging.ImageFormat.Jpeg);
             img.Dispose();
         }
     }

@@ -34,6 +34,7 @@ void showTrackletClusters(App app);
 void showTracklet(App app);
 void buildTrajectory(App app);
 void compareSimilarity(App app);
+void showTrajectory();
 
 // Database
 
