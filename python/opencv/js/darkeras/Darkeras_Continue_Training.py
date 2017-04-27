@@ -17,7 +17,7 @@ import yolo.config as cfg
 from utils.help import say
 
 keras.backend.set_image_dim_ordering('th')
-weights_path = 'yolo-tiny-epoch17.h5'
+weights_path = 'yolo-tiny2-epoch10.h5'
 is_freeze = True
 verbalise = True
 
@@ -88,14 +88,15 @@ for i, (x_batch, datum) in enumerate(batches):
     loss_val = fetched[1]
     say("step {} - loss {}".format(i, loss_val), verbalise=True)
     if i == 1:
-        save_step_weigths_path = 'yolo-tiny2-step{}.h5'.format(i)
+        save_step_weigths_path = 'yolo-tiny3-step{}.h5'.format(i)
         model.save_weights(save_step_weigths_path)
         print("Saved weigths : ", save_step_weigths_path)
-    if i % 3100 == 0:
-        model.save_weights('yolo-tiny2-epoch{}.h5'.format(i//3100))
-        say("Save weights : ", 'yolo-tiny2-epoch{}.h5'.format(i//3100), verbalise=verbalise)
+    if i % (3100*2) == 0:
+        model.save_weights('yolo-tiny3-epoch{}.h5'.format(i//3100))
+        say("Save weights : ", 'yolo-tiny3-epoch{}.h5'.format(i//3100), verbalise=verbalise)
 
-
+model.save('yolo-tiny3-model.h5')
+say("Learning Done..", verbalise=verbalise)
 # In[10]:
 
 sess.close()
