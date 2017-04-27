@@ -18,22 +18,29 @@ namespace RapidCheck
         //overlay test
         private async void overBtn_Click(object sender, EventArgs e)
         {
-            /*
+            overlay1();
+            //overlay2();
+        }
+
+        private void overlay1()
+        {
             try
             {
                 overlay = new Bitmap(@"C:\Users\trevor\Desktop\Videos\overlay.png");
                 pictureBox1.Cursor = Cursors.Cross;
-                
+
                 ShowCombinedImage();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Error opening file.\n" + ex.Message,
                 "Open Error", MessageBoxButtons.OK,
                 MessageBoxIcon.Error);
             }
-             */
+        }
 
+        private void overlay2()
+        {
             //overlay test
             OverlayWindow overlay = new OverlayWindow(false);
 
@@ -79,7 +86,6 @@ namespace RapidCheck
                 overlay.Graphics.EndScene();
             }
         }
-
         private Bitmap CombinedBitmap = null;
         //ShowCombinedImage
         private void ShowCombinedImage()
