@@ -40,7 +40,7 @@ namespace RapidCheck
                     videoPanel.Height = height;
                     // play the first frame of the video so we can identify it
                     video.Play();
-                    video.CurrentPosition = 200 / 60;
+                    video.CurrentPosition = 1000 / 60;
                     //video.Pause();
                 }
                 catch (Exception ex)
