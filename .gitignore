@@ -20,6 +20,7 @@ videos/
 *.pyc
 *.mp4
 dataset/
+my_testset
 
 # for jupyter notebook
 .ipynb_checkpoints/

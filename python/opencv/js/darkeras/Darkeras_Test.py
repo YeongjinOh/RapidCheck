@@ -81,8 +81,9 @@ from utils.BoxUtils import post_progress
 # imagePath = './test/my_testset/001618.jpg'
 # imagePath = './test/my_testset/000892.jpg'
 # imagePath = './test/my_testset/000906.jpg'
-imagePath = './test/my_testset/000467.jpg'
-# imagePath = './test/my_testset/000386.jpg'
+# imagePath = './test/my_testset/000467.jpg'
+imagePath = './test/my_testset/000386.jpg'
+# imagePath = './test/my_testset/person.jpg'
 # imagePath = './test/my_testset/person.jpg'
 image = cv2.imread(imagePath)
 print("1", image.shape)
@@ -117,7 +118,7 @@ plt.show()
 
 
 weigths_path2 = 'yolo-tiny2-epoch10.h5'
-test_threshold = 0.1
+test_threshold = 0.05
 
 model.load_weights(weigths_path2)
 model.summary()
@@ -160,7 +161,7 @@ out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
 plt.imshow(out_img)
 plt.show()
 
-weigths_path2 = 'yolo-tiny3-epoch4.h5'
+weigths_path2 = 'yolo-tiny4-epoch0.h5'
 model.load_weights(weigths_path2)
 image = cv2.imread(imagePath)
 out = model.predict(batch)
@@ -171,7 +172,7 @@ out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
 plt.imshow(out_img)
 plt.show()
 
-weigths_path2 = 'yolo-tiny3-epoch6.h5'
+weigths_path2 = 'yolo-tiny4-epoch1.h5'
 model.load_weights(weigths_path2)
 image = cv2.imread(imagePath)
 out = model.predict(batch)
@@ -182,7 +183,7 @@ out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
 plt.imshow(out_img)
 plt.show()
 
-weigths_path2 = 'yolo-tiny3-epoch8.h5'
+weigths_path2 = 'yolo-tiny4-epoch2.h5'
 model.load_weights(weigths_path2)
 image = cv2.imread(imagePath)
 out = model.predict(batch)
@@ -194,7 +195,7 @@ out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
 plt.imshow(out_img)
 plt.show()
 
-weigths_path2 = 'yolo-tiny3-epoch10.h5'
+weigths_path2 = 'yolo-tiny4-epoch3.h5'
 model.load_weights(weigths_path2)
 image = cv2.imread(imagePath)
 out = model.predict(batch)
