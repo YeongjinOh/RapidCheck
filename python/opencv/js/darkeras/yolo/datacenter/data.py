@@ -159,5 +159,6 @@ def shuffle():
 			yield x_batch, feed_batch
 
 		print('Finish {} epoch'.format(i+1))
+
 if __name__ == '__main__':
 	print("hello")
