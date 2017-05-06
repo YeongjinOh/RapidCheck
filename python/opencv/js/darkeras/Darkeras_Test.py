@@ -82,8 +82,8 @@ from utils.BoxUtils import post_progress
 # imagePath = './test/my_testset/000892.jpg'
 # imagePath = './test/my_testset/000906.jpg'
 # imagePath = './test/my_testset/000467.jpg'
-imagePath = './test/my_testset/000386.jpg'
-# imagePath = './test/my_testset/person.jpg'
+# imagePath = './test/my_testset/000386.jpg'
+imagePath = './test/my_testset/person.jpg'
 # imagePath = './test/my_testset/person.jpg'
 image = cv2.imread(imagePath)
 print("1", image.shape)
@@ -117,8 +117,8 @@ plt.show()
 # In[18]:
 
 
-weigths_path2 = 'yolo-tiny2-epoch10.h5'
-test_threshold = 0.05
+weigths_path2 = 'models/train/yolo-tiny-new-detection-epoch100.h5'
+test_threshold = 0.1
 
 model.load_weights(weigths_path2)
 model.summary()

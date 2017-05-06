@@ -9,7 +9,7 @@ import h5py
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
-get_ipython().magic('matplotlib inline')
+
 from keras import backend as K
 
 import keras
@@ -29,15 +29,22 @@ sess = tf.Session()
 K.set_session(sess)
 
 keras.backend.set_image_dim_ordering('th')
-weights_path = 'yolo-tiny-origin-named.h5'
+pretrained_weights_path = 'models/pretrain/yolo-tiny-origin-named.h5'
 is_freeze = True
 verbalise = True
 
+freeze_layer_weights = None
+trainable_layer_weights = None
+show_trainable_state = False # 여기를 True 로 바꾸면, conv layer 와 dense layer 의 학습별 weigths 가 변하는지 안변하는지를 확인할 수 있다.
+trained_save_weights_prefix = 'models/train/{}-'.format(cfg.model_name)
+
+inp_w, inp_h, inp_c = cfg.inp_size
+output_tensor_shape = (cfg.cell_size * cfg.cell_size)*(cfg.num_classes + cfg.boxes_per_cell*5)
 
 # In[3]:
 
 model = Sequential()
-model.add(Conv2D(16, (3, 3), input_shape=(3,448,448),padding='same', 
+model.add(Conv2D(16, (3, 3), input_shape=(inp_c, inp_w, inp_h),padding='same', 
                         activation=LeakyReLU(alpha=0.1), trainable=not is_freeze, name='conv1'))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Conv2D(32,(3,3), padding='same', 
@@ -62,7 +69,7 @@ model.add(Flatten())
 model.add(Dense(256, name='new_dense1'))
 model.add(Dense(4096, name='new_dense2'))
 model.add(LeakyReLU(alpha=0.1))
-model.add(Dense(1470, name='new_detection'))
+model.add(Dense(output_tensor_shape, name='new_detection'))
 
 
 # In[4]:
@@ -101,7 +108,7 @@ print(sess.run(dense_last.weights[0])[0][0:10])
 
 # In[7]:
 
-model.load_weights(weights_path, by_name=True)
+model.load_weights(pretrained_weights_path, by_name=True)
 
 
 # In[8]:
@@ -116,31 +123,31 @@ print(sess.run(dense_last.weights[0])[0][0:10])
 
 # In[9]:
 
-from utils.BoxUtils import post_progress
+# from utils.BoxUtils import post_progress
 
 
 # In[10]:
 
-imagePath = './test/my_testset/person.jpg'
-image = cv2.imread(imagePath)
-print("1", image.shape)
-resized = cv2.resize(image,(448,448))
-plt.imshow(resized)
-print("2", resized.shape)
-np_img = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
-batch = np.transpose(np_img,(2,0,1))
-print("3", batch.shape)
-batch = 2*(batch/255.) - 1
-batch = np.expand_dims(batch, axis=0)
-print("4", batch.shape)
+# imagePath = './test/my_testset/person.jpg'
+# image = cv2.imread(imagePath)
+# print("1", image.shape)
+# resized = cv2.resize(image,(448,448))
+# plt.imshow(resized)
+# print("2", resized.shape)
+# np_img = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
+# batch = np.transpose(np_img,(2,0,1))
+# print("3", batch.shape)
+# batch = 2*(batch/255.) - 1
+# batch = np.expand_dims(batch, axis=0)
+# print("4", batch.shape)
 
-out = model.predict(batch)
-print("5", out.shape)
+# out = model.predict(batch)
+# print("5", out.shape)
 
-out_img = post_progress(out[0], im=image, is_save=False, threshold=0.1)
-print("6", out_img.shape)
-out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
-plt.imshow(out_img)
+# out_img = post_progress(out[0], im=image, is_save=False, threshold=0.1)
+# print("6", out_img.shape)
+# out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
+# plt.imshow(out_img)
 
 
 # ## 오케이. new-layer 부분은 깨끗하게 Initalized 된 것을 확인하였다.
@@ -159,9 +166,7 @@ def conv_weigths_flatten(layer_weights_comp):
 
 # In[24]:
 
-freeze_layer_weights = None
-trainable_layer_weights = None
-show_trainable_state = False # 여기를 True 로 바꾸면, conv layer 와 dense layer 의 학습별 weigths 가 변하는지 안변하는지를 확인할 수 있다.
+
 
 batches = shuffle()
 for i, (x_batch, datum) in enumerate(batches):
@@ -190,16 +195,16 @@ for i, (x_batch, datum) in enumerate(batches):
             last_layer_flatten = [val for sublist in last_layer_comp for val in sublist]
             print("danse last : ", dense_last.name, all(last_layer_flatten))
     if i == 1:
-        model.save_weights('models/train/yolo-tiny-new-detection-epoch{}.h5'.format(i))
-        say("Save weights : ", 'models/train/yolo-tiny-new-detection-epoch{}.h5'.format(i), verbalise=verbalise)
+        model.save_weights(trained_save_weights_prefix + 'epoch{}.h5'.format(i))
+        say("Save weights : ", trained_save_weights_prefix + 'epoch{}.h5'.format(i), verbalise=verbalise)
    
     if i % 3100 == 0:
-        model.save_weights('models/train/yolo-tiny-new-detection-epoch{}.h5'.format(i//310))
-        say("Save weights : ", 'models/train/yolo-tiny-new-detection-epoch{}.h5'.format(i//310), verbalise=verbalise)
+        model.save_weights(trained_save_weights_prefix + 'epoch{}.h5'.format(i//310))
+        say("Save weights : ", trained_save_weights_prefix + 'epoch{}.h5'.format(i//310), verbalise=verbalise)
 
 say('Training All Done..', verbalise=verbalise)
-model.save_weights('model/train/yolo-tiny-new-detection-complete.h5')
-say("Save weights : ", 'model/train/yolo-tiny-new-detection-complete.h5', verbalise=verbalise)
+model.save_weights(trained_save_weights_prefix + 'complete.h5')
+say("Save weights : ", trained_save_weights_prefix + 'complete.h5', verbalise=verbalise)
 
 
 # In[ ]:
