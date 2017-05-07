@@ -26,7 +26,7 @@ import yolo.config as cfg
 keras.backend.set_image_dim_ordering('th')
 weights_path = 'yolo-tiny-origin.h5'
 is_freeze = True
-
+output_tensor_shape = (cfg.cell_size * cfg.cell_size)*(cfg.num_classes + cfg.boxes_per_cell*5)
 
 # In[3]:
 
@@ -56,35 +56,37 @@ model.add(Flatten())
 model.add(Dense(256))
 model.add(Dense(4096))
 model.add(LeakyReLU(alpha=0.1))
-model.add(Dense(1470))
+model.add(Dense(output_tensor_shape))
 
 
 # ## Test original weights file
 
 # In[4]:
 
-model.load_weights(weights_path)
+# model.load_weights(weights_path)
 
 
-# In[5]:
+# # In[5]:
 
-model.summary()
+# model.summary()
 
 
-# In[6]:
+# # In[6]:
 
 from utils.BoxUtils import post_progress
 
 
-# In[7]:
+# # In[7]:
 
 # imagePath = './test/my_testset/001618.jpg'
 # imagePath = './test/my_testset/000892.jpg'
 # imagePath = './test/my_testset/000906.jpg'
 # imagePath = './test/my_testset/000467.jpg'
 # imagePath = './test/my_testset/000386.jpg'
+# imagePath = './test/my_testset/many_person.jpg'
 imagePath = './test/my_testset/person.jpg'
-# imagePath = './test/my_testset/person.jpg'
+# imagePath = './test/my_testset/person_car6.jpg'
+# imagePath = './test/my_testset/car1.jpg'
 image = cv2.imread(imagePath)
 print("1", image.shape)
 resized = cv2.resize(image,(448,448))
@@ -98,27 +100,27 @@ batch = np.expand_dims(batch, axis=0)
 print("4", batch.shape)
 
 
-# In[8]:
+# # In[8]:
 
-out = model.predict(batch)
-print("5", out.shape)
+# out = model.predict(batch)
+# print("5", out.shape)
 
 
-# In[9]:
+# # In[9]:
 
-out_img = post_progress(out[0], im=image, is_save=False, threshold=0.1)
-print("6", out_img.shape)
-out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
-plt.imshow(out_img)
-plt.show()
+# out_img = post_progress(out[0], im=image, is_save=False, threshold=0.1)
+# print("6", out_img.shape)
+# out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
+# plt.imshow(out_img)
+# plt.show()
 
 # ## Test step1 save weights file
 
 # In[18]:
 
 
-weigths_path2 = 'models/train/yolo-tiny-new-detection-epoch100.h5'
-test_threshold = 0.1
+weigths_path2 = 'models/train/yolo-2class-epoch50.h5'
+test_threshold = 0.2
 
 model.load_weights(weigths_path2)
 model.summary()
@@ -150,7 +152,7 @@ plt.show()
 
 # 
 
-weigths_path2 = 'yolo-tiny3-epoch2.h5'
+weigths_path2 = 'models/train/yolo-2class-complete.h5'
 model.load_weights(weigths_path2)
 image = cv2.imread(imagePath)
 out = model.predict(batch)

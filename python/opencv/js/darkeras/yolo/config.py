@@ -1,6 +1,6 @@
 # Global config variables
 import os
-import yolo.conf.yolo_tiny_config as c
+import yolo.conf.yolo_2class_config as c
 
 model_name = c.model_name
 classes_name = c.classes_name
