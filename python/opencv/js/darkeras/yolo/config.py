@@ -1,26 +1,27 @@
 # Global config variables
 import os
+# import yolo.conf.yolo_2class_config as c
+import yolo.conf.yolo_tiny_config as c
+model_name = c.model_name
+classes_name = c.classes_name
 
-model_name = 'yolo-tiny'
-classes_name = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train","tvmonitor"]
+dataset_abs_location = c.dataset_abs_location
+ann_location = c.ann_location
+imageset_location = c.imageset_location
 
-dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
-ann_location = os.path.join(dataset_abs_location, 'Annotations')
-imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
+cell_size = c.cell_size
+num_classes = c.num_classes
+boxes_per_cell = c.boxes_per_cell
 
-cell_size = 7
-num_classes = 20
-boxes_per_cell = 2
+class_scale = c.class_scale
+object_scale = c.object_scale
+noobject_scale = c.noobject_scale
+coord_scale = c.coord_scale
 
-class_scale = 1
-object_scale = 1
-noobject_scale = 0.5
-coord_scale = 5
+inp_size = c.inp_size
+batch_size = c.batch_size
+epochs= c.epochs
 
-inp_size = 448, 448, 3
-batch_size = 32
-epochs=500
-
-lr=0.0001
-trainer='adam'
+lr= c.lr
+trainer= c.trainer
 

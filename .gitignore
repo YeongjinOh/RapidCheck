@@ -20,6 +20,10 @@ videos/
 *.pyc
 *.mp4
 dataset/
+my_testset
+MNIST_data/
+mnist_ckpt/
+
 # for jupyter notebook
 .ipynb_checkpoints/
 data/
@@ -349,3 +353,7 @@ __pycache__/
 *.feat
 *.model
 *.zip
+
+
+
+
