@@ -26,11 +26,15 @@ namespace RapidCheck
         int nrow; //nrow = tracking[Array Size]
 
         //MySQL setting
-        private string strConn = "Server=localhost;Database=test;Uid=root;Pwd=1234;";
-        
+        private string strConn = "Server=localhost;Database=rapidcheck;Uid=root;Pwd=1234;";
+        tracking[] trackingData;
         private void sqlAdapterBtn_Click(object sender, EventArgs e)
         {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
             sqlAdapter();
+            sw.Stop();
+            MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
         }   
 
         //데이터의 열을 가져와서 열만큼 arr생성하고, 생성한 arr 초기화
@@ -48,7 +52,7 @@ namespace RapidCheck
                     adapter.Fill(ds, "nrow");
 
                     //tracking data
-                    adapter.SelectCommand = new MySqlCommand("SELECT * FROM tracking", conn);
+                    adapter.SelectCommand = new MySqlCommand("SELECT * FROM tracking where videoId=1 ORDER BY frameNum ASC", conn);
                     adapter.Fill(ds, "data");
 
                     //set nrow
@@ -59,7 +63,7 @@ namespace RapidCheck
                         nrow = Int32.Parse(dr["count(*)"].ToString());
                     }
                     //make array
-                    tracking[] trackingData = new tracking[nrow];
+                    trackingData = new tracking[nrow];
 
                     //get tracking data
                     DataTable dt = new DataTable();
