@@ -6,7 +6,6 @@ model_name = c.model_name
 classes_name = c.classes_name
 
 dataset_abs_location = c.dataset_abs_location
-# dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012')
 ann_location = c.ann_location
 imageset_location = c.imageset_location
 
