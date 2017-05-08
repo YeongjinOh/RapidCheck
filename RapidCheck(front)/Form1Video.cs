@@ -41,8 +41,6 @@ namespace RapidCheck
                     // play the first frame of the video so we can identify it
                     video.CurrentPosition = 10;
                     video.Play();
-
-                    //MessageBox.Show(video.AverageTimePerFrame.ToString());
                     //video.Pause();
                 }
                 catch (Exception ex)

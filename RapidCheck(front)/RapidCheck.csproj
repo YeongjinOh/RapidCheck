@@ -31,7 +31,39 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Accord">
+      <HintPath>packages\Accord.3.4.2-alpha\lib\net45\Accord.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Video">
+      <HintPath>packages\Accord.Video.3.4.2-alpha\lib\net45\Accord.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="Accord.Video.FFMPEG">
+      <HintPath>packages\Accord.Video.FFMPEG.3.3.0\lib\net45\Accord.Video.FFMPEG.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge">
+      <HintPath>packages\AForge.2.2.5\lib\AForge.dll</HintPath>
+    </Reference>
     <Reference Include="DirectShowLib-2005">
       <HintPath>.\DirectShowLib-2005.dll</HintPath>
     </Reference>
@@ -48,11 +80,25 @@
       <HintPath>..\..\Downloads\DirectX\Microsoft.DirectX.AudioVideoPlayback.dll</HintPath>
     </Reference>
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
-    <Reference Include="Overlay.NET">
-      <HintPath>packages\Overlay.NET.1.0.2\lib\Overlay.NET.dll</HintPath>
+    <Reference Include="SharpDX, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.dll</HintPath>
     </Reference>
-    <Reference Include="Process.NET">
-      <HintPath>packages\Overlay.NET.1.0.2\lib\Process.NET.dll</HintPath>
+    <Reference Include="SharpDX.Direct2D1, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.Direct2D1.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Direct3D11, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.Direct3D11.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.DXGI, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.DXGI.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Mathematics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -66,6 +112,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="D2DOverlay.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,10 +128,16 @@
     <Compile Include="Form1overlay.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Form1overlay2.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Form1SQL.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1Video.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="getVideoFrame.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Program.cs" />
@@ -118,13 +171,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\overlay\DirectXOverlay\DirectXOverlayWindow\DirectXOverlayWindow\DirectXOverlayWindow.csproj">
-      <Project>{12150582-7a7b-445a-b9ad-678aa8b87f6f}</Project>
-      <Name>DirectXOverlayWindow</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="packages\Accord.Video.FFMPEG.3.3.0\build\Accord.Video.FFMPEG.targets" Condition="Exists('packages\Accord.Video.FFMPEG.3.3.0\build\Accord.Video.FFMPEG.targets')" />
+  <Import Project="packages\Accord.3.4.2-alpha\build\Accord.targets" Condition="Exists('packages\Accord.3.4.2-alpha\build\Accord.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

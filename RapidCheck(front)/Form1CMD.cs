@@ -11,7 +11,6 @@ namespace RapidCheck
 {
     public partial class Form1
     {
-
         private void CMDBtn_Click(object sender, EventArgs e)
         {
             //CMD
