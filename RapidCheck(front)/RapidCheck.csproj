@@ -65,7 +65,7 @@
       <HintPath>packages\AForge.2.2.5\lib\AForge.dll</HintPath>
     </Reference>
     <Reference Include="DirectShowLib-2005">
-      <HintPath>.\DirectShowLib-2005.dll</HintPath>
+      <HintPath>..\..\..\Downloads\DirectShow\lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
     <Reference Include="MaterialSkin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\MaterialSkin.0.2.1\lib\MaterialSkin.dll</HintPath>
@@ -82,23 +82,23 @@
     <Reference Include="MySql.Data, Version=6.9.9.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL" />
     <Reference Include="SharpDX, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.dll</HintPath>
+      <HintPath>..\..\..\Downloads\sharpDX\Bin\Desktop\SharpDX.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct2D1, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.Direct2D1.dll</HintPath>
+      <HintPath>..\..\..\Downloads\sharpDX\Bin\Desktop\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Direct3D11, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.Direct3D11.dll</HintPath>
+      <HintPath>..\..\..\Downloads\sharpDX\Bin\Desktop\SharpDX.Direct3D11.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.DXGI, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.DXGI.dll</HintPath>
+      <HintPath>..\..\..\Downloads\sharpDX\Bin\Desktop\SharpDX.DXGI.dll</HintPath>
     </Reference>
     <Reference Include="SharpDX.Mathematics, Version=3.1.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Downloads\SharpDX\Bin\Desktop\SharpDX.Mathematics.dll</HintPath>
+      <HintPath>..\..\..\Downloads\sharpDX\Bin\Desktop\SharpDX.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
