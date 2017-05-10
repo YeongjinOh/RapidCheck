@@ -39,11 +39,11 @@ def yolo_vgg16_TFdim_model(is_top=False):
 
 	if is_top:
 		model_vgg.add(Flatten())
-		model_vgg.add(Dense(4096, activation='relu'))
+		model_vgg.add(Dense(4096, activation='relu', name='dense_1'))
 		model_vgg.add(Dropout(0.5))
-		model_vgg.add(Dense(4096, activation='relu'))
+		model_vgg.add(Dense(4096, activation='relu', name='dense_2'))
 		model_vgg.add(Dropout(0.5))
-		model_vgg.add(Dense(1000, activation='softmax'))
+		model_vgg.add(Dense(1000, activation='softmax', name='dense_3'))
 	else:
 		pass
 
