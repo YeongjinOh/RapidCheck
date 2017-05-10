@@ -41,8 +41,13 @@ def _fix(obj, dims, scale, offs):
 def resize_input(im):
 	h, w, c = cfg.inp_size
 	imsz = cv2.resize(im, (w, h))
-	imsz = imsz / 255.
-	imsz = imsz[:,:,::-1]
+	if cfg.norm_type == 'center':
+		imsz[:, :, 0] -= 103.939
+		imsz[:, :, 1] -= 116.779
+		imsz[:, :, 2] -= 123.68
+	elif cfg.norm_type == 'scale_down':
+		imsz = imsz / .255
+	imsz = imsz[:,:,::-1] # BGR -> RGB
 	return imsz
 
 def preprocess(im, allobj = None):
@@ -55,7 +60,12 @@ def preprocess(im, allobj = None):
 	parsed annotation (allobj) will also be modified accordingly.
 	"""
 	if type(im) is not np.ndarray:
-		im = cv2.imread(im)
+		if cfg.norm_type == 'center':
+			im = cv2.imread(im).astype(np.float32)
+		elif cfg.norm_type == 'scale_down':
+			im = cv2.imread(im)
+		else:
+			im = cv2.imread(im)
 
 	if allobj is not None: # in training mode
 		result = imcv2_affine_trans(im)
@@ -70,6 +80,7 @@ def preprocess(im, allobj = None):
 		im = imcv2_recolor(im)
 
 	im = resize_input(im)
-	# im = np.transpose(im,(2,0,1)) # to change tf->th
+	if cfg.image_dim_order == 'th':
+		im = np.transpose(im,(2,0,1)) # to change tf->th
 	if allobj is None: return im
 	return im#, np.array(im) # for unit testing

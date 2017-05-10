@@ -1,7 +1,8 @@
 # Global config variables
 import os
+import yolo.conf.vgg16_2class_config as c
 # import yolo.conf.yolo_2class_config as c
-import yolo.conf.yolo_tiny_config as c
+# import yolo.conf.yolo_tiny_config as c
 model_name = c.model_name
 classes_name = c.classes_name
 
@@ -25,3 +26,5 @@ epochs= c.epochs
 lr= c.lr
 trainer= c.trainer
 
+image_dim_order = c.image_dim_order
+norm_type = c.norm_type

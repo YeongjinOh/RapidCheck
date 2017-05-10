@@ -24,3 +24,6 @@ epochs=500
 
 lr=0.0001
 trainer='adam'
+
+image_dim_order = 'th'
+norm_type = 'scale_down'

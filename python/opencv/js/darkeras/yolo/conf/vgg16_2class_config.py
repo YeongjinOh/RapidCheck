@@ -8,7 +8,7 @@ only 2class classifier yolo model config
 # Global config variables
 import os
 
-model_name = 'yolo-2class'
+model_name = 'yolo-vgg16-2class'
 classes_name = ["car", "person"]
 
 dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
@@ -25,12 +25,12 @@ object_scale = 1
 noobject_scale = 0.5
 coord_scale = 5
 
-inp_size = 448, 448, 3
+inp_size = 224, 224, 3
 batch_size = 32
 epochs=100
 
 lr=0.0001
 trainer='adam'
 
-image_dim_order = 'th'
-norm_type = 'scale_down'
+image_dim_order = 'tf'
+norm_type = 'center'
