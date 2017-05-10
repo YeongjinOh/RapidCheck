@@ -18,12 +18,57 @@ C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\obj\Debug\
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\RapidCheck.exe
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\RapidCheck.pdb
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\MaterialSkin.dll
-C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\DirectXOverlayWindow.dll
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct2D1.dll
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.dll
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.DXGI.dll
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.xml
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct2D1.xml
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.DXGI.xml
-C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\DirectXOverlayWindow.pdb
 C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\DirectShowLib-2005.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct3D11.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct3D11.xml
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Mathematics.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Mathematics.xml
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\avcodec-53.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\avdevice-53.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\avformat-53.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\avutil-51.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\postproc-52.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\swresample-0.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\swscale-2.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.dll.config
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.FFMPEG.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\AForge.dll
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.xml
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.xml
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.FFMPEG.xml
+C:\Users\trevor\Desktop\python workspace\RapidCheck\RapidCheck(front)\bin\Debug\AForge.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\avcodec-53.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\avdevice-53.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\avformat-53.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\avutil-51.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\postproc-52.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\swresample-0.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\swscale-2.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.dll.config
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.FFMPEG.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\AForge.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\DirectShowLib-2005.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct2D1.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct3D11.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.DXGI.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Mathematics.dll
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\Accord.Video.FFMPEG.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\AForge.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct2D1.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Direct3D11.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.DXGI.xml
+C:\Users\SoMa\Desktop\RapidCheck\RapidCheck(front)\bin\Debug\SharpDX.Mathematics.xml

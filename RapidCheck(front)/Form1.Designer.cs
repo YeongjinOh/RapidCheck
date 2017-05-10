@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -41,13 +42,13 @@
             this.materialRadioButton1 = new MaterialSkin.Controls.MaterialRadioButton();
             this.materialRadioButton2 = new MaterialSkin.Controls.MaterialRadioButton();
             this.materialCheckBox1 = new MaterialSkin.Controls.MaterialCheckBox();
-            this.sqlBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.VideoBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.overBtn = new System.Windows.Forms.Button();
             this.SQLAdapter = new MaterialSkin.Controls.MaterialFlatButton();
             this.DirectShowBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.captureBtn = new MaterialSkin.Controls.MaterialFlatButton();
+            this.button1 = new System.Windows.Forms.Button();
             this.materialTabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -85,6 +86,7 @@
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(894, 287);
@@ -218,22 +220,6 @@
             this.materialCheckBox1.Text = "CheckBox";
             this.materialCheckBox1.UseVisualStyleBackColor = true;
             // 
-            // sqlBtn
-            // 
-            this.sqlBtn.AutoSize = true;
-            this.sqlBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.sqlBtn.Depth = 0;
-            this.sqlBtn.Location = new System.Drawing.Point(362, 113);
-            this.sqlBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.sqlBtn.MouseState = MaterialSkin.MouseState.HOVER;
-            this.sqlBtn.Name = "sqlBtn";
-            this.sqlBtn.Primary = false;
-            this.sqlBtn.Size = new System.Drawing.Size(45, 36);
-            this.sqlBtn.TabIndex = 7;
-            this.sqlBtn.Text = "SQL";
-            this.sqlBtn.UseVisualStyleBackColor = true;
-            this.sqlBtn.Click += new System.EventHandler(this.sqlBtn_Click);
-            // 
             // VideoBtn
             // 
             this.VideoBtn.AutoSize = true;
@@ -270,9 +256,9 @@
             this.SQLAdapter.MouseState = MaterialSkin.MouseState.HOVER;
             this.SQLAdapter.Name = "SQLAdapter";
             this.SQLAdapter.Primary = false;
-            this.SQLAdapter.Size = new System.Drawing.Size(120, 36);
+            this.SQLAdapter.Size = new System.Drawing.Size(45, 36);
             this.SQLAdapter.TabIndex = 7;
-            this.SQLAdapter.Text = "SQLAdapter";
+            this.SQLAdapter.Text = "SQL";
             this.SQLAdapter.UseVisualStyleBackColor = true;
             this.SQLAdapter.Click += new System.EventHandler(this.sqlAdapterBtn_Click);
             // 
@@ -315,18 +301,28 @@
             this.captureBtn.UseVisualStyleBackColor = true;
             this.captureBtn.Click += new System.EventHandler(this.captureBtn_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(286, 123);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(110, 29);
+            this.button1.TabIndex = 11;
+            this.button1.Text = "frame";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(932, 523);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.captureBtn);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.overBtn);
             this.Controls.Add(this.DirectShowBtn);
             this.Controls.Add(this.VideoBtn);
             this.Controls.Add(this.SQLAdapter);
-            this.Controls.Add(this.sqlBtn);
             this.Controls.Add(this.materialCheckBox1);
             this.Controls.Add(this.materialRadioButton2);
             this.Controls.Add(this.materialRadioButton1);
@@ -363,7 +359,6 @@
         private MaterialSkin.Controls.MaterialRadioButton materialRadioButton1;
         private MaterialSkin.Controls.MaterialRadioButton materialRadioButton2;
         private MaterialSkin.Controls.MaterialCheckBox materialCheckBox1;
-        private MaterialSkin.Controls.MaterialFlatButton sqlBtn;
         private MaterialSkin.Controls.MaterialFlatButton VideoBtn;
         private System.Windows.Forms.Button overBtn;
         private System.Windows.Forms.PictureBox pictureBox1;
@@ -371,6 +366,7 @@
         private MaterialSkin.Controls.MaterialFlatButton DirectShowBtn;
         private System.Windows.Forms.TextBox textBox1;
         private MaterialSkin.Controls.MaterialFlatButton captureBtn;
+        private System.Windows.Forms.Button button1;
     }
 }
 
