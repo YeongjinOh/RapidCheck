@@ -156,6 +156,7 @@
     <ClCompile Include="gpu_hog.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="showTracklet.cpp" />
+    <ClCompile Include="showTrajectory.cpp" />
     <ClCompile Include="similarity_utils.cpp" />
     <ClCompile Include="target.cpp" />
     <ClCompile Include="targetgroup.cpp" />
