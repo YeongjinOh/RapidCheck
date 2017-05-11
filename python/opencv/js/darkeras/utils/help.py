@@ -17,4 +17,13 @@ def convert_darkweights2keras(model, weigths_path, verbalise=False):
 			idx += np.prod(kshape)
 			layer.set_weights([ker,bia])
 	say("convert np weights file -> kears models", "Successful", verbalise=verbalise)
+
+def conv_weigths_flatten(layer_weights_comp):
+	flatten = []
+	for sub_1 in layer_weights_comp:
+		for sub_2 in sub_1:
+			for sub_3 in sub_2:
+				for val in sub_3:
+					flatten.append(val)
+	return flatten
 	

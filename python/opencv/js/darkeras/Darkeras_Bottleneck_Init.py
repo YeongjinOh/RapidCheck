@@ -81,10 +81,16 @@ model = make_yolotiny_network()
 model.summary()
 
 
+
+exit()
+
+
+
+
 # In[6]:
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
-from yolo.dataset.data import shuffle
+from yolo.datacenter.data import shuffle
 
 
 # In[7]:
@@ -123,6 +129,7 @@ model = make_bottleneck_network(model)
 model.summary()
 
 
+
 # In[9]:
 
 batches = shuffle()
@@ -138,13 +145,15 @@ for i, (x_batch, datum) in enumerate(batches):
     loss_val = fetched[1]
     say("step {} - loss {}".format(i, loss_val), verbalise=True)
     if i == 1:
-        save_step_weigths_path = 'yolo-tiny-step{}.h5'.format(i)
+        save_step_weigths_path = 'yolo-tiny5-step{}.h5'.format(i)
         model.save_weights(save_step_weigths_path)
         print("Saved weigths : ", save_step_weigths_path)
-    if i % 310 == 0:
-        model.save_weights('yolo-tiny-epoch{}.h5'.format(i//310))
-        say("Save weights : ", 'yolo-tiny-epoch{}.h5'.format(i//310), verbalise=verbalise)
+    if i % 3100 == 0:
+        model.save_weights('yolo-tiny5-epoch{}.h5'.format(i//310))
+        say("Save weights : ", 'yolo-tiny5-epoch{}.h5'.format(i//310), verbalise=verbalise)
 
+model.save('yolo-tiny5-model.h5')
+say("Save Full Model : ", 'yolo-tiny5-model.h5', verbalise=verbalise)
 
 # In[10]:
 

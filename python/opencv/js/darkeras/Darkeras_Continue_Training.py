@@ -55,7 +55,7 @@ model = make_yolotiny_network(is_freeze)
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
-from yolo.dataset.data import shuffle
+from yolo.datacenter.data import shuffle
 
 inp_x = model.input
 net_out = model.output

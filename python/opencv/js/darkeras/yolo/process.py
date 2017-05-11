@@ -41,8 +41,13 @@ def _fix(obj, dims, scale, offs):
 def resize_input(im):
 	h, w, c = cfg.inp_size
 	imsz = cv2.resize(im, (w, h))
-	imsz = imsz / 255.
-	imsz = imsz[:,:,::-1]
+	if cfg.norm_type == 'center':
+		imsz[:, :, 0] -= 103.939
+		imsz[:, :, 1] -= 116.779
+		imsz[:, :, 2] -= 123.68
+	elif cfg.norm_type == 'scale_down':
+		imsz = imsz / .255
+	imsz = imsz[:,:,::-1] # BGR -> RGB
 	return imsz
 
 def preprocess(im, allobj = None):
@@ -69,7 +74,11 @@ def preprocess(im, allobj = None):
 			obj[3] = dims[0] - obj_1_
 		im = imcv2_recolor(im)
 
+	if cfg.norm_type == 'center':
+		im = im.astype(np.float32)
+	
 	im = resize_input(im)
-	im = np.transpose(im,(2,0,1)) # to change tf->th
+	if cfg.image_dim_order == 'th':
+		im = np.transpose(im,(2,0,1)) # to change tf->th
 	if allobj is None: return im
 	return im#, np.array(im) # for unit testing

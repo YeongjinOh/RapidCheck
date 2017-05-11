@@ -1,7 +1,8 @@
 import numpy as np
 import cv2
+import yolo.config as cfg
 
-classes_name =  ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train","tvmonitor"]
+classes_name =  cfg.classes_name
 base = int(np.ceil(pow(len(classes_name), 1./3)))
 print("base : ", base)
 def _to_color(index, base):
@@ -36,7 +37,7 @@ def prob_compare(box):
 	return box.probs[box.class_num]
 
 
-def find_boxes(net_out, threshold = 0.01, sqrt=2,C=20, B=2, S=7):
+def find_boxes(net_out, threshold = 0.01, sqrt=2,C=cfg.num_classes, B=cfg.boxes_per_cell, S=cfg.cell_size):
 	boxes = []
 	SS        =  S * S # number of grid cells
 	prob_size = SS * C # class probabilities
