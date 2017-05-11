@@ -60,12 +60,7 @@ def preprocess(im, allobj = None):
 	parsed annotation (allobj) will also be modified accordingly.
 	"""
 	if type(im) is not np.ndarray:
-		if cfg.norm_type == 'center':
-			im = cv2.imread(im).astype(np.float32)
-		elif cfg.norm_type == 'scale_down':
-			im = cv2.imread(im)
-		else:
-			im = cv2.imread(im)
+		im = cv2.imread(im)
 
 	if allobj is not None: # in training mode
 		result = imcv2_affine_trans(im)
@@ -79,6 +74,9 @@ def preprocess(im, allobj = None):
 			obj[3] = dims[0] - obj_1_
 		im = imcv2_recolor(im)
 
+	if cfg.norm_type == 'center':
+		im = im.astype(np.float32)
+	
 	im = resize_input(im)
 	if cfg.image_dim_order == 'th':
 		im = np.transpose(im,(2,0,1)) # to change tf->th

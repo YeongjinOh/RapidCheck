@@ -1,1 +1,1 @@
-yolo\yolo-tiny-tfdim-new.parsed aeroplane bicycle bird boat bottle bus car cat chair cow diningtable dog horse motorbike person pottedplant sheep sofa train tvmonitor
+yolo\yolo-vgg16-2class.parsed car person

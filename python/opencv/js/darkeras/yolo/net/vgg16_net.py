@@ -11,6 +11,8 @@ import yolo.config as cfg
 ## Make VGG16 networks for feature selection
 pretrained_weights_path = 'models/pretrain/vgg16_tfdim_top_weights.h5'
 img_width, img_height, img_channel = cfg.inp_size
+output_tensor_shape = (cfg.cell_size * cfg.cell_size)*(cfg.num_classes + cfg.boxes_per_cell*5)
+
 def yolo_vgg16_TFdim_model(is_top=False, is_new_training=False):
 	model_vgg = Sequential()
 	model_vgg.add(Conv2D(64, (3, 3), padding='same', input_shape=(img_width, img_height,img_channel),
@@ -50,10 +52,11 @@ def yolo_vgg16_TFdim_model(is_top=False, is_new_training=False):
 	else:
 		if is_top:
 			model_vgg.add(Flatten())
-			model_vgg.add(Dense(4096, activation='relu', name='new_dense_1'))
-			model_vgg.add(Dropout(0.5))
-			model_vgg.add(Dense(4096, activation='relu', name='new_dense_2'))
-			model_vgg.add(Dropout(0.5))
-			model_vgg.add(Dense(1000, activation='softmax', name='new_dense_3'))
+			model_vgg.add(Dense(256, name='new_dense_1'))
+			# model_vgg.add(Dropout(0.5))
+			model_vgg.add(Dense(4096, name='new_dense_2'))
+			model_vgg.add(LeakyReLU(alpha=0.1))
+			# model_vgg.add(Dropout(0.5))
+			model_vgg.add(Dense(output_tensor_shape, name='new_detection'))
 
 	return model_vgg

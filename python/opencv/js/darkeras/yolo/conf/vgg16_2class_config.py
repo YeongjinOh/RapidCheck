@@ -27,7 +27,7 @@ coord_scale = 5
 
 inp_size = 224, 224, 3
 batch_size = 32
-epochs=100
+epochs=300
 
 lr=0.0001
 trainer='adam'

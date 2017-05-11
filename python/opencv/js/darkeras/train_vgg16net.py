@@ -10,7 +10,7 @@ import keras.backend as K
 # from yolo.net.yolo_tiny_tfdim_net import yolo_tiny_TFdim_model
 from yolo.net.vgg16_net import yolo_vgg16_TFdim_model
 
-pretrain_weight_path = 'models/pretrain/vgg16_weights.h5'
+pretrain_weight_path = 'models/pretrain/vgg16_tfdim_top_weights_named.h5'
 is_freeze = True
 verbalise = True
 
@@ -22,7 +22,7 @@ trained_save_weights_prefix = 'models/train/{}-'.format(cfg.model_name)
 sess = tf.Session()
 K.set_session(sess)
 
-model = yolo_tiny_TFdim_model()
+model = yolo_vgg16_TFdim_model(is_top=True, is_new_training=True)
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
@@ -40,23 +40,7 @@ train_op = optimizer.apply_gradients(gradients)
 
 sess.run(tf.global_variables_initializer())
 
-# model.load_weights(pretrain_weight_path, by_name=True)
-
-f = h5py.File(pretrained_weights_path)
-	for k in range(f.attrs['nb_layers']):
-		if k >= len(model_vgg.layers) - 1:
-		# we don't look at the last two layers in the savefile (fully-connected and activation)
-			break
-		g = f['layer_{}'.format(k)]
-		weights = [g['param_{}'.format(p)] for p in range(g.attrs['nb_params'])]
-		layer = model_vgg.layers[k]
-
-		if layer.__class__.__name__ in ['Convolution1D', 'Convolution2D', 'Convolution3D', 'AtrousConvolution2D']:
-			weights[0] = np.transpose(weights[0], (2, 3, 1, 0))
-
-		layer.set_weights(weights)
-	f.close()
-	print("VGG16 Model with No Top loaded...")	
+model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
 for i, (x_batch, datum) in enumerate(batches):
@@ -102,3 +86,9 @@ for i, (x_batch, datum) in enumerate(batches):
 say('Training All Done..', verbalise=verbalise)
 model.save_weights(trained_save_weights_prefix + 'complete.h5')
 say("Save weights : ", trained_save_weights_prefix + 'complete.h5', verbalise=verbalise)
+model.save(trained_save_weights_prefix + 'fullmodel.h5')
+say("Save Model : ", trained_save_weights_prefix + 'fullmodel.h5', verbalise=verbalise)
+model_json = model.to_json()
+with open(trained_save_weights_prefix + "fullmodel.json", "w") as json_file:
+    json_file.write(model_json)
+print("model json config write done..")
