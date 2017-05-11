@@ -4,8 +4,8 @@ import os
 model_name = 'yolo-tiny-tfdim-new'
 classes_name = ["aeroplane", "bicycle", "bird", "boat", "bottle", "bus", "car", "cat", "chair", "cow", "diningtable", "dog", "horse", "motorbike", "person", "pottedplant", "sheep", "sofa", "train","tvmonitor"]
 
-# dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007') # SOMA_COM 1
-dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012') # SOMA_COM 2
+dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007') # SOMA_COM 1
+# dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012') # SOMA_COM 2
 ann_location = os.path.join(dataset_abs_location, 'Annotations')
 imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
 
@@ -25,5 +25,5 @@ epochs=500
 lr=0.0001
 trainer='adam'
 
-image_dim_order = 'tf'
+image_dim_order = 'th'
 norm_type = 'scale_down'

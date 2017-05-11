@@ -84,8 +84,8 @@ from yolo.process import preprocess
 # imagePath = './test/my_testset/000467.jpg'
 # imagePath = './test/my_testset/000386.jpg'
 # imagePath = './test/my_testset/many_person.jpg'
-# imagePath = './test/my_testset/person.jpg'
-imagePath = './test/my_testset/person_car3.jpg'
+imagePath = './test/my_testset/person.jpg'
+# imagePath = './test/my_testset/person_car3.jpg'
 # imagePath = './test/my_testset/person.jpg'
 # imagePath = './test/my_testset/car1.jpg'
 image = cv2.imread(imagePath)
