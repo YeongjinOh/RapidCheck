@@ -46,7 +46,7 @@ def resize_input(im):
 		imsz[:, :, 1] -= 116.779
 		imsz[:, :, 2] -= 123.68
 	elif cfg.norm_type == 'scale_down':
-		imsz = imsz / .255
+		imsz = imsz / 255.
 	imsz = imsz[:,:,::-1] # BGR -> RGB
 	return imsz
 
