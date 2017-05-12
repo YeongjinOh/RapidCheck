@@ -16,7 +16,7 @@
 #include "frame.h"
 #include "config.h"
 #include "database.h"
-
+#include "RCTrajectory.h"
 
 using cv::VideoCapture;
 using cv::Scalar;

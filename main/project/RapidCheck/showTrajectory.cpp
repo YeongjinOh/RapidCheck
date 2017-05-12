@@ -13,7 +13,7 @@ void showTrajectory ()
 	Mat frame;
 
 	// read trajectories from database
-	vector<RPTrajectory> trajectories;
+	vector<RCTrajectory> trajectories;
 	readTrajectories(trajectories);
 
 	int objectId = 0;
@@ -29,15 +29,15 @@ void showTrajectory ()
 			// vector<tracklet>& pedestrianTracklets = segment.tracklets;
 			for (int objectId = 0; objectId < trajectories.size(); objectId++)
 			{
-				RPTrajectory& trajectory = trajectories[objectId];
-				if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
+				RCTrajectory& trajectory = trajectories[objectId];
+				if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
 
-				Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
+				Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
 				rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
 				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 			}
 
-			imshow("tracklets", frame);
+			imshow("Trajectory", frame);
 
 			// key handling
 			int key = waitKey(130);

@@ -161,12 +161,14 @@
     <ClCompile Include="target.cpp" />
     <ClCompile Include="targetgroup.cpp" />
     <ClCompile Include="tracking_utils.cpp" />
+    <ClCompile Include="RCTrajectory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="config.h" />
     <ClInclude Include="database.h" />
     <ClInclude Include="frame.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="RCTrajectory.h" />
     <ClInclude Include="similarity_utils.h" />
     <ClInclude Include="targetgroup.h" />
     <ClInclude Include="target.h" />

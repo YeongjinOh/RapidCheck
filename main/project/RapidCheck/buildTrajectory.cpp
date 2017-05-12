@@ -1,12 +1,13 @@
 #include "tracking_utils.h"
 #include "similarity_utils.h"
+#include "RCTrajectory.h"
 
 using namespace cv;
 
 /**
 	Show trajectory
 */
-void showTrajectory(vector<Frame>& frames, vector<RPTrajectory>& trajectories)
+void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 {
 	VideoCapture cap(VIDEOFILE);
 
@@ -31,10 +32,10 @@ void showTrajectory(vector<Frame>& frames, vector<RPTrajectory>& trajectories)
 				// vector<tracklet>& pedestrianTracklets = segment.tracklets;
 				for (int objectId = 0; objectId < trajectories.size(); objectId++)
 				{
-					RPTrajectory& trajectory = trajectories[objectId];
-					if (segmentNumber < trajectory.startSegmentNum || segmentNumber > trajectory.endSegmentNum) continue;
+					RCTrajectory& trajectory = trajectories[objectId];
+					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
 
-					Target& currentFramePedestrian = trajectory.targets[LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.startSegmentNum) + frameIdx];
+					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
 
 
 					// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
@@ -98,7 +99,7 @@ void buildTrajectory(App app)
 	printf("Tracking takes %d(ms)\n", t);
 
 	// build Trajectory
-	vector<RPTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked;
+	vector<RCTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked;
 	bool useOnlineTracking = true;
 	if (!useOnlineTracking)
 	{
@@ -106,7 +107,7 @@ void buildTrajectory(App app)
 		{
 			vector<tracklet>& tracklets = segments[segmentNum].tracklets;
 			for (int t = 0; t < tracklets.size(); t++)
-				trajectoriesStillBeingTracked.push_back(RPTrajectory(tracklets[t], segmentNum));
+				trajectoriesStillBeingTracked.push_back(RCTrajectory(tracklets[t], segmentNum));
 		}
 	}
 
@@ -117,10 +118,10 @@ void buildTrajectory(App app)
 		vector<tracklet>& tracklets = segment.getTracklets();
 
 		// for each trajectory still being tracked
-		for (vector<RPTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
+		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 		{
-			RPTrajectory& rpTrajectory = *itTrajectories;
-			int diffSegmentNum = segmentNum - rpTrajectory.endSegmentNum;
+			RCTrajectory& RCTrajectory = *itTrajectories;
+			int diffSegmentNum = segmentNum - RCTrajectory.getEndSegmentNum();
 			// if trajectory is finished
 			if (diffSegmentNum > 5)
 			{
@@ -130,7 +131,7 @@ void buildTrajectory(App app)
 			}
 			
 			
-			tracklet& curTrajectory = rpTrajectory.targets;
+			tracklet& curTrajectory = RCTrajectory.getTargets();
 			Point pl1 = curTrajectory[curTrajectory.size() - 2].getCenterPoint(), pl2 = curTrajectory[curTrajectory.size() - 1].getCenterPoint();
 			double minCost = INFINITY;
 			vector<tracklet>::iterator minTrackletIt;
@@ -157,7 +158,7 @@ void buildTrajectory(App app)
 				if (minCost < TRAJECTORY_MATCH_THRES)
 				{
 					// merge
-					rpTrajectory.merge(*minTrackletIt);
+					RCTrajectory.merge(*minTrackletIt);
 					tracklets.erase(minTrackletIt);
 					continue;
 				}
@@ -179,7 +180,7 @@ void buildTrajectory(App app)
 				{
 					// merge
 
-					rpTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
+					RCTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
 					tracklets.erase(maxTrackletIt);
 					printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
 					continue;
@@ -190,7 +191,7 @@ void buildTrajectory(App app)
 		// push unselected tracklets
 		for (int trackletNum = 0; trackletNum < tracklets.size(); trackletNum++)
 		{
-			trajectoriesStillBeingTracked.push_back(RPTrajectory(tracklets[trackletNum], segmentNum));
+			trajectoriesStillBeingTracked.push_back(RCTrajectory(tracklets[trackletNum], segmentNum));
 		}
 	}
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());

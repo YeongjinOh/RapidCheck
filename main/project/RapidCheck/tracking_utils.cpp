@@ -1,17 +1,6 @@
 #include "tracking_utils.h"
 using namespace cv;
 
-// Calculate Internal Divison from a to b with m:n
-int calcInternalDivision(int a, int b, int m, int n)
-{
-	return (a*n + b*m) / (m + n);
-}
-
-// Calculate Internal Divison from a to b with m:n
-double calcInternalDivision(double a, double b, int m, int n)
-{
-	return (a*n + b*m) / (m + n);
-}
 // Generate random colors
 vector<Scalar> getRandomColors()
 {
@@ -488,7 +477,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 }
 
 // Read trajectories in MAX_FRAMES frames from DataBase
-void readTrajectories(vector<RPTrajectory>& trajectories)
+void readTrajectories(vector<RCTrajectory>& trajectories)
 {
 	vector<vector<int > > res;
 	map<int, int> objectIdToIdx; // convert objectId to index of trajectories
@@ -499,7 +488,7 @@ void readTrajectories(vector<RPTrajectory>& trajectories)
 		if (objectIdToIdx.find(objectId) == objectIdToIdx.end())  {
 			objectIdToIdx[objectId] = trajectories.size();
 			int segmentNum = (frameNum - START_FRAME_NUM) / (FRAME_STEP*LOW_LEVEL_TRACKLETS);
-			RPTrajectory newTrajectory(segmentNum);
+			RCTrajectory newTrajectory(segmentNum);
 			trajectories.push_back(newTrajectory);
 		}
 		trajectories[objectIdToIdx[objectId]].addTarget(target);
@@ -630,7 +619,7 @@ void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& ml
 			}
 
 			// for each solution
-			RPTrajectory trajectory(segmentNumber);
+			RCTrajectory trajectory(segmentNumber);
 			for (int i = 0; i < solution.size(); i++)
 			{
 				Segment& curSegment = segments[segmentNumber + i];

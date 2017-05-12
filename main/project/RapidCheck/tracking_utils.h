@@ -3,8 +3,6 @@
 
 #include "main.h"
 
-typedef vector<Target> tracklet;
-
 struct Segment {
 	vector<tracklet> tracklets;
 	int startFrameNumber;
@@ -29,52 +27,13 @@ struct Segment {
 int calcInternalDivision(int a, int b, int m, int n);
 double calcInternalDivision(double a, double b, int m, int n);
 
-// Trajectory is already defined in cv
-struct RPTrajectory
-{
-	int startSegmentNum, endSegmentNum;
-	vector<Target> targets;
-	RPTrajectory(int segmentNum) : targets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum) { }
-	RPTrajectory(vector<Target>& tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum) { }
-	void merge(tracklet tr)
-	{
-		targets.insert(targets.end(), tr.begin(), tr.end());
-		endSegmentNum++;
-	}
-	void mergeWithSegmentGap(tracklet tr, int diffNumSegment)
-	{
-		Rect RectPrev = targets.back().rect, RectNext = tr[0].rect;
-		// check where merge starts
-		// RectPrev.x -= RectPrev.width;
-		// RectPrev.width *= 3;
-		int numberOfDummies = (diffNumSegment - 1) * LOW_LEVEL_TRACKLETS;	
-		for (int i = 1; i <= numberOfDummies; i++) {
-			int predictedX = calcInternalDivision(RectPrev.x, RectNext.x, i, numberOfDummies + 1 - i),
-				predictedY = calcInternalDivision(RectPrev.y, RectNext.y, i, numberOfDummies + 1 - i),
-				predictedWidth = calcInternalDivision(RectPrev.width, RectNext.width, i, numberOfDummies + 1 - i),
-				predictedHeight = calcInternalDivision(RectPrev.height, RectNext.height, i, numberOfDummies + 1 - i);
-			Rect predictedRect(predictedX, predictedY, predictedWidth, predictedHeight);
-			targets.push_back(Target(predictedRect));
-		}
-		targets.insert(targets.end(), tr.begin(), tr.end());
-		endSegmentNum += diffNumSegment;
-	}
-	void addTarget(Target target)
-	{
-		targets.push_back(target);
-		int numOfTargets = targets.size();
-		if (numOfTargets % 6 == 1)
-		{
-			endSegmentNum = startSegmentNum + (numOfTargets / 6);
-		}
-	}
-};
+
 
 // Mid-level segments which consist of LOW_LEVEL_TRACKLETS*MID_LEVEL_TRACKLETS(36) frames
 struct MidLevelSegemet
 {
-	vector<RPTrajectory> trajectories;
-	void addTrajectory(RPTrajectory trajectory)
+	vector<RCTrajectory> trajectories;
+	void addTrajectory(RCTrajectory trajectory)
 	{
 		trajectories.push_back(trajectory);
 	}
@@ -192,7 +151,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames);
 	@param cap video variable
 	@param trajectories list of trajectories to be implemented tracking
 */
-void readTrajectories(vector<RPTrajectory>& trajectories);
+void readTrajectories(vector<RCTrajectory>& trajectories);
 /**
 	Build all tracklets of given frames
 
