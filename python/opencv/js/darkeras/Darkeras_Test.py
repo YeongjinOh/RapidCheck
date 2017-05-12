@@ -84,20 +84,14 @@ from yolo.process import preprocess
 # imagePath = './test/my_testset/000467.jpg'
 # imagePath = './test/my_testset/000386.jpg'
 # imagePath = './test/my_testset/many_person.jpg'
-# imagePath = './test/my_testset/person.jpg'
-# imagePath = './test/my_testset/apart_car_test.jpg'
 imagePath = './test/my_testset/person.jpg'
+# imagePath = './test/my_testset/person_car3.jpg'
+# imagePath = './test/my_testset/person.jpg'
 # imagePath = './test/my_testset/car1.jpg'
 image = cv2.imread(imagePath)
 print("1", image.shape)
 image = preprocess(image)
-# resized = cv2.resize(image,(448,448))
-# plt.imshow(resized)
-# print("2", resized.shape)
-# np_img = cv2.cvtColor(resized, cv2.COLOR_BGR2RGB)
-# batch = np.transpose(np_img,(2,0,1))
-# print("3", batch.shape)
-# batch = 2*(batch/255.) - 1
+
 batch = np.expand_dims(image, axis=0)
 print("4", batch.shape)
 
@@ -121,7 +115,7 @@ print("4", batch.shape)
 # In[18]:
 
 
-weigths_path2 = 'models/train/yolo-2class-epoch50.h5'
+weigths_path2 = 'models/train/yolo-tiny-new-detection-epoch90.h5'
 test_threshold = 0.2
 
 model.load_weights(weigths_path2)
