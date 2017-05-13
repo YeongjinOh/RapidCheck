@@ -23,6 +23,7 @@ namespace RapidCheck
             public int w;
             public int h;
         }
+        tracking[] myData;
         int nrow; //nrow = tracking[Array Size]
 
         //MySQL setting
@@ -32,13 +33,13 @@ namespace RapidCheck
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             sw.Start();
-            sqlAdapter();
+            sqlAdapter(out myData);
             sw.Stop();
             MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
         }   
 
         //데이터의 열을 가져와서 열만큼 arr생성하고, 생성한 arr 초기화
-        private void sqlAdapter()
+        private void sqlAdapter(out tracking[] resultData)
         {
             try
             {
@@ -53,6 +54,7 @@ namespace RapidCheck
 
                     //tracking data
                     adapter.SelectCommand = new MySqlCommand("SELECT * FROM tracking where videoId=1 ORDER BY frameNum ASC", conn);
+                    
                     adapter.Fill(ds, "data");
 
                     //set nrow
@@ -64,7 +66,6 @@ namespace RapidCheck
                     }
                     //make array
                     trackingData = new tracking[nrow];
-
                     //get tracking data
                     DataTable dt = new DataTable();
                     dt = ds.Tables["data"];
@@ -75,10 +76,14 @@ namespace RapidCheck
                         trackingData[index].videoId = Convert.ToInt32(dr["videoId"]);
                         trackingData[index].objId = Convert.ToInt32(dr["objectId"]);
                         trackingData[index].frameNum = Convert.ToInt32(dr["frameNum"]);
-                        trackingData[index].x = Convert.ToInt32(dr["x"]);
-                        trackingData[index].y = Convert.ToInt32(dr["y"]);
-                        trackingData[index].w = Convert.ToInt32(dr["width"]);
-                        trackingData[index].h = Convert.ToInt32(dr["height"]);
+                        trackingData[index].x = Convert.ToInt32(dr["x"]) - 10;
+                        trackingData[index].y = Convert.ToInt32(dr["y"]) - 20;
+                        trackingData[index].w = Convert.ToInt32(dr["width"]) + 20;
+                        trackingData[index].h = Convert.ToInt32(dr["height"]) + 40;
+                        //trackingData[index].x = Convert.ToInt32(dr["x"]);
+                        //trackingData[index].y = Convert.ToInt32(dr["y"]);
+                        //trackingData[index].w = Convert.ToInt32(dr["width"]);
+                        //trackingData[index].h = Convert.ToInt32(dr["height"]);
                         index += 1;
                     }
                 }
@@ -87,6 +92,7 @@ namespace RapidCheck
             {
                 MessageBox.Show("Adapter Error");
             }
+            resultData = (tracking[])trackingData.Clone();
         }
     }
 }

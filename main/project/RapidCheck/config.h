@@ -2,10 +2,10 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-#define MAX_FRAMES 200
+#define MAX_FRAMES 400
 #define START_FRAME_NUM 0 // start frame number
-#define FRAME_STEP 1
-#define VIDEOID 0
+#define FRAME_STEP 5
+#define VIDEOID 1
 
 #define NUM_OF_COLORS 64
 #define DEBUG false

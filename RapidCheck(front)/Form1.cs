@@ -48,6 +48,7 @@ namespace RapidCheck
         {
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(tabPage3.Width, tabPage3.Height);
+
         }
     }
 }

@@ -10,7 +10,14 @@ int main(int argc, char ** argv)
 	args.scale = 1.05;
 	App app(args);
 
-	int operationNum = 5;
+	for (int i = 0; i < 65; i++)
+	{
+		Mat img;
+		img = cv::imread("C:\\videos\\Background10\\" + std::to_string(i) + ".bmp");
+		cv::imshow("Overlay",img);
+		cv::waitKey(30);
+	}
+	int operationNum = 1;
 	switch (operationNum)
 	{
 		case 0:

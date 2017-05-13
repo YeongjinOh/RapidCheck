@@ -39,7 +39,7 @@ namespace RapidCheck
         }
         private void captureBtn_Click(object sender, EventArgs e)
         {
-            over();
+            //over();
             //pCapture();
         }
         private void Videotest1()

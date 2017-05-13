@@ -225,7 +225,7 @@
             this.VideoBtn.AutoSize = true;
             this.VideoBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.VideoBtn.Depth = 0;
-            this.VideoBtn.Location = new System.Drawing.Point(508, 76);
+            this.VideoBtn.Location = new System.Drawing.Point(595, 79);
             this.VideoBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.VideoBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.VideoBtn.Name = "VideoBtn";
@@ -238,7 +238,7 @@
             // 
             // overBtn
             // 
-            this.overBtn.Location = new System.Drawing.Point(508, 123);
+            this.overBtn.Location = new System.Drawing.Point(535, 121);
             this.overBtn.Name = "overBtn";
             this.overBtn.Size = new System.Drawing.Size(136, 34);
             this.overBtn.TabIndex = 8;

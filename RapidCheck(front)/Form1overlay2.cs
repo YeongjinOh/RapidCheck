@@ -17,11 +17,9 @@ namespace RapidCheck
 {
     public partial class Form1
     {
-        static void over()
+        static void over(string inputPath, string cropImgPath, string outputPath, int x, int y)
         {
-            var inputPath = "Input.png";
-            var outputPath = "output.png";
-
+            
             // 그래픽을 랜더링할 장비를 추가 - 3D or 2D
             var defaultDevice = new SharpDX.Direct3D11.Device(SharpDX.Direct3D.DriverType.Hardware,
                 d3d.DeviceCreationFlags.VideoSupport
@@ -42,23 +40,15 @@ namespace RapidCheck
             var wicPixelFormat = wic.PixelFormat.Format32bppPRGBA;
 
 
-
-
-
-
-
             //이미지 로딩
             var imagingFactory = new wic.ImagingFactory2();
-            var decoder = new wic.PngBitmapDecoder(imagingFactory);
+            var decoder = new wic.BmpBitmapDecoder(imagingFactory);
             var inputStream = new wic.WICStream(imagingFactory, inputPath, NativeFileAccess.Read);
             decoder.Initialize(inputStream, wic.DecodeOptions.CacheOnLoad);            
-
-
 
             //다이렉트2D가 사용할수 있도록 디코딩
             var formatConverter = new wic.FormatConverter(imagingFactory);
             formatConverter.Initialize(decoder.GetFrame(0), wicPixelFormat);
-
 
             //기본 이미지를 D2D이미지로 로드
             //var inputBitmap = d2.Bitmap1.FromWicBitmap(d2dContext, formatConverter, new d2.BitmapProperties1(d2PixelFormat));
@@ -75,13 +65,17 @@ namespace RapidCheck
 
 
             
-
+            //IntPtr crop = new System.Drawing.Bitmap(cropImg).GetHbitmap();
+            //var temp = new d2.DeviceContext(crop);
+            //var blend = new d2.Effects.Blend(temp);
+            //var cropCrop = new d2.Effects.BitmapSource(temp);
+            //cropCrop.WicBitmapSource = formatConverter;
 
 
             // Effect 2 : GaussianBlur - bitmapsource에 가우시안블러 효과 적용
-            var gaussianBlurEffect = new d2.Effects.GaussianBlur(d2dContext);
-            gaussianBlurEffect.SetInput(0, bitmapSourceEffect.Output, true);
-            gaussianBlurEffect.StandardDeviation = 5f;
+            //var gaussianBlurEffect = new d2.Effects.GaussianBlur(d2dContext);
+            //gaussianBlurEffect.SetInput(0, bitmapSourceEffect.Output, true);
+            //gaussianBlurEffect.StandardDeviation = 5f;
 
 
 
@@ -89,20 +83,21 @@ namespace RapidCheck
 
 
 
-            //overlay text setup
-            var textFormat = new dw.TextFormat(dwFactory, "Arial", 15f);
+            ////overlay text setup
+            //var textFormat = new dw.TextFormat(dwFactory, "Arial", 15f);
 
-            //draw a long text to show the automatic line wrapping
-            var textToDraw = "sime ling text..." + "text" + "dddd";
+            ////draw a long text to show the automatic line wrapping
+            //var textToDraw = "sime ling text..." + "text" + "dddd";
 
-            //create the text layout - this imroves the drawing performance for static text
-            // as the glyph positions are precalculated
-            //윤곽선 글꼴 데이터에서 글자 하나의 모양에 대한 기본 단위를 글리프(glyph)라고 한다
-            var textLayout = new dw.TextLayout(dwFactory, textToDraw, textFormat, 300f, 1000f);
+            ////create the text layout - this imroves the drawing performance for static text
+            //// as the glyph positions are precalculated
+            ////윤곽선 글꼴 데이터에서 글자 하나의 모양에 대한 기본 단위를 글리프(glyph)라고 한다
+            //var textLayout = new dw.TextLayout(dwFactory, textToDraw, textFormat, 300f, 1000f);
 
-            SharpDX.Mathematics.Interop.RawColor4 color = new SharpDX.Mathematics.Interop.RawColor4(255, 255, 255, 1);
-            var textBrush = new d2.SolidColorBrush(d2dContext, color);
+            //SharpDX.Mathematics.Interop.RawColor4 color = new SharpDX.Mathematics.Interop.RawColor4(255, 255, 255, 1);
+            //var textBrush = new d2.SolidColorBrush(d2dContext, color);
 
+            
 
 
             //여기서부터 다시
@@ -116,15 +111,46 @@ namespace RapidCheck
             var d2dRenderTarget = new d2.Bitmap1(d2dContext, new Size2(pixelWidth, pixelHeight), d2dBitmapProps);
             d2dContext.Target = d2dRenderTarget; //associate bitmap with the d2d context
 
+            System.Drawing.Bitmap temp = new System.Drawing.Bitmap(cropImgPath);
+            IntPtr temp2 = temp.GetHbitmap();
+            var obj = new SharpDX.Direct2D1.Bitmap(temp2);
 
+            Vector2 center = new Vector2(temp.Size.Width / 2, temp.Size.Height / 2);
+            //d2dContext.Transform = Matrix.Transformation2D(center, 0f, new Vector2(pixelWidth / temp.Size.Width, pixelHeight / temp.Size.Height), center, 0f, new Vector2(x - center.X, y - center.Y));
+            var lin = SharpDX.Direct2D1.BitmapInterpolationMode.NearestNeighbor;
+            d2dContext.DrawBitmap(obj, 1f, lin);
+            //d2dContext.Transform = Matrix.Transformation2D(Vector2.Zero, 0f, new Vector2(1f, 1f), Vector2.Zero, 0f, Vector2.Zero);
+            
+            
+            
 
-
-            //Drawing
-
+            //Drawing        
             //slow preparations - fast drawing
             d2dContext.BeginDraw();
-            d2dContext.DrawImage(gaussianBlurEffect,new SharpDX.Mathematics.Interop.RawVector2(100f,100f));
-            d2dContext.DrawTextLayout(new SharpDX.Mathematics.Interop.RawVector2(50f, 50f), textLayout, textBrush);
+            d2dContext.DrawImage(bitmapSourceEffect, new SharpDX.Mathematics.Interop.RawVector2(0f, 0f));            
+            //d2dContext.DrawImage(temp, new SharpDX.Mathematics.Interop.RawVector2((float)x, (float)y));
+
+
+            //test
+            SharpDX.Direct2D1.Bitmap1 newBitmap;
+            // Neccessary for creating WIC objects.
+            NativeFileStream fileStream = new NativeFileStream(cropImgPath, NativeFileMode.Open, NativeFileAccess.Read);
+            // Used to read the image source file.
+            wic.BitmapDecoder bitmapDecoder = new wic.BitmapDecoder(imagingFactory, fileStream, wic.DecodeOptions.CacheOnDemand);
+            // Get the first frame of the image.
+            wic.BitmapFrameDecode frame = bitmapDecoder.GetFrame(0);
+            // Convert it to a compatible pixel format.
+            wic.FormatConverter converter = new wic.FormatConverter(imagingFactory);
+            converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPRGBA);
+            // Create the new Bitmap1 directly from the FormatConverter.
+            newBitmap = SharpDX.Direct2D1.Bitmap1.FromWicBitmap(d2dContext, converter);
+            
+            ///test
+            d2dContext.DrawBitmap(newBitmap, 1.0f, SharpDX.Direct2D1.BitmapInterpolationMode.Linear);
+
+            
+            //d2dContext.DrawBitmap(new d2.Bitmap(cropImg), rect,0.5f, new SharpDX.Direct2D1.BitmapInterpolationMode());
+            //d2dContext.DrawTextLayout(new SharpDX.Mathematics.Interop.RawVector2(50f, 50f), textLayout, textBrush);
             d2dContext.EndDraw();
 
             //Image save
@@ -157,9 +183,9 @@ namespace RapidCheck
             bitmapFrameEncode.Dispose();
             encoder.Dispose();
             stream.Dispose();
-            textBrush.Dispose();
-            textLayout.Dispose();
-            textFormat.Dispose();
+            //textBrush.Dispose();
+            //textLayout.Dispose();
+            //textFormat.Dispose();
             formatConverter.Dispose();
             //gaussianBlurEffect.Dispose();
             bitmapSourceEffect.Dispose();
@@ -175,7 +201,7 @@ namespace RapidCheck
             defaultDevice.Dispose();
 
             //save
-            System.Diagnostics.Process.Start(outputPath);
+            //System.Diagnostics.Process.Start(outputPath);
         }
     }
 }

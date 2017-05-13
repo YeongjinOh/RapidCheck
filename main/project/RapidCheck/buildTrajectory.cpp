@@ -78,6 +78,7 @@ void showTrajectory(vector<Frame>& frames, vector<RPTrajectory>& trajectories)
 */
 void buildTrajectory(App app)
 {
+
 	// set input video
 	VideoCapture cap(VIDEOFILE);
 

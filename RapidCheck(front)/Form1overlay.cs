@@ -9,96 +9,88 @@ using System.Windows.Forms; //MessageBox
 //using DirectXOverlayWindow;
 using System.Diagnostics; //stopwatch
 using System.Drawing; //Bitmap, Point, Graphics
-
+using System.Drawing.Imaging;
 namespace RapidCheck
 {
     public partial class Form1
     {
-        private Bitmap overlay = null;
         //overlay test
         private async void overBtn_Click(object sender, EventArgs e)
         {
+            int[] oId = {67,53,5,52,102,72,103,36,89, 1};
+            int[] fra = {168,114,102,102,84,72,72,66,66,66};
+            //over(@"C:\videos\Background\0.bmp",@"C:\videos\Background\0.bmp",@"C:\videos\test.bmp",30,30);
+            for (int i = 6; i < 10; i++)
+            {
+                int frame = 0;
+                string[] files;
+                files = System.IO.Directory.GetFiles(@"C:\videos\obj\" + oId[i] + @"\", "*.bmp", System.IO.SearchOption.TopDirectoryOnly);
+                int rowNum;
+                for (int j = 0; j < 66; j++) //img파일 접근
+                {
+                    makeFolder(@"C:\videos\Background" + (i+1));
+                    string background = @"C:\videos\Background"+ i + @"\" + frame + ".bmp";
+                    string outputpath = @"C:\videos\Background"+ (i+1) + @"\" + frame + ".bmp";
+                    string crop = files[j];
+                    rowNum = Convert.ToInt32(files[j].Replace(@"C:\videos\obj\" + oId[i] + @"\", "").Replace(".bmp", ""));
+                    Rectangle temp = new Rectangle(myData[rowNum].x, myData[rowNum].y, myData[rowNum].w, myData[rowNum].h);
+                    overlay1(background, crop, outputpath, temp);
+                    frame += 1;
+                }
+            }
             //overlay1();
             //overlay2();
         }
 
-        //private void overlay1()
-        //{
-        //    try
-        //    {
-        //        overlay = new Bitmap(@"C:\Users\trevor\Desktop\Videos\overlay.png");
-        //        pictureBox1.Cursor = Cursors.Cross;
+        private Bitmap overlay = null;
+        private void overlay1(string baseImgPath, string cropImgPath,string outputImgPath, Rectangle position)
+        {
+            try
+            {
+                Bitmap CombinedBitmap = new Bitmap(baseImgPath);
+                //Point overlayLocation = new Point(x, y);
+                overlay = new Bitmap(cropImgPath);
+                //pictureBox1.Cursor = Cursors.Cross;
+                //Add the overlay
+                if (overlay != null)
+                {
+                    using (Graphics gr = Graphics.FromImage(CombinedBitmap))
+                    {
+                        //create a color matrix object  
+                        ColorMatrix matrix = new ColorMatrix();
 
-        //        ShowCombinedImage();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error opening file.\n" + ex.Message,
-        //        "Open Error", MessageBoxButtons.OK,
-        //        MessageBoxIcon.Error);
-        //    }
-        //}
+                        //set the opacity  
+                        matrix.Matrix33 = 0.6f;
 
-        //private void overlay2()
-        //{
-        //    //overlay test
-        //    OverlayWindow overlay = new OverlayWindow(false);
+                        //create image attributes  
+                        ImageAttributes attributes = new ImageAttributes();
 
-        //    Stopwatch watch = Stopwatch.StartNew();
+                        //set the color(opacity) of the image  
+                        attributes.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
-        //    int redBrush = overlay.Graphics.CreateBrush(0x7FFF0000);
-        //    int redOpacityBrush = overlay.Graphics.CreateBrush(System.Drawing.Color.FromArgb(80, 255, 0, 0));
-        //    int yellowBrush = overlay.Graphics.CreateBrush(0x7FFFFF00);
+                        gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                        gr.DrawImage(overlay, position, 0, 0, overlay.Width, overlay.Height, GraphicsUnit.Pixel, attributes);
+                    }
+                }
+                //if (System.IO.File.Exists(outputImgPath))
+                //{
+                //    System.IO.File.Delete(outputImgPath);
+                //}
 
-        //    int font = overlay.Graphics.CreateFont("Arial", 20);
-        //    int hugeFont = overlay.Graphics.CreateFont("Arial", 50, true);
-
-        //    float rotation = 0.0f;
-        //    int fps = 0;
-        //    int displayFPS = 0;
-
-        //    while (true)
-        //    {
-        //        overlay.Graphics.BeginScene();
-        //        overlay.Graphics.ClearScene();
-
-        //        overlay.Graphics.DrawText("RotateSwastika", font, redBrush, 50, 450);
-        //        overlay.Graphics.RotateSwastika(150, 600, 50, 2, rotation, redBrush);
-
-        //        Console.WriteLine(overlay.ParentWindow);
-
-        //        rotation += 0.03f;//related to speed
-        //        if (rotation > 50.0f)//size of the swastika
-        //            rotation = -50.0f;
-
-        //        if (watch.ElapsedMilliseconds > 1000)
-        //        {
-        //            displayFPS = fps;
-        //            fps = 0;
-        //            watch.Restart();
-        //        }
-        //        else
-        //        {
-        //            fps++;
-        //        }
-
-        //        overlay.Graphics.DrawText("FPS: " + displayFPS.ToString(), hugeFont, redBrush, 400, 600, false);
-        //        overlay.Graphics.EndScene();
-        //    }
-        //}
-        //private Bitmap CombinedBitmap = null;
-        ////ShowCombinedImage
+                CombinedBitmap.Save(outputImgPath);                
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error opening file.\n" + ex.Message,
+                "Open Error", MessageBoxButtons.OK,
+                MessageBoxIcon.Error);
+            }
+        }
         //private void ShowCombinedImage()
         //{
-        //    // If there's no background image, do nothing
-        //    if (pictureBox1.Image == null)
-        //    {
-        //        MessageBox.Show("pictureBox1 image is nulln");
-        //        return;
-        //    }
-        //    CombinedBitmap = new Bitmap(pictureBox1.Image);
+        //    CombinedBitmap = new Bitmap(@"C:\videos\Background\0.bmp");
 
-        //    Point overlayLocation = new Point(10, 10);
+        //    Point overlayLocation = new Point(30, 30);
 
         //    //Add the overlay
         //    if (overlay != null)
@@ -108,7 +100,12 @@ namespace RapidCheck
         //            gr.DrawImage(overlay, overlayLocation);
         //        }
         //    }
-        //    pictureBox1.Image = CombinedBitmap;
+        //    CombinedBitmap.Save(@"C:\videos\temp.bmp");
         //}
     }
 }
+
+
+
+
+
