@@ -1,5 +1,6 @@
 #include "RCTrajectory.h"
 #include "config.h"
+#include <cmath>
 
 // Calculate Internal Divison from a to b with m:n
 int calcInternalDivision(int a, int b, int m, int n)
@@ -11,6 +12,18 @@ int calcInternalDivision(int a, int b, int m, int n)
 double calcInternalDivision(double a, double b, int m, int n)
 {
 	return (a*n + b*m) / (m + n);
+}
+
+int motionVectorToDirectionClass(int x, int y)
+{
+	double unit = 2 * PI / NUM_OF_DIRECTIONS;
+	double deg = atan2(y, x);
+	for (int i = 1; i <= NUM_OF_DIRECTIONS; i++)
+	{
+		if (deg > PI - unit * i)
+			return i - 1;
+	}
+	return -1;
 }
 
 void RCTrajectory::merge(tracklet tr)
