@@ -38,7 +38,7 @@ def _fix(obj, dims, scale, offs):
 		obj[i] = int(obj[i] * scale - off)
 		obj[i] = max(min(obj[i], dim), 0)
 
-def resize_input(im):
+def resize_input(im, color_type='BGR'):
 	h, w, c = cfg.inp_size
 	imsz = cv2.resize(im, (w, h))
 	if cfg.norm_type == 'center':
@@ -47,10 +47,11 @@ def resize_input(im):
 		imsz[:, :, 2] -= 123.68
 	elif cfg.norm_type == 'scale_down':
 		imsz = imsz / 255.
-	imsz = imsz[:,:,::-1] # BGR -> RGB
+	if color_type == 'BGR':
+		imsz = imsz[:,:,::-1] # BGR -> RGB
 	return imsz
 
-def preprocess(im, allobj = None):
+def preprocess(im, allobj = None, color_type='BGR'):
 	"""
 	Takes an image, return it as a numpy tensor that is readily
 	to be fed into tfnet. If there is an accompanied annotation (allobj),
@@ -77,7 +78,7 @@ def preprocess(im, allobj = None):
 	if cfg.norm_type == 'center':
 		im = im.astype(np.float32)
 	
-	im = resize_input(im)
+	im = resize_input(im, color_type=color_type)
 	if cfg.image_dim_order == 'th':
 		im = np.transpose(im,(2,0,1)) # to change tf->th
 	if allobj is None: return im
