@@ -4,17 +4,11 @@
 
 using namespace cv;
 
-void printDirectionCounts(vector<RCTrajectory>& trajectories)
+void insertDirectionCountsIntoDB(vector<RCTrajectory>& trajectories)
 {
 	for (int i = 0; i < trajectories.size(); i++)
 	{
-		printf("\nobj %d : \n", i);
-		RCTrajectory trj = trajectories[i];
-		vector<int> cnt = trj.getCntDirections();
-		for (int j = 0; j < NUM_OF_DIRECTIONS; j++)
-		{
-			printf("%d ", cnt[j]);
-		}
+		db.insertObjectInfo(VIDEOID, i, trajectories[i].getCntDirections(), 0.0, 0);
 	}
 }
 /**
@@ -210,7 +204,9 @@ void buildTrajectory(App app)
 	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
 	
+	// insert direction counts into DB
+	insertDirectionCountsIntoDB(trajectoriesStillBeingTracked);
+
 	// show Trajectory
-	printDirectionCounts(trajectoriesStillBeingTracked);
 	showTrajectory(frames, trajectoriesStillBeingTracked);
 }

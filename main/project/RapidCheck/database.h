@@ -90,12 +90,18 @@ public:
 		sprintf(query, "SELECT * FROM detection WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
 		select(query, rows);
 	}
-	void insertObjectInfo(int videoId, int objectId, int direction, double speed, int colorId)
+	void insertObjectInfo(int videoId, int objectId, vector<int> cntDirections, double speed, int colorId)
 	{
-		char query[200];
+		char query[500];
+		string directionKeys = "";
+		for (int i = 0; i < NUM_OF_DIRECTIONS; i++)
+			directionKeys += "directionCnt" + std::to_string(i) + ", ";
+		string directionValues = "";
+		for (int i = 0; i < NUM_OF_DIRECTIONS; i++)
+			directionValues += std::to_string(cntDirections[i]) + ", ";
 		if (speed < 10000.0)
 		{
-			sprintf(query, "INSERT INTO objectInfo (videoId, objectId, direction, speed, colorId) VALUES (%d, %d, %d, %8lf, %d);", videoId, objectId, direction, speed, colorId);
+			sprintf(query, "INSERT INTO objectInfo (videoId, objectId, %s speed, colorId) VALUES (%d, %d, %s %8lf, %d);", directionKeys.c_str(), videoId, objectId, directionValues.c_str(), speed, colorId);
 			insert(query);
 		}
 	}
