@@ -18,9 +18,9 @@ object_scale = 1
 noobject_scale = 0.5
 coord_scale = 5
 
-inp_size = 448, 448, 3
-batch_size = 32
-epochs=500
+inp_size = 32, 32, 3
+batch_size = 64
+epochs=100
 
 lr=0.0001
 trainer='adam'
