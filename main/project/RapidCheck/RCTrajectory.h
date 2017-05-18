@@ -12,6 +12,7 @@ private:
 	int startSegmentNum, endSegmentNum;
 	std::vector<Target> targets;
 	std::vector<int> cntDirections;
+	void increaseDirectionCount(tracklet tr);
 public:
 	RCTrajectory(int segmentNum) : targets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0) {}
 	RCTrajectory(std::vector<Target>& tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0) { }
@@ -22,6 +23,7 @@ public:
 	int getEndSegmentNum();
 	Target getTarget(int idx);
 	std::vector<Target> getTargets();
+	std::vector<int> getCntDirections();
 };
 
 #endif

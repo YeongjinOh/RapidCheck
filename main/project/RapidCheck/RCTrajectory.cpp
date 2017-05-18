@@ -14,10 +14,10 @@ double calcInternalDivision(double a, double b, int m, int n)
 	return (a*n + b*m) / (m + n);
 }
 
-int motionVectorToDirectionClass(int x, int y)
+int motionVectorToDirectionClass(cv::Point p)
 {
 	double unit = 2 * PI / NUM_OF_DIRECTIONS;
-	double deg = atan2(y, x);
+	double deg = atan2(p.y, p.x);
 	for (int i = 1; i <= NUM_OF_DIRECTIONS; i++)
 	{
 		if (deg > PI - unit * i)
@@ -30,6 +30,15 @@ void RCTrajectory::merge(tracklet tr)
 {
 	targets.insert(targets.end(), tr.begin(), tr.end());
 	endSegmentNum++;
+	increaseDirectionCount(tr);
+}
+
+void RCTrajectory::increaseDirectionCount(tracklet tr)
+{
+	Point p = tr.back().getCenterPoint() - tr[0].getCenterPoint();
+	if (p.x == 0 && p.y == 0) return;
+	int directionClass = motionVectorToDirectionClass(p);
+	cntDirections[directionClass]++;
 }
 
 void RCTrajectory::mergeWithSegmentGap(tracklet tr, int diffNumSegment)
@@ -45,6 +54,7 @@ void RCTrajectory::mergeWithSegmentGap(tracklet tr, int diffNumSegment)
 		targets.push_back(Target(predictedRect));
 	}
 	targets.insert(targets.end(), tr.begin(), tr.end());
+	increaseDirectionCount(tr);
 	endSegmentNum += diffNumSegment;
 }
 
@@ -78,4 +88,9 @@ Target RCTrajectory::getTarget(int idx)
 std::vector<Target> RCTrajectory::getTargets()
 {
 	return targets;
+}
+
+std::vector<int> RCTrajectory::getCntDirections()
+{
+	return cntDirections;
 }
