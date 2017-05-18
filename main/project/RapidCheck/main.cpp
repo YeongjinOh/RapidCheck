@@ -10,7 +10,7 @@ int main(int argc, char ** argv)
 	args.scale = 1.05;
 	App app(args);
 
-	int operationNum = 5;
+	int operationNum = 1;
 	switch (operationNum)
 	{
 		case 0:
