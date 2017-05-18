@@ -10,7 +10,7 @@ from keras import backend as K
 import tensorflow as tf
 import yolo.config as cfg
 
-from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THNet
+from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model
 from utils.BoxUtils import post_progress
 from yolo.process import preprocess
 
@@ -21,12 +21,13 @@ is_freeze = True
 weigths_path = 'models/train/yolo-2class-complete.h5'
 test_threshold = 0.2
 
-model = yolo_tiny_THNet(is_freeze)
+model = yolo_tiny_THdim_model(is_freeze)
 model.load_weights(weigths_path)
 model.summary()
 
 # video_name = 'persons1.mp4'
-video_name = 'tracking.mp4'
+# video_name = 'tracking.mp4'
+video_name = 'demo2.mp4'
 cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 while True:
 	ret, frame = cap.read()
