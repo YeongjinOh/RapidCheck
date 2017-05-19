@@ -4,13 +4,6 @@
 
 using namespace cv;
 
-void insertDirectionCountsIntoDB(vector<RCTrajectory>& trajectories)
-{
-	for (int i = 0; i < trajectories.size(); i++)
-	{
-		db.insertObjectInfo(VIDEOID, i, trajectories[i].getCntDirections(), 0.0, 0);
-	}
-}
 /**
 	Show trajectory
 */
@@ -189,7 +182,7 @@ void buildTrajectory(App app)
 
 					RCTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
 					tracklets.erase(maxTrackletIt);
-					printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
+					// printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
 					continue;
 				}
 			}
@@ -201,11 +194,11 @@ void buildTrajectory(App app)
 			trajectoriesStillBeingTracked.push_back(RCTrajectory(tracklets[trackletNum], segmentNum));
 		}
 	}
-	printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
+	// printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
 	
 	// insert direction counts into DB
-	insertDirectionCountsIntoDB(trajectoriesStillBeingTracked);
+	insertObjectInfoIntoDB(trajectoriesStillBeingTracked);
 
 	// show Trajectory
 	showTrajectory(frames, trajectoriesStillBeingTracked);

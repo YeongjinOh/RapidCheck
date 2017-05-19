@@ -329,7 +329,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 18; int s_bins = 6;
+	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -416,7 +416,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 18; int s_bins = 6;
+	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -478,6 +478,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			hists.push_back(hist);
 			
+			/*
 			Mat &subImg = frame(r);
 			// TO DO : compare avg of sqrt and sqrt of avg
 			
@@ -492,6 +493,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 				}
 				//cout << endl;
 			}
+			*/
 			
 		}
 		
@@ -658,5 +660,15 @@ void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& ml
 		}
 		// TODO : not-found segments
 		mlSegments.push_back(mlSegment);
+	}
+}
+
+
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories)
+{
+	for (int i = 0; i < trajectories.size(); i++)
+	{
+		trajectories[i].normalizeColorRatios();
+		db.insertObjectInfo(VIDEOID, i, trajectories[i].getCntDirections(), 0.0, trajectories[i].getColorRatios());
 	}
 }

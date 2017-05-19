@@ -26,14 +26,47 @@ int motionVectorToDirectionClass(cv::Point p)
 	return -1;
 }
 
-void RCTrajectory::merge(tracklet tr)
+RCTrajectory::RCTrajectory(int segmentNum) : targets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {}
+RCTrajectory::RCTrajectory(std::vector<Target> &tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {
+	colorRatios = getColorRatioFromTracklet(tr);
+}
+
+std::vector<float> RCTrajectory::getColorRatioFromTracklet(tracklet &tr)
+{
+	std::vector<float> colorHistSum(NUM_OF_COLOR_CLASSES, 0);
+	Target &representativeTargetInTracklet = tr[LOW_LEVEL_TRACKLETS / 2];
+	MatND &hist = representativeTargetInTracklet.hist;
+	float totalHistSum = 0.0;
+	for (int i = 0; i < hist.rows; i++)
+	{
+		int currentColorIdx = i / NUM_HUE_GROUP_SIZE;
+		for (int j = 0; j < hist.cols; j++)
+		{
+			float currentHistValue = hist.at<float>(i, j);
+			colorHistSum[currentColorIdx] += currentHistValue;
+			totalHistSum += currentHistValue;
+		}
+	}
+	for (int i = 0; i < colorHistSum.size(); i++)
+	{
+		colorHistSum[i] /= totalHistSum;
+	}
+	return colorHistSum;
+}
+
+void RCTrajectory::merge(tracklet &tr)
 {
 	targets.insert(targets.end(), tr.begin(), tr.end());
 	endSegmentNum++;
 	increaseDirectionCount(tr);
+	std::vector<float> colorRatio = getColorRatioFromTracklet(tr);
+	for (int i = 0; i < colorRatios.size(); i++)
+	{
+		colorRatios[i] += colorRatio[i];
+	}
 }
 
-void RCTrajectory::increaseDirectionCount(tracklet tr)
+void RCTrajectory::increaseDirectionCount(tracklet &tr)
 {
 	Point p = tr.back().getCenterPoint() - tr[0].getCenterPoint();
 	if (p.x == 0 && p.y == 0) return;
@@ -41,7 +74,7 @@ void RCTrajectory::increaseDirectionCount(tracklet tr)
 	cntDirections[directionClass]++;
 }
 
-void RCTrajectory::mergeWithSegmentGap(tracklet tr, int diffNumSegment)
+void RCTrajectory::mergeWithSegmentGap(tracklet &tr, int diffNumSegment)
 {
 	Rect RectPrev = targets.back().rect, RectNext = tr[0].rect;
 	int numberOfDummies = (diffNumSegment - 1) * LOW_LEVEL_TRACKLETS;
@@ -53,12 +86,11 @@ void RCTrajectory::mergeWithSegmentGap(tracklet tr, int diffNumSegment)
 		Rect predictedRect(predictedX, predictedY, predictedWidth, predictedHeight);
 		targets.push_back(Target(predictedRect));
 	}
-	targets.insert(targets.end(), tr.begin(), tr.end());
-	increaseDirectionCount(tr);
-	endSegmentNum += diffNumSegment;
+	endSegmentNum += diffNumSegment - 1;
+	merge(tr);
 }
 
-void RCTrajectory::addTarget(Target target)
+void RCTrajectory::addTarget(Target &target)
 {
 	targets.push_back(target);
 	int numOfTargets = targets.size();
@@ -93,4 +125,22 @@ std::vector<Target> RCTrajectory::getTargets()
 std::vector<int> RCTrajectory::getCntDirections()
 {
 	return cntDirections;
+}
+
+std::vector<float> RCTrajectory::getColorRatios()
+{
+	return colorRatios;
+}
+
+void RCTrajectory::normalizeColorRatios()
+{
+	float sumColorRatios = 0.0;
+	for (int i = 0; i < colorRatios.size(); i++)
+	{
+		sumColorRatios += colorRatios[i];
+	}
+	for (int i = 0; i < colorRatios.size(); i++)
+	{
+		colorRatios[i] /= sumColorRatios;
+	}
 }
