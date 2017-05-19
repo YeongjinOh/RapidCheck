@@ -11,7 +11,7 @@
 #include <vector>
 #include <map>
 #include <time.h>
-#include "gpu_hog.h"
+#include "App.h"
 #include "targetgroup.h"
 #include "frame.h"
 #include "config.h"

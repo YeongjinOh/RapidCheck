@@ -61,23 +61,10 @@ class App
 public:
 	App();
 	App(const Args& s);
-	void run();
 	void getHogResults(Mat& frame, vector<Rect>& found);
 	void handleKey(char key);
 
-	void hogWorkBegin();
-	void hogWorkEnd();
-	string hogWorkFps() const;
-
-	void workBegin();
-	void workEnd();
-	string workFps() const;
-
-	string message() const;
-
 private:
-	App operator=(App&);
-
 	Args args;
 	bool running;
 

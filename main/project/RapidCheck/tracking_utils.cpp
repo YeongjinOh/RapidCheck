@@ -338,9 +338,10 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
 
-	Mat frame;
+	Mat frame, frameSkipped;
 	
 	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
@@ -350,10 +351,13 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-
+		
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
@@ -421,9 +425,10 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
 
-	Mat frame;
+	Mat frame, frameSkipped;
 
 	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 
@@ -444,34 +449,52 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 		
 		// create histograms
 		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
 		vector<MatND> hists;
-
+		
 		// shrink rect smaller
 		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
 		for (int i = 0; i < found.size(); ++i)
 		{
-			Mat temp;
+			Mat subImage;
 			MatND hist;
-			//Rect r = found_filtered[i];
 			Rect& r = found[i];
 			r.x += r.width * (1-widthRatio) / 2;
 			r.width = r.width * widthRatio;
 			r.y += r.height * (1-heightRatio) / 2 - r.height * shiftUpperRatio;
 			r.height = r.height * heightRatio;
 
-			cvtColor(frame(r), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			cvtColor(frame(r), subImage, COLOR_BGR2HSV);
+			calcHist(&subImage, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			hists.push_back(hist);
+			
+			Mat &subImg = frame(r);
+			// TO DO : compare avg of sqrt and sqrt of avg
+			
+			long int rgbSqrSum = 0;
+			for (int i = 0; i < subImg.rows; i++)
+			{
+				for (int j = 0; j < subImg.cols; j++)
+				{
+					//cout << subImg.at<cv::Vec3b>(i, j) << " ";
+					cv::Vec3b &pixelValue = subImg.at<cv::Vec3b>(i, j);
+					rgbSqrSum += pixelValue[0] * pixelValue[0] + pixelValue[1] * pixelValue[1] + pixelValue[2] * pixelValue[2];
+				}
+				//cout << endl;
+			}
+			
 		}
-
+		
 		frames.push_back(Frame(frameNum, found, hists));
 	}
 }
@@ -501,8 +524,9 @@ void readTrajectories(vector<RCTrajectory>& trajectories)
 void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 {
 	
-	Mat frame;
+	Mat frame, frameSkipped;
 	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 	int classId = 0;
@@ -514,10 +538,13 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-
+		
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
