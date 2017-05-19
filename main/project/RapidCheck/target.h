@@ -19,16 +19,6 @@ public:
 	std::vector<Point> centerPositions;
 
 	bool found;
-
-
-	double currentDiagonalSize;
-	double currentAspectRatio;
-	bool currentMatchFoundOrNew;
-	bool stillBeingTracked;
-	int numOfConsecutiveFramesWithoutAMatch;
-
-	Point predictedNextPosition;
-	void predictNextPosition(void);
 	Point getCenterPoint();
 
 	// Histogram for matching

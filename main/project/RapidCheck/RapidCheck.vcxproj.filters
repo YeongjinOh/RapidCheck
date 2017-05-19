@@ -18,16 +18,10 @@
     <ClCompile Include="target.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="targetgroup.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="frame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="detectionAndTracking.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="tracking_utils.cpp">
@@ -57,12 +51,12 @@
     <ClCompile Include="App.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="showDetection.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="target.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetgroup.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="main.h">

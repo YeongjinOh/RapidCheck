@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
 	args.scale = 1.05;
 	App app(args);
 
-	int operationNum = 1;
+	int operationNum = 4;
 	switch (operationNum)
 	{
 		case 0:
@@ -90,7 +90,7 @@ int main(int argc, char ** argv)
 			showTrackletClusters(app);
 			break;
 		case 4:
-			detectionAndTracking(app);
+			showDetection(app);
 			break;
 		case 5:
 			showTrajectory();
