@@ -20,6 +20,10 @@ Frame::Frame(int num, vector<Rect>& pedes, vector<MatND> hists)
 		targets.push_back(Target(pedes[i], hists[i]));
 	}
 }
+Frame::Frame(int num, vector<Target>& targets_) {
+	frameNumber = num;
+	targets = targets_;
+}
 
 int Frame::getFrameNumbers()
 {

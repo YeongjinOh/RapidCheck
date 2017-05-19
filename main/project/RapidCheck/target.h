@@ -14,10 +14,11 @@ public:
 	Target(){};
 	Target(Rect rect);
 	Target(Rect rect, MatND hist);
+	Target(Rect rect, MatND hist, double whiteRatio, double blackRatio);
 	
 	Rect rect;
 	std::vector<Point> centerPositions;
-
+	double blackRatio, whiteRatio;
 	bool found;
 	Point getCenterPoint();
 

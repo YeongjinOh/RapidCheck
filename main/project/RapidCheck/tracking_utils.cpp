@@ -389,10 +389,10 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		}
 
 		// create histograms
-		vector<MatND> hists;
+		vector<Target> targets;
 		for (int i = 0; i < found_filtered.size(); ++i)
 		{
-			Mat temp;
+			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
 			//Rect r = found_filtered[i];
 			Rect &r = found_filtered[i];
@@ -401,13 +401,19 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 			r.y += r.height / 10;
 			r.height = r.height * 4 / 5;
 
-			cvtColor(frame(r), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
+			
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			double whiteRatio = (double)cntWhite / area, blackRatio = (double)cntBlack / area;
+			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
 		}
 
-		frames.push_back(Frame(frameNum, found_filtered, hists));
+		frames.push_back(Frame(frameNum, targets));
 	}
 }
 
@@ -459,13 +465,13 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 		
 		// create histograms
 		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
-		vector<MatND> hists;
+		vector<Target> targets;
 		
 		// shrink rect smaller
 		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
 		for (int i = 0; i < found.size(); ++i)
 		{
-			Mat subImage;
+			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
 			Rect& r = found[i];
 			r.x += r.width * (1-widthRatio) / 2;
@@ -473,31 +479,19 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			r.y += r.height * (1-heightRatio) / 2 - r.height * shiftUpperRatio;
 			r.height = r.height * heightRatio;
 
-			cvtColor(frame(r), subImage, COLOR_BGR2HSV);
-			calcHist(&subImage, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
-			
-			/*
-			Mat &subImg = frame(r);
-			// TO DO : compare avg of sqrt and sqrt of avg
-			
-			long int rgbSqrSum = 0;
-			for (int i = 0; i < subImg.rows; i++)
-			{
-				for (int j = 0; j < subImg.cols; j++)
-				{
-					//cout << subImg.at<cv::Vec3b>(i, j) << " ";
-					cv::Vec3b &pixelValue = subImg.at<cv::Vec3b>(i, j);
-					rgbSqrSum += pixelValue[0] * pixelValue[0] + pixelValue[1] * pixelValue[1] + pixelValue[2] * pixelValue[2];
-				}
-				//cout << endl;
-			}
-			*/
-			
+
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			double whiteRatio = (double)cntWhite / area, blackRatio = (double)cntBlack / area;
+			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
+
 		}
-		
-		frames.push_back(Frame(frameNum, found, hists));
+		frames.push_back(Frame(frameNum, targets));
 	}
 }
 
