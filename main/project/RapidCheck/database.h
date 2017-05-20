@@ -110,7 +110,6 @@ public:
 		string colorValues = "";
 		for (int i = 0; i < NUM_OF_COLOR_CLASSES; i++)
 			colorValues += std::to_string(colorRatios[i]).substr(0,4) + ", ";
-
 		sprintf(query, "INSERT INTO objectInfo (videoId, objectId, %s %s speed) VALUES (%d, %d, %s %s %8lf);", directionKeys.c_str(), colorKeys.c_str(), videoId, objectId, directionValues.c_str(), colorValues.c_str(), speed);
 		insert(query);
 	}

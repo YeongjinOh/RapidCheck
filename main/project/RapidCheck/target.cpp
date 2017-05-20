@@ -18,7 +18,7 @@ Target::Target(Rect rect, MatND hist) :rect(rect), hist(hist)
 	found = false;
 }
 
-Target::Target(Rect rect, MatND hist, double whiteRatio, double blackRatio) :rect(rect), hist(hist), whiteRatio(whiteRatio), blackRatio(blackRatio)
+Target::Target(Rect rect, MatND hist, float whiteRatio, float blackRatio) :rect(rect), hist(hist), whiteRatio(whiteRatio), blackRatio(blackRatio)
 {
 	Point currentCenter;
 	currentCenter.x = (rect.x + rect.x + rect.width) / 2;

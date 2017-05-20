@@ -409,7 +409,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
-			double whiteRatio = (double)cntWhite / area, blackRatio = (double)cntBlack / area;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
 			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
 		}
 
@@ -487,7 +487,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
-			double whiteRatio = (double)cntWhite / area, blackRatio = (double)cntBlack / area;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
 			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
 
 		}

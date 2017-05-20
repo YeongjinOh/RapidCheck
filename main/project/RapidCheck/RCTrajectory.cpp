@@ -26,8 +26,8 @@ int motionVectorToDirectionClass(cv::Point p)
 	return -1;
 }
 
-RCTrajectory::RCTrajectory(int segmentNum) : targets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {}
-RCTrajectory::RCTrajectory(std::vector<Target> &tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {
+RCTrajectory::RCTrajectory(int segmentNum) : targets(0), cntValidTracklets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {}
+RCTrajectory::RCTrajectory(std::vector<Target> &tr, int segmentNum) : targets(tr), cntValidTracklets(1), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {
 	colorRatios = getColorRatioFromTracklet(tr);
 }
 
@@ -47,10 +47,12 @@ std::vector<float> RCTrajectory::getColorRatioFromTracklet(tracklet &tr)
 			totalHistSum += currentHistValue;
 		}
 	}
-	for (int i = 0; i < colorHistSum.size(); i++)
+	for (int i = 0; i < NUM_OF_COLOR_CLASSES - 2; i++)
 	{
 		colorHistSum[i] /= totalHistSum;
 	}
+	colorHistSum[NUM_OF_COLOR_CLASSES - 2] = representativeTargetInTracklet.whiteRatio;
+	colorHistSum[NUM_OF_COLOR_CLASSES - 1] = representativeTargetInTracklet.blackRatio;
 	return colorHistSum;
 }
 
@@ -64,6 +66,7 @@ void RCTrajectory::merge(tracklet &tr)
 	{
 		colorRatios[i] += colorRatio[i];
 	}
+	cntValidTracklets++;
 }
 
 void RCTrajectory::increaseDirectionCount(tracklet &tr)
@@ -134,13 +137,8 @@ std::vector<float> RCTrajectory::getColorRatios()
 
 void RCTrajectory::normalizeColorRatios()
 {
-	float sumColorRatios = 0.0;
 	for (int i = 0; i < colorRatios.size(); i++)
 	{
-		sumColorRatios += colorRatios[i];
-	}
-	for (int i = 0; i < colorRatios.size(); i++)
-	{
-		colorRatios[i] /= sumColorRatios;
+		colorRatios[i] /= cntValidTracklets;
 	}
 }

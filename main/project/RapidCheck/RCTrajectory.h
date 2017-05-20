@@ -9,7 +9,7 @@ typedef std::vector<Target> tracklet;
 class RCTrajectory
 {
 private:
-	int startSegmentNum, endSegmentNum;
+	int startSegmentNum, endSegmentNum, cntValidTracklets;
 	std::vector<Target> targets;
 	std::vector<int> cntDirections;
 	std::vector<float> colorRatios;
