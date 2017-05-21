@@ -15,6 +15,7 @@ public:
 	Frame(int num);
 	Frame(int num, vector<Rect>& pedestrians);
 	Frame(int num, vector<Rect>& pedestrians, vector<MatND> hists);
+	Frame(int num, vector<Target>& targets_);
 	int getFrameNumbers();
 	vector<Rect>& getPedestrians();
 	vector<Target>& getTargets();

@@ -174,4 +174,12 @@ void getTrajectory(vector<int>& solution);
 */
 void buildTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& mlSegments);
 
+
+/**
+	Insert object informations such as direction counts, color ratios into database
+
+	@param trajectories list of trajectory of each object
+*/
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories);
+
 #endif

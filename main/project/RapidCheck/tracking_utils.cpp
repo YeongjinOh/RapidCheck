@@ -329,7 +329,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 18; int s_bins = 6;
+	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -338,9 +338,10 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
 
-	Mat frame;
+	Mat frame, frameSkipped;
 	
 	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
@@ -350,10 +351,13 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-
+		
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
@@ -385,10 +389,10 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		}
 
 		// create histograms
-		vector<MatND> hists;
+		vector<Target> targets;
 		for (int i = 0; i < found_filtered.size(); ++i)
 		{
-			Mat temp;
+			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
 			//Rect r = found_filtered[i];
 			Rect &r = found_filtered[i];
@@ -397,13 +401,19 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 			r.y += r.height / 10;
 			r.height = r.height * 4 / 5;
 
-			cvtColor(frame(r), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
+			
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
+			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
 		}
 
-		frames.push_back(Frame(frameNum, found_filtered, hists));
+		frames.push_back(Frame(frameNum, targets));
 	}
 }
 
@@ -412,7 +422,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 18; int s_bins = 6;
+	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -421,9 +431,10 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
 
-	Mat frame;
+	Mat frame, frameSkipped;
 
 	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 
@@ -444,35 +455,43 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 		
 		// create histograms
 		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
-		vector<MatND> hists;
-
+		vector<Target> targets;
+		
 		// shrink rect smaller
 		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
 		for (int i = 0; i < found.size(); ++i)
 		{
-			Mat temp;
+			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
-			//Rect r = found_filtered[i];
 			Rect& r = found[i];
 			r.x += r.width * (1-widthRatio) / 2;
 			r.width = r.width * widthRatio;
 			r.y += r.height * (1-heightRatio) / 2 - r.height * shiftUpperRatio;
 			r.height = r.height * heightRatio;
 
-			cvtColor(frame(r), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
-		}
 
-		frames.push_back(Frame(frameNum, found, hists));
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
+			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
+
+		}
+		frames.push_back(Frame(frameNum, targets));
 	}
 }
 
@@ -501,8 +520,9 @@ void readTrajectories(vector<RCTrajectory>& trajectories)
 void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 {
 	
-	Mat frame;
+	Mat frame, frameSkipped;
 	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 	int classId = 0;
@@ -514,10 +534,13 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-
+		
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
@@ -631,5 +654,15 @@ void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& ml
 		}
 		// TODO : not-found segments
 		mlSegments.push_back(mlSegment);
+	}
+}
+
+
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories)
+{
+	for (int i = 0; i < trajectories.size(); i++)
+	{
+		trajectories[i].normalizeColorRatios();
+		db.insertObjectInfo(VIDEOID, i, trajectories[i].getCntDirections(), 0.0, trajectories[i].getColorRatios());
 	}
 }

@@ -11,8 +11,8 @@
 #include <vector>
 #include <map>
 #include <time.h>
-#include "gpu_hog.h"
-#include "targetgroup.h"
+#include "App.h"
+#include "target.h"
 #include "frame.h"
 #include "config.h"
 #include "database.h"
@@ -29,7 +29,7 @@ using cv::RNG;
 #define GREEN Scalar(0,255,0)
 #define RED Scalar(0,0,255)
 
-void detectionAndTracking(App app);
+void showDetection(App app);
 void showTrackletClusters(App app);
 void showTracklet(App app);
 void buildTrajectory(App app);

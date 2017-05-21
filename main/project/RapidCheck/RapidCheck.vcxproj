@@ -150,16 +150,15 @@
   <ItemGroup>
     <ClCompile Include="buildTrajectory.cpp" />
     <ClCompile Include="compareSimilarity.cpp" />
-    <ClCompile Include="detectionAndTracking.cpp" />
+    <ClCompile Include="showDetection.cpp" />
     <ClCompile Include="showTrackletClusters.cpp" />
     <ClCompile Include="frame.cpp" />
-    <ClCompile Include="gpu_hog.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="showTracklet.cpp" />
     <ClCompile Include="showTrajectory.cpp" />
     <ClCompile Include="similarity_utils.cpp" />
     <ClCompile Include="target.cpp" />
-    <ClCompile Include="targetgroup.cpp" />
     <ClCompile Include="tracking_utils.cpp" />
     <ClCompile Include="RCTrajectory.cpp" />
   </ItemGroup>
@@ -170,9 +169,8 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="RCTrajectory.h" />
     <ClInclude Include="similarity_utils.h" />
-    <ClInclude Include="targetgroup.h" />
     <ClInclude Include="target.h" />
-    <ClInclude Include="gpu_hog.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="tracking_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -90,19 +90,27 @@ public:
 		sprintf(query, "SELECT * FROM detection WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
 		select(query, rows);
 	}
-	void insertObjectInfo(int videoId, int objectId, vector<int> cntDirections, double speed, int colorId)
+	void insertObjectInfo(int videoId, int objectId, vector<int> cntDirections, double speed, vector<float> colorRatios)
 	{
-		char query[500];
+		if (speed >= 10000.0)
+		{
+			cout << "Invalid speed" << endl;
+			return;
+		}
+		char query[1000];
 		string directionKeys = "";
 		for (int i = 0; i < NUM_OF_DIRECTIONS; i++)
 			directionKeys += "directionCnt" + std::to_string(i) + ", ";
 		string directionValues = "";
 		for (int i = 0; i < NUM_OF_DIRECTIONS; i++)
 			directionValues += std::to_string(cntDirections[i]) + ", ";
-		if (speed < 10000.0)
-		{
-			sprintf(query, "INSERT INTO objectInfo (videoId, objectId, %s speed, colorId) VALUES (%d, %d, %s %8lf, %d);", directionKeys.c_str(), videoId, objectId, directionValues.c_str(), speed, colorId);
-			insert(query);
-		}
+		string colorKeys = "";
+		for (int i = 0; i < NUM_OF_COLOR_CLASSES; i++)
+			colorKeys += "color" + std::to_string(i) + ", ";
+		string colorValues = "";
+		for (int i = 0; i < NUM_OF_COLOR_CLASSES; i++)
+			colorValues += std::to_string(colorRatios[i]).substr(0,4) + ", ";
+		sprintf(query, "INSERT INTO objectInfo (videoId, objectId, %s %s speed) VALUES (%d, %d, %s %s %8lf);", directionKeys.c_str(), colorKeys.c_str(), videoId, objectId, directionValues.c_str(), colorValues.c_str(), speed);
+		insert(query);
 	}
 };

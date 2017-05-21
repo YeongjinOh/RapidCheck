@@ -9,21 +9,25 @@ typedef std::vector<Target> tracklet;
 class RCTrajectory
 {
 private:
-	int startSegmentNum, endSegmentNum;
+	int startSegmentNum, endSegmentNum, cntValidTracklets;
 	std::vector<Target> targets;
 	std::vector<int> cntDirections;
-	void increaseDirectionCount(tracklet tr);
+	std::vector<float> colorRatios;
+	void increaseDirectionCount(tracklet &tr);
+	std::vector<float> getColorRatioFromTracklet(tracklet &tr);
 public:
-	RCTrajectory(int segmentNum) : targets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0) {}
-	RCTrajectory(std::vector<Target>& tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0) { }
-	void merge(tracklet tr);
-	void mergeWithSegmentGap(tracklet tr, int diffNumSegment);
-	void addTarget(Target target);
+	RCTrajectory(int segmentNum);
+	RCTrajectory(std::vector<Target> &tr, int segmentNum);
+	void merge(tracklet &tr);
+	void mergeWithSegmentGap(tracklet &tr, int diffNumSegment);
+	void addTarget(Target &target);
 	int getStartSegmentNum();
 	int getEndSegmentNum();
 	Target getTarget(int idx);
 	std::vector<Target> getTargets();
 	std::vector<int> getCntDirections();
+	std::vector<float> getColorRatios();
+	void normalizeColorRatios();
 };
 
 #endif

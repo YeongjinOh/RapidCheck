@@ -14,21 +14,12 @@ public:
 	Target(){};
 	Target(Rect rect);
 	Target(Rect rect, MatND hist);
+	Target(Rect rect, MatND hist, float whiteRatio, float blackRatio);
 	
 	Rect rect;
 	std::vector<Point> centerPositions;
-
+	float blackRatio, whiteRatio;
 	bool found;
-
-
-	double currentDiagonalSize;
-	double currentAspectRatio;
-	bool currentMatchFoundOrNew;
-	bool stillBeingTracked;
-	int numOfConsecutiveFramesWithoutAMatch;
-
-	Point predictedNextPosition;
-	void predictNextPosition(void);
 	Point getCenterPoint();
 
 	// Histogram for matching
