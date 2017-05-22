@@ -12,7 +12,7 @@ private:
 	int startSegmentNum, endSegmentNum, cntValidTracklets;
 	std::vector<Target> targets;
 	std::vector<int> cntDirections;
-	std::vector<float> colorRatios;
+	std::vector<float> colorRatios, directionRatios;
 	void increaseDirectionCount(tracklet &tr);
 	std::vector<float> getColorRatioFromTracklet(tracklet &tr);
 public:
@@ -25,7 +25,7 @@ public:
 	int getEndSegmentNum();
 	Target getTarget(int idx);
 	std::vector<Target> getTargets();
-	std::vector<int> getCntDirections();
+	std::vector<float> getDirectionRatios();
 	std::vector<float> getColorRatios();
 	void normalizeColorRatios();
 };

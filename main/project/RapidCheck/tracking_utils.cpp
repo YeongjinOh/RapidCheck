@@ -663,6 +663,6 @@ void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories)
 	for (int i = 0; i < trajectories.size(); i++)
 	{
 		trajectories[i].normalizeColorRatios();
-		db.insertObjectInfo(VIDEOID, i, trajectories[i].getCntDirections(), 0.0, trajectories[i].getColorRatios());
+		db.insertObjectInfo(VIDEOID, i, trajectories[i].getDirectionRatios(), 0.0, trajectories[i].getColorRatios());
 	}
 }
