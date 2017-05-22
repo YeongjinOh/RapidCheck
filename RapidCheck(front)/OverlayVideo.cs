@@ -12,6 +12,13 @@ using System.Data;
 
 using System.Windows.Forms;
 
+//add frame library
+//1. AviFile
+//2. SharpAvi
+//3. AForge.Video.VFW
+using Accord.Video.VFW;
+using Accord.Video.FFMPEG;
+
 namespace RapidCheck
 {
     public class OverlayVideo
@@ -47,9 +54,8 @@ namespace RapidCheck
             MessageBox.Show("sqr");
             getMysqlObjList();
             //set (ObjList)
-            MessageBox.Show("addObj");
+            MessageBox.Show("addObj\n" + trackingTableFrameNum.Count);
             addObj();
-
             //set Obj cropImage
             MessageBox.Show("crop");
             imageCrop(videoPath);
@@ -58,13 +64,13 @@ namespace RapidCheck
             MessageBox.Show("overlay");
             overlay();
             MessageBox.Show("save\n" + overlayFrames.Count);
-
             for (int i = 0; i < overlayFrames.Count; i++)
             {
                 string filepath = @"C:\videos\test\" + i + ".bmp";
                 overlayFrames[i].Save(filepath);
             }
-
+            MessageBox.Show("make .avi");
+            saveAviFile2();
             /* 1. Db에서 가져온 데이터를 기준으로OBJ생성
              * 2. image crop (this class에서 처리해야함)
              * 3. background + cropimage
@@ -254,6 +260,35 @@ namespace RapidCheck
                 videoFrame.Dispose();
             }
             reader.Close();
+        }
+        public void saveAviFile()
+        {
+            // instantiate AVI writer, use WMV3 codec
+            AVIWriter writer = new AVIWriter("h264");
+            //AVIWriter writer = new AVIWriter("wmv3");
+            // create new AVI file and open it            
+            writer.Open(@"C:\videos\output.avi", 960, 720);
+            // create frame image
+            //Bitmap image = new Bitmap(320, 240);
+
+            for (int i = 0; i < 100; i++)
+            {
+                // update image
+                //image.SetPixel(i, i, Color.Red);
+                // add the image as a new frame of video file
+                writer.AddFrame(overlayFrames[i]);
+            }
+            writer.Close();
+        }
+        public void saveAviFile2()
+        {
+            VideoFileWriter writer = new VideoFileWriter();
+            writer.Open(@"C:\videos\testAvi.avi", 960, 720, 20,VideoCodec.H264);
+            for(int i = 0 ; i < 100; i ++)
+            {
+                writer.WriteVideoFrame(overlayFrames[i]);
+            }
+            writer.Close();
         }
     }
 }
