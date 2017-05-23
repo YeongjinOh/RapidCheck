@@ -87,7 +87,7 @@ void compareSimilarity(App app)
 		}
 		tracklet& trackletPrev = trackletsPrev[targetIdxPrev];
 		Target& targetPrev = trackletPrev[LOW_LEVEL_TRACKLETS / 2];
-		rectangle(framePrev, targetPrev.rect, colors[targetIdxPrev], 2);
+		rectangle(framePrev, targetPrev.getTargetArea(), colors[targetIdxPrev], 2);
 		/*
 		MatND histSumPrev = trackletsPrev[targetIdxPrev][0].hist;
 		for (int i = 1; i < trackletsPrev[targetIdxPrev].size(); i++)

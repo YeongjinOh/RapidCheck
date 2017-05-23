@@ -80,7 +80,7 @@ void RCTrajectory::increaseDirectionCount(tracklet &tr)
 
 void RCTrajectory::mergeWithSegmentGap(tracklet &tr, int diffNumSegment)
 {
-	Rect RectPrev = targets.back().rect, RectNext = tr[0].rect;
+	Rect RectPrev = targets.back().getTargetArea(), RectNext = tr[0].getTargetArea();
 	int numberOfDummies = (diffNumSegment - 1) * LOW_LEVEL_TRACKLETS;
 	for (int i = 1; i <= numberOfDummies; i++) {
 		int predictedX = calcInternalDivision(RectPrev.x, RectNext.x, i, numberOfDummies + 1 - i),

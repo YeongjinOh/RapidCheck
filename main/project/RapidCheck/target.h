@@ -10,17 +10,19 @@ using cv::MatND;
 
 class Target
 {
+private:
+	Rect rect;
 public:
 	Target(){};
 	Target(Rect rect);
 	Target(Rect rect, MatND hist);
 	Target(Rect rect, MatND hist, float whiteRatio, float blackRatio);
 	
-	Rect rect;
 	std::vector<Point> centerPositions;
 	float blackRatio, whiteRatio;
 	bool found;
 	Point getCenterPoint();
+	Rect getTargetArea();
 
 	// Histogram for matching
 	MatND hist;
