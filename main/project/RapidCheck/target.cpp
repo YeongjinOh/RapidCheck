@@ -27,6 +27,13 @@ Target::Target(Rect rect, MatND hist, float whiteRatio, float blackRatio) :rect(
 	found = false;
 }
 
-Point Target::getCenterPoint() {
+Point Target::getCenterPoint()
+{
 	return Point(rect.x + rect.width / 2, rect.y + rect.height / 2);
 }
+
+Rect Target::getTargetArea()
+{
+	return rect;
+}
+

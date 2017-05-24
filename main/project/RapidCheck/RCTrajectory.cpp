@@ -26,9 +26,10 @@ int motionVectorToDirectionClass(cv::Point p)
 	return -1;
 }
 
-RCTrajectory::RCTrajectory(int segmentNum) : targets(0), cntValidTracklets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {}
-RCTrajectory::RCTrajectory(std::vector<Target> &tr, int segmentNum) : targets(tr), cntValidTracklets(1), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), colorRatios(NUM_OF_COLOR_CLASSES, 0) {
+RCTrajectory::RCTrajectory(int segmentNum) : targets(0), cntValidTracklets(0), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), directionRatios(NUM_OF_DIRECTIONS), colorRatios(NUM_OF_COLOR_CLASSES, 0) {}
+RCTrajectory::RCTrajectory(std::vector<Target> &tr, int segmentNum) : targets(tr), cntValidTracklets(1), startSegmentNum(segmentNum), endSegmentNum(segmentNum), cntDirections(NUM_OF_DIRECTIONS, 0), directionRatios(NUM_OF_DIRECTIONS), colorRatios(NUM_OF_COLOR_CLASSES, 0) {
 	colorRatios = getColorRatioFromTracklet(tr);
+	increaseDirectionCount(tr);
 }
 
 std::vector<float> RCTrajectory::getColorRatioFromTracklet(tracklet &tr)
@@ -79,7 +80,7 @@ void RCTrajectory::increaseDirectionCount(tracklet &tr)
 
 void RCTrajectory::mergeWithSegmentGap(tracklet &tr, int diffNumSegment)
 {
-	Rect RectPrev = targets.back().rect, RectNext = tr[0].rect;
+	Rect RectPrev = targets.back().getTargetArea(), RectNext = tr[0].getTargetArea();
 	int numberOfDummies = (diffNumSegment - 1) * LOW_LEVEL_TRACKLETS;
 	for (int i = 1; i <= numberOfDummies; i++) {
 		int predictedX = calcInternalDivision(RectPrev.x, RectNext.x, i, numberOfDummies + 1 - i),
@@ -125,9 +126,9 @@ std::vector<Target> RCTrajectory::getTargets()
 	return targets;
 }
 
-std::vector<int> RCTrajectory::getCntDirections()
+std::vector<float> RCTrajectory::getDirectionRatios()
 {
-	return cntDirections;
+	return directionRatios;
 }
 
 std::vector<float> RCTrajectory::getColorRatios()
@@ -137,6 +138,9 @@ std::vector<float> RCTrajectory::getColorRatios()
 
 void RCTrajectory::normalizeColorRatios()
 {
+	for (int i = 0; i < cntDirections.size(); i++) {
+		directionRatios[i] = (float)cntDirections[i] / cntValidTracklets;
+	}
 	for (int i = 0; i < colorRatios.size(); i++)
 	{
 		colorRatios[i] /= cntValidTracklets;

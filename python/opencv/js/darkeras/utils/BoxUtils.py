@@ -148,6 +148,7 @@ def post_progress(net_out, im, is_save = True, threshold=0.01):
 
 	h, w, _ = imgcv.shape
 	thick = int((h + w) // 300) # ractange line thick
+	objects = []
 	max_indx, left, right, top, bot = -1, -1, -1, -1, -1
 
 	for b in boxes:
@@ -167,10 +168,11 @@ def post_progress(net_out, im, is_save = True, threshold=0.01):
 		# cv2.putText(imgcv, max_indx, (left, top - 12),
 		#    2, 1.5, (0, 0, 255))
 		cv2.putText(imgcv, class_name, (int(left), int(top-12)), 2, 1.5, class_color)
-	
+		# append objects
+		objects.append([max_indx, left, top, int(right-left), int(bot-top)])
 	if not is_save: 
 		# not save
 		# to db
-		return imgcv, max_indx, left, top, int(right-left), int(bot-top), is_object
+		return imgcv, objects, is_object
 	else:
 		cv2.imwrite('test\out.jpg', imgcv)

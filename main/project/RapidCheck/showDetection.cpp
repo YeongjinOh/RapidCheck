@@ -13,10 +13,6 @@ void showDetection(App app)
 	Target target;
 	bool hasTarget = false;
 
-	// create a tracker object
-	std::vector<Ptr<Tracker> > trackers;
-	for (int i = 0; i < MAX_TRACKER_NUMS; ++i)
-		trackers.push_back(Tracker::create("KCF"));
 	std::vector<Rect> found;
 	std::vector<Rect2d> found_filtered;
 
@@ -51,37 +47,33 @@ void showDetection(App app)
 		if (frame.rows == 0 || frame.cols == 0)
 			break;
 
-		// implement detection using HOG every n-th frame
-		if (frameCnt % DETECTION_PERIOD == 0) {
-
-			// reset vectors
-			found.clear();
-			found_filtered.clear();
-			trackers.clear();
+		// reset vectors
+		found.clear();
+		found_filtered.clear();
 			
-			app.getHogResults(frame, found);
-			size_t i, j;
-			for (int i = 0; i<found.size() && i < MAX_TRACKER_NUMS; i++)
-			{
-				Rect r = found[i];
-				for (j = 0; j<found.size(); j++)
-					if (j != i && (r & found[j]) == r)
-						break;
-				if (j == found.size())
-					found_filtered.push_back(r);
-			}
-
-			for (i = 0; i<found_filtered.size() && i < MAX_TRACKER_NUMS; i++)
-			{
-				Rect2d &r = found_filtered[i];
-			
-				r.x += cvRound(r.width*0.1);
-				r.width = cvRound(r.width*0.8);
-				r.y += cvRound(r.height*0.07);
-				r.height = cvRound(r.height*0.8);
-				rectangle(frame, r, Scalar(0, 255, 0), 3);
-			}
+		app.getHogResults(frame, found);
+		size_t i, j;
+		for (int i = 0; i<found.size(); i++)
+		{
+			Rect r = found[i];
+			for (j = 0; j<found.size(); j++)
+				if (j != i && (r & found[j]) == r)
+					break;
+			if (j == found.size())
+				found_filtered.push_back(r);
 		}
+
+		for (i = 0; i<found_filtered.size(); i++)
+		{
+			Rect2d &r = found_filtered[i];
+			
+			r.x += cvRound(r.width*0.1);
+			r.width = cvRound(r.width*0.8);
+			r.y += cvRound(r.height*0.07);
+			r.height = cvRound(r.height*0.8);
+			rectangle(frame, r, Scalar(0, 255, 0), 3);
+		}
+	
 		
 		// draw frame
 		imshow("tracker", frame);

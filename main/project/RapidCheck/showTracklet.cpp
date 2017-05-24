@@ -44,7 +44,7 @@ void showTracklet(App app)
 			{
 				tracklet& pedestrianTracklet = pedestrianTracklets[pedestrianNum];
 				Target& currentFramePedestrian = pedestrianTracklet[frameIdx];
-				rectangle(frame, currentFramePedestrian.rect, colors[(objectId + pedestrianNum) % NUM_OF_COLORS], 2);
+				rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId + pedestrianNum) % NUM_OF_COLORS], 2);
 				// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 				centers.push_back(currentFramePedestrian.getCenterPoint());
 				objectIds.push_back(objectId + pedestrianNum);
