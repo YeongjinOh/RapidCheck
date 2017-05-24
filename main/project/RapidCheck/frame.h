@@ -9,15 +9,13 @@ class Frame
 {
 private:
 	int frameNumber;
-	vector<Rect> pedestrians;
 	vector<Target> targets;
 public:
 	Frame(int num);
-	Frame(int num, vector<Rect>& pedestrians);
 	Frame(int num, vector<Rect>& pedestrians, vector<MatND> hists);
-	Frame(int num, vector<Target>& targets_);
+	Frame(int num, vector<Target>& targets);
 	int getFrameNumbers();
-	vector<Rect>& getPedestrians();
+	vector<Rect> getPedestrians();
 	vector<Target>& getTargets();
 	Target& getTarget(int idx);
 	Rect& getPedestrian(int idx);

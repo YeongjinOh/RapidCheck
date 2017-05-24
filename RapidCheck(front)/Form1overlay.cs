@@ -38,53 +38,6 @@ namespace RapidCheck
         //        MessageBoxIcon.Error);
         //    }
         //}
-
-        //private void overlay2()
-        //{
-        //    //overlay test
-        //    OverlayWindow overlay = new OverlayWindow(false);
-
-        //    Stopwatch watch = Stopwatch.StartNew();
-
-        //    int redBrush = overlay.Graphics.CreateBrush(0x7FFF0000);
-        //    int redOpacityBrush = overlay.Graphics.CreateBrush(System.Drawing.Color.FromArgb(80, 255, 0, 0));
-        //    int yellowBrush = overlay.Graphics.CreateBrush(0x7FFFFF00);
-
-        //    int font = overlay.Graphics.CreateFont("Arial", 20);
-        //    int hugeFont = overlay.Graphics.CreateFont("Arial", 50, true);
-
-        //    float rotation = 0.0f;
-        //    int fps = 0;
-        //    int displayFPS = 0;
-
-        //    while (true)
-        //    {
-        //        overlay.Graphics.BeginScene();
-        //        overlay.Graphics.ClearScene();
-
-        //        overlay.Graphics.DrawText("RotateSwastika", font, redBrush, 50, 450);
-        //        overlay.Graphics.RotateSwastika(150, 600, 50, 2, rotation, redBrush);
-
-        //        Console.WriteLine(overlay.ParentWindow);
-
-        //        rotation += 0.03f;//related to speed
-        //        if (rotation > 50.0f)//size of the swastika
-        //            rotation = -50.0f;
-
-        //        if (watch.ElapsedMilliseconds > 1000)
-        //        {
-        //            displayFPS = fps;
-        //            fps = 0;
-        //            watch.Restart();
-        //        }
-        //        else
-        //        {
-        //            fps++;
-        //        }
-
-        //        overlay.Graphics.DrawText("FPS: " + displayFPS.ToString(), hugeFont, redBrush, 400, 600, false);
-        //        overlay.Graphics.EndScene();
-        //    }
         //}
         //private Bitmap CombinedBitmap = null;
         ////ShowCombinedImage

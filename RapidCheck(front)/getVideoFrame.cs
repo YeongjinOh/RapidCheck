@@ -20,14 +20,14 @@ namespace RapidCheck
 {
     public partial class Form1
     {
-        private void button1_Click(object sender, EventArgs e) //Frame btn
-        {
-            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            FFMPEG_TEST();
-            sw.Stop();
-            MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
-        }
+        //private void button1_Click(object sender, EventArgs e) //Frame btn
+        //{
+        //    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+        //    sw.Start();
+        //    FFMPEG_TEST();
+        //    sw.Stop();
+        //    MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
+        //}
         public void FFMPEG_TEST()
         {
             // create instance of video reader

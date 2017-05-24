@@ -37,15 +37,14 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 
 					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
 
-
-					// Rect rect = currentFramePedestrian.rect, roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
+					// Rect rect = currentFramePedestrian.getTargetArea(), roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
 					// Scalar mean = cv::mean(frame(roi));
-					// rectangle(frame, currentFramePedestrian.rect, mean, 2);
-					rectangle(frame, currentFramePedestrian.rect, colors[(objectId) % NUM_OF_COLORS], 2);
+					// rectangle(frame, currentFramePedestrian.getTargetArea(), mean, 2);
+					rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId) % NUM_OF_COLORS], 2);
 
-					//db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.rect.x, currentFramePedestrian.rect.y, currentFramePedestrian.rect.width, currentFramePedestrian.rect.height);
+					//db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
 
-					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.rect.height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
+					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 				}
 				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
@@ -90,7 +89,7 @@ void buildTrajectory(App app)
 	readTargets(cap, frames);
 	t = clock() - t;
 	printf("Detection takes %d(ms)\n", t);
-
+	
 	// build all tracklets
 	vector<Segment> segments;
 	t = clock();
