@@ -37,6 +37,10 @@ namespace RapidCheck
         private int outputFrameNum;
         private string strConn = "Server=localhost;Database=rapidcheck;Uid=root;Pwd=1234;";
         private int maxFrameNum;
+
+        private List<StartingGroup> startingGroup; //kmeans test
+        private int clusterNum;
+        
         //overlayOrders의 길이와 overlayFrames의 길이는 같아야한다??? 디펜던시가 있다
         public OverlayVideo() { }
         public OverlayVideo(string path)
@@ -54,9 +58,14 @@ namespace RapidCheck
             videoHeight = 0;
             videoWidth = 0;
             frameStep = 5;
-            outputFrameNum = 48;
+            outputFrameNum = 200;
             maxFrameNum = 10000;
-
+            clusterNum = 10;
+            startingGroup = new List<StartingGroup>(clusterNum); //
+            for (int i = 0; i < clusterNum; i++)
+            {
+                startingGroup.Add(new StartingGroup());
+            }
             //****************************************width height test***********************************
             //Stopwatch sw = new Stopwatch();
             //sw.Start();
@@ -71,16 +80,16 @@ namespace RapidCheck
             // step1. db에서 obj정보를 가져오고 OBJ 필드값을 세팅
             getMysqlObjList();  //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle, objectidList)
             addObj();           //set (ObjList)
-            kMeasFunc(5);
+            kMeasFunc();
 
-            return;
             imageCrop(videoPath);//set Obj cropImage
             
             //step2. 오버레이 할 id를 선별한다
             setObjidList(); //set #frame >=48인 id추출 & max값 저장
 
             //step3. 오버레이 할 id를 기준으로 어떤 id가 어떤 구간에 그릴지를 설정한다
-            buildOverlayOrder(); //set overlayOrders
+            //buildOverlayOrder(); //set overlayOrders
+            buildOverlayOrderUsingCluster();
 
             //step4. overlay
             overlay(); //set overlayFrames

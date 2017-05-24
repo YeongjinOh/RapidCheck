@@ -60,6 +60,21 @@ namespace RapidCheck
                 overlayOrders.Add(temp);
             }
         }
+        public void buildOverlayOrderUsingCluster() // 애를 만든다. overlayOrders;
+        {
+            for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
+            {
+                List<int> currentObjid = new List<int>();
+                for (int groupIdx = 0; groupIdx < startingGroup.Count; groupIdx++)
+                {
+                    if(startingGroup[groupIdx].hasNext())
+                    {
+                        currentObjid.Add(startingGroup[groupIdx].getNextId(ref ObjList));
+                    }
+                }
+                overlayOrders.Add(currentObjid);
+            }
+        }
         public void overlay()
         {
             overlayFrames = new List<Bitmap>();
@@ -78,52 +93,60 @@ namespace RapidCheck
         }
         public void setObjidList()
         {
-            objectidList.Clear();
-            int idCnt = trackingTableObjid.Distinct().Count();
-            for (int idIdx = 0; idIdx < idCnt; idIdx++)
+            bool useFilter = false;
+            if (!useFilter)
             {
-                if (ObjList[idIdx].getFrameCnt() >= outputFrameNum) //48frame 이상인 아이들 저장
+
+                objectidList.Clear();
+                for (int idIdx = 0; idIdx < ObjList.Count; idIdx++)
                 {
                     ObjList[idIdx].currentAreaPositionIdx = 0;
                     ObjList[idIdx].currentImagePositionIdx = 0;
+                    //ObjList[idIdx].resetPosition();
                     objectidList.Add(idIdx);
                 }
             }
-            List<int> temp = new List<int>();
-            using (MySqlConnection conn = new MySqlConnection(strConn))
+            else
             {
-                DataSet ds = new DataSet();
-                MySqlDataAdapter adapter = new MySqlDataAdapter();
-                DataTable dt = new DataTable();
-
-                //string SQL = String.Format("SELECT objectId FROM rapidcheck.objectinfo where direction1 + direction2 > 0.7 and videoId={0};", videoid);
-                string SQL = String.Format("SELECT * FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1};", videoid, ObjList.Count);
-
-                adapter.SelectCommand = new MySqlCommand(SQL, conn);
-                adapter.Fill(ds, "directionid");
-                dt = ds.Tables["directionid"];
-                foreach (DataRow dr in dt.Rows)
+                List<int> temp = new List<int>();
+                using (MySqlConnection conn = new MySqlConnection(strConn))
                 {
-                    temp.Add(Convert.ToInt32(dr["objectId"]));
-                }
-            }
-            List<int> store = new List<int>();
-            for (int i = 0; i < objectidList.Count; i++)
-            {
-                for (int j = 0; j < temp.Count; j++)
-                {
-                    if (objectidList[i] == temp[j])
+                    DataSet ds = new DataSet();
+                    MySqlDataAdapter adapter = new MySqlDataAdapter();
+                    DataTable dt = new DataTable();
+
+                    //string SQL = String.Format("SELECT objectId FROM rapidcheck.objectinfo where direction1 + direction2 > 0.7 and videoId={0};", videoid);
+                    string SQL = String.Format("SELECT * FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1};", videoid, ObjList.Count);
+
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "directionid");
+                    dt = ds.Tables["directionid"];
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        store.Add(objectidList[i]);
-                        break;
+                        temp.Add(Convert.ToInt32(dr["objectId"]));
                     }
                 }
-            }
-            objectidList.Clear();
-            foreach (int id in store)
-            {
-                objectidList.Add(id);
-                //MessageBox.Show(id.ToString());
+                List<int> store = new List<int>();
+                for (int i = 0; i < objectidList.Count; i++)
+                {
+                    for (int j = 0; j < temp.Count; j++)
+                    {
+                        if (objectidList[i] == temp[j])
+                        {
+                            store.Add(objectidList[i]);
+                            break;
+                        }
+                    }
+                }
+                objectidList.Clear();
+                foreach (int id in store)
+                {
+                    objectidList.Add(id);
+                    ObjList[id].currentAreaPositionIdx = 0;
+                    ObjList[id].currentImagePositionIdx = 0;
+                    //ObjList[id].resetPosition();
+                    //MessageBox.Show(id.ToString());
+                }
             }
         }
         public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position)
@@ -278,25 +301,20 @@ namespace RapidCheck
             if (cropArea.X + cropArea.Width > videoWidth) cropArea.Width = videoWidth - cropArea.X;
             if (cropArea.Y + cropArea.Height > videoHeight) cropArea.Height = videoHeight - cropArea.Y;
         }
-        
-        
-        public void kMeasFunc(int k )
+        public void kMeasFunc()
         {
-            var kmeas = new KMeans(k:k);
-            //List<List<int>> points = new List<List<int>>();
+            var kmeas = new KMeans(k:clusterNum);
             double[][] points = new double[ObjList.Count][];
-            //List<Point> points = new List<Point>();
             for (int i = 0; i < ObjList.Count; i++)
             {
                 points[i] = ObjList[i].getStartingPoint();
             }
             KMeansClusterCollection clusters = kmeas.Learn(points);
             int[] output = clusters.Decide(points);
-            for (int i = 0; i < ObjList.Count; i++)
+            
+            for (int id = 0; id < ObjList.Count; id++)
             {
-                points[i] = ObjList[i].getStartingPoint();
-                string temp = string.Format("x:{0} y:{1} class:{2}\n", points[i][0], points[i][1], output[i]);
-                Console.WriteLine(temp);
+                startingGroup[output[id]].Add(id);
             }
         }
     }
