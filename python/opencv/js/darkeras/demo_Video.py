@@ -29,7 +29,7 @@ model.summary()
 
 db = DB_Helper()
 db.open()
-db.delete()
+# db.delete()
 # video_name = 'persons1.mp4'
 video_name = 'tracking.mp4'
 # video_name = 'demo2.mp4'
@@ -52,20 +52,21 @@ try:
 		if frameNum % frameSteps != 0:
 			continue
 		# cv2.imshow('Original Window', frame)
+		print("FrameNum : {}".format(frameNum))
 		img = preprocess(frame)
 		batch = np.expand_dims(img, axis=0)
 		net_out = model.predict(batch)
 		out_img, objects, is_object = post_progress(net_out[0], im=frame, is_save=False, threshold=test_threshold)
-		if is_object:
-			for each_object in objects:
-				items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4]))
+		# if is_object:
+		# 	for each_object in objects:
+		# 		items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4]))
 		
-		if len(items) >= 100:
-			db.insert(items)
-			print("DB Insert 100 items Done..")
-			del items
-			items = []
-		# cv2.imshow('Detection Window', out_img)
+		# if len(items) >= 100:
+		# 	db.insert(items)
+		# 	print("DB Insert 100 items Done..")
+		# 	del items
+		# 	items = []
+		cv2.imshow('Detection Window', out_img)
 		if cv2.waitKey(1) & 0xFF == ord('q'):
 			break
 except Exception:
@@ -76,6 +77,6 @@ finally:
 	cap.release()
 	cv2.destroyAllWindows()
 
-db.insert(items)
-print("DB Insert 100 items Done..")
-del items
+# db.insert(items)
+# print("DB Insert 100 items Done..")
+# del items

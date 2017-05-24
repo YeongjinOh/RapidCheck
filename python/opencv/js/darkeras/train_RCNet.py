@@ -7,10 +7,13 @@ import yolo.config as cfg
 from utils.help import say, conv_weigths_flatten
 
 import keras.backend as K
-from yolo.net.yolo_tiny_tfdim_net import yolo_tiny_TFdim_model
+from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model
 
+if cfg.image_dim_order == 'th':
+	K.set_image_dim_ordering('th')
 
-pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-tfdim-named.h5'
+pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+# pretrain_weight_path = 'models/train/yolo-2class-complete.h5'
 is_freeze = True
 verbalise = True
 
@@ -19,10 +22,12 @@ trainable_layer_weights = None
 show_trainable_state = False # 여기를 True 로 바꾸면, conv layer 와 dense layer 의 학습별 weigths 가 변하는지 안변하는지를 확인할 수 있다.
 trained_save_weights_prefix = 'models/train/{}-'.format(cfg.model_name)
 
+print(cfg.dataset_abs_location)
+
 sess = tf.Session()
 K.set_session(sess)
 
-model = yolo_tiny_TFdim_model()
+model = yolo_tiny_THdim_model()
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
