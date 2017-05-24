@@ -28,7 +28,7 @@ void reconstructLeftDummy(vector<int>& selectedIndices, vector<Target>& selected
 	assert(idx >= 0 && idx + 2 < selectedTargets.size());
 	Target target1 = selectedTargets[idx + 1], target2 = selectedTargets[idx + 2];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-	int width = target1.rect.width, height = target1.rect.height;
+	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
@@ -42,7 +42,7 @@ void reconstructRightDummy(vector<int>& selectedIndices, vector<Target>& selecte
 	assert(idx >= 2 && idx < selectedTargets.size());
 	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx - 2];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-	int width = target1.rect.width, height = target1.rect.height;
+	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
@@ -56,7 +56,7 @@ void reconstructMiddleOneDummy(vector<int>& selectedIndices, vector<Target>& sel
 	assert(idx > 0 && idx + 1 < selectedTargets.size());
 	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx + 1];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
-	int width = target1.rect.width, height = target1.rect.height;
+	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
@@ -70,7 +70,7 @@ void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& s
 	assert(idx1 > 0 && idx2 < selectedTargets.size() && idx1 + 1 == idx2);
 	Target target1 = selectedTargets[idx1 - 1], target2 = selectedTargets[idx2 + 1];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p_l = (2 * p1 + p2) / 3, p_r = (p1 + 2 * p2) / 3;
-	int width_l = target1.rect.width, height_l = target1.rect.height, width_r = target2.rect.width, height_r = target2.rect.height;
+	int width_l = target1.getTargetArea().width, height_l = target1.getTargetArea().height, width_r = target2.getTargetArea().width, height_r = target2.getTargetArea().height;
 	Rect rect_l(p_l.x - width_l / 2, p_l.y - height_l / 2, width_l, height_l), rect_r(p_r.x - width_r / 2, p_r.y - height_r / 2, width_r, height_r);
 	Target target_l(rect_l, target1.hist), target_r(rect_r, target2.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx1].addTarget(target_l);
@@ -663,6 +663,6 @@ void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories)
 	for (int i = 0; i < trajectories.size(); i++)
 	{
 		trajectories[i].normalizeColorRatios();
-		db.insertObjectInfo(VIDEOID, i, trajectories[i].getCntDirections(), 0.0, trajectories[i].getColorRatios());
+		db.insertObjectInfo(VIDEOID, i, trajectories[i].getDirectionRatios(), 0.0, trajectories[i].getColorRatios());
 	}
 }

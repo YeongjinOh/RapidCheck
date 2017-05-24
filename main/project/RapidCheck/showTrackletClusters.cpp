@@ -172,7 +172,7 @@ void showTrackletClusters(App app)
 
 				// draw found object in each frame
 				 rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
-				 putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.rect.height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
+				 putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.getTargetArea().height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
 				target.found = true;
 
 				printf("%d ", solution[i]);
