@@ -8,13 +8,18 @@ only 2class classifier yolo model config
 # Global config variables
 import os
 
-model_name = 'yolo-2class'
+model_name = 'yolo-2class-mydata'
 classes_name = ["car", "person"]
 
-dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
+dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
+# dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012')
-ann_location = os.path.join(dataset_abs_location, 'Annotations')
-imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
+
+ann_location = os.path.join(dataset_abs_location, 'annotations')
+#ann_location = os.path.join(dataset_abs_location, 'Annotations')
+
+imageset_location = os.path.join(dataset_abs_location, 'images')
+#imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
 
 cell_size = 7
 num_classes = 2
