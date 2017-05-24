@@ -37,7 +37,7 @@ namespace RapidCheck
         private int outputFrameNum;
         private string strConn = "Server=localhost;Database=rapidcheck;Uid=root;Pwd=1234;";
         private int maxFrameNum;
-
+        private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
         
@@ -59,7 +59,8 @@ namespace RapidCheck
             videoWidth = 0;
             frameStep = 5;
             outputFrameNum = 200;
-            maxFrameNum = 10000;
+            maxFrameNum = 5000;
+            minTrackingLength = 47;
             clusterNum = 10;
             startingGroup = new List<StartingGroup>(clusterNum); //
             for (int i = 0; i < clusterNum; i++)

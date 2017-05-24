@@ -15,7 +15,6 @@ namespace RapidCheck
         public void addCropPositionNum(int frame) { cropPositionNum.Add(frame); }
         public void addCropImage(Bitmap cropImage)
         {
-            cropImageLength++;
             cropImages.Add(cropImage);
         }
         public bool emptyImage()

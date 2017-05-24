@@ -316,6 +316,11 @@ namespace RapidCheck
             {
                 startingGroup[output[id]].Add(id);
             }
+            //sort
+            for (int k = 0; k < startingGroup.Count; k++)
+            {
+                startingGroup[k].sort(ref ObjList);
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ namespace RapidCheck
     class StartingGroup
     {
         private List<int> idList;
+        private List<int> lengthList;
         private int currentidPosition; //0 ~ image length
         private int currentIndex; //index of id list
 
@@ -16,6 +17,7 @@ namespace RapidCheck
         public StartingGroup() 
         {
             idList = new List<int>();
+            lengthList = new List<int>();
             currentidPosition = 0;
             currentIndex = 0;
         }
@@ -23,7 +25,7 @@ namespace RapidCheck
         {
             int objId = idList[currentIndex];
             currentidPosition++;
-            if (objList[objId].cropImageLength == currentidPosition)
+            if (objList[objId].getLength() == currentidPosition)
             {
                 currentIndex++;
                 currentidPosition = 0;
@@ -37,6 +39,28 @@ namespace RapidCheck
         public void Add(int id)
         {
             idList.Add(id);
+        }
+
+        public void sort(ref List<Obj> ObjList)
+        {
+            for (int idx=0; idx < idList.Count; idx++)
+            {
+                int objId = idList[idx];
+                lengthList.Add(ObjList[objId].getLength());
+            }
+
+            for (int i = 0; i < lengthList.Count; i++)
+            {
+                for (int j=i; j>0 && lengthList[j] > lengthList[j-1]; j--)
+                {
+                    int tmp = lengthList[j];
+                    lengthList[j] = lengthList[j - 1];
+                    lengthList[j - 1] = tmp;
+                    tmp = idList[j];
+                    idList[j] = idList[j - 1];
+                    idList[j - 1] = tmp;
+                }
+            }
         }
     }
 }
