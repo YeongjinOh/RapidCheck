@@ -84,18 +84,18 @@ namespace RapidCheck
             //worker = new Thread(Run);
             //worker.Start();
         }
-        private void Run()
-        {
-            Graphics gs = tabPage2.CreateGraphics();
-            for (int i = 0; i < 66; i++)
-            {
-                System.Threading.Thread.Sleep(500);
-                //if (i >= 65) { i = 0; }
-                string filePath = @"C:\videos\66장 여기\" + i + ".bmp";
-                Bitmap back = new Bitmap(filePath);
-                gs.DrawImage(back, new Point(0, 0));
-            }
-        }
+        //private void Run()
+        //{
+        //    Graphics gs = tabPage2.CreateGraphics();
+        //    for (int i = 0; i < 66; i++)
+        //    {
+        //        System.Threading.Thread.Sleep(500);
+        //        //if (i >= 65) { i = 0; }
+        //        string filePath = @"C:\videos\66장 여기\" + i + ".bmp";
+        //        Bitmap back = new Bitmap(filePath);
+        //        gs.DrawImage(back, new Point(0, 0));
+        //    }
+        //}
         private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
         private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
         private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
@@ -109,12 +109,12 @@ namespace RapidCheck
 
         private void Form1_Resize(object sender, EventArgs e)
         {
-            if(worker != null)
-            {
-                worker.Abort();
-                worker = new Thread(Run);
-                worker.Start();
-            }
+        //    if(worker != null)
+        //    {
+        //        worker.Abort();
+        //        worker = new Thread(Run);
+        //        worker.Start();
+        //    }
         }
     }
 }

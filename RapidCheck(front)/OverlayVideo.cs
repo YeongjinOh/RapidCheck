@@ -13,6 +13,8 @@ using System.Windows.Forms;
 using Accord.Video.VFW;
 using Accord.Video.FFMPEG;
 
+using System.Diagnostics;
+//time
 namespace RapidCheck
 {
     public partial class OverlayVideo
@@ -34,6 +36,7 @@ namespace RapidCheck
         private int videoid;
         private int outputFrameNum;
         private string strConn = "Server=localhost;Database=rapidcheck;Uid=root;Pwd=1234;";
+        private int maxFrameNum;
         //overlayOrders의 길이와 overlayFrames의 길이는 같아야한다??? 디펜던시가 있다
         public OverlayVideo() { }
         public OverlayVideo(string path)
@@ -52,10 +55,25 @@ namespace RapidCheck
             videoWidth = 0;
             frameStep = 5;
             outputFrameNum = 48;
+            maxFrameNum = 10000;
 
+            //****************************************width height test***********************************
+            //Stopwatch sw = new Stopwatch();
+            //sw.Start();
+            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader.Open(videoPath);
+            videoWidth = reader.Width;
+            videoHeight = reader.Height;
+            reader.Close();
+            //sw.Stop();
+            //MessageBox.Show(sw.ElapsedMilliseconds.ToString() + "ms");
+            //****************************************width height test***********************************
             // step1. db에서 obj정보를 가져오고 OBJ 필드값을 세팅
             getMysqlObjList();  //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle, objectidList)
             addObj();           //set (ObjList)
+            kMeasFunc(5);
+
+            return;
             imageCrop(videoPath);//set Obj cropImage
             
             //step2. 오버레이 할 id를 선별한다

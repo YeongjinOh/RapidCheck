@@ -12,7 +12,7 @@ namespace RapidCheck
         public int objectid { get; set; }
         public int currentAreaPositionIdx { get; set; }
         public int currentImagePositionIdx { get; set; }
-        private List<int> cropPositionNum; //자르는 위치.... 필요 없음...아마도
+        private List<int> cropPositionNum;
         private List<Rectangle> cropAreas;
         private List<Bitmap> cropImages;
         public int cropImageLength { get; set; }

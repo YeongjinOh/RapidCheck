@@ -12,6 +12,7 @@ using System.Windows.Forms;
 
 using Accord.Video.VFW;
 using Accord.Video.FFMPEG;
+using Accord.MachineLearning; //knn test
 namespace RapidCheck
 {
     public partial class OverlayVideo
@@ -19,18 +20,16 @@ namespace RapidCheck
         public void addObj()
         {
             int row = 0;
-            for (int objid = 0; objid < trackingTableObjid.Distinct().Count(); objid++)
+            for (int objid = 0; objid < trackingTableObjid.Distinct().Count(); objid++) //0~1196
             {
                 Obj temp = new Obj(objid);
-                try
+                for (; row < trackingTableObjid.Count && objid == trackingTableObjid[row]; row++)
                 {
-                    for (; objid == trackingTableObjid[row]; row++)
-                    {
-                        temp.addCropArea(trackingTableRectangle[row]);
-                        temp.addCropPositionNum(trackingTableFrameNum[row]);
-                    }
+                    Rectangle rect = trackingTableRectangle[row];
+                    modifyCropArea(ref rect);
+                    temp.addCropArea(rect);
+                    temp.addCropPositionNum(trackingTableFrameNum[row]);
                 }
-                catch (System.ArgumentOutOfRangeException) { }
                 ObjList.Add(temp);
             }
         }
@@ -56,10 +55,7 @@ namespace RapidCheck
                 for (int objectidListIdx = 0; (objectidListIdx < objectidList.Count) && (overlayFrameNum >=(objectidListIdx/group)*offset); objectidListIdx++)
                 {
                     int id = objectidList[objectidListIdx];
-                    if (!ObjList[id].emptyImage())
-                    {
-                        temp.Add(id);
-                    }
+                    temp.Add(id);
                 }
                 overlayOrders.Add(temp);
             }
@@ -72,16 +68,12 @@ namespace RapidCheck
             for (int resFrame = 0; resFrame < overlayOrders.Count; resFrame++)
             {
                 Bitmap BitCopy = (Bitmap)background.Clone();
-                try
+                for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
-                    for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
-                    {
-                        int id = overlayOrders[resFrame][idx];
-                        BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
-                    }
-                    overlayFrames.Add(BitCopy);
+                    int id = overlayOrders[resFrame][idx];
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
                 }
-                catch (System.ArgumentOutOfRangeException) { }
+                overlayFrames.Add(BitCopy);
             }
         }
         public void setObjidList()
@@ -105,7 +97,7 @@ namespace RapidCheck
                 DataTable dt = new DataTable();
 
                 //string SQL = String.Format("SELECT objectId FROM rapidcheck.objectinfo where direction1 + direction2 > 0.7 and videoId={0};", videoid);
-                string SQL = String.Format("SELECT * FROM rapidcheck.objectinfo where color9 >0.8 and videoId={0};", videoid);
+                string SQL = String.Format("SELECT * FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1};", videoid, ObjList.Count);
 
                 adapter.SelectCommand = new MySqlCommand(SQL, conn);
                 adapter.Fill(ds, "directionid");
@@ -185,13 +177,13 @@ namespace RapidCheck
                     {
                         videoid = Convert.ToInt32(dr["videoid"]);
                     }
-                    videoid = 1;
+                    videoid = 1; //test
 
-                    SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0};", videoid);
+                    SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "maxid");
 
-                    SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} ORDER BY objectId ASC, frameNum ASC", videoid);
+                    SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum < {1} ORDER BY objectId ASC, frameNum ASC", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
 
@@ -244,19 +236,15 @@ namespace RapidCheck
         {
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
-            videoWidth = reader.Width;
-            videoHeight = reader.Height;
 
-            for (int frameNum = 0; frameNum < reader.FrameCount; frameNum++)
+            for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum++)
             {
                 Bitmap videoFrame = reader.ReadVideoFrame();
                 if (objidByFrame.ContainsKey(frameNum))
                 {
                     foreach (int objid in objidByFrame[frameNum])
                     {
-                        Rectangle temp = new Rectangle();
-                        temp = ObjList[objid].getCropArea();
-                        modifyCropArea(ref temp);
+                        Rectangle temp = ObjList[objid].getCropArea();
                         ObjList[objid].addCropImage(videoFrame.Clone(temp, videoFrame.PixelFormat));
                     }
                 }
@@ -289,6 +277,27 @@ namespace RapidCheck
             //if (cropArea.Y < 0) cropArea.Y = 0;
             if (cropArea.X + cropArea.Width > videoWidth) cropArea.Width = videoWidth - cropArea.X;
             if (cropArea.Y + cropArea.Height > videoHeight) cropArea.Height = videoHeight - cropArea.Y;
+        }
+        
+        
+        public void kMeasFunc(int k )
+        {
+            var kmeas = new KMeans(k:k);
+            //List<List<int>> points = new List<List<int>>();
+            double[][] points = new double[ObjList.Count][];
+            //List<Point> points = new List<Point>();
+            for (int i = 0; i < ObjList.Count; i++)
+            {
+                points[i] = ObjList[i].getStartingPoint();
+            }
+            KMeansClusterCollection clusters = kmeas.Learn(points);
+            int[] output = clusters.Decide(points);
+            for (int i = 0; i < ObjList.Count; i++)
+            {
+                points[i] = ObjList[i].getStartingPoint();
+                string temp = string.Format("x:{0} y:{1} class:{2}\n", points[i][0], points[i][1], output[i]);
+                Console.WriteLine(temp);
+            }
         }
     }
 }

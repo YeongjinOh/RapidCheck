@@ -42,5 +42,10 @@ namespace RapidCheck
             //if (cropArea.Width == 0) { System.Windows.Forms.MessageBox.Show(cropArea.ToString() + "\n" + this.objectid.ToString()); }
             cropAreas.Add(cropArea);
         }
+        public double[] getStartingPoint()
+        {
+            double[] ret = {cropAreas[0].X, cropAreas[0].Y};
+            return ret;
+        }
     }
 }
