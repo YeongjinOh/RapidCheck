@@ -17,28 +17,14 @@ namespace RapidCheck
         {
             cropImages.Add(cropImage);
         }
-        public bool emptyImage()
-        {
-            if (currentImagePositionIdx < cropImages.Count)
-                return false;
-            return true;
-        }
+        //public bool emptyImage() //삭제 예정
+        //{
+        //    if (currentImagePositionIdx < cropImages.Count)
+        //        return false;
+        //    return true;
+        //}
         public void addCropArea(Rectangle cropArea)
         {
-            //cropArea.X -= 10;
-            //cropArea.Y -= 20;
-            //cropArea.Width += 20;
-            //cropArea.Height += 20;
-
-            ////일단은... width x height
-            //if (cropArea.X > width) cropArea.X /= 2;
-            //if (cropArea.Y > height) cropArea.Y /= 2;
-            ////if (cropArea.X < 0) cropArea.X = 0;
-            ////if (cropArea.Y < 0) cropArea.Y = 0;
-            //if (cropArea.X + cropArea.Width > width) cropArea.Width = width - cropArea.X;
-            //if (cropArea.Y + cropArea.Height > height) cropArea.Height = height - cropArea.Y;
-
-            //if (cropArea.Width == 0) { System.Windows.Forms.MessageBox.Show(cropArea.ToString() + "\n" + this.objectid.ToString()); }
             cropAreas.Add(cropArea);
         }
         public double[] getStartingPoint()

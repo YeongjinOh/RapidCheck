@@ -77,6 +77,7 @@ namespace RapidCheck
         }
         public void overlay()
         {
+            /*
             overlayFrames = new List<Bitmap>();
             //drawing
             Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
@@ -89,14 +90,35 @@ namespace RapidCheck
                     BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
                 }
                 overlayFrames.Add(BitCopy);
+                BitCopy.Dispose();
             }
+            */
+            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            VideoFileWriter writer = new VideoFileWriter();
+            string outputPath = string.Format(@"C:\videos\output\video{0}_{1}_{2}_{3}.avi", videoid, maxFrameNum, outputFrameNum, clusterNum);
+            if(System.IO.File.Exists(outputPath)) //해당 이름을 가진 파일이 존재한다면,,,,
+            {
+                outputPath = outputPath + "_" + System.DateTime.Now.ToString("MM_dd hh_mm");
+            }
+            writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
+            for (int resFrame = 0; resFrame < outputFrameNum; resFrame++)
+            {
+                Bitmap BitCopy = (Bitmap)background.Clone();
+                for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
+                {
+                    int id = overlayOrders[resFrame][idx];
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
+                }
+                writer.WriteVideoFrame(BitCopy);
+                BitCopy.Dispose();
+            }
+            writer.Close();
         }
         public void setObjidList()
         {
             bool useFilter = false;
             if (!useFilter)
             {
-
                 objectidList.Clear();
                 for (int idIdx = 0; idIdx < ObjList.Count; idIdx++)
                 {
@@ -275,17 +297,18 @@ namespace RapidCheck
             }
             reader.Close();
         }
-        public void saveAviFile()
-        {
-            VideoFileWriter writer = new VideoFileWriter();
-            string outputPath = string.Format(@"C:\videos\output\{0}.avi", videoid);
-            writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
-            for (int i = 0; i < outputFrameNum; i++)
-            {
-                writer.WriteVideoFrame(overlayFrames[i]);
-            }
-            writer.Close();
-        }
+        //public void saveAviFile() //삭제예정
+        //{
+        //    VideoFileWriter writer = new VideoFileWriter();
+        //    string outputPath = string.Format(@"C:\videos\output\{0}.avi", videoid);
+        //    writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
+        //    for (int i = 0; i < outputFrameNum; i++)
+        //    {
+        //        writer.WriteVideoFrame(overlayFrames[i]);
+        //        overlayFrames[i].Dispose();
+        //    }
+        //    writer.Close();
+        //}
         public void modifyCropArea(ref Rectangle cropArea)
         {
             cropArea.X -= 10;

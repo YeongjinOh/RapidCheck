@@ -14,14 +14,12 @@ using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Threading;
 //using SharpDX.MediaFoundation;
-
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
     {
         private Size formSize;
         private Size pnlSize;
-
         //검색 조건 (방향, 색상)
         private int inputDirection = -1;
         private int color = -1;
@@ -43,6 +41,7 @@ namespace RapidCheck
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(tabPage3.Width, tabPage3.Height);
 
+            //color button
             radioButton1.Text = "빨간색";
             radioButton2.Text = "노란색";
             radioButton3.Text = "초록색";
@@ -53,6 +52,16 @@ namespace RapidCheck
             radioButton8.Text = "자주색";
             radioButton9.Text = "검은색";
             radioButton10.Text = "흰색";
+
+            //progress bar
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            progressBar1.Step = progressBar1.Maximum / 7;
+            progressBar1.Style = ProgressBarStyle.Continuous;
+            progressBar1.Enabled = true;
+            
+            //text box
+            stateLabel.Text = "click! video button";
         }
 
         private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
@@ -65,24 +74,90 @@ namespace RapidCheck
         private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
 
         string videoPath = null;
-        Thread worker;
         private void VideoBtn_Click(object sender, EventArgs e)
         {
-            //OpenFileDialog choofdlog = new OpenFileDialog();
-            //choofdlog.Filter = "All Files (*.*)|*.*";
-            //choofdlog.FilterIndex = 1;
-            //choofdlog.Multiselect = true;
-            //choofdlog.InitialDirectory = @"C:\videos";
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "All Files (*.*)|*.*";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = true;
+            choofdlog.InitialDirectory = @"C:\videos";
 
-            //if (choofdlog.ShowDialog() == DialogResult.OK)
-            //{
-            //    videoPath = choofdlog.FileName;
-            //}
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                videoPath = choofdlog.FileName;
+            }
             videoPath = @"C:\videos\tracking.mp4";
-            RapidCheck.OverlayVideo test = new RapidCheck.OverlayVideo(videoPath);
-            /////
-            //worker = new Thread(Run);
-            //worker.Start();
+
+            int maxFrameNum = 10000; // 0이면 모든 영상의 모든 frame을 분석
+            int frameStep = 5;
+            int minTrackingLength = 29;
+            int clusterNum = 20;
+            int outputFrameNum = 1000;
+            RapidCheck.OverlayVideo rapidCheck = new RapidCheck.OverlayVideo(videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+
+            new Thread(() => rapidRun(ref rapidCheck)).Start();
+            //rapidRun(ref rapidCheck);
+        }
+        private void rapidRun(ref RapidCheck.OverlayVideo rapid)
+        {
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+
+            stateLabel.Text = "Get MYSQL table...";
+            sw.Start();
+            rapid.getMysqlObjList();
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\nMYSQL : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+
+            stateLabel.Text = "Setting Obj List...";
+            sw.Start();
+            rapid.addObj();
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\naddObj : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+
+            stateLabel.Text = "Clustering...";
+            sw.Start();
+            rapid.kMeasFunc();
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\nkMeasFunc : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+
+            stateLabel.Text = "Image cropping...";
+            sw.Start();
+            rapid.imageCrop(videoPath);
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\nimageCrop : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+
+            stateLabel.Text = "Obj id filtering...";
+            sw.Start();
+            rapid.setObjidList();
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\nsetObjidList : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+
+            stateLabel.Text = "Overlay id Ordering...";
+            sw.Start();
+            rapid.buildOverlayOrderUsingCluster();
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\nbuildOverlayOrderUsingCluster : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+
+            stateLabel.Text = "make overlayBitmap and .avi";
+            sw.Start();
+            rapid.overlay();
+            sw.Stop();
+            timeLabel.Text = timeLabel.Text + "\noverlay : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.Value = 100;
+            stateLabel.Text = "Done.";
         }
         //private void Run()
         //{
