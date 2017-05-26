@@ -22,7 +22,7 @@ if cfg.image_dim_order == 'th':
 
 # weights_path = 'models/train/yolo-tiny-tfdim-new-steps10000.h5'
 # weights_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
-weights_path = 'models/train/yolo-tiny-new-detection-epoch90.h5'
+# weights_path = 'models/train/yolo-tiny-new-detection-epoch90.h5'
 # weights_path = 'models/pretrain/yolo-tiny-origin.h5'
 # weights_path = 'models/train/yolo-vgg16-2class-steps40000.h5'
 is_freeze = True
@@ -32,12 +32,12 @@ output_tensor_shape = (cfg.cell_size * cfg.cell_size)*(cfg.num_classes + cfg.box
 # model = yolo_tiny_TFdim_model()
 model = yolo_tiny_THdim_model()
 model.summary()
-model.load_weights(weights_path)
+# model.load_weights(weights_path)
 
 from utils.BoxUtils import post_progress
 from yolo.process import preprocess
 
-threshold = 0.1
+threshold = 0.2
 
 
 # imagePath = './test/my_testset/person_cow.jpg'
@@ -46,12 +46,12 @@ threshold = 0.1
 # imagePath = './test/my_testset/000467.jpg'
 # imagePath = './test/my_testset/000386.jpg'
 # imagePath = './test/my_testset/many_person.jpg'
-imagePath = './test/my_testset/person.jpg'
+imagePath = './test/my_testset/tracking_00110.png'
 # imagePath = './test/my_testset/apart_car_test.jpg'
 # imagePath = './test/my_testset/person_car3.jpg'
 # imagePath = './test/my_testset/car1.jpg'
 # imagePath = './test/my_testset/car2.jpg'
-test_weights_list = [weights_path]
+test_weights_list = ['models/train/yolo-2class-mydata-tracking-complete.h5']
 # test_weights_list = ['models/train/yolo-vgg16-2class-steps10000.h5',
 # 					'models/train/yolo-vgg16-2class-steps15000.h5',
 # 					'models/train/yolo-vgg16-2class-steps20000.h5',
@@ -79,7 +79,7 @@ for each_weight_path in test_weights_list:
 	print("4", batch.shape)
 	out = model.predict(batch)
 	print("5", out.shape)
-	out_img = post_progress(out[0], im=img, is_save=False, threshold=threshold)
+	out_img, objects, is_object = post_progress(out[0], im=img, is_save=False, threshold=threshold)
 	print("6", out_img.shape)
 	out_img = cv2.cvtColor(out_img, cv2.COLOR_BGR2RGB)
 	plt.imshow(out_img)

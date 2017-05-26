@@ -136,7 +136,7 @@ def shuffle():
 
 	for i in range(cfg.epochs):
 		shuffle_idx = perm(np.arange(size))
-		print("shuffle index : ", shuffle_idx)
+		# print("shuffle index : ", shuffle_idx)
 		for b in range(batch_per_epoch):
 			# yield these
 			x_batch = list()

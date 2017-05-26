@@ -8,12 +8,14 @@ only 2class classifier yolo model config
 # Global config variables
 import os
 
-model_name = 'yolo-2class-mydata'
+model_name = 'yolo-2class-mydata-tracking'
 classes_name = ["car", "person"]
 
-dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
+# dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
 # dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012')
+
+dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','my_trainset', 'datacenter_tracking', 'datacenter')
 
 ann_location = os.path.join(dataset_abs_location, 'annotations')
 #ann_location = os.path.join(dataset_abs_location, 'Annotations')
@@ -32,7 +34,7 @@ coord_scale = 5
 
 inp_size = 448, 448, 3
 batch_size = 32
-epochs=100
+epochs=500
 
 lr=0.0001
 trainer='adam'
