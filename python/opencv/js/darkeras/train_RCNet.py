@@ -13,7 +13,9 @@ if cfg.image_dim_order == 'th':
 	K.set_image_dim_ordering('th')
 
 pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+# pretrain_weight_path = 'models/train/yolo-2class-mydata-tracking-complete.h5'
 # pretrain_weight_path = 'models/train/yolo-2class-complete.h5'
+# pretrain_weight_path = 'models/train/yolo-2class-mydata-3video-complete.h5'
 is_freeze = True
 verbalise = True
 
@@ -80,7 +82,7 @@ for i, (x_batch, datum) in enumerate(batches):
 			else:
 				print(dense_last.name, "\tTraining~")
 	
-	if i == 1:
+	if i == 1 or i == 10 or i == 50:
 		model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 		say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
    

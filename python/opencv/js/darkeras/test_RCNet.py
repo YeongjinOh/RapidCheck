@@ -46,12 +46,13 @@ threshold = 0.2
 # imagePath = './test/my_testset/000467.jpg'
 # imagePath = './test/my_testset/000386.jpg'
 # imagePath = './test/my_testset/many_person.jpg'
-imagePath = './test/my_testset/tracking_00110.png'
+# imagePath = './test/my_testset/tracking_00110.png'
 # imagePath = './test/my_testset/apart_car_test.jpg'
 # imagePath = './test/my_testset/person_car3.jpg'
-# imagePath = './test/my_testset/car1.jpg'
+imagePath = './test/my_testset/person2.jpg'
 # imagePath = './test/my_testset/car2.jpg'
-test_weights_list = ['models/train/yolo-2class-mydata-tracking-complete.h5']
+# test_weights_list = ['models/train/yolo-2class-mydata-3video-steps5000.h5']
+test_weights_list = ['models/train/yolo-2class-complete.h5']
 # test_weights_list = ['models/train/yolo-vgg16-2class-steps10000.h5',
 # 					'models/train/yolo-vgg16-2class-steps15000.h5',
 # 					'models/train/yolo-vgg16-2class-steps20000.h5',

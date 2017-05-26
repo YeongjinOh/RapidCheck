@@ -19,16 +19,17 @@ from utils.help import DB_Helper, DB_Item
 K.set_image_dim_ordering('th')
 
 is_freeze = True
-# weigths_path = 'models/train/yolo-2class-epoch50.h5'
-weigths_path = 'models/train/yolo-2class-complete.h5'
+# weigths_path = 'models/train/yolo-2class-complete.h5'
+weigths_path = 'models/train/yolo-2class-mydata-3video-complete.h5'
+# weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 test_threshold = 0.23
 
 model = yolo_tiny_THdim_model(is_freeze)
 model.load_weights(weigths_path)
 model.summary()
 
-db = DB_Helper()
-db.open()
+# db = DB_Helper()
+# db.open()
 # db.delete()
 # video_name = 'persons1.mp4'
 video_name = 'tracking.mp4'
@@ -40,9 +41,10 @@ video_name = 'tracking.mp4'
 # video_name = 'car_view_video3.avi'
 videoId = 3 # TODO: video id would be get by runtime
 frameNum = 0
-frameSteps = 5
+frameSteps = 2
 items = []
-cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
+# cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
+cap = cv2.VideoCapture('C:\\Users\\Soma2\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
 cv2.resizeWindow('Detection Window', 600,600)
 try:
@@ -67,12 +69,15 @@ try:
 		# 	del items
 		# 	items = []
 		cv2.imshow('Detection Window', out_img)
-		if cv2.waitKey(1) & 0xFF == ord('q'):
+		wk = cv2.waitKey(1)
+		if wk & 0xFF == ord('q'):
 			break
+		elif wk & 0xFF == ord(' '):
+			cv2.waitKey(0)
 except Exception:
 	print("Exception Occured")
 finally:
-	db.close()
+	# db.close()
 	print("DB Closed in Finally..")
 	cap.release()
 	cv2.destroyAllWindows()
