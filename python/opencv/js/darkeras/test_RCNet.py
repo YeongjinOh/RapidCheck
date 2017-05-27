@@ -44,30 +44,19 @@ threshold = 0.2
 # imagePath = './test/my_testset/000892.jpg'
 # imagePath = './test/my_testset/000906.jpg'
 # imagePath = './test/my_testset/000467.jpg'
-# imagePath = './test/my_testset/000386.jpg'
+imagePath = './test/my_testset/car_test2.jpg'
 # imagePath = './test/my_testset/many_person.jpg'
 # imagePath = './test/my_testset/tracking_00110.png'
 # imagePath = './test/my_testset/apart_car_test.jpg'
 # imagePath = './test/my_testset/person_car3.jpg'
-imagePath = './test/my_testset/person2.jpg'
+# imagePath = './test/my_testset/person.jpg'
 # imagePath = './test/my_testset/car2.jpg'
 # test_weights_list = ['models/train/yolo-2class-mydata-3video-steps5000.h5']
-test_weights_list = ['models/train/yolo-2class-complete.h5']
-# test_weights_list = ['models/train/yolo-vgg16-2class-steps10000.h5',
-# 					'models/train/yolo-vgg16-2class-steps15000.h5',
-# 					'models/train/yolo-vgg16-2class-steps20000.h5',
-# 					'models/train/yolo-vgg16-2class-steps25000.h5',
-# 					'models/train/yolo-vgg16-2class-steps30000.h5',
-# 					'models/train/yolo-vgg16-2class-steps35000.h5',
-# 					'models/train/yolo-vgg16-2class-steps40000.h5',
-# 					'models/train/yolo-vgg16-2class-steps45000.h5',
-# 					'models/train/yolo-vgg16-2class-steps50000.h5',
-# 					'models/train/yolo-vgg16-2class-steps55000.h5',
-# 					'models/train/yolo-vgg16-2class-steps60000.h5',
-# 					'models/train/yolo-vgg16-2class-steps65000.h5',
-# 					'models/train/yolo-vgg16-2class-steps70000.h5',
-# 					'models/train/yolo-vgg16-2class-steps75000.h5',
-# 					'models/train/yolo-vgg16-2class-steps80000.h5']
+# test_weights_list = ['models/train/yolo-2class-complete.h5']
+test_weights_list = []
+for i in range(1000, 5000, 1000):
+	weights_path = "models/train/yolo-2class-mydata-onlycartracking-cell14-steps{}.h5".format(i)
+	test_weights_list.append(weights_path)
 
 
 for each_weight_path in test_weights_list:
