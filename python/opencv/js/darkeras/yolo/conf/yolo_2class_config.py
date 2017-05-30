@@ -9,13 +9,13 @@ only 2class classifier yolo model config
 import os
 
 
-model_name = 'yolo-2class-voc2007-train-cell28'
+model_name = 'yolo-2class-voc2007-base-shortdense-cell14'
 classes_name = ["car", "person"]
 
 # dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
-# dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
+dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012')
-dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_06-2007','VOCdevkit','VOC2007')
+# dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_06-2007','VOCdevkit','VOC2007')
 
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','my_trainset', 'datacenter_tracking', 'datacenter')
 
@@ -25,7 +25,7 @@ ann_location = os.path.join(dataset_abs_location, 'Annotations')
 # imageset_location = os.path.join(dataset_abs_location, 'images')
 imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
 
-cell_size = 28
+cell_size = 14
 num_classes = len(classes_name)
 boxes_per_cell = 2
 
@@ -36,7 +36,7 @@ coord_scale = 5
 
 inp_size = 448, 448, 3
 batch_size = 32
-epochs=500
+epochs=100000
 
 lr=0.0001
 trainer='adam'
