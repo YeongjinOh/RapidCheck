@@ -54,11 +54,8 @@ sess.run(tf.global_variables_initializer())
 model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
-<<<<<<< Updated upstream
-for i, (x_batch, datum) in enumerate(batches, start=24000):
-=======
-for i, (x_batch, datum) in enumerate(batches, start=45000):
->>>>>>> Stashed changes
+
+for i, (x_batch, datum) in enumerate(batches):
 	train_feed_dict = {
 	   loss_ph[key]:datum[key] for key in loss_ph 
 	}
@@ -94,7 +91,7 @@ for i, (x_batch, datum) in enumerate(batches, start=45000):
 	# 	model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 	# 	say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
    
-	if i % 4000 == 0:
+	if i % 5000 == 0:
 		model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 		say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
 
