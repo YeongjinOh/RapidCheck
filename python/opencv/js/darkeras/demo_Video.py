@@ -20,9 +20,13 @@ K.set_image_dim_ordering('th')
 
 is_freeze = True
 # weigths_path = 'models/train/yolo-2class-complete.h5'
+
 weigths_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps44000.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 test_threshold = 0.5
+
+# weigths_path = 'models/train/yolo-2class-voc2007-train-cell28-steps40000.h5'
+# weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 
 model = yolo_tiny_THdim_model(is_freeze)
 model.load_weights(weigths_path)
@@ -33,8 +37,13 @@ model.summary()
 # db.delete()
 # video_name = 'persons1.mp4'
 #video_name = 'apart_car1.mp4'
+<<<<<<< Updated upstream
 # video_name = 'demo2.mp4'
 video_name = 'tracking.mp4'
+=======
+video_name = 'tracking.mp4'
+# video_name = 'playback.mp4'
+>>>>>>> Stashed changes
 # video_name = 'videoplayback.mp4'
 # video_name = 'car_video2.mp4'
 # video_name = 'car_night_video.mp4'

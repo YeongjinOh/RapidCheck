@@ -12,8 +12,11 @@ from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_
 if cfg.image_dim_order == 'th':
 	K.set_image_dim_ordering('th')
 
-# pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
-pretrain_weight_path = 'models/train/yolo-2class-voc2007-base-shortdense-cell14-steps24000.h5'
+
+pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+# pretrain_weight_path = 'models/train/yolo-2class-voc2007-base-shortdense-cell14-steps24000.h5'
+# pretrain_weight_path = 'models/train/yolo-2class-voc2007-train-cell14-steps40000.h5'
+
 # pretrain_weight_path = 'models/train/yolo-2class-complete.h5'
 # pretrain_weight_path = 'models/train/yolo-2class-mydata-3video-complete.h5'
 is_freeze = True
@@ -51,7 +54,11 @@ sess.run(tf.global_variables_initializer())
 model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
+<<<<<<< Updated upstream
 for i, (x_batch, datum) in enumerate(batches, start=24000):
+=======
+for i, (x_batch, datum) in enumerate(batches, start=45000):
+>>>>>>> Stashed changes
 	train_feed_dict = {
 	   loss_ph[key]:datum[key] for key in loss_ph 
 	}
