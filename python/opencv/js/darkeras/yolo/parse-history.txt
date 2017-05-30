@@ -1,1 +1,1 @@
-yolo\yolo-vgg16-2class.parsed car person
+yolo\yolo-2class-voc2007-train-cell28.parsed car person

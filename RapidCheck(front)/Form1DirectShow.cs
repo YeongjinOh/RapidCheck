@@ -35,7 +35,7 @@ namespace RapidCheck
         private void Video2Btn_Click(object sender, EventArgs e)
         {
             //Videotest1(); //진행중 동작x
-            Videotest2();
+            //Videotest2();
         }
         private void captureBtn_Click(object sender, EventArgs e)
         {
@@ -87,19 +87,19 @@ namespace RapidCheck
             Marshal.ReleaseComObject(pMediaEvent);
             pMediaEvent = null;
         }
-        private void Videotest2()
-        {
-            if (DirectShowBtn.Text == "DiShow")
-            {
-                play();
-                DirectShowBtn.Text = "close";
-            }
-            else if (DirectShowBtn.Text == "close")
-            {
-                CloseInterface();
-                DirectShowBtn.Text = "DiShow";
-            }
-        }
+        //private void Videotest2()
+        //{
+        //    if (DirectShowBtn.Text == "DiShow")
+        //    {
+        //        play();
+        //        DirectShowBtn.Text = "close";
+        //    }
+        //    else if (DirectShowBtn.Text == "close")
+        //    {
+        //        CloseInterface();
+        //        DirectShowBtn.Text = "DiShow";
+        //    }
+        //}
         private void play()
         {
             SetupGraph(tabPage2, @"C:\Users\trevor\Desktop\Videos\cctv2.wmv");

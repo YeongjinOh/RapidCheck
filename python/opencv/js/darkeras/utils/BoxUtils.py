@@ -157,8 +157,8 @@ def post_progress(net_out, im, is_save = True, threshold=0.01):
 	  		continue
 		is_object = True
 		left, right, top, bot, max_indx, confidence = boxResults
-		line = "max_index: {}, left: {}, top: {}, right: {}, bottom: {}".format(
-	    	max_indx, left, top, right, bot)
+		line = "max_index: {}, left: {}, top: {}, right: {}, bottom: {}, confidence: {:.3f}".format(
+	    	max_indx, left, top, right, bot, confidence)
 		print(line)
 
 		class_name, class_color = classes_colors[max_indx]
@@ -167,7 +167,7 @@ def post_progress(net_out, im, is_save = True, threshold=0.01):
 	  		class_color, thick)
 		# cv2.putText(imgcv, max_indx, (left, top - 12),
 		#    2, 1.5, (0, 0, 255))
-		cv2.putText(imgcv, class_name, (int(left), int(top-12)), 2, 1.5, class_color)
+		cv2.putText(imgcv, class_name+" {:.2f}".format(confidence), (int(left), int(top-12)), 2, 1.5, class_color)
 		# append objects
 		objects.append([max_indx, left, top, int(right-left), int(bot-top)])
 	if not is_save: 
