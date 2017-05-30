@@ -1,3 +1,7 @@
+# Project local configuration
+main/project/RapidCheck/config.h
+config.h
+
 # image ignore
 *.jpg
 *.jpeg
@@ -16,11 +20,17 @@ videos/
 *.pyc
 *.mp4
 dataset/
+my_testset
+MNIST_data/
+mnist_ckpt/
+
 # for jupyter notebook
 .ipynb_checkpoints/
 data/
 models/
 .DS_Store/
+*.weights
+*.parsed
 
 
 # Created by https://www.gitignore.io/api/c++,visualstudio
@@ -343,3 +353,7 @@ __pycache__/
 *.feat
 *.model
 *.zip
+
+
+
+

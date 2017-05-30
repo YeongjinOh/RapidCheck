@@ -59,6 +59,7 @@
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="cv_x64_debug.props" />
+    <Import Project="mysql.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -99,12 +100,15 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -145,22 +149,28 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="buildTrajectory.cpp" />
-    <ClCompile Include="detectionAndTracking.cpp" />
-    <ClCompile Include="detectionBasedTracking.cpp" />
+    <ClCompile Include="compareSimilarity.cpp" />
+    <ClCompile Include="showDetection.cpp" />
+    <ClCompile Include="showTrackletClusters.cpp" />
     <ClCompile Include="frame.cpp" />
-    <ClCompile Include="gpu_hog.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="showTracklet.cpp" />
+    <ClCompile Include="showTrajectory.cpp" />
+    <ClCompile Include="similarity_utils.cpp" />
     <ClCompile Include="target.cpp" />
-    <ClCompile Include="targetgroup.cpp" />
     <ClCompile Include="tracking_utils.cpp" />
+    <ClCompile Include="RCTrajectory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config.h" />
+    <ClInclude Include="database.h" />
     <ClInclude Include="frame.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="targetgroup.h" />
+    <ClInclude Include="RCTrajectory.h" />
+    <ClInclude Include="similarity_utils.h" />
     <ClInclude Include="target.h" />
-    <ClInclude Include="gpu_hog.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="tracking_utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -3,20 +3,6 @@
 
 #include "main.h"
 
-#define MIXTURE_CONSTANT 0.1
-#define LOW_LEVEL_TRACKLETS 6
-#define CONTINUOUS_MOTION_COST_THRE 30
-
-#define MAX_FRAMES 181
-#define NUM_OF_SEGMENTS (MAX_FRAMES - 1)/LOW_LEVEL_TRACKLETS
-#define NUM_OF_COLORS 64
-#define DEBUG false
-#define START_FRAME_NUM 444 // start frame number
-#define FRAME_STEP 1
-
-
-typedef vector<Target> tracklet;
-
 struct Segment {
 	vector<tracklet> tracklets;
 	int startFrameNumber;
@@ -26,22 +12,38 @@ struct Segment {
 	{
 		tracklets.push_back(tr);
 	}
-};
-
-
-// Trajectory is already defined in cv
-struct RPTrajectory
-{
-	int startSegmentNum, endSegmentNum;
-	vector<Target> targets;
-	RPTrajectory(vector<Target>& tr, int segmentNum) : targets(tr), startSegmentNum(segmentNum), endSegmentNum(segmentNum) { }
-	void merge(tracklet tr)
+	vector<tracklet> getTracklets()
 	{
-		targets.insert(targets.end(), tr.begin(), tr.end());
-		endSegmentNum++;
+		return tracklets;
+	}
+	tracklet getTracklet(int idx)
+	{
+		if (idx<tracklets.size())
+			return tracklets[idx];
+		return tracklet();
 	}
 };
 
+int calcInternalDivision(int a, int b, int m, int n);
+double calcInternalDivision(double a, double b, int m, int n);
+
+
+
+// Mid-level segments which consist of LOW_LEVEL_TRACKLETS*MID_LEVEL_TRACKLETS(36) frames
+struct MidLevelSegemet
+{
+	vector<RCTrajectory> trajectories;
+	void addTrajectory(RCTrajectory trajectory)
+	{
+		trajectories.push_back(trajectory);
+	}
+};
+
+/** Generate random colors
+	
+	@return list of colors
+*/
+vector<Scalar> getRandomColors();
 
 /**
 	Calculate 2-d norm value of given vector
@@ -122,17 +124,62 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 
 	@param app frame reader with basic parameters set
 	@param cap video variable
-	@param list of frames to be implemented detection
+	@param frames list of frames to be implemented detection
 */
 void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
+
+
+/**
+	Detect targets in MAX_FRAMES frames and insert result into DataBase
+
+	@param app frame reader with basic parameters set
+	@param cap video variable
+*/
+void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
+
+
+/**
+	Read targets in MAX_FRAMES frames from DataBase
+
+	@param cap video variable
+	@param frames list of frames to be implemented detection
+*/
+void readTargets(VideoCapture& cap, vector<Frame>& frames);
+/**
+	Read trajectories in MAX_FRAMES frames from DataBase
+
+	@param cap video variable
+	@param trajectories list of trajectories to be implemented tracking
+*/
+void readTrajectories(vector<RCTrajectory>& trajectories);
+/**
+	Build all tracklets of given frames
+
+	@param frames list of frames to be implemented detection
+	@param segments list of segments to be built
+*/
+void buildTracklets(vector<Frame>& frames, vector<Segment>& segments);
+
+/** Build one optimal trajectory of given mid-level segment
+	
+	@param solution solution indices of each frames which indicates optimal tracklet
+*/
+void getTrajectory(vector<int>& solution);
 
 /**
 	Build all tracklets of given frames
 
-	@param cap video variable
-	@param list of frames to be implemented detection
+	@param segments list of segments to be matched
+	@param mlSegments list of mide-level segments to be built
 */
-void buildTracklets(vector<Frame>& frames, vector<Segment>& segments);
+void buildTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& mlSegments);
 
+
+/**
+	Insert object informations such as direction counts, color ratios into database
+
+	@param trajectories list of trajectory of each object
+*/
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories);
 
 #endif

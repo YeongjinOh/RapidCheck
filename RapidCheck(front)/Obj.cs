@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing; //Bitmap
+
+namespace RapidCheck
+{
+    public partial class Obj
+    {
+        public int objectid { get; set; }
+        public int currentAreaPositionIdx { get; set; }
+        public int currentImagePositionIdx { get; set; }
+        private List<int> cropPositionNum;
+        private List<Rectangle> cropAreas;
+        private List<Bitmap> cropImages;
+        //public static int width { get; set; }
+        //public static int height { get; set; }
+
+        public Obj() { }
+        public Obj(int id)
+        {
+            objectid = id;
+            currentAreaPositionIdx = 0;
+            currentImagePositionIdx = 0;
+            cropPositionNum = new List<int>();
+            cropAreas = new List<Rectangle>();
+            cropImages = new List<Bitmap>();
+        }
+        public int getLength()
+        {
+            return cropAreas.Count;
+        }
+    }
+}

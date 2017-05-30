@@ -15,25 +15,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="gpu_hog.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="target.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="targetgroup.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="frame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="detectionBasedTracking.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="detectionAndTracking.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="tracking_utils.cpp">
@@ -45,15 +33,30 @@
     <ClCompile Include="buildTrajectory.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="compareSimilarity.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="showTrackletClusters.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="similarity_utils.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="showTrajectory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="RCTrajectory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="showDetection.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gpu_hog.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="target.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetgroup.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
@@ -63,6 +66,21 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="tracking_utils.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="config.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="database.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="similarity_utils.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="RCTrajectory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,5 +1,22 @@
 #include "tracking_utils.h"
+using namespace cv;
 
+// Generate random colors
+vector<Scalar> getRandomColors()
+{
+	// random number generator
+	RNG rng(0xFFFFFFFF);
+
+	// initialize colors	
+	vector<Scalar> colors;
+	for (int i = 0; i < NUM_OF_COLORS; i++)
+	{
+		int icolor = (unsigned)rng;
+		int minimumColor = 0;
+		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
+	}
+	return colors;
+}
 // Calculate 2-d norm value of given vector
 double getNormValueFromVector(Point p) {
 	return sqrt(p.x*p.x + p.y*p.y);
@@ -11,7 +28,7 @@ void reconstructLeftDummy(vector<int>& selectedIndices, vector<Target>& selected
 	assert(idx >= 0 && idx + 2 < selectedTargets.size());
 	Target target1 = selectedTargets[idx + 1], target2 = selectedTargets[idx + 2];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-	int width = target1.rect.width, height = target1.rect.height;
+	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
@@ -25,7 +42,7 @@ void reconstructRightDummy(vector<int>& selectedIndices, vector<Target>& selecte
 	assert(idx >= 2 && idx < selectedTargets.size());
 	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx - 2];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
-	int width = target1.rect.width, height = target1.rect.height;
+	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
@@ -39,7 +56,7 @@ void reconstructMiddleOneDummy(vector<int>& selectedIndices, vector<Target>& sel
 	assert(idx > 0 && idx + 1 < selectedTargets.size());
 	Target target1 = selectedTargets[idx - 1], target2 = selectedTargets[idx + 1];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
-	int width = target1.rect.width, height = target1.rect.height;
+	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
@@ -53,7 +70,7 @@ void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& s
 	assert(idx1 > 0 && idx2 < selectedTargets.size() && idx1 + 1 == idx2);
 	Target target1 = selectedTargets[idx1 - 1], target2 = selectedTargets[idx2 + 1];
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p_l = (2 * p1 + p2) / 3, p_r = (p1 + 2 * p2) / 3;
-	int width_l = target1.rect.width, height_l = target1.rect.height, width_r = target2.rect.width, height_r = target2.rect.height;
+	int width_l = target1.getTargetArea().width, height_l = target1.getTargetArea().height, width_r = target2.getTargetArea().width, height_r = target2.getTargetArea().height;
 	Rect rect_l(p_l.x - width_l / 2, p_l.y - height_l / 2, width_l, height_l), rect_r(p_r.x - width_r / 2, p_r.y - height_r / 2, width_r, height_r);
 	Target target_l(rect_l, target1.hist), target_r(rect_r, target2.hist);
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx1].addTarget(target_l);
@@ -161,6 +178,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 				int outlierIdx = minOutliers[i];
 				selectedIndices[outlierIdx] = -1;
 				selectedTargets[outlierIdx] = Target();
+				useDummy = true;
 			}
 			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
 			return;
@@ -240,7 +258,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < i; j++)
-			{
+			{ 
 				costAppearance += compareHist(selectedTargets[i].hist, selectedTargets[j].hist, 0);
 			}
 			for (int j = 1; j < n - 1; j++)
@@ -295,7 +313,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	}
 
 	// if not used, use dummy
-	if ((n < 2 || cnt == 0) && useDummy)
+	if (useDummy && (n < 2 || cnt == 0))
 	{
 		// recursive backtracking
 		selectedTargets.push_back(Target());
@@ -311,7 +329,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
+	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
 	int histSize[] = { h_bins, s_bins };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
@@ -320,14 +338,26 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
 
-	Mat frame;
+	Mat frame, frameSkipped;
 	
-	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
-
-		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP*frameNum);
-
+	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+		
 		// get frame from the video
 		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
 
 		// stop the program if no more images
 		if (frame.rows == 0 || frame.cols == 0)
@@ -337,19 +367,21 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 
 		// implement hog detection
 		app.getHogResults(frame, found);
+		
+
 		size_t i, j;
-		for (int i = 0; i<found.size(); i++)
+		for (i = 0; i<found.size(); i++)
 		{
-			Rect r = found[i];
-			for (j = 0; j<found.size(); j++)
-				if (j != i && (r & found[j]) == r)
-					break;
-			if (j == found.size())
+			Rect& r = found[i];
+			//for (j = 0; j<found.size(); j++)
+		   	//	if (j != i && (r & found[j]) == r)
+			//		break;
+			//if (j == found.size())
 				found_filtered.push_back(r);
 		}
 		for (i = 0; i<found_filtered.size(); i++)
 		{
-			Rect &r = found_filtered[i];
+			Rect& r = found_filtered[i];
 			r.x += cvRound(r.width*0.1);
 			r.width = cvRound(r.width*0.8);
 			r.y += cvRound(r.height*0.07);
@@ -357,53 +389,203 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 		}
 
 		// create histograms
-		vector<MatND> hists;
+		vector<Target> targets;
 		for (int i = 0; i < found_filtered.size(); ++i)
 		{
-			Mat temp;
+			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
-			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			//Rect r = found_filtered[i];
+			Rect &r = found_filtered[i];
+			r.x += r.width / 5;
+			r.width = r.width * 3 / 5;
+			r.y += r.height / 10;
+			r.height = r.height * 4 / 5;
+
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
+			
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
+			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
 		}
 
-		frames.push_back(Frame(frameNum, found_filtered, hists));
+		frames.push_back(Frame(frameNum, targets));
 	}
+}
+
+// Read targets in MAX_FRAMES frames from DataBase
+void readTargets(VideoCapture& cap, vector<Frame>& frames)
+{
+	// initialize variables for histogram
+	// Using 50 bins for hue and 60 for saturation
+	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
+	int histSize[] = { h_bins, s_bins };
+	// hue varies from 0 to 179, saturation from 0 to 255
+	float h_ranges[] = { 0, 180 };
+	float s_ranges[] = { 0, 256 };
+	const float* ranges[] = { h_ranges, s_ranges };
+	// Use the o-th and 1-st channels
+	int channels[] = { 0, 1 };
+
+	Mat frame, frameSkipped;
+
+	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+
+	// read result from database and build mapFrameNumToPedestrians
+	vector<vector<int > > res;
+	map<int, vector<Rect> > mapFrameNumToPedestrians;
+	//db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	int carClassId = 0;
+	db.selectDetection2(res, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	for (int i = 0; i < res.size(); i++)
+	{
+		int frameNum = res[i][0], x = res[i][1], y = res[i][2], width = res[i][3], height = res[i][4], classId = res[i][5];
+		mapFrameNumToPedestrians[frameNum].push_back(Rect(x, y, width, height));
+	}
+
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+
+		// get frame from the video
+		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
+		
+		// create histograms
+		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
+		vector<Target> targets;
+		
+		// shrink rect smaller
+		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
+		for (int i = 0; i < found.size(); ++i)
+		{
+			Mat imgHSV, imgWhite, imgBlack;
+			MatND hist;
+			Rect& r = found[i];
+			if (RESIZE_DETECTION_AREA)
+			{
+				r.x += r.width * (1 - widthRatio) / 2;
+				r.width = r.width * widthRatio;
+				r.y += r.height * (1 - heightRatio) / 2 - r.height * shiftUpperRatio;
+				r.height = r.height * heightRatio;
+			}
+
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
+
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
+			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
+
+		}
+		frames.push_back(Frame(frameNum, targets));
+	}
+}
+
+// Read trajectories in MAX_FRAMES frames from DataBase
+void readTrajectories(vector<RCTrajectory>& trajectories)
+{
+	vector<vector<int > > res;
+	map<int, int> objectIdToIdx; // convert objectId to index of trajectories
+	db.selectTracking(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	for (int i = 0; i < res.size(); i++) {
+		int objectId = res[i][0], frameNum = res[i][1], x = res[i][2], y = res[i][3], width = res[i][4], height = res[i][5];
+		Target target(Rect(x, y, width, height));
+		if (objectIdToIdx.find(objectId) == objectIdToIdx.end())  {
+			objectIdToIdx[objectId] = trajectories.size();
+			int segmentNum = (frameNum - START_FRAME_NUM) / (FRAME_STEP*LOW_LEVEL_TRACKLETS);
+			RCTrajectory newTrajectory(segmentNum);
+			trajectories.push_back(newTrajectory);
+		}
+		trajectories[objectIdToIdx[objectId]].addTarget(target);
+	}
+
+}
+
+
+// Detect targets in MAX_FRAMES frames and insert result into DB
+void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
+{
+	
+	Mat frame, frameSkipped;
+	int frameNum = START_FRAME_NUM;
+	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	cout << "total frame count : " << totalFrameCount << endl;
+	int classId = 0;
+	time_t t = clock();
+	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
+	{
+		if (frameNum >= totalFrameCount)
+		{
+			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			return;
+		}
+		
+		// get frame from the video
+		cap >> frame;
+		for (int i = 1; i < FRAME_STEP; i++)
+		{
+			cap >> frameSkipped;
+		}
+
+		// stop the program if no more images
+		if (frame.rows == 0 || frame.cols == 0)
+			break;
+
+		vector<Rect> found;
+		// implement hog detection
+		app.getHogResults(frame, found);
+		for (int i = 0; i<found.size(); i++)
+		{
+			Rect& r = found[i];
+			db.insertDetection(videoId, frameNum, classId, r.x, r.y, r.width, r.height);
+		}
+	}
+	t = clock() - t;
+	printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
 }
 
 // Build all tracklets of given frames
 void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 {
 	// build all segments
-	int frameNum = 1;
-
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
+	int frameNum = 0;
+	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		printf("segnum:%d\n", segmentNumber);
 		Segment segment(frameNum + START_FRAME_NUM);
 
 		// create tracklet
 		vector<int> solution;
-
+		
 		// do not use dummy until no more solution built to optimize
 		bool useDummy = false;
 		while (true)
 		{
-			if (segmentNumber == 12) 
-			{
-				printf("segnum:%d\n", segmentNumber);
-			}
 			double costMin = INFINITY;
 			solution.clear();
 
 			
 			// build solution
 			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
-			if (segmentNumber == 12)
-			{
-				printf("after:%d\n", segmentNumber);
-			}
 
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
@@ -427,5 +609,65 @@ void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 
 		}
 		segments.push_back(segment);
+	}
+}
+
+// Build one optimal trajectory of given mid-level segment
+void getTrajectory(vector<int>& solution) {
+	// TODO
+}
+
+// Build all trajectories
+void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& mlSegments)
+{
+
+	for (int segmentNumber = 0; segmentNumber + MID_LEVEL_TRACKLETS <= segments.size(); segmentNumber += MID_LEVEL_TRACKLETS)
+	{
+		// create tracklet
+		vector<int> solution;
+		MidLevelSegemet mlSegment;
+
+		// do not use dummy until no more solution built to optimize
+		bool useDummy = false;
+		while (true)
+		{
+			double costMin = INFINITY;
+			solution.clear();
+
+			// build solution
+			getTrajectory(solution);
+
+			// if no more solution
+			if (solution.size() < LOW_LEVEL_TRACKLETS)
+			{
+				if (useDummy)
+					break;
+				useDummy = true;
+				continue;
+			}
+
+			// for each solution
+			RCTrajectory trajectory(segmentNumber);
+			for (int i = 0; i < solution.size(); i++)
+			{
+				Segment& curSegment = segments[segmentNumber + i];
+				tracklet& tracklet = curSegment.getTracklet(solution[i]);
+				trajectory.merge(tracklet);
+				// TODO : set found trues
+			}
+			mlSegment.addTrajectory(trajectory);
+		}
+		// TODO : not-found segments
+		mlSegments.push_back(mlSegment);
+	}
+}
+
+
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories)
+{
+	for (int i = 0; i < trajectories.size(); i++)
+	{
+		trajectories[i].normalizeColorRatios();
+		db.insertObjectInfo(VIDEOID, i, trajectories[i].getDirectionRatios(), 0.0, trajectories[i].getColorRatios());
 	}
 }

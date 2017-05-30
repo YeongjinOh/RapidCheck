@@ -2,30 +2,27 @@
 #define TARGET_H
 
 #include<opencv2/core/core.hpp>
-using namespace cv;
+using cv::Point;
+using cv::Point2d;
+using cv::Rect2d;
+using cv::Rect;
+using cv::MatND;
 
 class Target
 {
+private:
+	Rect rect;
 public:
 	Target(){};
 	Target(Rect rect);
 	Target(Rect rect, MatND hist);
+	Target(Rect rect, MatND hist, float whiteRatio, float blackRatio);
 	
-	Rect rect;
 	std::vector<Point> centerPositions;
-
+	float blackRatio, whiteRatio;
 	bool found;
-
-
-	double currentDiagonalSize;
-	double currentAspectRatio;
-	bool currentMatchFoundOrNew;
-	bool stillBeingTracked;
-	int numOfConsecutiveFramesWithoutAMatch;
-
-	Point predictedNextPosition;
-	void predictNextPosition(void);
 	Point getCenterPoint();
+	Rect getTargetArea();
 
 	// Histogram for matching
 	MatND hist;
