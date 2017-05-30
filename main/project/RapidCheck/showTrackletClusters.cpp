@@ -38,7 +38,11 @@ void showTrackletClusters(App app)
 	int channels[] = { 0, 1 };
 	
 	vector<Frame> frames;
+	readTargets(cap, frames);
+
+	
 	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
+	/*
 	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
 		
 		// get frame from the video
@@ -85,16 +89,16 @@ void showTrackletClusters(App app)
 	
 		frames.push_back(Frame(frameNum, found_filtered, hists));
 	}
-
+	*/
 	cout << "Detection finished" << endl;
 	
-	int frameNum = 1, objectId;
+	int frameNum = 691, objectId;
 	while (true)
 	{
 		printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
+		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
 
 		// get frame
 		Mat frame;
@@ -112,7 +116,7 @@ void showTrackletClusters(App app)
 		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 		{
 			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + START_FRAME_NUM + i);
+			cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + i);
 			// get frame
 			Mat cluster;
 			cap >> cluster;
@@ -144,8 +148,9 @@ void showTrackletClusters(App app)
 			solution.clear();
 			
 			// build solution
-			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
-			
+			// getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+			getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
 			{

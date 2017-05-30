@@ -49,8 +49,8 @@ void showTrajectory ()
 				rectangle(frameOrigin, pedestrians[i], WHITE, 2);
 			}
 
-			imshow("tracklets", frame);
-			imshow("origin", frameOrigin);
+			imshow("Trajectory", frame);
+			imshow("Detection response", frameOrigin);
 
 			// key handling
 			int key = waitKey(130);
