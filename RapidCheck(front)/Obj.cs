@@ -15,6 +15,7 @@ namespace RapidCheck
         private List<int> cropPositionNum;
         private List<Rectangle> cropAreas;
         private List<Bitmap> cropImages;
+        public int OrderingCnt { get; set; }
         //public static int width { get; set; }
         //public static int height { get; set; }
 
@@ -24,6 +25,7 @@ namespace RapidCheck
             objectid = id;
             currentAreaPositionIdx = 0;
             currentImagePositionIdx = 0;
+            OrderingCnt = 0;
             cropPositionNum = new List<int>();
             cropAreas = new List<Rectangle>();
             cropImages = new List<Bitmap>();

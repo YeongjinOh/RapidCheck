@@ -51,11 +51,14 @@ namespace RapidCheck
             int group = 3;
             for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
             {
-                List<int> temp = new List<int>();
+                List<objIdAndOrderingCnt> temp = new List<objIdAndOrderingCnt>();
                 for (int objectidListIdx = 0; (objectidListIdx < objectidList.Count) && (overlayFrameNum >=(objectidListIdx/group)*offset); objectidListIdx++)
                 {
                     int id = objectidList[objectidListIdx];
-                    temp.Add(id);
+                    int orderingCnt = ObjList[id].OrderingCnt;
+                    objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
+                    temp.Add(newOrder);
+                    ObjList[id].OrderingCnt++;
                 }
                 overlayOrders.Add(temp);
             }
@@ -64,12 +67,16 @@ namespace RapidCheck
         {
             for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
             {
-                List<int> currentObjid = new List<int>();
+                List<objIdAndOrderingCnt> currentObjid = new List<objIdAndOrderingCnt>();
                 for (int groupIdx = 0; groupIdx < startingGroup.Count; groupIdx++)
                 {
                     if(startingGroup[groupIdx].hasNext())
                     {
-                        currentObjid.Add(startingGroup[groupIdx].getNextId(ref ObjList));
+                        int id = startingGroup[groupIdx].getNextId(ref ObjList);
+                        int orderingCnt = ObjList[id].OrderingCnt;
+                        objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
+                        currentObjid.Add(newOrder);
+                        ObjList[id].OrderingCnt++;
                     }
                 }
                 overlayOrders.Add(currentObjid);
@@ -77,28 +84,12 @@ namespace RapidCheck
         }
         public void overlay()
         {
-            /*
-            overlayFrames = new List<Bitmap>();
-            //drawing
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
-            for (int resFrame = 0; resFrame < overlayOrders.Count; resFrame++)
-            {
-                Bitmap BitCopy = (Bitmap)background.Clone();
-                for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
-                {
-                    int id = overlayOrders[resFrame][idx];
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
-                }
-                overlayFrames.Add(BitCopy);
-                BitCopy.Dispose();
-            }
-            */
             Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
             VideoFileWriter writer = new VideoFileWriter();
             string outputPath = string.Format(@"C:\videos\output\video{0}_{1}_{2}_{3}.avi", videoid, maxFrameNum, outputFrameNum, clusterNum);
             if(System.IO.File.Exists(outputPath)) //해당 이름을 가진 파일이 존재한다면,,,,
             {
-                outputPath = outputPath + "_" + System.DateTime.Now.ToString("MM_dd hh_mm");
+                outputPath = outputPath.Replace(".avi",string.Format("_{0}.avi", System.DateTime.Now.ToString("_hh시mm분")));
             }
             writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
             for (int resFrame = 0; resFrame < outputFrameNum; resFrame++)
@@ -106,13 +97,34 @@ namespace RapidCheck
                 Bitmap BitCopy = (Bitmap)background.Clone();
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
-                    int id = overlayOrders[resFrame][idx];
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
+                    int id = overlayOrders[resFrame][idx].id;
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea());
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
             }
             writer.Close();
+        }
+        public void overlayLive()
+        {
+            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            //set panel
+            Graphics gs = pictureBoxVideo.CreateGraphics();
+            //System.Threading.Thread.Sleep(500);
+            ///panel
+            for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
+            {
+                Bitmap BitCopy = (Bitmap)background.Clone();
+                for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
+                {
+                    int id = overlayOrders[resFrame][overlayObjIdx].id;
+                    int orderingCnt = overlayOrders[resFrame][overlayObjIdx].orderingCnt;
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), ObjList[id].getCropArea(orderingCnt));
+                }
+                trackingBar.Value += 1;
+                gs.DrawImage(BitCopy, new Point(0, 0));
+                BitCopy.Dispose();
+            }
         }
         public void setObjidList()
         {
@@ -277,7 +289,7 @@ namespace RapidCheck
                 Console.WriteLine("getMysqlObjList() ERROR");
             }
         }
-        public void imageCrop(string videoPath)
+        public void imageCrop()
         {
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
@@ -289,7 +301,7 @@ namespace RapidCheck
                 {
                     foreach (int objid in objidByFrame[frameNum])
                     {
-                        Rectangle temp = ObjList[objid].getCropArea();
+                        Rectangle temp = ObjList[objid].getNextCropArea();
                         ObjList[objid].addCropImage(videoFrame.Clone(temp, videoFrame.PixelFormat));
                     }
                 }
@@ -344,6 +356,10 @@ namespace RapidCheck
             {
                 startingGroup[k].sort(ref ObjList);
             }
+        }
+        public void setResFrame(int resFrameNum)
+        {
+            this.resFrame = resFrameNum;
         }
     }
 }

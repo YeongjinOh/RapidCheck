@@ -13,7 +13,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Threading;
-//using SharpDX.MediaFoundation;
+
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
@@ -23,6 +23,8 @@ namespace RapidCheck
         //검색 조건 (방향, 색상)
         private int inputDirection = -1;
         private int color = -1;
+        private int trackBarFlag = 0;
+        RapidCheck.OverlayVideo rapidCheck;
         public Form1()
         {
             InitializeComponent();
@@ -32,7 +34,7 @@ namespace RapidCheck
             skinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             skinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
             
-            tabPage1.Text = "검색";
+            tabPage1.Text = "구성중";
             tabPage2.Text = "요약";
             tabPage3.Text = "영상";
         }
@@ -62,16 +64,10 @@ namespace RapidCheck
             
             //text box
             stateLabel.Text = "click! video button";
-        }
 
-        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
-        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
-        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
-        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
-        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
-        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
-        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
-        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
+            //video player
+            MaximizeBox = false;
+        }
 
         string videoPath = null;
         private void VideoBtn_Click(object sender, EventArgs e)
@@ -81,96 +77,81 @@ namespace RapidCheck
             choofdlog.FilterIndex = 1;
             choofdlog.Multiselect = true;
             choofdlog.InitialDirectory = @"C:\videos";
-
             if (choofdlog.ShowDialog() == DialogResult.OK)
             {
                 videoPath = choofdlog.FileName;
             }
             videoPath = @"C:\videos\tracking.mp4";
 
-            int maxFrameNum = 10000; // 0이면 모든 영상의 모든 frame을 분석
+            int maxFrameNum = 5000; // 0이면 모든 영상의 모든 frame을 분석
             int frameStep = 5;
             int minTrackingLength = 29;
-            int clusterNum = 20;
+            int clusterNum = 5;
             int outputFrameNum = 1000;
-            RapidCheck.OverlayVideo rapidCheck = new RapidCheck.OverlayVideo(videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+
+            //trackbar
+            trackBar1.Minimum = 0;
+            trackBar1.Maximum = outputFrameNum -1;
 
             new Thread(() => rapidRun(ref rapidCheck)).Start();
             //rapidRun(ref rapidCheck);
         }
+        delegate void rapidModule();
+        delegate void rapidChain(ref System.Diagnostics.Stopwatch sw, string state, rapidModule dele);
+        private void basicFlow(ref System.Diagnostics.Stopwatch sw, string state, rapidModule dele)
+        {
+            stateLabel.Text = state;
+            sw.Start();
+            dele();
+            sw.Stop();
+            timeLabel.Text = string.Format("{0}\n{1,-15} : {2} ms", timeLabel.Text, dele.Method.ToString().Replace("Void ",""), sw.ElapsedMilliseconds.ToString());
+            //timeLabel.Text + "\noverlay : " + sw.ElapsedMilliseconds.ToString() + "ms";
+            sw.Reset();
+            progressBar1.PerformStep();
+        }
         private void rapidRun(ref RapidCheck.OverlayVideo rapid)
         {
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+           
+            List<string> states = new List<string>();
+            states.Add("MySQL");
+            states.Add("Obj List");
+            states.Add("Clustering");
+            states.Add("Image cropping");
+            states.Add("Id filtering");
+            states.Add("Id ordering");
+            states.Add("Bitmap overlay");
 
-            stateLabel.Text = "Get MYSQL table...";
-            sw.Start();
-            rapid.getMysqlObjList();
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\nMYSQL : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
-            progressBar1.PerformStep();
-
-            stateLabel.Text = "Setting Obj List...";
-            sw.Start();
-            rapid.addObj();
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\naddObj : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
-            progressBar1.PerformStep();
-
-            stateLabel.Text = "Clustering...";
-            sw.Start();
-            rapid.kMeasFunc();
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\nkMeasFunc : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
-            progressBar1.PerformStep();
-
-            stateLabel.Text = "Image cropping...";
-            sw.Start();
-            rapid.imageCrop(videoPath);
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\nimageCrop : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
-            progressBar1.PerformStep();
-
-            stateLabel.Text = "Obj id filtering...";
-            sw.Start();
-            rapid.setObjidList();
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\nsetObjidList : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
-            progressBar1.PerformStep();
-
-            stateLabel.Text = "Overlay id Ordering...";
-            sw.Start();
-            rapid.buildOverlayOrderUsingCluster();
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\nbuildOverlayOrderUsingCluster : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
-            progressBar1.PerformStep();
-
-            stateLabel.Text = "make overlayBitmap and .avi";
-            sw.Start();
-            rapid.overlay();
-            sw.Stop();
-            timeLabel.Text = timeLabel.Text + "\noverlay : " + sw.ElapsedMilliseconds.ToString() + "ms";
-            sw.Reset();
+            List<rapidModule> myRapidModule = new List<rapidModule>();
+            myRapidModule.Add(rapid.getMysqlObjList);
+            myRapidModule.Add(rapid.addObj);
+            myRapidModule.Add(rapid.kMeasFunc);
+            myRapidModule.Add(rapid.imageCrop);
+            myRapidModule.Add(rapid.setObjidList);
+            myRapidModule.Add(rapid.buildOverlayOrderUsingCluster);
+            //myRapidModule.Add(rapid.overlay);
+            trackBarFlag = 1;
+            myRapidModule.Add(rapid.overlayLive);
+            rapidChain myRapidChain = new rapidChain(basicFlow);
+            for (int idx = 0; idx < myRapidModule.Count; idx++)
+            {
+                myRapidChain(ref sw, states[idx], myRapidModule[idx]);
+            }
             progressBar1.Value = 100;
             stateLabel.Text = "Done.";
         }
-        //private void Run()
-        //{
-        //    Graphics gs = tabPage2.CreateGraphics();
-        //    for (int i = 0; i < 66; i++)
-        //    {
-        //        System.Threading.Thread.Sleep(500);
-        //        //if (i >= 65) { i = 0; }
-        //        string filePath = @"C:\videos\66장 여기\" + i + ".bmp";
-        //        Bitmap back = new Bitmap(filePath);
-        //        gs.DrawImage(back, new Point(0, 0));
-        //    }
-        //}
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            //    if(worker != null)
+            //    {
+            //        worker.Abort();
+            //        worker = new Thread(Run);
+            //        worker.Start();
+            //    }
+        }
+
         private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
         private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
         private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
@@ -182,14 +163,27 @@ namespace RapidCheck
         private void radioButton9_CheckedChanged(object sender, EventArgs e) { color = 8; }
         private void radioButton10_CheckedChanged(object sender, EventArgs e) { color = 9; }
 
-        private void Form1_Resize(object sender, EventArgs e)
+        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
+        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
+        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
+        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
+        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
+        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
+        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
+        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
+
+        private void direction_Click(object sender, EventArgs e)
         {
-        //    if(worker != null)
-        //    {
-        //        worker.Abort();
-        //        worker = new Thread(Run);
-        //        worker.Start();
-        //    }
+            axWindowsMediaPlayer1.openPlayer(@"C:\videos\output\video1_10000_1000_5.avi");
+            axWindowsMediaPlayer1.Ctlcontrols.play();
+        }
+        private void trackBar1_ValueChanged(object sender, EventArgs e)
+        {
+            if (trackBarFlag == 1)
+            {    
+                rapidCheck.resFrame = trackBar1.Value;
+                rapidCheck.overlayObjIdx = 0;
+            }
         }
     }
 }
