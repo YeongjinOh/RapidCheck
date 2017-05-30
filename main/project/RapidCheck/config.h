@@ -2,15 +2,15 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-const int MAX_FRAMES = 1000;
-const int START_FRAME_NUM = 00;
-const int FRAME_STEP = 5;
-const int VIDEOID = 1;
+const int MAX_FRAMES = 2000;
+const int START_FRAME_NUM = 2001;
+const int FRAME_STEP = 3;
+const int VIDEOID = 3;
 
 const int NUM_OF_COLORS = 64;
 const bool DEBUG = false;
 
-const static char* VIDEOFILES[3] = { "videos/street.avi", "videos/tracking.mp4", "videos/demo.mp4" };
+const static char* VIDEOFILES[4] = { "videos/street.avi", "videos/tracking.mp4", "videos/demo.mp4", "videos/tracking.mp4" };
 const static int videoId = VIDEOID;
 const static char* VIDEOFILE = VIDEOFILES[videoId];
 
@@ -25,12 +25,15 @@ const int MID_LEVEL_TRACKLETS = 6;
 const int NUM_OF_SEGMENTS = (MAX_FRAMES - 1) / LOW_LEVEL_TRACKLETS;
 const int NUM_OF_MID_LEVEL_SEGMENTS = NUM_OF_SEGMENTS / MID_LEVEL_TRACKLETS;
 const int CONTINUOUS_MOTION_COST_THRE = 30;
+const bool RESIZE_DETECTION_AREA = false;
 
 // Trajectory
 const double TRAJECTORY_MATCH_THRES = 200.0;
 const double TRAJECTORY_MATCH_SIMILARITY_THRES = 0.75;
 const int MAXIMUM_LOST_SEGMENTS = 10;
 const double STANDARD_DEVIATION = 2000.0;
+const bool INSERT_TRACKING_INTO_DB = false;
+const bool INSERT_OBJECT_INFO_INTO_DB = false;
 
 // Object Information
 const int NUM_OF_DIRECTIONS = 8;

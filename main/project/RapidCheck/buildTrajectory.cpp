@@ -42,8 +42,10 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 					// rectangle(frame, currentFramePedestrian.getTargetArea(), mean, 2);
 					rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId) % NUM_OF_COLORS], 2);
 
-					//db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
-
+					if (INSERT_TRACKING_INTO_DB)
+					{
+						db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
+					}
 					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 				}
@@ -52,8 +54,8 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
 				}
 
-				imshow("tracklets", frame);
-				imshow("origin", frameOrigin);
+				imshow("Trajectory", frame);
+				imshow("Detection response", frameOrigin);
 
 				// key handling
 				int key = waitKey(130);
@@ -152,8 +154,6 @@ void buildTrajectory(App app)
 						minTrackletIt = itTracklets;
 					}
 				}
-
-				// printf("minCost : %.2lf\n", minCost);
 				if (minCost < TRAJECTORY_MATCH_THRES)
 				{
 					// merge
@@ -178,10 +178,8 @@ void buildTrajectory(App app)
 				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
 				{
 					// merge
-
 					RCTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
 					tracklets.erase(maxTrackletIt);
-					// printf("diffSegmentNum:%d maxSimilarity:%.2lf\n", diffSegmentNum, maxSimilarity);
 					continue;
 				}
 			}
@@ -193,11 +191,14 @@ void buildTrajectory(App app)
 			trajectoriesStillBeingTracked.push_back(RCTrajectory(tracklets[trackletNum], segmentNum));
 		}
 	}
-	// printf("size Finished:%d still:%d\n", trajectoriesFinished.size(), trajectoriesStillBeingTracked.size());
 	cout << "Built Trajectories" << endl;
 	
 	// insert direction counts into DB
-	insertObjectInfoIntoDB(trajectoriesStillBeingTracked);
+	if (INSERT_OBJECT_INFO_INTO_DB)
+	{
+		insertObjectInfoIntoDB(trajectoriesStillBeingTracked);
+	}
+		
 
 	// show Trajectory
 	showTrajectory(frames, trajectoriesStillBeingTracked);

@@ -81,13 +81,19 @@ public:
 	void selectTracking(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
 	{
 		char query[200];
-		sprintf(query, "SELECT * FROM tracking WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
+		sprintf(query, "SELECT objectId, frameNum, x, y, width, height FROM tracking WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
 		select(query, rows);
 	}
 	void selectDetection(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
 	{
 		char query[200];
-		sprintf(query, "SELECT * FROM detection WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
+		sprintf(query, "SELECT frameNum, x, y, width, height, classId FROM detection WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
+		select(query, rows);
+	}
+	void selectDetection2(vector<vector<int> >& rows, int videoId, int classId,  int start_frame, int end_frame, int frame_step)
+	{
+		char query[200];
+		sprintf(query, "SELECT frameNum, x, y, width, height, class FROM detection2 WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d and class = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step, classId);
 		select(query, rows);
 	}
 	void insertObjectInfo(int videoId, int objectId, vector<float> directionRatios, double speed, vector<float> colorRatios)

@@ -441,10 +441,12 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	// read result from database and build mapFrameNumToPedestrians
 	vector<vector<int > > res;
 	map<int, vector<Rect> > mapFrameNumToPedestrians;
-	db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	//db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	int carClassId = 0;
+	db.selectDetection2(res, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	for (int i = 0; i < res.size(); i++)
 	{
-		int frameNum = res[i][2], x = res[i][3], y = res[i][4], width = res[i][5], height = res[i][6];
+		int frameNum = res[i][0], x = res[i][1], y = res[i][2], width = res[i][3], height = res[i][4], classId = res[i][5];
 		mapFrameNumToPedestrians[frameNum].push_back(Rect(x, y, width, height));
 	}
 
@@ -474,10 +476,13 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
 			Rect& r = found[i];
-			r.x += r.width * (1-widthRatio) / 2;
-			r.width = r.width * widthRatio;
-			r.y += r.height * (1-heightRatio) / 2 - r.height * shiftUpperRatio;
-			r.height = r.height * heightRatio;
+			if (RESIZE_DETECTION_AREA)
+			{
+				r.x += r.width * (1 - widthRatio) / 2;
+				r.width = r.width * widthRatio;
+				r.y += r.height * (1 - heightRatio) / 2 - r.height * shiftUpperRatio;
+				r.height = r.height * heightRatio;
+			}
 
 			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
 			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
@@ -502,7 +507,7 @@ void readTrajectories(vector<RCTrajectory>& trajectories)
 	map<int, int> objectIdToIdx; // convert objectId to index of trajectories
 	db.selectTracking(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	for (int i = 0; i < res.size(); i++) {
-		int objectId = res[i][1], frameNum = res[i][2], x = res[i][3], y = res[i][4], width = res[i][5], height = res[i][6];
+		int objectId = res[i][0], frameNum = res[i][1], x = res[i][2], y = res[i][3], width = res[i][4], height = res[i][5];
 		Target target(Rect(x, y, width, height));
 		if (objectIdToIdx.find(objectId) == objectIdToIdx.end())  {
 			objectIdToIdx[objectId] = trajectories.size();
