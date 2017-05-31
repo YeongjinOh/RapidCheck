@@ -19,8 +19,8 @@ void compareSimilarity(App app)
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
-	// detectTargets(app, cap, frames);
-	readTargets(cap, frames);
+	detectTargets(app, cap, frames);
+	// readTargets(cap, frames);
 	t = clock() - t;
 	printf("Detection takes %d(ms)\n", t);
 

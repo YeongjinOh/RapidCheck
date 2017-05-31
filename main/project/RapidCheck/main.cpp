@@ -74,7 +74,7 @@ int main(int argc, char ** argv)
 	args.scale = 1.05;
 	App app(args);
 
-	int operationNum = 1;
+	int operationNum = 3;
 	switch (operationNum)
 	{
 		case 0:

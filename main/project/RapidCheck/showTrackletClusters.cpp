@@ -26,73 +26,26 @@ void showTrackletClusters(App app)
 		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
 	}
 		
-	// initialize variables for histogram
-	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
-	int histSize[] = { h_bins, s_bins };
-	// hue varies from 0 to 179, saturation from 0 to 255
-	float h_ranges[] = { 0, 180 };
-	float s_ranges[] = { 0, 256 };
-	const float* ranges[] = { h_ranges, s_ranges };
-	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
-	
 	vector<Frame> frames;
-	readTargets(cap, frames);
-
-	
-	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
-	/*
-	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
-		
-		// get frame from the video
-		cap >> frame;
-	
-		// stop the program if no more images
-		if (frame.rows == 0 || frame.cols == 0)
-			break;
-
-		vector<Rect> found, found_filtered;
-
-		// implement hog detection
-		app.getHogResults(frame, found);
-		size_t i, j;
-		for (int i = 0; i<found.size(); i++)
-		{
-			Rect r = found[i];
-			for (j = 0; j<found.size(); j++)
-				if (j != i && (r & found[j]) == r)
-					break;
-			if (j == found.size())
-				found_filtered.push_back(r);
-		}
-		for (i = 0; i<found_filtered.size(); i++)
-		{
-			Rect &r = found_filtered[i];
-			r.x += cvRound(r.width*0.1);
-			r.width = cvRound(r.width*0.8);
-			r.y += cvRound(r.height*0.07);
-			r.height = cvRound(r.height*0.8);
-		}
-
-		// create histograms
-		vector<MatND> hists;
-		for (int i = 0; i < found_filtered.size(); ++i)
-		{
-			Mat temp;
-			MatND hist;
-			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
-			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
-		}
-	
-		frames.push_back(Frame(frameNum, found_filtered, hists));
+	if (SELECT_DETECTION_RESPONSE)
+	{
+		readTargets(cap, frames);
 	}
-	*/
+	else
+	{
+		detectTargets(app, cap, frames);
+	}
+	
+
 	cout << "Detection finished" << endl;
 	
-	int frameNum = 691, objectId;
+	// open windows
+	for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
+	{
+		namedWindow("Frame #" + to_string(i + 1));
+		moveWindow("Frame #" + to_string(i + 1), 400*(i/3), (280*(i%3)));
+	}
+	int frameNum = 0, objectId;
 	while (true)
 	{
 		printf("\n\nFrame #%d", frameNum);

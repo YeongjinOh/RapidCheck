@@ -107,9 +107,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 			{
 				inlierCandidates.push_back(i);
 			}
-
 		}
-
 
 		// at least 4 inliers needed
 		if (inlierCandidates.size() < 4)
@@ -686,7 +684,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	// read result from database and build mapFrameNumToPedestrians
 	vector<vector<int > > res;
 	map<int, vector<Rect> > mapFrameNumToPedestrians;
-	//db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	// db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	int carClassId = 0;
 	db.selectDetection2(res, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	for (int i = 0; i < res.size(); i++)

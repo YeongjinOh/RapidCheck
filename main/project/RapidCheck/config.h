@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-const int MAX_FRAMES = 2000;
+const int MAX_FRAMES = 300;
 const int START_FRAME_NUM = 2001;
 const int FRAME_STEP = 3;
 const int VIDEOID = 3;
@@ -25,12 +25,14 @@ const int MID_LEVEL_TRACKLETS = 6;
 const int NUM_OF_SEGMENTS = (MAX_FRAMES - 1) / LOW_LEVEL_TRACKLETS;
 const int NUM_OF_MID_LEVEL_SEGMENTS = NUM_OF_SEGMENTS / MID_LEVEL_TRACKLETS;
 const int CONTINUOUS_MOTION_COST_THRE = 30;
+const int CONTINUOUS_MOTION_COST_THRE_CAR = 100;
 const bool RESIZE_DETECTION_AREA = false;
+const bool SELECT_DETECTION_RESPONSE = true;
 
 // Trajectory
 const double TRAJECTORY_MATCH_THRES = 200.0;
-const double TRAJECTORY_MATCH_SIMILARITY_THRES = 0.75;
-const int MAXIMUM_LOST_SEGMENTS = 10;
+const double TRAJECTORY_MATCH_SIMILARITY_THRES = 0.55;
+const int MAXIMUM_LOST_SEGMENTS = 2;
 const double STANDARD_DEVIATION = 2000.0;
 const bool INSERT_TRACKING_INTO_DB = false;
 const bool INSERT_OBJECT_INFO_INTO_DB = false;

@@ -86,9 +86,15 @@ void buildTrajectory(App app)
 	// build target detected frames
 	vector<Frame> frames;
 	clock_t t = clock();
-	//detectAndInsertResultIntoDB(app, cap);
-	//detectTargets(app, cap, frames);
-	readTargets(cap, frames);
+	if (SELECT_DETECTION_RESPONSE)
+	{
+		readTargets(cap, frames);
+	}
+	else
+	{
+		detectTargets(app, cap, frames);
+		//detectAndInsertResultIntoDB(app, cap);
+	}
 	t = clock() - t;
 	printf("Detection takes %d(ms)\n", t);
 	
@@ -124,7 +130,7 @@ void buildTrajectory(App app)
 			RCTrajectory& RCTrajectory = *itTrajectories;
 			int diffSegmentNum = segmentNum - RCTrajectory.getEndSegmentNum();
 			// if trajectory is finished
-			if (diffSegmentNum > 5)
+			if (diffSegmentNum > MAXIMUM_LOST_SEGMENTS)
 			{
 				// trajectoriesFinished.push_back(trajectory);
 				// trajectoriesStillBeingTracked.erase(itTrajectories);
