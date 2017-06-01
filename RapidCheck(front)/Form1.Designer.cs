@@ -37,9 +37,10 @@
             this.panelProgress = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.panelVideo = new System.Windows.Forms.Panel();
+            this.startBtn = new System.Windows.Forms.Button();
             this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
-            this.panelSearch = new System.Windows.Forms.Panel();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.panelSearch = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
@@ -80,15 +81,15 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.panelVideoPart = new System.Windows.Forms.Panel();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
             this.panelProgress.SuspendLayout();
             this.panelVideo.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
-            this.panelSearch.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.panelSearch.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -96,6 +97,7 @@
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vdoTrackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panelVideoPart.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -131,7 +133,6 @@
             // panelObject
             // 
             this.panelObject.BackColor = System.Drawing.Color.Silver;
-            this.panelObject.Controls.Add(this.listBox1);
             this.panelObject.Controls.Add(this.label2);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
@@ -171,8 +172,10 @@
             // 
             // panelVideo
             // 
-            this.panelVideo.BackColor = System.Drawing.Color.DarkGray;
-            this.panelVideo.Controls.Add(this.pictureBoxVideo);
+            this.panelVideo.BackColor = System.Drawing.Color.White;
+            this.panelVideo.Controls.Add(this.panelVideoPart);
+            this.panelVideo.Controls.Add(this.startBtn);
+            this.panelVideo.Controls.Add(this.trackBar1);
             this.panelVideo.Controls.Add(this.panelSearch);
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelVideo.Location = new System.Drawing.Point(3, 3);
@@ -180,35 +183,48 @@
             this.panelVideo.Size = new System.Drawing.Size(1072, 741);
             this.panelVideo.TabIndex = 0;
             // 
+            // startBtn
+            // 
+            this.startBtn.Enabled = false;
+            this.startBtn.Location = new System.Drawing.Point(179, 715);
+            this.startBtn.Name = "startBtn";
+            this.startBtn.Size = new System.Drawing.Size(89, 26);
+            this.startBtn.TabIndex = 2;
+            this.startBtn.Text = "Start";
+            this.startBtn.UseVisualStyleBackColor = true;
+            this.startBtn.Click += new System.EventHandler(this.VideoStartBtn_Click);
+            // 
             // pictureBoxVideo
             // 
             this.pictureBoxVideo.BackColor = System.Drawing.Color.Silver;
-            this.pictureBoxVideo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBoxVideo.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxVideo.Name = "pictureBoxVideo";
-            this.pictureBoxVideo.Size = new System.Drawing.Size(1072, 655);
+            this.pictureBoxVideo.Size = new System.Drawing.Size(1072, 621);
             this.pictureBoxVideo.TabIndex = 1;
             this.pictureBoxVideo.TabStop = false;
+            this.pictureBoxVideo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxVideo_MouseDown);
+            // 
+            // trackBar1
+            // 
+            this.trackBar1.BackColor = System.Drawing.Color.White;
+            this.trackBar1.Enabled = false;
+            this.trackBar1.Location = new System.Drawing.Point(2, 694);
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
+            this.trackBar1.TabIndex = 2;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseDown);
             // 
             // panelSearch
             // 
             this.panelSearch.BackColor = System.Drawing.Color.Gainsboro;
-            this.panelSearch.Controls.Add(this.trackBar1);
             this.panelSearch.Controls.Add(this.label3);
-            this.panelSearch.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelSearch.Location = new System.Drawing.Point(0, 655);
+            this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelSearch.Location = new System.Drawing.Point(0, 0);
             this.panelSearch.Name = "panelSearch";
-            this.panelSearch.Size = new System.Drawing.Size(1072, 86);
+            this.panelSearch.Size = new System.Drawing.Size(1072, 67);
             this.panelSearch.TabIndex = 0;
-            // 
-            // trackBar1
-            // 
-            this.trackBar1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.trackBar1.Location = new System.Drawing.Point(617, 20);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(452, 45);
-            this.trackBar1.TabIndex = 2;
-            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             // 
             // label3
             // 
@@ -635,13 +651,14 @@
             // 
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // listBox1
+            // panelVideoPart
             // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(149, 27);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(175, 381);
-            this.listBox1.TabIndex = 1;
+            this.panelVideoPart.Controls.Add(this.pictureBoxVideo);
+            this.panelVideoPart.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelVideoPart.Location = new System.Drawing.Point(0, 67);
+            this.panelVideoPart.Name = "panelVideoPart";
+            this.panelVideoPart.Size = new System.Drawing.Size(1072, 621);
+            this.panelVideoPart.TabIndex = 3;
             // 
             // Form1
             // 
@@ -662,10 +679,11 @@
             this.panelProgress.ResumeLayout(false);
             this.panelProgress.PerformLayout();
             this.panelVideo.ResumeLayout(false);
+            this.panelVideo.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panelSearch.ResumeLayout(false);
             this.panelSearch.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
@@ -675,6 +693,7 @@
             this.videoPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.vdoTrackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panelVideoPart.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -731,7 +750,8 @@
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.PictureBox pictureBoxVideo;
         private System.Windows.Forms.TrackBar trackBar1;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.Button startBtn;
+        private System.Windows.Forms.Panel panelVideoPart;
     }
 }
 

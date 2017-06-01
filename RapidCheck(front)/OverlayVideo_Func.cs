@@ -91,7 +91,7 @@ namespace RapidCheck
             {
                 outputPath = outputPath.Replace(".avi",string.Format("_{0}.avi", System.DateTime.Now.ToString("_hh시mm분")));
             }
-            writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
+            writer.Open(outputPath, videoWidth, videoHeight, frameStep, VideoCodec.H264);
             for (int resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 Bitmap BitCopy = (Bitmap)background.Clone();
@@ -105,15 +105,49 @@ namespace RapidCheck
             }
             writer.Close();
         }
+        
         public void overlayLive()
         {
             Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
-            //set panel
             Graphics gs = pictureBoxVideo.CreateGraphics();
+            startBtn.Enabled = true;
+            trackingBar.Enabled = true;
+            startBtn.Text = "Pause";
+
+            // set draw size
+            int drawWidth = pictureBoxVideo.Width;
+            int drawHeight = pictureBoxVideo.Height;
+            //***********************************************************클릭 옵션 할때까지 잠깐 주석처리**********************************************************
+            //if (background.Height * drawWidth > background.Width * drawHeight)
+            //{
+            //    drawHeight = pictureBoxVideo.Height;
+            //    drawWidth = (int)((double)pictureBoxVideo.Height * ((double)background.Width / (double)background.Height));
+            //}
+            //else if (background.Height * drawWidth < background.Width * drawHeight)
+            //{
+            //    drawWidth = pictureBoxVideo.Width;
+            //    drawHeight = (int)((double)pictureBoxVideo.Width * ((double)background.Height / (double)background.Width));
+            //}
+            ////set draw position
+            //int drawX = (pictureBoxVideo.Width - drawWidth)/2;
+            //int drawY = (pictureBoxVideo.Height - drawHeight)/2;
+            ////set puictureBox
+            //pictureBoxVideo.Height = drawHeight;
+            //pictureBoxVideo.Width = drawWidth;
+            //pictureBoxVideo.Location = new Point(drawX, drawY);
+            //***********************************************************클릭 옵션 할때까지 잠깐 주석처리**********************************************************
+
+
+            //overlay time
+            int frameTime = 10;
+            //1000 / frameStep;
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            
+            //**********************DRAWING CODE**********************
             //System.Threading.Thread.Sleep(500);
-            ///panel
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
+                sw.Start();
                 Bitmap BitCopy = (Bitmap)background.Clone();
                 for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
@@ -122,7 +156,18 @@ namespace RapidCheck
                     BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), ObjList[id].getCropArea(orderingCnt));
                 }
                 trackingBar.Value += 1;
-                gs.DrawImage(BitCopy, new Point(0, 0));
+                if (resFrame == outputFrameNum - 1)
+                {
+                    startBtn.Text = "Start";
+                }
+                sw.Stop();
+                do
+                {
+                    gs.DrawImage(BitCopy, new Rectangle(0, 0, drawWidth, drawHeight));
+                    if (frameTime - (int)sw.ElapsedMilliseconds > 1) { System.Threading.Thread.Sleep(frameTime - (int)sw.ElapsedMilliseconds); }
+                    sw.Reset();
+                    
+                } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
         }
@@ -136,7 +181,6 @@ namespace RapidCheck
                 {
                     ObjList[idIdx].currentAreaPositionIdx = 0;
                     ObjList[idIdx].currentImagePositionIdx = 0;
-                    //ObjList[idIdx].resetPosition();
                     objectidList.Add(idIdx);
                 }
             }
@@ -178,8 +222,6 @@ namespace RapidCheck
                     objectidList.Add(id);
                     ObjList[id].currentAreaPositionIdx = 0;
                     ObjList[id].currentImagePositionIdx = 0;
-                    //ObjList[id].resetPosition();
-                    //MessageBox.Show(id.ToString());
                 }
             }
         }
@@ -360,6 +402,48 @@ namespace RapidCheck
         public void setResFrame(int resFrameNum)
         {
             this.resFrame = resFrameNum;
+        }
+        private int min(int num1, int num2)
+        {
+            return num1 > num2 ? num2 : num1;
+        }
+
+        public int getClickedObjectOriginalFrameNum(int clickPositionX, int clickPositionY)
+        {
+            /*
+            int startFrame = -1;
+            for(int idx = 0 ; idx < overlayOrders[resFrame].Count ; idx ++) // id의 인덱스
+            {
+                int id = overlayOrders[resFrame][idx].id;
+                int orderingCnt = overlayOrders[resFrame][idx].orderingCnt;
+                Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
+                if( (objRect.X < clickPositionX) && (objRect.Width+objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height+objRect.Y > clickPositionY))
+                {
+                    startFrame = ObjList[id].getStartFrameNum();
+                    break;
+                }
+            }
+            return startFrame;
+             */
+            int startFrame = -1, maxClickedPositionArea = 0;
+            for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++) // id의 인덱스
+            {
+                int id = overlayOrders[resFrame][idx].id;
+                int orderingCnt = overlayOrders[resFrame][idx].orderingCnt;
+                Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
+                if ((objRect.X < clickPositionX) && (objRect.Width + objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height + objRect.Y > clickPositionY))
+                {
+                    int clickedPositionWidth = min(clickPositionX - objRect.X, objRect.Width + objRect.X - clickPositionX);
+                    int clickedPositionHeight = min(clickPositionY - objRect.Y, objRect.Height + objRect.Y - clickPositionY);
+                    int curClickedPositionArea = clickedPositionWidth * clickedPositionHeight;
+                    if (maxClickedPositionArea < curClickedPositionArea)
+                    {
+                        startFrame = ObjList[id].getStartFrameNum();
+                        maxClickedPositionArea = curClickedPositionArea;
+                    }
+                }
+            }
+            return startFrame;
         }
     }
 }

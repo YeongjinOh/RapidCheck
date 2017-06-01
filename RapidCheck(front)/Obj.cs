@@ -34,5 +34,9 @@ namespace RapidCheck
         {
             return cropAreas.Count;
         }
+        public int getStartFrameNum()
+        {
+            return cropPositionNum[0];
+        }
     }
 }

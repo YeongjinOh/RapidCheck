@@ -70,6 +70,7 @@ namespace RapidCheck
         }
 
         string videoPath = null;
+        int outputFrameNum = 0;
         private void VideoBtn_Click(object sender, EventArgs e)
         {
             OpenFileDialog choofdlog = new OpenFileDialog();
@@ -87,13 +88,12 @@ namespace RapidCheck
             int frameStep = 5;
             int minTrackingLength = 29;
             int clusterNum = 5;
-            int outputFrameNum = 1000;
-            rapidCheck = new RapidCheck.OverlayVideo(trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            outputFrameNum = 1000;
+            rapidCheck = new RapidCheck.OverlayVideo(startBtn, trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
 
             //trackbar
             trackBar1.Minimum = 0;
             trackBar1.Maximum = outputFrameNum -1;
-
             new Thread(() => rapidRun(ref rapidCheck)).Start();
             //rapidRun(ref rapidCheck);
         }
@@ -183,6 +183,36 @@ namespace RapidCheck
             {    
                 rapidCheck.resFrame = trackBar1.Value;
                 rapidCheck.overlayObjIdx = 0;
+            }
+        }
+
+        private void VideoStartBtn_Click(object sender, EventArgs e)
+        {
+            if(startBtn.Text == "Start" )
+            {
+                startBtn.Text = "Pause";
+            }
+            else
+            {
+                startBtn.Text = "Start";
+            }
+        }
+
+        private void trackBar1_MouseDown(object sender, MouseEventArgs e)
+        {
+            trackBar1.Value = Convert.ToInt32(1.0 * outputFrameNum * e.Location.X / trackBar1.Width);
+        }
+
+        private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e)
+        {
+            startBtn.Text = "Start";
+            Point clickPosition = e.Location;
+            int frameNum = rapidCheck.getClickedObjectOriginalFrameNum(clickPosition.X, clickPosition.Y);
+            if (frameNum >= 0)
+            {
+                // TODO 
+                // original video를 띄워주고
+                // frameNum부터 재생시킨다.
             }
         }
     }
