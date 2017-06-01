@@ -137,16 +137,15 @@ namespace RapidCheck
 
 
             //overlay time
-            int frameTime = 10;
-            //1000 / frameStep;
+            int frameTime = 1000 / frameStep;
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             float alphaMin = 0.4f, alphaDiff = 0.2f;
             //**********************DRAWING CODE**********************
-            //System.Threading.Thread.Sleep(500);
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 sw.Start();
                 Bitmap BitCopy = (Bitmap)background.Clone();
+                String tmpId = "";
                 for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
@@ -166,6 +165,7 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
+                    tmpId += id.ToString() + " ";
                     BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha);
                 }
                 trackingBar.Value += 1;
@@ -177,8 +177,9 @@ namespace RapidCheck
                 do
                 {
                     gs.DrawImage(BitCopy, new Rectangle(0, 0, drawWidth, drawHeight));
-                    if (frameTime - (int)sw.ElapsedMilliseconds > 1) { System.Threading.Thread.Sleep(frameTime - (int)sw.ElapsedMilliseconds); }
+                    if (frameTime - (int)sw.ElapsedMilliseconds > 0) { System.Threading.Thread.Sleep(frameTime - (int)sw.ElapsedMilliseconds); }
                     sw.Reset();
+                    frameTime = 1000 / frameStep / speed;
                     
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
@@ -198,7 +199,9 @@ namespace RapidCheck
         }
         public void setObjidList()
         {
-            bool useFilter = false;
+            // TODO
+            return;
+            bool useFilter = true;
             if (!useFilter)
             {
                 objectidList.Clear();
@@ -315,6 +318,9 @@ namespace RapidCheck
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
 
+                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum < {1} group by objectId;", videoid, maxFrameNum);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "objCnt");
 
                     dt = ds.Tables["maxid"];
                     int maxObjectid = 0;
@@ -323,7 +329,15 @@ namespace RapidCheck
                         maxObjectid = Convert.ToInt32(dr["maxid"]);
                     }
                     //set ObjectidList
-                    setDefaultObjectidList(maxObjectid);
+                    // setDefaultObjectidList(maxObjectid);
+                    dt = ds.Tables["objCnt"];
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (Convert.ToInt32(dr["cnt"]) > minTrackingLength)
+                        {
+                            objectidList.Add(Convert.ToInt32(dr["objectId"]));
+                        }
+                    }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
                     foreach (DataRow dr in dt.Rows)
@@ -395,7 +409,6 @@ namespace RapidCheck
             cropArea.Width += 20;
             cropArea.Height += 20;
 
-            //일단은... width x height
             if (cropArea.X > videoWidth) cropArea.X /= 2;
             if (cropArea.Y > videoHeight) cropArea.Y /= 2;
             //if (cropArea.X < 0) cropArea.X = 0;
@@ -406,17 +419,20 @@ namespace RapidCheck
         public void kMeasFunc()
         {
             var kmeas = new KMeans(k:clusterNum);
-            double[][] points = new double[ObjList.Count][];
-            for (int i = 0; i < ObjList.Count; i++)
+            double[][] points = new double[objectidList.Count][];
+
+            for (int i = 0; i < objectidList.Count; i++)
             {
-                points[i] = ObjList[i].getStartingPoint();
+                int id = objectidList[i];
+                points[i] = ObjList[id].getStartingPoint();
             }
             KMeansClusterCollection clusters = kmeas.Learn(points);
             int[] output = clusters.Decide(points);
-            
-            for (int id = 0; id < ObjList.Count; id++)
+
+            for (int i = 0; i < objectidList.Count; i++)
             {
-                startingGroup[output[id]].Add(id);
+                int id = objectidList[i];
+                startingGroup[output[i]].Add(id);
             }
             //sort
             for (int k = 0; k < startingGroup.Count; k++)
@@ -432,7 +448,6 @@ namespace RapidCheck
         {
             return num1 > num2 ? num2 : num1;
         }
-
         public int getClickedObjectOriginalFrameNum(double clickPositionX, double clickPositionY)
         {
             /*
@@ -470,6 +485,10 @@ namespace RapidCheck
                 }
             }
             return startFrame;
+        }
+        public void setSpeed(int speed)
+        {
+            this.speed = speed;
         }
     }
 }

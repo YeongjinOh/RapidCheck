@@ -33,18 +33,20 @@
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
-            this.VideoBtn = new System.Windows.Forms.Button();
             this.timeLabel = new System.Windows.Forms.Label();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.stateLabel = new System.Windows.Forms.Label();
             this.panelProgress = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
+            this.VideoBtn = new System.Windows.Forms.Button();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.panelVideoPart = new System.Windows.Forms.Panel();
             this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
             this.startBtn = new System.Windows.Forms.Button();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.panelSearch = new System.Windows.Forms.Panel();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.videoPanel = new System.Windows.Forms.Panel();
+            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.direction5 = new System.Windows.Forms.Button();
             this.direction6 = new System.Windows.Forms.Button();
@@ -66,13 +68,11 @@
             this.radioButton10 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.videoPanel = new System.Windows.Forms.Panel();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -81,11 +81,11 @@
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage3.SuspendLayout();
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
+            this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -94,8 +94,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.materialTabControl1.Controls.Add(this.tabPage2);
-            this.materialTabControl1.Controls.Add(this.tabPage1);
             this.materialTabControl1.Controls.Add(this.tabPage3);
+            this.materialTabControl1.Controls.Add(this.tabPage1);
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.materialTabControl1.Location = new System.Drawing.Point(12, 103);
@@ -120,10 +120,8 @@
             // 
             // panelObject
             // 
-            this.panelObject.BackColor = System.Drawing.Color.Silver;
-            this.panelObject.Controls.Add(this.VideoBtn);
+            this.panelObject.BackColor = System.Drawing.Color.Transparent;
             this.panelObject.Controls.Add(this.timeLabel);
-            this.panelObject.Controls.Add(this.progressBar1);
             this.panelObject.Controls.Add(this.stateLabel);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
@@ -131,21 +129,10 @@
             this.panelObject.Size = new System.Drawing.Size(438, 670);
             this.panelObject.TabIndex = 2;
             // 
-            // VideoBtn
-            // 
-            this.VideoBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VideoBtn.Location = new System.Drawing.Point(36, 32);
-            this.VideoBtn.Name = "VideoBtn";
-            this.VideoBtn.Size = new System.Drawing.Size(103, 51);
-            this.VideoBtn.TabIndex = 16;
-            this.VideoBtn.Text = "Video";
-            this.VideoBtn.UseVisualStyleBackColor = true;
-            this.VideoBtn.Click += new System.EventHandler(this.VideoBtn_Click);
-            // 
             // timeLabel
             // 
             this.timeLabel.AutoSize = true;
-            this.timeLabel.Location = new System.Drawing.Point(33, 249);
+            this.timeLabel.Location = new System.Drawing.Point(6, 83);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(39, 17);
             this.timeLabel.TabIndex = 15;
@@ -154,16 +141,16 @@
             // progressBar1
             // 
             this.progressBar1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.progressBar1.Location = new System.Drawing.Point(36, 172);
+            this.progressBar1.Location = new System.Drawing.Point(78, 15);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(360, 44);
+            this.progressBar1.Size = new System.Drawing.Size(357, 34);
             this.progressBar1.TabIndex = 12;
             // 
             // stateLabel
             // 
             this.stateLabel.AutoSize = true;
             this.stateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stateLabel.Location = new System.Drawing.Point(29, 111);
+            this.stateLabel.Location = new System.Drawing.Point(2, 31);
             this.stateLabel.Name = "stateLabel";
             this.stateLabel.Size = new System.Drawing.Size(88, 38);
             this.stateLabel.TabIndex = 14;
@@ -171,27 +158,30 @@
             // 
             // panelProgress
             // 
-            this.panelProgress.BackColor = System.Drawing.Color.Gray;
-            this.panelProgress.Controls.Add(this.label1);
+            this.panelProgress.BackColor = System.Drawing.Color.Transparent;
+            this.panelProgress.Controls.Add(this.VideoBtn);
+            this.panelProgress.Controls.Add(this.progressBar1);
             this.panelProgress.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelProgress.Location = new System.Drawing.Point(1075, 3);
             this.panelProgress.Name = "panelProgress";
             this.panelProgress.Size = new System.Drawing.Size(438, 67);
             this.panelProgress.TabIndex = 1;
             // 
-            // label1
+            // VideoBtn
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(87, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(190, 29);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "여기는 프로그레스바";
+            this.VideoBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.VideoBtn.Location = new System.Drawing.Point(6, 15);
+            this.VideoBtn.Name = "VideoBtn";
+            this.VideoBtn.Size = new System.Drawing.Size(71, 34);
+            this.VideoBtn.TabIndex = 16;
+            this.VideoBtn.Text = "File";
+            this.VideoBtn.UseVisualStyleBackColor = true;
+            this.VideoBtn.Click += new System.EventHandler(this.VideoBtn_Click);
             // 
             // panelVideo
             // 
             this.panelVideo.BackColor = System.Drawing.Color.White;
+            this.panelVideo.Controls.Add(this.comboBox1);
             this.panelVideo.Controls.Add(this.panelVideoPart);
             this.panelVideo.Controls.Add(this.startBtn);
             this.panelVideo.Controls.Add(this.trackBar1);
@@ -213,7 +203,7 @@
             // 
             // pictureBoxVideo
             // 
-            this.pictureBoxVideo.BackColor = System.Drawing.Color.Silver;
+            this.pictureBoxVideo.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxVideo.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxVideo.Name = "pictureBoxVideo";
             this.pictureBoxVideo.Size = new System.Drawing.Size(1072, 621);
@@ -224,7 +214,7 @@
             // startBtn
             // 
             this.startBtn.Enabled = false;
-            this.startBtn.Location = new System.Drawing.Point(179, 715);
+            this.startBtn.Location = new System.Drawing.Point(172, 709);
             this.startBtn.Name = "startBtn";
             this.startBtn.Size = new System.Drawing.Size(89, 26);
             this.startBtn.TabIndex = 2;
@@ -236,7 +226,7 @@
             // 
             this.trackBar1.BackColor = System.Drawing.Color.White;
             this.trackBar1.Enabled = false;
-            this.trackBar1.Location = new System.Drawing.Point(2, 694);
+            this.trackBar1.Location = new System.Drawing.Point(2, 689);
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(1069, 56);
             this.trackBar1.TabIndex = 2;
@@ -246,12 +236,41 @@
             // 
             // panelSearch
             // 
-            this.panelSearch.BackColor = System.Drawing.Color.Gainsboro;
+            this.panelSearch.BackColor = System.Drawing.Color.Transparent;
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSearch.Location = new System.Drawing.Point(0, 0);
             this.panelSearch.Name = "panelSearch";
             this.panelSearch.Size = new System.Drawing.Size(1072, 67);
             this.panelSearch.TabIndex = 0;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.videoPanel);
+            this.tabPage3.Location = new System.Drawing.Point(4, 26);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(1516, 743);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // videoPanel
+            // 
+            this.videoPanel.Controls.Add(this.axWindowsMediaPlayer1);
+            this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.videoPanel.Location = new System.Drawing.Point(3, 3);
+            this.videoPanel.Name = "videoPanel";
+            this.videoPanel.Size = new System.Drawing.Size(1510, 737);
+            this.videoPanel.TabIndex = 1;
+            // 
+            // axWindowsMediaPlayer1
+            // 
+            this.axWindowsMediaPlayer1.Enabled = true;
+            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(3, 0);
+            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
+            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
+            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(1507, 737);
+            this.axWindowsMediaPlayer1.TabIndex = 0;
             // 
             // tabPage1
             // 
@@ -494,26 +513,6 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // tabPage3
-            // 
-            this.tabPage3.Controls.Add(this.videoPanel);
-            this.tabPage3.Location = new System.Drawing.Point(4, 26);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1516, 743);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
-            this.tabPage3.UseVisualStyleBackColor = true;
-            // 
-            // videoPanel
-            // 
-            this.videoPanel.Controls.Add(this.axWindowsMediaPlayer1);
-            this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.videoPanel.Location = new System.Drawing.Point(3, 3);
-            this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(1510, 737);
-            this.videoPanel.TabIndex = 1;
-            // 
             // materialTabSelector1
             // 
             this.materialTabSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -531,17 +530,14 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // timer1
+            // comboBox1
             // 
-            // 
-            // axWindowsMediaPlayer1
-            // 
-            this.axWindowsMediaPlayer1.Enabled = true;
-            this.axWindowsMediaPlayer1.Location = new System.Drawing.Point(3, 0);
-            this.axWindowsMediaPlayer1.Name = "axWindowsMediaPlayer1";
-            this.axWindowsMediaPlayer1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer1.OcxState")));
-            this.axWindowsMediaPlayer1.Size = new System.Drawing.Size(1507, 737);
-            this.axWindowsMediaPlayer1.TabIndex = 0;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(267, 710);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(134, 25);
+            this.comboBox1.TabIndex = 4;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -560,18 +556,17 @@
             this.panelObject.ResumeLayout(false);
             this.panelObject.PerformLayout();
             this.panelProgress.ResumeLayout(false);
-            this.panelProgress.PerformLayout();
             this.panelVideo.ResumeLayout(false);
             this.panelVideo.PerformLayout();
             this.panelVideoPart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage3.ResumeLayout(false);
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -609,7 +604,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panelObject;
         private System.Windows.Forms.Panel panelProgress;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panelVideo;
         private System.Windows.Forms.Panel panelSearch;
         private System.Windows.Forms.PictureBox pictureBoxVideo;
@@ -621,6 +615,7 @@
         private System.Windows.Forms.Label timeLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
+        private System.Windows.Forms.ComboBox comboBox1;
     }
 }
 

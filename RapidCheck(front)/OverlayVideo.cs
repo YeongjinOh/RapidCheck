@@ -50,6 +50,7 @@ namespace RapidCheck
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
+        private int speed;
         
         //UI
         PictureBox pictureBoxVideo;
@@ -84,6 +85,7 @@ namespace RapidCheck
             this.minTrackingLength = minTrackingLength;
             this.frameStep = frameStep;
             this.clusterNum = clusterNum;
+            this.speed = 1;
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)
             {

@@ -34,9 +34,11 @@ namespace RapidCheck
             skinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             skinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
             
-            tabPage1.Text = "구성중";
-            tabPage2.Text = "요약";
-            tabPage3.Text = "영상";
+            tabPage1.Text = "분석";
+            tabPage2.Text = "영상";
+            tabPage3.Text = "";
+
+            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -63,10 +65,15 @@ namespace RapidCheck
             progressBar1.Enabled = true;
             
             //text box
-            stateLabel.Text = "null";
+            stateLabel.Text = "";
 
             //video player
             MaximizeBox = false;
+
+            //comboBOx
+            comboBox1.Enabled = false;
+            string[] speed = {"x1", "x2", "x4"};
+            comboBox1.Items.AddRange(speed);
         }
 
         string videoPath = null;
@@ -85,11 +92,11 @@ namespace RapidCheck
             }
             videoPath = @"C:\videos\tracking.mp4";
 
-            int maxFrameNum = 5000; // 0이면 모든 영상의 모든 frame을 분석
+            int maxFrameNum = 20000;
             int frameStep = 5;
-            int minTrackingLength = 29;
-            int clusterNum = 5;
-            outputFrameNum = 1000;
+            int minTrackingLength = 47;
+            int clusterNum = 6;
+            outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(startBtn, trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
 
             //trackbar
@@ -129,10 +136,11 @@ namespace RapidCheck
             myRapidModule.Add(rapid.addObj);
             myRapidModule.Add(rapid.kMeasFunc);
             myRapidModule.Add(rapid.imageCrop);
-            myRapidModule.Add(rapid.setObjidList);
+//            myRapidModule.Add(rapid.setObjidList);
             myRapidModule.Add(rapid.buildOverlayOrderUsingCluster);
             //myRapidModule.Add(rapid.overlay);
             trackBarFlag = 1;
+            comboBox1.Enabled = true;
             myRapidModule.Add(rapid.overlayLive);
             rapidChain myRapidChain = new rapidChain(basicFlow);
             for (int idx = 0; idx < myRapidModule.Count; idx++)
@@ -213,6 +221,15 @@ namespace RapidCheck
                 axWindowsMediaPlayer1.Ctlcontrols.play();
                 axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)frameNum / fps;
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int speed = 1;
+            if (comboBox1.SelectedItem == "x1") { speed = 1; }
+            if (comboBox1.SelectedItem == "x2") { speed = 2; }
+            if (comboBox1.SelectedItem == "x4") { speed = 4; }
+            rapidCheck.setSpeed(speed);
         }
     }
 }
