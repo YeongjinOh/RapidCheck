@@ -118,23 +118,23 @@ namespace RapidCheck
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
             //***********************************************************클릭 옵션 할때까지 잠깐 주석처리**********************************************************
-            //if (background.Height * drawWidth > background.Width * drawHeight)
-            //{
-            //    drawHeight = pictureBoxVideo.Height;
-            //    drawWidth = (int)((double)pictureBoxVideo.Height * ((double)background.Width / (double)background.Height));
-            //}
-            //else if (background.Height * drawWidth < background.Width * drawHeight)
-            //{
-            //    drawWidth = pictureBoxVideo.Width;
-            //    drawHeight = (int)((double)pictureBoxVideo.Width * ((double)background.Height / (double)background.Width));
-            //}
-            ////set draw position
-            //int drawX = (pictureBoxVideo.Width - drawWidth)/2;
-            //int drawY = (pictureBoxVideo.Height - drawHeight)/2;
-            ////set puictureBox
-            //pictureBoxVideo.Height = drawHeight;
-            //pictureBoxVideo.Width = drawWidth;
-            //pictureBoxVideo.Location = new Point(drawX, drawY);
+            if (background.Height * drawWidth > background.Width * drawHeight)
+            {
+                drawHeight = pictureBoxVideo.Height;
+                drawWidth = (int)((double)pictureBoxVideo.Height * ((double)background.Width / (double)background.Height));
+            }
+            else if (background.Height * drawWidth < background.Width * drawHeight)
+            {
+                drawWidth = pictureBoxVideo.Width;
+                drawHeight = (int)((double)pictureBoxVideo.Width * ((double)background.Height / (double)background.Width));
+            }
+            //set draw position
+            int drawX = (pictureBoxVideo.Width - drawWidth) / 2;
+            int drawY = (pictureBoxVideo.Height - drawHeight) / 2;
+            //set puictureBox
+            pictureBoxVideo.Height = drawHeight;
+            pictureBoxVideo.Width = drawWidth;
+            pictureBoxVideo.Location = new Point(drawX, drawY);
             //***********************************************************클릭 옵션 할때까지 잠깐 주석처리**********************************************************
 
 
@@ -403,12 +403,12 @@ namespace RapidCheck
         {
             this.resFrame = resFrameNum;
         }
-        private int min(int num1, int num2)
+        private double min(double num1, double num2)
         {
             return num1 > num2 ? num2 : num1;
         }
 
-        public int getClickedObjectOriginalFrameNum(int clickPositionX, int clickPositionY)
+        public int getClickedObjectOriginalFrameNum(double clickPositionX, double clickPositionY)
         {
             /*
             int startFrame = -1;
@@ -425,7 +425,8 @@ namespace RapidCheck
             }
             return startFrame;
              */
-            int startFrame = -1, maxClickedPositionArea = 0;
+            int startFrame = -1;
+            double maxClickedPositionArea = 0;
             for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++) // id의 인덱스
             {
                 int id = overlayOrders[resFrame][idx].id;
@@ -433,9 +434,9 @@ namespace RapidCheck
                 Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
                 if ((objRect.X < clickPositionX) && (objRect.Width + objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height + objRect.Y > clickPositionY))
                 {
-                    int clickedPositionWidth = min(clickPositionX - objRect.X, objRect.Width + objRect.X - clickPositionX);
-                    int clickedPositionHeight = min(clickPositionY - objRect.Y, objRect.Height + objRect.Y - clickPositionY);
-                    int curClickedPositionArea = clickedPositionWidth * clickedPositionHeight;
+                    double clickedPositionWidth = min(clickPositionX - objRect.X, objRect.Width + objRect.X - clickPositionX);
+                    double clickedPositionHeight = min(clickPositionY - objRect.Y, objRect.Height + objRect.Y - clickPositionY);
+                    double curClickedPositionArea = clickedPositionWidth * clickedPositionHeight;
                     if (maxClickedPositionArea < curClickedPositionArea)
                     {
                         startFrame = ObjList[id].getStartFrameNum();

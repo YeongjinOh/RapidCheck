@@ -13,7 +13,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Threading;
-
+using AxWMPLib; //player
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
@@ -63,7 +63,7 @@ namespace RapidCheck
             progressBar1.Enabled = true;
             
             //text box
-            stateLabel.Text = "click! video button";
+            stateLabel.Text = "null";
 
             //video player
             MaximizeBox = false;
@@ -71,16 +71,17 @@ namespace RapidCheck
 
         string videoPath = null;
         int outputFrameNum = 0;
+        OpenFileDialog videoFilePath;
         private void VideoBtn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "All Files (*.*)|*.*";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = true;
-            choofdlog.InitialDirectory = @"C:\videos";
-            if (choofdlog.ShowDialog() == DialogResult.OK)
+            videoFilePath = new OpenFileDialog();
+            videoFilePath.Filter = "All Files (*.*)|*.*";
+            videoFilePath.FilterIndex = 1;
+            videoFilePath.Multiselect = true;
+            videoFilePath.InitialDirectory = @"C:\videos";
+            if (videoFilePath.ShowDialog() == DialogResult.OK)
             {
-                videoPath = choofdlog.FileName;
+                videoPath = videoFilePath.FileName;
             }
             videoPath = @"C:\videos\tracking.mp4";
 
@@ -121,7 +122,7 @@ namespace RapidCheck
             states.Add("Image cropping");
             states.Add("Id filtering");
             states.Add("Id ordering");
-            states.Add("Bitmap overlay");
+            states.Add("play");
 
             List<rapidModule> myRapidModule = new List<rapidModule>();
             myRapidModule.Add(rapid.getMysqlObjList);
@@ -139,7 +140,7 @@ namespace RapidCheck
                 myRapidChain(ref sw, states[idx], myRapidModule[idx]);
             }
             progressBar1.Value = 100;
-            stateLabel.Text = "Done.";
+            stateLabel.Text = "...";
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -171,12 +172,6 @@ namespace RapidCheck
         private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
         private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
         private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
-
-        private void direction_Click(object sender, EventArgs e)
-        {
-            axWindowsMediaPlayer1.openPlayer(@"C:\videos\output\video1_10000_1000_5.avi");
-            axWindowsMediaPlayer1.Ctlcontrols.play();
-        }
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             if (trackBarFlag == 1)
@@ -205,14 +200,18 @@ namespace RapidCheck
 
         private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e)
         {
+            int fps = 20;
             startBtn.Text = "Start";
             Point clickPosition = e.Location;
-            int frameNum = rapidCheck.getClickedObjectOriginalFrameNum(clickPosition.X, clickPosition.Y);
+            double clickPositionOriginX = (double)clickPosition.X / pictureBoxVideo.Width * rapidCheck.videoWidth;
+            double clickPositionOriginY = (double)clickPosition.Y / pictureBoxVideo.Height * rapidCheck.videoHeight;
+            int frameNum = rapidCheck.getClickedObjectOriginalFrameNum(clickPositionOriginX, clickPositionOriginY);
             if (frameNum >= 0)
             {
-                // TODO 
-                // original video를 띄워주고
-                // frameNum부터 재생시킨다.
+                materialTabControl1.SelectedTab = tabPage3;
+                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)frameNum / fps;
             }
         }
     }

@@ -40,8 +40,8 @@ namespace RapidCheck
         private List<int> trackingTableObjid;
         private List<Rectangle> trackingTableRectangle;
         private string videoPath;
-        private int videoWidth;
-        private int videoHeight;
+        public int videoWidth { get; set; }
+        public int videoHeight { get; set; }
         private int frameStep;
         private int videoid;
         private int outputFrameNum;
