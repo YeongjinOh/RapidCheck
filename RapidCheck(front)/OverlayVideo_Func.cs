@@ -98,7 +98,7 @@ namespace RapidCheck
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
                     int id = overlayOrders[resFrame][idx].id;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea());
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f);
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
@@ -117,7 +117,6 @@ namespace RapidCheck
             // set draw size
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
-            //***********************************************************클릭 옵션 할때까지 잠깐 주석처리**********************************************************
             if (background.Height * drawWidth > background.Width * drawHeight)
             {
                 drawHeight = pictureBoxVideo.Height;
@@ -135,14 +134,13 @@ namespace RapidCheck
             pictureBoxVideo.Height = drawHeight;
             pictureBoxVideo.Width = drawWidth;
             pictureBoxVideo.Location = new Point(drawX, drawY);
-            //***********************************************************클릭 옵션 할때까지 잠깐 주석처리**********************************************************
 
 
             //overlay time
             int frameTime = 10;
             //1000 / frameStep;
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            
+            float alphaMin = 0.4f, alphaDiff = 0.2f;
             //**********************DRAWING CODE**********************
             //System.Threading.Thread.Sleep(500);
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
@@ -153,7 +151,22 @@ namespace RapidCheck
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
                     int orderingCnt = overlayOrders[resFrame][overlayObjIdx].orderingCnt;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), ObjList[id].getCropArea(orderingCnt));
+                    Rectangle currentObjectArea = ObjList[id].getCropArea(orderingCnt);
+                    float alpha = 0.8f;
+                    
+                    for (int prevOverlayObjIdx = 0; prevOverlayObjIdx < overlayObjIdx; prevOverlayObjIdx++)
+                    {
+                        int previd = overlayOrders[resFrame][prevOverlayObjIdx].id;
+                        int prevOrderingCnt = overlayOrders[resFrame][prevOverlayObjIdx].orderingCnt;
+                        Rectangle prevObjectArea = ObjList[previd].getCropArea(prevOrderingCnt);
+                        if (isIntersect(currentObjectArea, prevObjectArea))
+                        {
+                            alpha -= alphaDiff;
+                        }
+                    }
+                    if (alpha < alphaMin)
+                        alpha = alphaMin;
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha);
                 }
                 trackingBar.Value += 1;
                 if (resFrame == outputFrameNum - 1)
@@ -170,6 +183,18 @@ namespace RapidCheck
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
+        }
+        public bool isIntersect(Rectangle rect1, Rectangle rect2)
+        {
+            return isIntersectPoint(rect1, new Point(rect2.X, rect2.Y)) ||
+            isIntersectPoint(rect1, new Point(rect2.X, rect2.Y+rect2.Height)) ||
+            isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y)) ||
+            isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y + rect2.Height));
+        }
+
+        public bool isIntersectPoint(Rectangle rect, Point po)
+        {
+            return rect.X < po.X && rect.X + rect.Width > po.X && rect.Y < po.Y && rect.Y + rect.Height > po.Y;
         }
         public void setObjidList()
         {
@@ -225,7 +250,7 @@ namespace RapidCheck
                 }
             }
         }
-        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position)
+        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha)
         {
             try
             {
@@ -235,7 +260,7 @@ namespace RapidCheck
                     using (Graphics gr = Graphics.FromImage(back))
                     {
                         ColorMatrix matrix = new ColorMatrix();
-                        matrix.Matrix33 = 0.75f; //0.7~0.75
+                        matrix.Matrix33 = alpha; //0.7~0.75
                         ImageAttributes att = new ImageAttributes();
                         att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
