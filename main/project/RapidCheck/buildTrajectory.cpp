@@ -15,17 +15,22 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 	vector<Scalar> colors = getRandomColors();
 
 	// show trajectories
-	Mat frame, frameOrigin;
+	Mat frame, frameOrigin, frameSkipped;
+	int timeToSleep = 130;
+	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
 	while (true) {
 		int objectId = 0;
 		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 		{
 			// Segment & segment = segments[segmentNumber];
+			printf("segmentNum : %d\n", segmentNumber);
 			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 			{
 				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
-				cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+				// cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 				cap >> frame;
+				for (int i = 1; i < FRAME_STEP; i++)
+					cap >> frame;
 
 				frame.copyTo(frameOrigin);
 
@@ -54,6 +59,10 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
 				}
 
+				rectangle(frame, Rect(0, 0, 180, 30), WHITE, -1);
+				rectangle(frameOrigin, Rect(0, 0, 180, 30), WHITE, -1);
+				putText(frame, "Frame #" + to_string(frameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
+				putText(frameOrigin, "Frame #" + to_string(frameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
 				imshow("Trajectory", frame);
 				imshow("Detection response", frameOrigin);
 
@@ -66,7 +75,25 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 					segmentNumber = 0;
 					break;
 				}
-
+				else if (key == (int)('p'))
+				{
+					key = waitKey(0);
+				}
+				else if (key == (int)('['))
+				{
+					timeToSleep += 10;
+				}
+				else if (key == (int)(']'))
+				{
+					timeToSleep -= 10;
+				}
+				else if (key == (int)('b'))
+				{
+					segmentNumber = max(0, segmentNumber-10);
+					frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+					cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+					break;
+				}
 			}
 		}
 		waitKey(0);
@@ -123,7 +150,7 @@ void buildTrajectory(App app)
 	{
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& tracklets = segment.getTracklets();
-
+		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, tracklets.size());
 		// for each trajectory still being tracked
 		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 		{
@@ -146,6 +173,7 @@ void buildTrajectory(App app)
 			if (diffSegmentNum == 1)
 			{
 				// explore each tracklet in this segment
+				/*
 				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
 				{
 					tracklet& tr = *itTracklets;
@@ -160,11 +188,31 @@ void buildTrajectory(App app)
 						minTrackletIt = itTracklets;
 					}
 				}
-				if (minCost < TRAJECTORY_MATCH_THRES)
+				printf("minCost : %.2lf\n", minCost);
+				if (minCost < TRAJECTORY_MATCH_COST_THRES_FOR_CAR)
 				{
 					// merge
 					RCTrajectory.merge(*minTrackletIt);
 					tracklets.erase(minTrackletIt);
+					continue;
+				}*/
+				double maxSimilarity = 0.0;
+				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
+				{
+					tracklet& tr = *itTracklets;
+					double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
+					if (maxSimilarity < curSimilarity)
+					{
+						maxSimilarity = curSimilarity;
+						maxTrackletIt = itTracklets;
+					}
+				}
+				printf("maxSim : %.2lf\n", maxSimilarity);
+				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
+				{
+					// merge
+					RCTrajectory.merge(*maxTrackletIt);
+					tracklets.erase(maxTrackletIt);
 					continue;
 				}
 			}

@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-const int MAX_FRAMES = 300;
+const int MAX_FRAMES = 1000;
 const int START_FRAME_NUM = 2001;
 const int FRAME_STEP = 3;
 const int VIDEOID = 3;
@@ -30,7 +30,8 @@ const bool RESIZE_DETECTION_AREA = false;
 const bool SELECT_DETECTION_RESPONSE = true;
 
 // Trajectory
-const double TRAJECTORY_MATCH_THRES = 200.0;
+const double TRAJECTORY_MATCH_COST_THRES_FOR_PEDESTRIAN = 200.0;
+const double TRAJECTORY_MATCH_COST_THRES_FOR_CAR = 1500.0;
 const double TRAJECTORY_MATCH_SIMILARITY_THRES = 0.55;
 const int MAXIMUM_LOST_SEGMENTS = 2;
 const double STANDARD_DEVIATION = 2000.0;
