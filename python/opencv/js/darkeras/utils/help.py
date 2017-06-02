@@ -83,3 +83,7 @@ class DB_Helper:
 
 	def close(self):
 		self.conn.close()
+
+# Model History Save Modules in RapidCheck Darkeras
+def save_model(model, save_type='weights'):
+	pass
