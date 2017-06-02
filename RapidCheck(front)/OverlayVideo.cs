@@ -40,8 +40,8 @@ namespace RapidCheck
         private List<int> trackingTableObjid;
         private List<Rectangle> trackingTableRectangle;
         private string videoPath;
-        private int videoWidth;
-        private int videoHeight;
+        public int videoWidth { get; set; }
+        public int videoHeight { get; set; }
         private int frameStep;
         private int videoid;
         private int outputFrameNum;
@@ -50,19 +50,25 @@ namespace RapidCheck
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
-        //
+        private int speed;
+        
+        //UI
         PictureBox pictureBoxVideo;
         TrackBar trackingBar;
+        Button startBtn;
         public int resFrame { get; set; }
         public int overlayObjIdx { set; get; }
-        //overlayOrders의 길이와 overlayFrames의 길이는 같아야한다??? 디펜던시가 있다
+        public int clickFramePosition { set; get; } // mouse click frame position
+
         public OverlayVideo() { }
-        public OverlayVideo(TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             this.trackingBar = TrackingBar;
             this.pictureBoxVideo = pictureBoxVideo;
+            this.startBtn = startBtn;
             this.resFrame = 0;
             this.overlayObjIdx = 0;
+            this.clickFramePosition = 0;
             //------------------------------변수 초기화-----------------------------
             ObjList = new List<Obj>(); //DB Table
             objectidList = new List<int>();
@@ -79,6 +85,7 @@ namespace RapidCheck
             this.minTrackingLength = minTrackingLength;
             this.frameStep = frameStep;
             this.clusterNum = clusterNum;
+            this.speed = 1;
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)
             {

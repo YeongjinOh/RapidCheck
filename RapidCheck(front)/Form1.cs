@@ -13,7 +13,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Threading;
-
+using AxWMPLib; //player
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
@@ -34,9 +34,11 @@ namespace RapidCheck
             skinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             skinManager.ColorScheme = new ColorScheme(Primary.BlueGrey800, Primary.BlueGrey900, Primary.BlueGrey500, Accent.LightBlue200, TextShade.WHITE);
             
-            tabPage1.Text = "구성중";
-            tabPage2.Text = "요약";
-            tabPage3.Text = "영상";
+            tabPage1.Text = "분석";
+            tabPage2.Text = "영상";
+            tabPage3.Text = "";
+
+            
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -63,37 +65,43 @@ namespace RapidCheck
             progressBar1.Enabled = true;
             
             //text box
-            stateLabel.Text = "click! video button";
+            stateLabel.Text = "";
 
             //video player
             MaximizeBox = false;
+
+            //comboBOx
+            comboBox1.Enabled = false;
+            string[] speed = {"x1", "x2", "x4"};
+            comboBox1.Items.AddRange(speed);
         }
 
         string videoPath = null;
+        int outputFrameNum = 0;
+        OpenFileDialog videoFilePath;
         private void VideoBtn_Click(object sender, EventArgs e)
         {
-            OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "All Files (*.*)|*.*";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = true;
-            choofdlog.InitialDirectory = @"C:\videos";
-            if (choofdlog.ShowDialog() == DialogResult.OK)
+            videoFilePath = new OpenFileDialog();
+            videoFilePath.Filter = "All Files (*.*)|*.*";
+            videoFilePath.FilterIndex = 1;
+            videoFilePath.Multiselect = true;
+            videoFilePath.InitialDirectory = @"C:\videos";
+            if (videoFilePath.ShowDialog() == DialogResult.OK)
             {
-                videoPath = choofdlog.FileName;
+                videoPath = videoFilePath.FileName;
             }
             videoPath = @"C:\videos\tracking.mp4";
 
-            int maxFrameNum = 5000; // 0이면 모든 영상의 모든 frame을 분석
+            int maxFrameNum = 20000;
             int frameStep = 5;
-            int minTrackingLength = 29;
-            int clusterNum = 5;
-            int outputFrameNum = 1000;
-            rapidCheck = new RapidCheck.OverlayVideo(trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            int minTrackingLength = 47;
+            int clusterNum = 6;
+            outputFrameNum = 500;
+            rapidCheck = new RapidCheck.OverlayVideo(startBtn, trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
 
             //trackbar
             trackBar1.Minimum = 0;
             trackBar1.Maximum = outputFrameNum -1;
-
             new Thread(() => rapidRun(ref rapidCheck)).Start();
             //rapidRun(ref rapidCheck);
         }
@@ -121,17 +129,18 @@ namespace RapidCheck
             states.Add("Image cropping");
             states.Add("Id filtering");
             states.Add("Id ordering");
-            states.Add("Bitmap overlay");
+            states.Add("play");
 
             List<rapidModule> myRapidModule = new List<rapidModule>();
             myRapidModule.Add(rapid.getMysqlObjList);
             myRapidModule.Add(rapid.addObj);
             myRapidModule.Add(rapid.kMeasFunc);
             myRapidModule.Add(rapid.imageCrop);
-            myRapidModule.Add(rapid.setObjidList);
+//            myRapidModule.Add(rapid.setObjidList);
             myRapidModule.Add(rapid.buildOverlayOrderUsingCluster);
             //myRapidModule.Add(rapid.overlay);
             trackBarFlag = 1;
+            comboBox1.Enabled = true;
             myRapidModule.Add(rapid.overlayLive);
             rapidChain myRapidChain = new rapidChain(basicFlow);
             for (int idx = 0; idx < myRapidModule.Count; idx++)
@@ -139,7 +148,7 @@ namespace RapidCheck
                 myRapidChain(ref sw, states[idx], myRapidModule[idx]);
             }
             progressBar1.Value = 100;
-            stateLabel.Text = "Done.";
+            stateLabel.Text = "...";
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -171,12 +180,6 @@ namespace RapidCheck
         private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
         private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
         private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
-
-        private void direction_Click(object sender, EventArgs e)
-        {
-            axWindowsMediaPlayer1.openPlayer(@"C:\videos\output\video1_10000_1000_5.avi");
-            axWindowsMediaPlayer1.Ctlcontrols.play();
-        }
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             if (trackBarFlag == 1)
@@ -184,6 +187,49 @@ namespace RapidCheck
                 rapidCheck.resFrame = trackBar1.Value;
                 rapidCheck.overlayObjIdx = 0;
             }
+        }
+
+        private void VideoStartBtn_Click(object sender, EventArgs e)
+        {
+            if(startBtn.Text == "Start" )
+            {
+                startBtn.Text = "Pause";
+            }
+            else
+            {
+                startBtn.Text = "Start";
+            }
+        }
+
+        private void trackBar1_MouseDown(object sender, MouseEventArgs e)
+        {
+            trackBar1.Value = Convert.ToInt32(1.0 * outputFrameNum * e.Location.X / trackBar1.Width);
+        }
+
+        private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e)
+        {
+            int fps = 20;
+            startBtn.Text = "Start";
+            Point clickPosition = e.Location;
+            double clickPositionOriginX = (double)clickPosition.X / pictureBoxVideo.Width * rapidCheck.videoWidth;
+            double clickPositionOriginY = (double)clickPosition.Y / pictureBoxVideo.Height * rapidCheck.videoHeight;
+            int frameNum = rapidCheck.getClickedObjectOriginalFrameNum(clickPositionOriginX, clickPositionOriginY);
+            if (frameNum >= 0)
+            {
+                materialTabControl1.SelectedTab = tabPage3;
+                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)frameNum / fps;
+            }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int speed = 1;
+            if (comboBox1.SelectedItem == "x1") { speed = 1; }
+            if (comboBox1.SelectedItem == "x2") { speed = 2; }
+            if (comboBox1.SelectedItem == "x4") { speed = 4; }
+            rapidCheck.setSpeed(speed);
         }
     }
 }
