@@ -64,7 +64,7 @@ namespace RapidCheck
         System.Drawing.Font drawFont;
         System.Drawing.SolidBrush drawBrush;
         //background
-
+        Bitmap background;
         
         //UI
         PictureBox pictureBoxVideo;
@@ -117,6 +117,7 @@ namespace RapidCheck
             reader.Open(videoPath);
             videoWidth = reader.Width;
             videoHeight = reader.Height;
+            background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
             if(maxFrameNum == 0)
             {
                 this.maxFrameNum = (int)reader.FrameCount;

@@ -84,7 +84,7 @@ namespace RapidCheck
         }
         public void overlay()
         {
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            //Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
             VideoFileWriter writer = new VideoFileWriter();
             string outputPath = string.Format(@"C:\videos\output\video{0}_{1}_{2}_{3}.avi", videoid, maxFrameNum, outputFrameNum, clusterNum);
             if(System.IO.File.Exists(outputPath)) //해당 이름을 가진 파일이 존재한다면,,,,
@@ -107,7 +107,7 @@ namespace RapidCheck
         }
         public void overlayLive()
         {
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            //Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
             startBtn.Enabled = true;
             trackingBar.Enabled = true;
