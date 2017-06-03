@@ -105,7 +105,6 @@ namespace RapidCheck
             }
             writer.Close();
         }
-        
         public void overlayLive()
         {
             Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
@@ -145,7 +144,6 @@ namespace RapidCheck
             {
                 sw.Start();
                 Bitmap BitCopy = (Bitmap)background.Clone();
-                String tmpId = "";
                 for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
@@ -165,7 +163,6 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
-                    tmpId += id.ToString() + " ";
                     BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha);
                 }
                 trackingBar.Value += 1;
@@ -192,7 +189,6 @@ namespace RapidCheck
             isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y)) ||
             isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y + rect2.Height));
         }
-
         public bool isIntersectPoint(Rectangle rect, Point po)
         {
             return rect.X < po.X && rect.X + rect.Width > po.X && rect.Y < po.Y && rect.Y + rect.Height > po.Y;
@@ -383,7 +379,19 @@ namespace RapidCheck
                     foreach (int objid in objidByFrame[frameNum])
                     {
                         Rectangle temp = ObjList[objid].getNextCropArea();
-                        ObjList[objid].addCropImage(videoFrame.Clone(temp, videoFrame.PixelFormat));
+                        Bitmap bit = videoFrame.Clone(temp, videoFrame.PixelFormat);
+                        ObjList[objid].addCropImage(bit);
+
+                        if (ObjList[objid].cropImages.Count == 1)
+                        {   
+                            //set string
+                            dataGridView.Invoke(new Action(() =>
+                            {
+                                string cont = string.Format("object id : {0}\nstart time : {1}\nend time : {2}\nmain color : {3}\ndirection : {4}", objid, "123", "345", "red", "31");
+                                dataGridView.Rows.Add(bit, cont);
+                                dataGridView.Rows[dataGridView.RowCount - 1].Height = bit.Height;
+                            }));
+                        }
                     }
                 }
                 videoFrame.Dispose();

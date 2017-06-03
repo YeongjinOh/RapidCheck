@@ -23,7 +23,6 @@ namespace RapidCheck
         //검색 조건 (방향, 색상)
         private int inputDirection = -1;
         private int color = -1;
-        private int trackBarFlag = 0;
         RapidCheck.OverlayVideo rapidCheck;
         public Form1()
         {
@@ -70,10 +69,40 @@ namespace RapidCheck
             //video player
             MaximizeBox = false;
 
-            //comboBOx
-            comboBox1.Enabled = false;
-            string[] speed = {"x1", "x2", "x4"};
-            comboBox1.Items.AddRange(speed);
+            //radioBtn speed
+            radioButtonX1.Enabled = false;
+            radioButtonX2.Enabled = false;
+            radioButtonX4.Enabled = false;
+
+            //trackBar
+            trackBar1.Enabled = false;
+
+            //dataGridView
+            dataGridView1.Columns[0].Width = panelObject.Width / 2;
+            dataGridView1.Columns[1].Width = panelObject.Width / 2;
+            dataGridView1.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True; //support multiline text
+            dataGridView1.ColumnHeadersVisible = false;
+            
+            //dataGridView1.ColumnCount = 3;
+            //dataGridView1.Columns[0].Name = "Product ID";
+            //dataGridView1.Columns[1].Name = "Product Name";
+            //dataGridView1.Columns[2].Name = "Product Price";
+
+            //string[] row = new string[] { "1", "Product 1", "1000" };
+            //dataGridView1.Rows.Add(row);
+            //row = new string[] { "2", "Product 2", "2000" };
+            //dataGridView1.Rows.Add(row);
+            //row = new string[] { "3", "Product 3", "3000" };
+            //dataGridView1.Rows.Add(row);
+            //row = new string[] { "4", "Product 4", "4000" };
+            //dataGridView1.Rows.Add(row);
+
+            //DataGridViewImageColumn img = new DataGridViewImageColumn();
+            //Image image = Image.FromFile(@"C:\videos\0.png");
+            //img.Image = image;
+            //dataGridView1.Columns.Add(img);
+            //img.HeaderText = "Image"; // header name
+            ////img.Name = "img";
         }
 
         string videoPath = null;
@@ -92,12 +121,12 @@ namespace RapidCheck
             }
             videoPath = @"C:\videos\tracking.mp4";
 
-            int maxFrameNum = 20000;
+            int maxFrameNum = 10000;
             int frameStep = 5;
             int minTrackingLength = 47;
             int clusterNum = 6;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(startBtn, trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
 
             //trackbar
             trackBar1.Minimum = 0;
@@ -139,8 +168,11 @@ namespace RapidCheck
 //            myRapidModule.Add(rapid.setObjidList);
             myRapidModule.Add(rapid.buildOverlayOrderUsingCluster);
             //myRapidModule.Add(rapid.overlay);
-            trackBarFlag = 1;
-            comboBox1.Enabled = true;
+            trackBar1.Enabled = true;
+            radioButtonX1.Enabled = true;
+            radioButtonX2.Enabled = true;
+            radioButtonX4.Enabled = true;
+            radioButtonX1.Checked = true;
             myRapidModule.Add(rapid.overlayLive);
             rapidChain myRapidChain = new rapidChain(basicFlow);
             for (int idx = 0; idx < myRapidModule.Count; idx++)
@@ -161,32 +193,10 @@ namespace RapidCheck
             //    }
         }
 
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) { color = 3; }
-        private void radioButton5_CheckedChanged(object sender, EventArgs e) { color = 4; }
-        private void radioButton6_CheckedChanged(object sender, EventArgs e) { color = 5; }
-        private void radioButton7_CheckedChanged(object sender, EventArgs e) { color = 6; }
-        private void radioButton8_CheckedChanged(object sender, EventArgs e) { color = 7; }
-        private void radioButton9_CheckedChanged(object sender, EventArgs e) { color = 8; }
-        private void radioButton10_CheckedChanged(object sender, EventArgs e) { color = 9; }
-
-        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
-        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
-        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
-        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
-        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
-        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
-        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
-        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
-            if (trackBarFlag == 1)
-            {    
-                rapidCheck.resFrame = trackBar1.Value;
-                rapidCheck.overlayObjIdx = 0;
-            }
+            rapidCheck.resFrame = trackBar1.Value;
+            rapidCheck.overlayObjIdx = 0;
         }
 
         private void VideoStartBtn_Click(object sender, EventArgs e)
@@ -208,28 +218,43 @@ namespace RapidCheck
 
         private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e)
         {
-            int fps = 20;
-            startBtn.Text = "Start";
-            Point clickPosition = e.Location;
-            double clickPositionOriginX = (double)clickPosition.X / pictureBoxVideo.Width * rapidCheck.videoWidth;
-            double clickPositionOriginY = (double)clickPosition.Y / pictureBoxVideo.Height * rapidCheck.videoHeight;
-            int frameNum = rapidCheck.getClickedObjectOriginalFrameNum(clickPositionOriginX, clickPositionOriginY);
-            if (frameNum >= 0)
+            if(trackBar1.Enabled == true)
             {
-                materialTabControl1.SelectedTab = tabPage3;
-                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
-                axWindowsMediaPlayer1.Ctlcontrols.play();
-                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)frameNum / fps;
+                int fps = 20;
+                startBtn.Text = "Start";
+                Point clickPosition = e.Location;
+                double clickPositionOriginX = (double)clickPosition.X / pictureBoxVideo.Width * rapidCheck.videoWidth;
+                double clickPositionOriginY = (double)clickPosition.Y / pictureBoxVideo.Height * rapidCheck.videoHeight;
+                int frameNum = rapidCheck.getClickedObjectOriginalFrameNum(clickPositionOriginX, clickPositionOriginY);
+                if (frameNum >= 0)
+                {
+                    materialTabControl1.SelectedTab = tabPage3;
+                    axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                    axWindowsMediaPlayer1.Ctlcontrols.play();
+                    axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)frameNum / fps;
+                }
             }
         }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int speed = 1;
-            if (comboBox1.SelectedItem == "x1") { speed = 1; }
-            if (comboBox1.SelectedItem == "x2") { speed = 2; }
-            if (comboBox1.SelectedItem == "x4") { speed = 4; }
-            rapidCheck.setSpeed(speed);
-        }
+        private void radioButtonX1_CheckedChanged(object sender, EventArgs e) { rapidCheck.setSpeed(1); }
+        private void radioButtonX2_CheckedChanged(object sender, EventArgs e) { rapidCheck.setSpeed(2); }
+        private void radioButtonX4_CheckedChanged(object sender, EventArgs e) { rapidCheck.setSpeed(4); }
+        private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
+        private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
+        private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
+        private void radioButton4_CheckedChanged(object sender, EventArgs e) { color = 3; }
+        private void radioButton5_CheckedChanged(object sender, EventArgs e) { color = 4; }
+        private void radioButton6_CheckedChanged(object sender, EventArgs e) { color = 5; }
+        private void radioButton7_CheckedChanged(object sender, EventArgs e) { color = 6; }
+        private void radioButton8_CheckedChanged(object sender, EventArgs e) { color = 7; }
+        private void radioButton9_CheckedChanged(object sender, EventArgs e) { color = 8; }
+        private void radioButton10_CheckedChanged(object sender, EventArgs e) { color = 9; }
+        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
+        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
+        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
+        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
+        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
+        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
+        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
+        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
     }
 }
