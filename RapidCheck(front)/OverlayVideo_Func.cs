@@ -98,7 +98,7 @@ namespace RapidCheck
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
                     int id = overlayOrders[resFrame][idx].id;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f);
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f, ObjList[id].getStartFrameNum());
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
@@ -163,7 +163,7 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha);
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha, ObjList[id].getStartFrameNum());
                 }
                 trackingBar.Value += 1;
                 if (resFrame == outputFrameNum - 1)
@@ -249,7 +249,7 @@ namespace RapidCheck
                 }
             }
         }
-        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha)
+        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, int frameNum)
         {
             try
             {
@@ -258,11 +258,16 @@ namespace RapidCheck
                     
                     using (Graphics gr = Graphics.FromImage(back))
                     {
+                        //set alpha
                         ColorMatrix matrix = new ColorMatrix();
                         matrix.Matrix33 = alpha; //0.7~0.75
                         ImageAttributes att = new ImageAttributes();
                         att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+
+                        //drawing time(frame num)
+                        gr.DrawString(frameNum.ToString(), drawFont, drawBrush, position.X, position.Y-20);
+                        //draw
                         gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
                     }
                 }

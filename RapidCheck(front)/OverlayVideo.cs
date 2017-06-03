@@ -59,6 +59,12 @@ namespace RapidCheck
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
         private int speed;
+
+        //drawing style
+        System.Drawing.Font drawFont;
+        System.Drawing.SolidBrush drawBrush;
+        //background
+
         
         //UI
         PictureBox pictureBoxVideo;
@@ -72,6 +78,10 @@ namespace RapidCheck
         public OverlayVideo() { }
         public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
+            //drawing style
+            drawFont = new System.Drawing.Font("Arial", 12);
+            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            //UI
             this.dataGridView = dataGridView;
             this.trackingBar = TrackingBar;
             this.pictureBoxVideo = pictureBoxVideo;

@@ -33,8 +33,10 @@
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelGrid = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.timeLabel = new System.Windows.Forms.Label();
             this.stateLabel = new System.Windows.Forms.Label();
             this.panelProgress = new System.Windows.Forms.Panel();
@@ -77,12 +79,10 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.panelProgress.SuspendLayout();
             this.panelVideo.SuspendLayout();
@@ -128,8 +128,8 @@
             // 
             // panelObject
             // 
-            this.panelObject.BackColor = System.Drawing.Color.Beige;
-            this.panelObject.Controls.Add(this.panel1);
+            this.panelObject.BackColor = System.Drawing.Color.Transparent;
+            this.panelObject.Controls.Add(this.panelGrid);
             this.panelObject.Controls.Add(this.timeLabel);
             this.panelObject.Controls.Add(this.stateLabel);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -138,14 +138,14 @@
             this.panelObject.Size = new System.Drawing.Size(438, 670);
             this.panelObject.TabIndex = 2;
             // 
-            // panel1
+            // panelGrid
             // 
-            this.panel1.Controls.Add(this.dataGridView1);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 246);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(438, 424);
-            this.panel1.TabIndex = 16;
+            this.panelGrid.Controls.Add(this.dataGridView1);
+            this.panelGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelGrid.Location = new System.Drawing.Point(0, 138);
+            this.panelGrid.Name = "panelGrid";
+            this.panelGrid.Size = new System.Drawing.Size(438, 532);
+            this.panelGrid.TabIndex = 16;
             // 
             // dataGridView1
             // 
@@ -160,13 +160,26 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 30;
-            this.dataGridView1.Size = new System.Drawing.Size(438, 424);
+            this.dataGridView1.Size = new System.Drawing.Size(438, 532);
             this.dataGridView1.TabIndex = 0;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Image";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Width = 200;
+            // 
+            // Column2
+            // 
+            this.Column2.HeaderText = "Contents";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             // 
             // timeLabel
             // 
             this.timeLabel.AutoSize = true;
-            this.timeLabel.Location = new System.Drawing.Point(10, 64);
+            this.timeLabel.Location = new System.Drawing.Point(10, 53);
             this.timeLabel.Name = "timeLabel";
             this.timeLabel.Size = new System.Drawing.Size(39, 17);
             this.timeLabel.TabIndex = 15;
@@ -275,7 +288,7 @@
             // 
             // pictureBoxVideo
             // 
-            this.pictureBoxVideo.BackColor = System.Drawing.Color.Beige;
+            this.pictureBoxVideo.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxVideo.Location = new System.Drawing.Point(0, 0);
             this.pictureBoxVideo.Name = "pictureBoxVideo";
             this.pictureBoxVideo.Size = new System.Drawing.Size(1072, 621);
@@ -308,7 +321,7 @@
             // 
             // panelSearch
             // 
-            this.panelSearch.BackColor = System.Drawing.Color.Beige;
+            this.panelSearch.BackColor = System.Drawing.Color.Transparent;
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSearch.Location = new System.Drawing.Point(0, 0);
             this.panelSearch.Name = "panelSearch";
@@ -602,17 +615,6 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Image";
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 200;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Contents";
-            this.Column2.Name = "Column2";
-            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -629,7 +631,7 @@
             this.tabPage2.ResumeLayout(false);
             this.panelObject.ResumeLayout(false);
             this.panelObject.PerformLayout();
-            this.panel1.ResumeLayout(false);
+            this.panelGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.panelProgress.ResumeLayout(false);
             this.panelVideo.ResumeLayout(false);
@@ -694,7 +696,7 @@
         private System.Windows.Forms.RadioButton radioButtonX1;
         private System.Windows.Forms.RadioButton radioButtonX4;
         private System.Windows.Forms.RadioButton radioButtonX2;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelGrid;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;

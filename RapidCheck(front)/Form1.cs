@@ -82,27 +82,6 @@ namespace RapidCheck
             dataGridView1.Columns[1].Width = panelObject.Width / 2;
             dataGridView1.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True; //support multiline text
             dataGridView1.ColumnHeadersVisible = false;
-            
-            //dataGridView1.ColumnCount = 3;
-            //dataGridView1.Columns[0].Name = "Product ID";
-            //dataGridView1.Columns[1].Name = "Product Name";
-            //dataGridView1.Columns[2].Name = "Product Price";
-
-            //string[] row = new string[] { "1", "Product 1", "1000" };
-            //dataGridView1.Rows.Add(row);
-            //row = new string[] { "2", "Product 2", "2000" };
-            //dataGridView1.Rows.Add(row);
-            //row = new string[] { "3", "Product 3", "3000" };
-            //dataGridView1.Rows.Add(row);
-            //row = new string[] { "4", "Product 4", "4000" };
-            //dataGridView1.Rows.Add(row);
-
-            //DataGridViewImageColumn img = new DataGridViewImageColumn();
-            //Image image = Image.FromFile(@"C:\videos\0.png");
-            //img.Image = image;
-            //dataGridView1.Columns.Add(img);
-            //img.HeaderText = "Image"; // header name
-            ////img.Name = "img";
         }
 
         string videoPath = null;
