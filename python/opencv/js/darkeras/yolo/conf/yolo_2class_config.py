@@ -9,7 +9,7 @@ only 2class classifier yolo model config
 import os
 
 
-model_name = 'yolo-2class-mydata-with-voc2007-train-cell14'
+model_name = 'yolo-2class-playbackandtracking-frombase-cell14'
 classes_name = ["car", "person"]
 
 # dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
@@ -17,7 +17,7 @@ classes_name = ["car", "person"]
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_06-2007','VOCdevkit','VOC2007')
 
-dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','my_trainset', 'voc2007_train_mydata_tracking', 'datacenter')
+dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','my_trainset', 'datacenter_mydata')
 
 ann_location = os.path.join(dataset_abs_location, 'annotations')
 # ann_location = os.path.join(dataset_abs_location, 'Annotations')
@@ -36,7 +36,7 @@ coord_scale = 5
 
 inp_size = 448, 448, 3
 batch_size = 32
-epochs=500
+epochs=2000
 
 lr=0.0001
 trainer='adam'

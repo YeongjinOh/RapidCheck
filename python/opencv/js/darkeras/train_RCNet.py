@@ -12,13 +12,17 @@ from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_
 if cfg.image_dim_order == 'th':
 	K.set_image_dim_ordering('th')
 
+# 새로 학습
+# pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
 
-pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+# 초벌구이 학습
 # pretrain_weight_path = 'models/train/yolo-2class-voc2007-base-shortdense-cell14-steps24000.h5'
-# pretrain_weight_path = 'models/train/yolo-2class-voc2007-train-cell14-steps40000.h5'
-
 # pretrain_weight_path = 'models/train/yolo-2class-complete.h5'
+
+# 추가 학습
+pretrain_weight_path = 'models/train/{}-complete.h5'.format(cfg.model_name)
 # pretrain_weight_path = 'models/train/yolo-2class-mydata-3video-complete.h5'
+
 is_freeze = True
 verbalise = True
 
@@ -32,8 +36,8 @@ print(cfg.dataset_abs_location)
 sess = tf.Session()
 K.set_session(sess)
 
-# model = yolo_tiny_THdim_model()
-model = yolo_shortdense_THdim_model()
+model = yolo_tiny_THdim_model()
+# model = yolo_shortdense_THdim_model()
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
@@ -55,7 +59,7 @@ model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
 
-for i, (x_batch, datum) in enumerate(batches):
+for i, (x_batch, datum) in enumerate(batches, start=7000):
 	train_feed_dict = {
 	   loss_ph[key]:datum[key] for key in loss_ph 
 	}
@@ -91,7 +95,7 @@ for i, (x_batch, datum) in enumerate(batches):
 	# 	model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 	# 	say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
    
-	if i % 5000 == 0:
+	if i % 4000 == 0:
 		model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 		say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
 
