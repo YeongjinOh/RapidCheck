@@ -17,15 +17,23 @@ void compareSimilarity(App app)
 	vector<Scalar> colors = getRandomColors();
 	
 	// build target detected frames
-	vector<Frame> frames;
+	vector<Frame> frames, framePedestrians, frameCars;
 	clock_t t = clock();
 	if (SELECT_DETECTION_RESPONSE)
 	{
-		readTargets(cap, frames);
+		readTargets(cap, framePedestrians, frameCars);
 	}
 	else
 	{
 		detectTargets(app, cap, frames);
+	}
+	if (USE_PEDESTRIANS_ONLY)
+	{
+		frames = framePedestrians;
+	}
+	else
+	{
+		frames = frameCars;
 	}
 	t = clock() - t;
 	printf("Detection takes %d(ms)\n", t);

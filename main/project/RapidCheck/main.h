@@ -32,7 +32,7 @@ using cv::RNG;
 void showDetection(App app);
 void showTrackletClusters(App app);
 void showTracklet(App app);
-void buildTrajectory(App app);
+void buildAndShowTrajectory(App app);
 void compareSimilarity(App app);
 void showTrajectory();
 

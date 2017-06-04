@@ -54,7 +54,7 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
 				}
-				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
 				for (int i = 0; i < pedestrians.size(); i++) {
 					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
 				}
@@ -67,12 +67,12 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 				imshow("Detection response", frameOrigin);
 
 				// key handling
-				int key = waitKey(130);
+				int key = waitKey(timeToSleep);
 
 				if (key == 27) break;
 				else if (key == (int)('r'))
 				{
-					segmentNumber = 0;
+					segmentNumber = NUM_OF_SEGMENTS;
 					break;
 				}
 				else if (key == (int)('p'))
@@ -100,44 +100,15 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 	}
 }
 
-/**
-	Build trajectories of all segements and then, show trace of tracklets
-
-	@param app frame reader with basic parameters set
-*/
-void buildTrajectory(App app)
+void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectories)
 {
-	// set input video
-	VideoCapture cap(VIDEOFILE);
-
-	// build target detected frames
-	vector<Frame> frames;
-	clock_t t = clock();
-	if (SELECT_DETECTION_RESPONSE)
-	{
-		readTargets(cap, frames);
-	}
-	else
-	{
-		detectTargets(app, cap, frames);
-		//detectAndInsertResultIntoDB(app, cap);
-	}
-	t = clock() - t;
-	printf("Detection takes %d(ms)\n", t);
-	
-	// build all tracklets
-	vector<Segment> segments;
-	t = clock();
-	buildTracklets(frames, segments);
-	t = clock() - t;
-	printf("Tracking takes %d(ms)\n", t);
 
 	// build Trajectory
-	vector<RCTrajectory> trajectoriesFinished, trajectoriesStillBeingTracked;
+	vector<RCTrajectory> trajectoriesStillBeingTracked;
 	bool useOnlineTracking = true;
 	if (!useOnlineTracking)
 	{
-		for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++) 
+		for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++)
 		{
 			vector<tracklet>& tracklets = segments[segmentNum].tracklets;
 			for (int t = 0; t < tracklets.size(); t++)
@@ -151,7 +122,7 @@ void buildTrajectory(App app)
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& curSegmentTracklets = segment.getTracklets();
 		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
-		
+
 		// move trajectories finished from trajectoriesStillBeingTracked to trajectoriesFinished
 		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end();)
 		{
@@ -160,7 +131,7 @@ void buildTrajectory(App app)
 			// if trajectory is finished
 			if (diffSegmentNum > MAXIMUM_LOST_SEGMENTS)
 			{
-				trajectoriesFinished.push_back(*itTrajectories);
+				trajectories.push_back(*itTrajectories);
 				itTrajectories = trajectoriesStillBeingTracked.erase(itTrajectories);
 				continue;
 			}
@@ -178,7 +149,8 @@ void buildTrajectory(App app)
 			{
 				RCTrajectory& curTrajectory = trajectoriesStillBeingTracked[i];
 				tracklet &curTracklet = curTrajectory.getTargets(), &nextTracklet = curSegmentTracklets[j];
-				if (isValidCarMotion(curTracklet, nextTracklet))
+				// TODO
+				// if (isValidCarMotion(curTracklet, nextTracklet))
 				{
 					int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
 					double similarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
@@ -243,63 +215,105 @@ void buildTrajectory(App app)
 		// for each trajectory still being tracked
 		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 		{
-			RCTrajectory& curTrajectory = *itTrajectories;
-			int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
-			tracklet& curTracklet = curTrajectory.getTargets();
-			vector<tracklet>::iterator maxTrackletIt;
+		RCTrajectory& curTrajectory = *itTrajectories;
+		int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
+		tracklet& curTracklet = curTrajectory.getTargets();
+		vector<tracklet>::iterator maxTrackletIt;
 
-			double maxSimilarity = 0.0;
-			for (vector<tracklet>::iterator itTracklets = curSegmentTracklets.begin(); itTracklets != curSegmentTracklets.end(); itTracklets++)
-			{
-				tracklet& nextTracklet = *itTracklets;
-				if (!isValidCarMotion(curTracklet, nextTracklet)) continue;
-				double curSimilarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
-				if (maxSimilarity < curSimilarity)
-				{
-					maxSimilarity = curSimilarity;
-					maxTrackletIt = itTracklets;
-				}
-			}
-			printf("maxSim : %.2lf\n", maxSimilarity);
-			if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
-			{
-				// merge
-				if (diffSegmentNum == 1)
-				{
-					curTrajectory.merge(*maxTrackletIt);
-				}
-				else
-				{
-					curTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
-				}
-				curSegmentTracklets.erase(maxTrackletIt);
-				continue;
-			}
+		double maxSimilarity = 0.0;
+		for (vector<tracklet>::iterator itTracklets = curSegmentTracklets.begin(); itTracklets != curSegmentTracklets.end(); itTracklets++)
+		{
+		tracklet& nextTracklet = *itTracklets;
+		if (!isValidCarMotion(curTracklet, nextTracklet)) continue;
+		double curSimilarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
+		if (maxSimilarity < curSimilarity)
+		{
+		maxSimilarity = curSimilarity;
+		maxTrackletIt = itTracklets;
 		}
-		
+		}
+		printf("maxSim : %.2lf\n", maxSimilarity);
+		if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
+		{
+		// merge
+		if (diffSegmentNum == 1)
+		{
+		curTrajectory.merge(*maxTrackletIt);
+		}
+		else
+		{
+		curTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
+		}
+		curSegmentTracklets.erase(maxTrackletIt);
+		continue;
+		}
+		}
+
 
 		// push unselected tracklets
 		for (int trackletNum = 0; trackletNum < curSegmentTracklets.size(); trackletNum++)
 		{
-			trajectoriesStillBeingTracked.push_back(RCTrajectory(curSegmentTracklets[trackletNum], segmentNum));
+		trajectoriesStillBeingTracked.push_back(RCTrajectory(curSegmentTracklets[trackletNum], segmentNum));
 		}
 		*/
 	}
 	for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 	{
-		trajectoriesFinished.push_back(*itTrajectories);
+		trajectories.push_back(*itTrajectories);
 	}
-	trajectoriesStillBeingTracked.clear();
+}
 
-	std::cout << "Built Trajectories" << endl;
+/**
+	Build trajectories of all segements and then, show trace of tracklets
+
+	@param app frame reader with basic parameters set
+*/
+void buildAndShowTrajectory(App app)
+{
+	// set input video
+	VideoCapture cap(VIDEOFILE);
+
+	// build target detected frames
+	vector<Frame> framePedestrians, frameCars;
+	clock_t t = clock();
+	if (SELECT_DETECTION_RESPONSE)
+	{
+		readTargets(cap, framePedestrians, frameCars);
+	}
+	else
+	{
+		detectTargets(app, cap, framePedestrians);
+		//detectAndInsertResultIntoDB(app, cap);
+	}
+	t = clock() - t;
+	printf("Detection takes %d(ms)\n", t);
 	
+	// build all tracklets
+	t = clock();
+	vector<Segment> segmentPedestrians, segmentCars;
+	buildTracklets(framePedestrians, segmentPedestrians);
+	buildTracklets(frameCars, segmentCars);
+	t = clock() - t;
+	printf("Tracklet takes %d(ms)\n", t);
+
+
+	// build trajectories
+	t = clock();
+	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;
+	buildTrajectory(segmentPedestrians, trajectoryPedestrians);
+	buildTrajectory(segmentCars, trajectoryCars);
+	t = clock() - t;
+	printf("Trajectory takes %d(ms)\n", t);
+	
+
 	// insert direction counts into DB
 	if (INSERT_OBJECT_INFO_INTO_DB)
 	{
-		insertObjectInfoIntoDB(trajectoriesFinished);
+		insertObjectInfoIntoDB(trajectoryPedestrians);
+		insertObjectInfoIntoDB(trajectoryCars);
 	}
 		
-
 	// show Trajectory
-	showTrajectory(frames, trajectoriesFinished);
+	// showTrajectory(framePedestrians, trajectoryPedestrians);
+	showTrajectory(frameCars, trajectoryCars);
 }

@@ -156,9 +156,10 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
 	Read targets in MAX_FRAMES frames from DataBase
 
 	@param cap video variable
-	@param frames list of frames to be implemented detection
+	@param framePedestrians list of frames of pedestrians to be implemented detection
+	@param frameCars list of frames of cars to be implemented detection
 */
-void readTargets(VideoCapture& cap, vector<Frame>& frames);
+void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Frame>& frameCars);
 /**
 	Read trajectories in MAX_FRAMES frames from DataBase
 

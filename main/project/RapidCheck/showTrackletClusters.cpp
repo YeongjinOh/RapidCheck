@@ -26,17 +26,24 @@ void showTrackletClusters(App app)
 		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
 	}
 		
-	vector<Frame> frames;
+	// build target detected frames
+	vector<Frame> frames, framePedestrians, frameCars;
 	if (SELECT_DETECTION_RESPONSE)
 	{
-		readTargets(cap, frames);
+		readTargets(cap, framePedestrians, frameCars);
 	}
 	else
 	{
 		detectTargets(app, cap, frames);
 	}
-	
-
+	if (USE_PEDESTRIANS_ONLY)
+	{
+		frames = framePedestrians;
+	}
+	else
+	{
+		frames = frameCars;
+	}
 	cout << "Detection finished" << endl;
 	
 	// open windows
@@ -58,8 +65,8 @@ void showTrackletClusters(App app)
 		cap >> frame;
 
 		// draw detection responses of the first frame in this segment with green rectangle
-		vector<Rect> & pedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1].getPedestrians();
-		// &prevPedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1 - 1].getPedestrians();
+		vector<Rect> & pedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1].getRects();
+		// &prevPedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1 - 1].getRects();
 		//for (int i = 0; i < pedestrians.size(); i++)
 		//	rectangle(frame, pedestrians[i], GREEN, 2, 1);
 
@@ -76,7 +83,7 @@ void showTrackletClusters(App app)
 			segment.push_back(cluster);
 
 			// draw detection responses with white rectangle in each cluster
-			vector<Rect>& pedestrians = frames[frameNum + i].getPedestrians();
+			vector<Rect>& pedestrians = frames[frameNum + i].getRects();
 			for (int j = 0; j < pedestrians.size(); j++)
 			{
 				Rect rect = pedestrians[j];
@@ -129,7 +136,7 @@ void showTrackletClusters(App app)
 				circle(frame, target.getCenterPoint(), 1, colors[objectId], 2);
 
 				// draw found object in each frame
-				 rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
+				rectangle(segment[i], curFrame.getRect(solution[i]), colors[objectId], 4, 1);
 				 putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.getTargetArea().height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
 				target.found = true;
 

@@ -661,7 +661,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 }
 
 // Read targets in MAX_FRAMES frames from DataBase
-void readTargets(VideoCapture& cap, vector<Frame>& frames)
+void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Frame>& frameCars)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
@@ -681,16 +681,24 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 
-	// read result from database and build mapFrameNumToPedestrians
-	vector<vector<int > > res;
-	map<int, vector<Rect> > mapFrameNumToPedestrians;
-	// db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	// read detection result from database and build mapFrameNumToPedestrians
+	vector<vector<int> > detectionResultsPedestrians, detectionResultsCars;
+	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
+	db.selectDetection(detectionResultsPedestrians, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	int carClassId = 0;
-	db.selectDetection2(res, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
-	for (int i = 0; i < res.size(); i++)
+	db.selectDetection2(detectionResultsCars, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	
+	for (int i = 0; i < detectionResultsPedestrians.size(); i++)
 	{
-		int frameNum = res[i][0], x = res[i][1], y = res[i][2], width = res[i][3], height = res[i][4], classId = res[i][5];
+		int frameNum = detectionResultsPedestrians[i][0], x = detectionResultsPedestrians[i][1], y = detectionResultsPedestrians[i][2],
+			width = detectionResultsPedestrians[i][3], height = detectionResultsPedestrians[i][4], classId = detectionResultsPedestrians[i][5];
 		mapFrameNumToPedestrians[frameNum].push_back(Rect(x, y, width, height));
+	}
+	for (int i = 0; i < detectionResultsCars.size(); i++)
+	{
+		int frameNum = detectionResultsCars[i][0], x = detectionResultsCars[i][1], y = detectionResultsCars[i][2],
+			width = detectionResultsCars[i][3], height = detectionResultsCars[i][4], classId = detectionResultsCars[i][5];
+		mapFrameNumToCars[frameNum].push_back(Rect(x, y, width, height));
 	}
 
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
@@ -708,17 +716,19 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			cap >> frameSkipped;
 		}
 		
+		/* Build framePedestrians*/
+
 		// create histograms
-		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
-		vector<Target> targets;
+		vector<Rect>& pedestriansRects = mapFrameNumToPedestrians[frameNum];
+		vector<Target> pedestrianTargets;
 		
 		// shrink rect smaller
 		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
-		for (int i = 0; i < found.size(); ++i)
+		for (int i = 0; i < pedestriansRects.size(); ++i)
 		{
 			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
-			Rect& r = found[i];
+			Rect& r = pedestriansRects[i];
 			if (RESIZE_DETECTION_AREA)
 			{
 				r.x += r.width * (1 - widthRatio) / 2;
@@ -736,10 +746,44 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
-
+			pedestrianTargets.push_back(Target(r, hist, whiteRatio, blackRatio));
 		}
-		frames.push_back(Frame(frameNum, targets));
+		framePedestrians.push_back(Frame(frameNum, pedestrianTargets));
+
+		/* Build frameCars */
+
+		// create histograms
+		vector<Rect>& carRects = mapFrameNumToCars[frameNum];
+		vector<Target> carTargets;
+
+		for (int i = 0; i < carRects.size(); ++i)
+		{
+			Mat imgHSV, imgWhite, imgBlack;
+			MatND hist;
+			Rect& r = carRects[i];
+
+			/* cars don't need to be resized
+			if (RESIZE_DETECTION_AREA)
+			{
+				r.x += r.width * (1 - widthRatio) / 2;
+				r.width = r.width * widthRatio;
+				r.y += r.height * (1 - heightRatio) / 2 - r.height * shiftUpperRatio;
+				r.height = r.height * heightRatio;
+			}
+			*/
+
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
+
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
+			carTargets.push_back(Target(r, hist, whiteRatio, blackRatio));
+		}
+		frameCars.push_back(Frame(frameNum, carTargets));
 	}
 }
 

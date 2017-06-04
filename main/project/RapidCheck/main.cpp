@@ -81,7 +81,7 @@ int main(int argc, char ** argv)
 			compareSimilarity(app);
 			break;
 		case 1:
-			buildTrajectory(app);
+			buildAndShowTrajectory(app);
 			break;
 		case 2:
 			showTracklet(app);
