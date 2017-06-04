@@ -151,11 +151,12 @@ void buildTrajectory(App app)
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& curSegmentTracklets = segment.getTracklets();
 		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
-		// for each trajectory still being tracked
+		
+		// move trajectories finished from trajectoriesStillBeingTracked to trajectoriesFinished
 		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end();)
 		{
-			RCTrajectory& RCTrajectory = *itTrajectories;
-			int diffSegmentNum = segmentNum - RCTrajectory.getEndSegmentNum();
+			RCTrajectory& curTrajectory = *itTrajectories;
+			int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
 			// if trajectory is finished
 			if (diffSegmentNum > MAXIMUM_LOST_SEGMENTS)
 			{
@@ -167,16 +168,92 @@ void buildTrajectory(App app)
 			{
 				itTrajectories++;
 			}
-			
-			tracklet& curTrajectory = RCTrajectory.getTargets();
+		}
+
+		// bipartite graph from i to j
+		vector<vector<double> > graphSimilarity = vector<vector<double> >(trajectoriesStillBeingTracked.size(), vector<double>(curSegmentTracklets.size(), 0.0));
+		for (int i = 0; i < trajectoriesStillBeingTracked.size(); i++)
+		{
+			for (int j = 0; j < curSegmentTracklets.size(); j++)
+			{
+				RCTrajectory& curTrajectory = trajectoriesStillBeingTracked[i];
+				tracklet &curTracklet = curTrajectory.getTargets(), &nextTracklet = curSegmentTracklets[j];
+				if (isValidCarMotion(curTracklet, nextTracklet))
+				{
+					int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
+					double similarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
+					if (similarity > TRAJECTORY_MATCH_SIMILARITY_THRES)
+						graphSimilarity[i][j] = similarity;
+				}
+				printf("%.2lf ", graphSimilarity[i][j]);
+			}
+			std::cout << endl;
+		}
+		std::cout << endl;
+		vector<bool> mergedNextTracket(curSegmentTracklets.size(), false);
+		while (true)
+		{
+			double maxSimilarity = 0.0;
+			int curMaxIdx = -1, nextMaxIdx = -1;
+			for (int curIdx = 0; curIdx < graphSimilarity.size(); curIdx++)
+			{
+				for (int nextIdx = 0; nextIdx < graphSimilarity[curIdx].size(); nextIdx++)
+				{
+					if (maxSimilarity < graphSimilarity[curIdx][nextIdx])
+					{
+						maxSimilarity = graphSimilarity[curIdx][nextIdx];
+						curMaxIdx = curIdx;
+						nextMaxIdx = nextIdx;
+					}
+				}
+			}
+			if (maxSimilarity < TRAJECTORY_MATCH_SIMILARITY_THRES)
+				break;
+
+			// merge
+			RCTrajectory& curTrajectory = trajectoriesStillBeingTracked[curMaxIdx];
+			tracklet &nextTracklet = curSegmentTracklets[nextMaxIdx];
+			int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
+			if (diffSegmentNum == 1)
+			{
+				curTrajectory.merge(nextTracklet);
+			}
+			else
+			{
+				curTrajectory.mergeWithSegmentGap(nextTracklet, diffSegmentNum);
+			}
+
+			// remove similarities
+			mergedNextTracket[nextMaxIdx] = true;
+			for (int i = 0; i < graphSimilarity.size(); i++)
+				graphSimilarity[i][nextMaxIdx] = 0.0;
+			for (int j = 0; j < graphSimilarity[curMaxIdx].size(); j++)
+				graphSimilarity[curMaxIdx][j] = 0.0;
+		}
+
+		for (int trackletNum = 0; trackletNum < curSegmentTracklets.size(); trackletNum++)
+		{
+			if (!mergedNextTracket[trackletNum])
+			{
+				trajectoriesStillBeingTracked.push_back(RCTrajectory(curSegmentTracklets[trackletNum], segmentNum));
+			}
+		}
+
+		/*
+		// for each trajectory still being tracked
+		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
+		{
+			RCTrajectory& curTrajectory = *itTrajectories;
+			int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
+			tracklet& curTracklet = curTrajectory.getTargets();
 			vector<tracklet>::iterator maxTrackletIt;
 
 			double maxSimilarity = 0.0;
 			for (vector<tracklet>::iterator itTracklets = curSegmentTracklets.begin(); itTracklets != curSegmentTracklets.end(); itTracklets++)
 			{
-				tracklet& tr = *itTracklets;
-				if (!isValidCarMotion(curTrajectory, tr)) continue;
-				double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
+				tracklet& nextTracklet = *itTracklets;
+				if (!isValidCarMotion(curTracklet, nextTracklet)) continue;
+				double curSimilarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
 				if (maxSimilarity < curSimilarity)
 				{
 					maxSimilarity = curSimilarity;
@@ -189,22 +266,24 @@ void buildTrajectory(App app)
 				// merge
 				if (diffSegmentNum == 1)
 				{
-					RCTrajectory.merge(*maxTrackletIt);
+					curTrajectory.merge(*maxTrackletIt);
 				}
 				else
 				{
-					RCTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
+					curTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
 				}
 				curSegmentTracklets.erase(maxTrackletIt);
 				continue;
 			}
 		}
+		
 
 		// push unselected tracklets
 		for (int trackletNum = 0; trackletNum < curSegmentTracklets.size(); trackletNum++)
 		{
 			trajectoriesStillBeingTracked.push_back(RCTrajectory(curSegmentTracklets[trackletNum], segmentNum));
 		}
+		*/
 	}
 	for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 	{
@@ -212,7 +291,7 @@ void buildTrajectory(App app)
 	}
 	trajectoriesStillBeingTracked.clear();
 
-	cout << "Built Trajectories" << endl;
+	std::cout << "Built Trajectories" << endl;
 	
 	// insert direction counts into DB
 	if (INSERT_OBJECT_INFO_INTO_DB)
