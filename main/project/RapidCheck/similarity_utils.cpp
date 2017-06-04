@@ -73,3 +73,18 @@ double calcSimilarity(tracklet& trackletPrev, tracklet& trackletNext, int segmen
 	double similarity = calcInternalDivision(similarityAppearance, similarityMotion, 1, segmentIndexDiff);
 	return similarity;
 }
+
+double innerProduct(Point2d p1, Point2d p2)
+{
+	return p1.x * p2.x + p1.y + p2.y;
+}
+
+bool isValidCarMotion(tracklet& trackletPrev, tracklet& trackletNext)
+{
+	int n = trackletPrev.size();
+	Point2d prevCarDirection = trackletPrev[n - 1].getCenterPoint() - trackletPrev[n-LOW_LEVEL_TRACKLETS].getCenterPoint();
+	Point2d centerPrev = (trackletPrev[n - LOW_LEVEL_TRACKLETS/2 - 1].getCenterPoint() + trackletPrev[n - LOW_LEVEL_TRACKLETS / 2].getCenterPoint())/2;
+	Point2d centerNext = (trackletNext[LOW_LEVEL_TRACKLETS / 2 - 1].getCenterPoint() + trackletNext[LOW_LEVEL_TRACKLETS / 2].getCenterPoint()) / 2;
+	Point2d centerDirection = centerNext - centerPrev;
+	return innerProduct(prevCarDirection, centerDirection) > 0;		
+}
