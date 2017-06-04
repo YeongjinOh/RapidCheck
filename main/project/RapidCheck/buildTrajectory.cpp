@@ -17,9 +17,9 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 	// show trajectories
 	Mat frame, frameOrigin, frameSkipped;
 	int timeToSleep = 130;
-	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
 	while (true) {
 		int objectId = 0;
+		cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
 		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 		{
 			// Segment & segment = segments[segmentNumber];
@@ -149,111 +149,78 @@ void buildTrajectory(App app)
 	for (int segmentNum = 0; segmentNum < segments.size() && useOnlineTracking; segmentNum++)
 	{
 		Segment& segment = segments[segmentNum];
-		vector<tracklet>& tracklets = segment.getTracklets();
-		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, tracklets.size());
+		vector<tracklet>& curSegmentTracklets = segment.getTracklets();
+		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
 		// for each trajectory still being tracked
-		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
+		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end();)
 		{
 			RCTrajectory& RCTrajectory = *itTrajectories;
 			int diffSegmentNum = segmentNum - RCTrajectory.getEndSegmentNum();
 			// if trajectory is finished
 			if (diffSegmentNum > MAXIMUM_LOST_SEGMENTS)
 			{
-				// trajectoriesFinished.push_back(trajectory);
-				// trajectoriesStillBeingTracked.erase(itTrajectories);
+				trajectoriesFinished.push_back(*itTrajectories);
+				itTrajectories = trajectoriesStillBeingTracked.erase(itTrajectories);
 				continue;
-			}
-			
-			
-			tracklet& curTrajectory = RCTrajectory.getTargets();
-			Point pl1 = curTrajectory[curTrajectory.size() - 2].getCenterPoint(), pl2 = curTrajectory[curTrajectory.size() - 1].getCenterPoint();
-			double minCost = INFINITY;
-			vector<tracklet>::iterator minTrackletIt;
-			vector<tracklet>::iterator maxTrackletIt;
-			if (diffSegmentNum == 1)
-			{
-				// explore each tracklet in this segment
-				/*
-				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
-				{
-					tracklet& tr = *itTracklets;
-					double costForward, costBackward, curCost;
-					Point pr1 = tr[0].getCenterPoint(), pr2 = tr[1].getCenterPoint();
-					costForward = getNormValueFromVector(pr1 + pl1 - 2 * pl2);
-					costBackward = getNormValueFromVector(pl2 + pr2 - 2 * pr1);
-					curCost = costForward*costForward + costBackward*costBackward;
-					if (minCost > curCost)
-					{
-						minCost = curCost;
-						minTrackletIt = itTracklets;
-					}
-				}
-				printf("minCost : %.2lf\n", minCost);
-				if (minCost < TRAJECTORY_MATCH_COST_THRES_FOR_CAR)
-				{
-					// merge
-					RCTrajectory.merge(*minTrackletIt);
-					tracklets.erase(minTrackletIt);
-					continue;
-				}*/
-				double maxSimilarity = 0.0;
-				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
-				{
-					tracklet& tr = *itTracklets;
-					double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
-					if (maxSimilarity < curSimilarity)
-					{
-						maxSimilarity = curSimilarity;
-						maxTrackletIt = itTracklets;
-					}
-				}
-				printf("maxSim : %.2lf\n", maxSimilarity);
-				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
-				{
-					// merge
-					RCTrajectory.merge(*maxTrackletIt);
-					tracklets.erase(maxTrackletIt);
-					continue;
-				}
 			}
 			else
 			{
-				double maxSimilarity = 0.0;
-				for (vector<tracklet>::iterator itTracklets = tracklets.begin(); itTracklets != tracklets.end(); itTracklets++)
+				itTrajectories++;
+			}
+			
+			tracklet& curTrajectory = RCTrajectory.getTargets();
+			vector<tracklet>::iterator maxTrackletIt;
+
+			double maxSimilarity = 0.0;
+			for (vector<tracklet>::iterator itTracklets = curSegmentTracklets.begin(); itTracklets != curSegmentTracklets.end(); itTracklets++)
+			{
+				tracklet& tr = *itTracklets;
+				if (!isValidCarMotion(curTrajectory, tr)) continue;
+				double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
+				if (maxSimilarity < curSimilarity)
 				{
-					tracklet& tr = *itTracklets;
-					double curSimilarity = calcSimilarity(curTrajectory, tr, diffSegmentNum);
-					if (maxSimilarity < curSimilarity)
-					{
-						maxSimilarity = curSimilarity;
-						maxTrackletIt = itTracklets;
-					}
+					maxSimilarity = curSimilarity;
+					maxTrackletIt = itTracklets;
 				}
-				if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
+			}
+			printf("maxSim : %.2lf\n", maxSimilarity);
+			if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
+			{
+				// merge
+				if (diffSegmentNum == 1)
 				{
-					// merge
+					RCTrajectory.merge(*maxTrackletIt);
+				}
+				else
+				{
 					RCTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
-					tracklets.erase(maxTrackletIt);
-					continue;
 				}
+				curSegmentTracklets.erase(maxTrackletIt);
+				continue;
 			}
 		}
 
 		// push unselected tracklets
-		for (int trackletNum = 0; trackletNum < tracklets.size(); trackletNum++)
+		for (int trackletNum = 0; trackletNum < curSegmentTracklets.size(); trackletNum++)
 		{
-			trajectoriesStillBeingTracked.push_back(RCTrajectory(tracklets[trackletNum], segmentNum));
+			trajectoriesStillBeingTracked.push_back(RCTrajectory(curSegmentTracklets[trackletNum], segmentNum));
 		}
 	}
+	for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
+	{
+		trajectoriesFinished.push_back(*itTrajectories);
+	}
+	trajectoriesStillBeingTracked.clear();
+
 	cout << "Built Trajectories" << endl;
 	
 	// insert direction counts into DB
 	if (INSERT_OBJECT_INFO_INTO_DB)
 	{
-		insertObjectInfoIntoDB(trajectoriesStillBeingTracked);
+		insertObjectInfoIntoDB(trajectoriesFinished);
 	}
 		
 
 	// show Trajectory
-	showTrajectory(frames, trajectoriesStillBeingTracked);
+	showTrajectory(frames, trajectoriesFinished);
 }
