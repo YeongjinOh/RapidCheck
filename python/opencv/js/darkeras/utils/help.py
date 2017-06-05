@@ -1,4 +1,6 @@
 import pymysql
+import os
+import json
 
 def say(*words, verbalise=False):
 	if verbalise:
@@ -85,5 +87,37 @@ class DB_Helper:
 		self.conn.close()
 
 # Model History Save Modules in RapidCheck Darkeras
-def save_model(model, save_type='weights'):
-	pass
+def save_model(model, save_folder, file_name, steps, descriptions, save_type='weights'):
+	"""
+		model : keras model
+		save_type : all -> weights + full model
+					weights -> only weights save
+					model -> only model save 
+	"""
+	if save_type == 'weights':
+		model.save_weights(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
+		print("Model Save Weights steps : {} ".format(steps))
+		architecture_path = os.path.join(save_folder, file_name) + '_arch.json'
+		# if not os.path.exists(architecture_path):
+		# 	# 모델의 구조에 대한 내용이 없을 경우에만 내리도록 한다.
+		# 	json_arch = model.to_json()
+		# 	with open(architecture_path, 'w+') as f:
+		# 		json.dumps(json_arch, f)
+		# 		print("Model Architecture Infomation saved in : ", architecture_path)
+		descriptions_path = os.path.join(save_folder, file_name) + '_desc.txt'
+		if not os.path.exists(descriptions_path):
+			# 모델에 대한 설명을 적은 파일이 존재하지 않을때만 생성 및 작성한다.
+			with open(descriptions_path, 'w+') as f:
+				f.write(descriptions)
+				print("Model Descriptions Infomation saved in : ", descriptions_path)
+	elif save_type == 'model':
+		model.save(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
+	elif save_type == 'all':
+		model.save_weights(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
+		model.save(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
+
+if __name__ == '__main__':
+	s = "dfkjasidfajfl\
+								dkfjrikdsflkjefdsfliejsdfl\n\
+				asdfj"
+	print(s)

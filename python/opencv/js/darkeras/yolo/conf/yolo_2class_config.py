@@ -8,8 +8,8 @@ only 2class classifier yolo model config
 # Global config variables
 import os
 
-
-model_name = 'yolo-2class-playbackandtracking-frombase-cell14'
+model_folder = os.path.join('models', 'train', 'yolo-2class-cell14')
+model_name = 'from-cell14base-mydata'
 classes_name = ["car", "person"]
 
 # dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
@@ -43,3 +43,23 @@ trainer='adam'
 
 image_dim_order = 'th'
 norm_type = 'scale_down'
+
+descriptions = "2017-06-05\n\
+cell size : {}\n\
+num_classes : {}\n\
+boxes_per_cell : {}\n\
+class_scale : {}\n\
+object_scale : {}\n\
+noobject_scale : {}\n\
+coord_scale : {}\n\
+inp_size : {}\n\
+epochs : {}\n\
+lr : {}\n\
+trainer : {}\n\
+image_dim_order : {}\n\
+norm_type : {}\n\
+cell14 base 란 yolo tiny network 에서 cell_size = 14 증폭시킨 네트워크 에서 voc 2007 trainval 데이터로 초벌구이를 한 베이스를 말한다.\n\
+현재 사용하고 있는 cell14 base weights 의 이름은 yolo-2class-voc2007-train-cell14-steps40000.h5 이다. \n\
+이번에 하고자 하는 실험은 cell14 base 로 부터 라벨링한 여러 도메인의 데이터들을 모두 넣어서 학습시켰을때, 어느 효과를 갖는지를 확인하고자 한다.".format(cell_size, 
+	num_classes, 
+	boxes_per_cell, class_scale, object_scale, noobject_scale, coord_scale, inp_size[0], epochs, lr, trainer, image_dim_order, norm_type,)
