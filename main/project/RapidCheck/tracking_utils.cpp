@@ -684,7 +684,9 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	// read detection result from database and build mapFrameNumToPedestrians
 	vector<vector<int> > detectionResultsPedestrians, detectionResultsCars;
 	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
-	db.selectDetection(detectionResultsPedestrians, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	//db.selectDetection(detectionResultsPedestrians, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	db.selectDetection2(detectionResultsPedestrians, videoId, 1, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+
 	int carClassId = 0;
 	db.selectDetection2(detectionResultsCars, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	

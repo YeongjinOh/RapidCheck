@@ -2,13 +2,13 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-const int MAX_FRAMES = 300;
+const int MAX_FRAMES = 200;
 const int START_FRAME_NUM = 2001;
 const int FRAME_STEP = 3;
 const int VIDEOID = 3;
 const int NUM_OF_COLORS = 64;
 const bool DEBUG = false;
-const bool USE_PEDESTRIANS_ONLY = false;
+const bool USE_PEDESTRIANS_ONLY = true;
 
 const static char* VIDEOFILES[4] = { "videos/street.avi", "videos/tracking.mp4", "videos/demo.mp4", "videos/tracking.mp4" };
 const static int videoId = VIDEOID;

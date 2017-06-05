@@ -7,7 +7,7 @@ using namespace cv;
 /**
 	Show trajectory
 */
-void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
+void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars)
 {
 	VideoCapture cap(VIDEOFILE);
 
@@ -34,29 +34,41 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 
 				frame.copyTo(frameOrigin);
 
-				// vector<tracklet>& pedestrianTracklets = segment.tracklets;
-				for (int objectId = 0; objectId < trajectories.size(); objectId++)
+				// draw pedestrian
+				for (int objectId = 0; objectId < trajectoryPedestrians.size(); objectId++)
 				{
-					RCTrajectory& trajectory = trajectories[objectId];
+					RCTrajectory& trajectory = trajectoryPedestrians[objectId];
 					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
-
 					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
-
-					// Rect rect = currentFramePedestrian.getTargetArea(), roi = Rect (rect.x+rect.width/4, rect.y+rect.height/4, rect.width/2, rect.height/2);
-					// Scalar mean = cv::mean(frame(roi));
-					// rectangle(frame, currentFramePedestrian.getTargetArea(), mean, 2);
 					rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId) % NUM_OF_COLORS], 2);
-
 					if (INSERT_TRACKING_INTO_DB)
 					{
 						db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
 					}
-					putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
-					// circle(frame, currentFramePedestrian.getCenterPoint(), 2, RED, 2);
+					putText(frame, "Pede #" + to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, colors[(objectId) % NUM_OF_COLORS], 2);
 				}
-				vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
-				for (int i = 0; i < pedestrians.size(); i++) {
-					rectangle(frameOrigin, pedestrians[i], WHITE, 2);
+
+				for (int objectId = 0; objectId < trajectoryCars.size(); objectId++)
+				{
+					RCTrajectory& trajectory = trajectoryCars[objectId];
+					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
+					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
+					Scalar carColor = colors[(objectId + trajectoryPedestrians.size()) % NUM_OF_COLORS];
+					rectangle(frame, currentFramePedestrian.getTargetArea(), carColor, 2);
+					if (INSERT_TRACKING_INTO_DB)
+					{
+						db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
+					}
+					putText(frame, "Car #" + to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, carColor, 2);
+				}
+
+				vector<Rect> pedestrianRects = framePedestrians[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
+				for (int i = 0; i < pedestrianRects.size(); i++) {
+					rectangle(frameOrigin, pedestrianRects[i], WHITE, 2);
+				}
+				vector<Rect> carRects = frameCars[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
+				for (int i = 0; i < carRects.size(); i++) {
+					rectangle(frameOrigin, carRects[i], CYAN, 2);
 				}
 
 				rectangle(frame, Rect(0, 0, 180, 30), WHITE, -1);
@@ -86,6 +98,8 @@ void showTrajectory(vector<Frame>& frames, vector<RCTrajectory>& trajectories)
 				else if (key == (int)(']'))
 				{
 					timeToSleep -= 10;
+					if (timeToSleep < 1)
+						timeToSleep = 1;
 				}
 				else if (key == (int)('b'))
 				{
@@ -315,12 +329,6 @@ void buildAndShowTrajectory(App app)
 	}
 		
 	// show Trajectory
-	if (USE_PEDESTRIANS_ONLY)
-	{
-		showTrajectory(framePedestrians, trajectoryPedestrians);
-	}
-	else 
-	{
-		showTrajectory(frameCars, trajectoryCars);
-	}
+	
+	showTrajectory(framePedestrians, frameCars, trajectoryPedestrians, trajectoryCars);
 }
