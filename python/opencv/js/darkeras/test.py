@@ -24,13 +24,13 @@ import numpy as np
 
 def plot_model_history(model_history):
 	fig, axs = plt.subplots(1,1,figsize=(15,5))
-	axs.plot(range(1,len(model_history['acc'])+1),model_history['acc'])
-	axs.plot(range(1,len(model_history['val_acc'])+1),model_history['val_acc'])
-	axs.set_title('Model Accuracy')
-	axs.set_ylabel('Accuracy')
-	axs.set_xlabel('Epoch')
-	axs.set_xticks(np.arange(1,len(model_history['acc'])+1),len(model_history['acc'])/10)
-	axs.legend(['train', 'val'], loc='best')
+	axs.plot(range(1,len(model_history['loss'])+1),model_history['loss'])
+	axs.plot(range(1,len(model_history['val_loss'])+1),model_history['val_loss'])
+	axs.set_title('Model Loss')
+	axs.set_ylabel('Loss')
+	axs.set_xlabel('Steps')
+	axs.set_xticks(np.arange(1,len(model_history['loss'])+1),len(model_history['loss'])/10)
+	axs.legend(['train_loss', 'val_loss'], loc='best')
 	plt.show()
 	fig.savefig('tmp/test.png')
 
