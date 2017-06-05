@@ -19,19 +19,32 @@ namespace RapidCheck
     {
         public void addObj()
         {
-            int row = 0;
-            for (int objid = 0; objid < trackingTableObjid.Distinct().Count(); objid++) //0~1196
+            //string tmp = "";
+            //for (int i = 0; i < objectidList.Count; i++) //0~1196
+            //{
+            //    tmp += objectidList[i].ToString() + " ";
+            //}
+            //MessageBox.Show(tmp);
+            for (int idx = 0; idx < objectidList.Count; idx++) //0~1196
             {
-                Obj temp = new Obj(objid);
-                for (; row < trackingTableObjid.Count && objid == trackingTableObjid[row]; row++)
-                {
-                    Rectangle rect = trackingTableRectangle[row];
-                    modifyCropArea(ref rect);
-                    temp.addCropArea(rect);
-                    temp.addCropPositionNum(trackingTableFrameNum[row]);
-                }
-                ObjList.Add(temp);
+                int objid = objectidList[idx];
+                idxbyObjid[objid] = idx;
+                Obj obj = new Obj(objid);
+                ObjList.Add(obj);
             }
+
+            //objList 
+            for (int row = 0; row < trackingTableObjid.Count; row++)
+            {
+                int objid = trackingTableObjid[row];
+                int idx = idxbyObjid[objid];
+                if (idx == -1) continue;
+                Rectangle rect = trackingTableRectangle[row];
+                modifyCropArea(ref rect);
+                ObjList[idx].addCropArea(rect);
+                ObjList[idx].addCropPositionNum(trackingTableFrameNum[row]);
+            }
+
         }
         public void addOverlayFrames(Bitmap frame)
         {
@@ -55,10 +68,10 @@ namespace RapidCheck
                 for (int objectidListIdx = 0; (objectidListIdx < objectidList.Count) && (overlayFrameNum >=(objectidListIdx/group)*offset); objectidListIdx++)
                 {
                     int id = objectidList[objectidListIdx];
-                    int orderingCnt = ObjList[id].OrderingCnt;
+                    int orderingCnt = ObjList[idxbyObjid[id]].OrderingCnt;
                     objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
                     temp.Add(newOrder);
-                    ObjList[id].OrderingCnt++;
+                    ObjList[idxbyObjid[id]].OrderingCnt++;
                 }
                 overlayOrders.Add(temp);
             }
@@ -72,11 +85,11 @@ namespace RapidCheck
                 {
                     if(startingGroup[groupIdx].hasNext())
                     {
-                        int id = startingGroup[groupIdx].getNextId(ref ObjList);
-                        int orderingCnt = ObjList[id].OrderingCnt;
+                        int id = startingGroup[groupIdx].getNextId(ref ObjList, ref idxbyObjid);
+                        int orderingCnt = ObjList[idxbyObjid[id]].OrderingCnt;
                         objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
                         currentObjid.Add(newOrder);
-                        ObjList[id].OrderingCnt++;
+                        ObjList[idxbyObjid[id]].OrderingCnt++;
                     }
                 }
                 overlayOrders.Add(currentObjid);
@@ -98,7 +111,7 @@ namespace RapidCheck
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
                     int id = overlayOrders[resFrame][idx].id;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f);
+                    BitCopy = combinedImage(BitCopy, ObjList[idxbyObjid[id]].getNextCropImage(), ObjList[idxbyObjid[id]].getNextCropArea(), 0.75f);
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
@@ -149,14 +162,15 @@ namespace RapidCheck
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
                     int orderingCnt = overlayOrders[resFrame][overlayObjIdx].orderingCnt;
-                    Rectangle currentObjectArea = ObjList[id].getCropArea(orderingCnt);
+                    Rectangle currentObjectArea = ObjList[idxbyObjid[id]].getCropArea(orderingCnt);
                     float alpha = 0.8f;
                     
                     for (int prevOverlayObjIdx = 0; prevOverlayObjIdx < overlayObjIdx; prevOverlayObjIdx++)
                     {
-                        int previd = overlayOrders[resFrame][prevOverlayObjIdx].id;
+                        int previd = idxbyObjid[overlayOrders[resFrame][prevOverlayObjIdx].id];
                         int prevOrderingCnt = overlayOrders[resFrame][prevOverlayObjIdx].orderingCnt;
                         Rectangle prevObjectArea = ObjList[previd].getCropArea(prevOrderingCnt);
+                        
                         if (isIntersect(currentObjectArea, prevObjectArea))
                         {
                             alpha -= alphaDiff;
@@ -164,7 +178,7 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
-                    int currentFrameNum = ObjList[id].getStartFrameNum() + frameStep * orderingCnt;
+                    int currentFrameNum = ObjList[idxbyObjid[id]].getStartFrameNum() + frameStep * orderingCnt;
                     passTimeSec = currentFrameNum / frameRate;
                     frameHour = passTimeSec / 3600;
                     passTimeSec = passTimeSec % 3600;
@@ -175,7 +189,7 @@ namespace RapidCheck
                     printTime = printTime.AddMinutes(frameMin);
                     frameSec = passTimeSec;
                     printTime = printTime.AddSeconds(frameSec);
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha, printTime.ToString("HH:mm:ss"));
+                    BitCopy = combinedImage(BitCopy, ObjList[idxbyObjid[id]].getCropImage(orderingCnt), currentObjectArea, alpha, printTime.ToString("HH:mm:ss"));
                 }
                 trackingBar.Value += 1;
                 if (resFrame == outputFrameNum - 1)
@@ -256,8 +270,8 @@ namespace RapidCheck
                 foreach (int id in store)
                 {
                     objectidList.Add(id);
-                    ObjList[id].currentAreaPositionIdx = 0;
-                    ObjList[id].currentImagePositionIdx = 0;
+                    ObjList[idxbyObjid[id]].currentAreaPositionIdx = 0;
+                    ObjList[idxbyObjid[id]].currentImagePositionIdx = 0;
                 }
             }
         }
@@ -342,6 +356,12 @@ namespace RapidCheck
                     {
                         maxObjectid = Convert.ToInt32(dr["maxid"]);
                     }
+                    
+                    idxbyObjid = new List<int>();
+                    for (int i = 0; i <= maxObjectid; i++ )
+                    {
+                        idxbyObjid.Add(-1);
+                    }   
                     //set ObjectidList
                     // setDefaultObjectidList(maxObjectid);
                     dt = ds.Tables["objCnt"];
@@ -349,7 +369,8 @@ namespace RapidCheck
                     {
                         if (Convert.ToInt32(dr["cnt"]) > minTrackingLength)
                         {
-                            objectidList.Add(Convert.ToInt32(dr["objectId"]));
+                            int objid = Convert.ToInt32(dr["objectId"]);
+                            objectidList.Add(objid);
                         }
                     }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
@@ -360,6 +381,7 @@ namespace RapidCheck
                         trackingTableObjid.Add(Convert.ToInt32(dr["objectId"]));
                         trackingTableRectangle.Add(new Rectangle(Convert.ToInt32(dr["x"]), Convert.ToInt32(dr["y"]), Convert.ToInt32(dr["width"]), Convert.ToInt32(dr["height"])));
                     }
+                    
                     //set objidByframe
                     dt = ds.Tables["objidByframe"];
                     foreach (DataRow dr in dt.Rows)
@@ -396,19 +418,15 @@ namespace RapidCheck
                 {
                     foreach (int objid in objidByFrame[frameNum])
                     {
-                        Rectangle temp = ObjList[objid].getNextCropArea();
-                        try
+                        if(idxbyObjid[objid] == -1)
                         {
-                            Bitmap bit2 = videoFrame.Clone(temp, videoFrame.PixelFormat);
+                            continue;
                         }
-                        catch(Exception e)
-                        {
-                            MessageBox.Show(temp.ToString());
-                        }
+                        Rectangle temp = ObjList[idxbyObjid[objid]].getNextCropArea();
                         Bitmap bit = videoFrame.Clone(temp, videoFrame.PixelFormat);
-                        ObjList[objid].addCropImage(bit);
+                        ObjList[idxbyObjid[objid]].addCropImage(bit);
 
-                        if (ObjList[objid].cropImages.Count == 1)
+                        if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                         {   
                             //set string
                             dataGridView.Invoke(new Action(() =>
@@ -466,13 +484,15 @@ namespace RapidCheck
         }
         public void kMeasFunc()
         {
+            if (clusterNum > objectidList.Count)
+                clusterNum = objectidList.Count;
             var kmeas = new KMeans(k:clusterNum);
             double[][] points = new double[objectidList.Count][];
 
             for (int i = 0; i < objectidList.Count; i++)
             {
                 int id = objectidList[i];
-                points[i] = ObjList[id].getStartingPoint();
+                points[i] = ObjList[idxbyObjid[id]].getStartingPoint();
             }
             KMeansClusterCollection clusters = kmeas.Learn(points);
             int[] output = clusters.Decide(points);
@@ -485,7 +505,7 @@ namespace RapidCheck
             //sort
             for (int k = 0; k < startingGroup.Count; k++)
             {
-                startingGroup[k].sort(ref ObjList);
+                startingGroup[k].sort(ref ObjList, ref idxbyObjid);
             }
         }
         public void setResFrame(int resFrameNum)
@@ -498,28 +518,13 @@ namespace RapidCheck
         }
         public int getClickedObjectOriginalFrameNum(double clickPositionX, double clickPositionY)
         {
-            /*
-            int startFrame = -1;
-            for(int idx = 0 ; idx < overlayOrders[resFrame].Count ; idx ++) // id의 인덱스
-            {
-                int id = overlayOrders[resFrame][idx].id;
-                int orderingCnt = overlayOrders[resFrame][idx].orderingCnt;
-                Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
-                if( (objRect.X < clickPositionX) && (objRect.Width+objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height+objRect.Y > clickPositionY))
-                {
-                    startFrame = ObjList[id].getStartFrameNum();
-                    break;
-                }
-            }
-            return startFrame;
-             */
             int startFrame = -1;
             double maxClickedPositionArea = 0;
             for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++) // id의 인덱스
             {
                 int id = overlayOrders[resFrame][idx].id;
                 int orderingCnt = overlayOrders[resFrame][idx].orderingCnt;
-                Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
+                Rectangle objRect = ObjList[idxbyObjid[id]].getCropArea(orderingCnt);
                 if ((objRect.X < clickPositionX) && (objRect.Width + objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height + objRect.Y > clickPositionY))
                 {
                     double clickedPositionWidth = min(clickPositionX - objRect.X, objRect.Width + objRect.X - clickPositionX);
@@ -527,7 +532,7 @@ namespace RapidCheck
                     double curClickedPositionArea = clickedPositionWidth * clickedPositionHeight;
                     if (maxClickedPositionArea < curClickedPositionArea)
                     {
-                        startFrame = ObjList[id].getStartFrameNum();
+                        startFrame = ObjList[idxbyObjid[id]].getStartFrameNum();
                         maxClickedPositionArea = curClickedPositionArea;
                     }
                 }

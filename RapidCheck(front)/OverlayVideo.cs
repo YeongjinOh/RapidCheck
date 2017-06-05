@@ -43,6 +43,7 @@ namespace RapidCheck
         private Dictionary<int, List<int>> objidByFrame; //key : frame, value : Objid //해당 frame에 등장한 object //crop할 위치 확인용
         private List<Bitmap> overlayFrames; //result Frame
         private List<List<objIdAndOrderingCnt>> overlayOrders; //overlayOrders[i] : i번째 output frame에 등장해야 할 Object id들의 리스트
+        private List<int> idxbyObjid; //objid로 인덱스 접근
 
         private List<int> trackingTableFrameNum;
         private List<int> trackingTableObjid;
@@ -62,7 +63,7 @@ namespace RapidCheck
         private System.DateTime createTime;
         private int frameRate;
         public bool drawTime { get; set; }
-
+        public int objType; //1 = both, 2 = people, 3 = car
         //drawing style
         System.Drawing.Font drawFont;
         System.Drawing.SolidBrush drawBrush;
@@ -98,6 +99,7 @@ namespace RapidCheck
             objidByFrame = new Dictionary<int, List<int>>();
             overlayFrames = new List<Bitmap>();
             overlayOrders = new List<List<objIdAndOrderingCnt>>();
+
             
             trackingTableObjid = new List<int>();
             trackingTableFrameNum = new List<int>();
@@ -111,6 +113,7 @@ namespace RapidCheck
             this.speed = 1;
             this.drawTime = true;
             this.createTime = new System.DateTime(2017, 1, 1, Int32.Parse(createTime.Split(':')[0]), Int32.Parse(createTime.Split(':')[1]), 0);
+            this.objType = 1; //default는 둘 다 검색
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)
             {

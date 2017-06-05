@@ -103,16 +103,16 @@ namespace RapidCheck
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
             int maxFrameNum = 10000;
             int frameStep = 3;
-            int minTrackingLength = 47;
+            int minTrackingLength = 17;
             int clusterNum = 6;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
 
             //trackbar
             trackBar1.Minimum = 0;
-            trackBar1.Maximum = outputFrameNum -1;
+            trackBar1.Maximum = outputFrameNum - 1;
             new Thread(() => rapidRun(ref rapidCheck)).Start();
-            //rapidRun(ref rapidCheck);
+            
         }
         delegate void rapidModule();
         delegate void rapidChain(ref System.Diagnostics.Stopwatch sw, string state, rapidModule dele);
@@ -177,7 +177,6 @@ namespace RapidCheck
             rapidCheck.resFrame = trackBar1.Value;
             rapidCheck.overlayObjIdx = 0;
         }
-
         private void VideoStartBtn_Click(object sender, EventArgs e)
         {
             if(startBtn.Text == "Start" )
@@ -267,6 +266,19 @@ namespace RapidCheck
         private void radioButtonTimeOff_CheckedChanged(object sender, EventArgs e)
         {
             rapidCheck.drawTime = false;
+        }
+
+        private void radioButtonBoth_CheckedChanged(object sender, EventArgs e)
+        {
+            rapidCheck.objType = 1;
+        }
+        private void radioButtonPeople_CheckedChanged(object sender, EventArgs e)
+        {
+            rapidCheck.objType = 2;
+        }
+        private void radioButtonCar_CheckedChanged(object sender, EventArgs e)
+        {
+            rapidCheck.objType = 3;
         }
     }
 }

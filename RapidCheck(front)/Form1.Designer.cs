@@ -79,6 +79,9 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.radioButtonTimeOn = new System.Windows.Forms.RadioButton();
             this.radioButtonTimeOff = new System.Windows.Forms.RadioButton();
+            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
+            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
+            this.radioButtonCar = new System.Windows.Forms.RadioButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -89,6 +92,7 @@
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.panelSearch.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
@@ -303,6 +307,9 @@
             // panelSearch
             // 
             this.panelSearch.BackColor = System.Drawing.Color.Transparent;
+            this.panelSearch.Controls.Add(this.radioButtonCar);
+            this.panelSearch.Controls.Add(this.radioButtonPeople);
+            this.panelSearch.Controls.Add(this.radioButtonBoth);
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSearch.Location = new System.Drawing.Point(0, 0);
             this.panelSearch.Name = "panelSearch";
@@ -620,6 +627,42 @@
             this.radioButtonTimeOff.UseVisualStyleBackColor = true;
             this.radioButtonTimeOff.CheckedChanged += new System.EventHandler(this.radioButtonTimeOff_CheckedChanged);
             // 
+            // radioButtonBoth
+            // 
+            this.radioButtonBoth.AutoSize = true;
+            this.radioButtonBoth.Location = new System.Drawing.Point(27, 3);
+            this.radioButtonBoth.Name = "radioButtonBoth";
+            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
+            this.radioButtonBoth.TabIndex = 0;
+            this.radioButtonBoth.TabStop = true;
+            this.radioButtonBoth.Text = "사람, 자동차";
+            this.radioButtonBoth.UseVisualStyleBackColor = true;
+            this.radioButtonBoth.CheckedChanged += new System.EventHandler(this.radioButtonBoth_CheckedChanged);
+            // 
+            // radioButtonPeople
+            // 
+            this.radioButtonPeople.AutoSize = true;
+            this.radioButtonPeople.Location = new System.Drawing.Point(27, 25);
+            this.radioButtonPeople.Name = "radioButtonPeople";
+            this.radioButtonPeople.Size = new System.Drawing.Size(53, 21);
+            this.radioButtonPeople.TabIndex = 0;
+            this.radioButtonPeople.TabStop = true;
+            this.radioButtonPeople.Text = "사람";
+            this.radioButtonPeople.UseVisualStyleBackColor = true;
+            this.radioButtonPeople.CheckedChanged += new System.EventHandler(this.radioButtonPeople_CheckedChanged);
+            // 
+            // radioButtonCar
+            // 
+            this.radioButtonCar.AutoSize = true;
+            this.radioButtonCar.Location = new System.Drawing.Point(24, 46);
+            this.radioButtonCar.Name = "radioButtonCar";
+            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
+            this.radioButtonCar.TabIndex = 0;
+            this.radioButtonCar.TabStop = true;
+            this.radioButtonCar.Text = "자동차";
+            this.radioButtonCar.UseVisualStyleBackColor = true;
+            this.radioButtonCar.CheckedChanged += new System.EventHandler(this.radioButtonCar_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -644,6 +687,8 @@
             this.panelVideoPart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.panelSearch.ResumeLayout(false);
+            this.panelSearch.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
@@ -705,6 +750,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
         private System.Windows.Forms.RadioButton radioButtonTimeOff;
         private System.Windows.Forms.RadioButton radioButtonTimeOn;
+        private System.Windows.Forms.RadioButton radioButtonCar;
+        private System.Windows.Forms.RadioButton radioButtonPeople;
+        private System.Windows.Forms.RadioButton radioButtonBoth;
     }
 }
 
