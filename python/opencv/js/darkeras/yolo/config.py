@@ -1,7 +1,8 @@
 # Global config variables
 import os
 # import yolo.conf.vgg16_2class_config as c
-import yolo.conf.yolo_2class_config as c
+import yolo.conf.yolo_2class_base_config as c
+# import yolo.conf.yolo_2class_config as c
 # import yolo.conf.yolo_tiny_config as c
 # import yolo.conf.cifar100_based_config as c
 model_folder = c.model_folder
@@ -11,6 +12,10 @@ classes_name = c.classes_name
 dataset_abs_location = c.dataset_abs_location
 ann_location = c.ann_location
 imageset_location = c.imageset_location
+
+test_dataset_abs_location = c.test_dataset_abs_location
+test_ann_location = c.test_ann_location
+test_imageset_location = c.test_imageset_location
 
 cell_size = c.cell_size
 num_classes = c.num_classes

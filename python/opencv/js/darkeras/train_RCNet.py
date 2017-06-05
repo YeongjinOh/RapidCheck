@@ -14,15 +14,15 @@ if cfg.image_dim_order == 'th':
 	K.set_image_dim_ordering('th')
 
 # 새로 학습
-# pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
 
-# 초벌구이 학습
+# 초벌구이 위에서 학습
 # pretrain_weight_path = 'models/train/yolo-2class-voc2007-base-shortdense-cell14-steps24000.h5'
 # pretrain_weight_path = 'models/train/yolo-2class-complete.h5'
 
 # 추가 학습
 # pretrain_weight_path = 'models/train/{}-complete.h5'.format(cfg.model_name)
-pretrain_weight_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps20000.h5'
+# pretrain_weight_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps20000.h5'
 
 is_freeze = True
 verbalise = True
@@ -45,7 +45,7 @@ model = yolo_tiny_THdim_model()
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
-from yolo.datacenter.data import shuffle
+from yolo.datacenter.data import shuffle, test_shuffle
 
 inp_x = model.input
 net_out = model.output
@@ -73,8 +73,20 @@ for i, (x_batch, datum) in enumerate(batches):
 	fetched = sess.run(fetches, feed_dict=train_feed_dict)
 	
 	loss_val = fetched[1]
-	say("step {} - loss {}".format(i, loss_val), verbalise=True)
-	
+	if i % 100 == 0:
+		# 100 번마다 한번씩 test loss 를 구해본다.
+		test_x_batch, test_datum = test_shuffle()
+		test_feed_dict = {
+			loss_ph[key]:test_datum[key] for key in loss_ph
+		}
+		test_feed_dict[inp_x] = test_x_batch
+		fetches = [train_op, loss_op]
+		test_fetched = sess.run(fetches, feed_dict=test_feed_dict)
+		test_loss_val = test_fetched[1]
+		say("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val), verbalise=True)
+	else:
+		say("step {} - train loss {}".format(i, loss_val), verbalise=True)
+
 	if show_trainable_state:
 		conv1 = model.layers[0]
 		dense_last = model.layers[-1]

@@ -191,7 +191,7 @@ def test_shuffle():
 	feed_batch = dict()
 
 	for j in range(batch_size):
-		test_instance = test_data[shuffle_idx]
+		test_instance = test_data[shuffle_idx[j]]
 		inp, new_feed = _batch(test_instance, is_test=True)
 
 		if inp is None: continue
