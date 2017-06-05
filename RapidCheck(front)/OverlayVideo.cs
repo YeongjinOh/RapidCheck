@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using System.Collections.Generic; //List
 using System.Drawing; //Bitmap
 using System.Drawing.Imaging;
 using MySql.Data.MySqlClient;
@@ -17,6 +15,16 @@ using System.Diagnostics;
 //time
 namespace RapidCheck
 {
+    public class objDataGridView
+    {
+        public DataGridViewImageColumn img;
+        public string contents;
+        public objDataGridView(DataGridViewImageColumn img, string contents)
+        {
+            this.img = img;
+            this.contents = contents;
+        }
+    }
     public class objIdAndOrderingCnt
     {
         public int id {get; set;}
@@ -51,18 +59,30 @@ namespace RapidCheck
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
         private int speed;
+
+        //drawing style
+        System.Drawing.Font drawFont;
+        System.Drawing.SolidBrush drawBrush;
+        //background
+        Bitmap background;
         
         //UI
         PictureBox pictureBoxVideo;
         TrackBar trackingBar;
         Button startBtn;
+        DataGridView dataGridView;
         public int resFrame { get; set; }
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
 
         public OverlayVideo() { }
-        public OverlayVideo(Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
+            //drawing style
+            drawFont = new System.Drawing.Font("Arial", 12);
+            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            //UI
+            this.dataGridView = dataGridView;
             this.trackingBar = TrackingBar;
             this.pictureBoxVideo = pictureBoxVideo;
             this.startBtn = startBtn;
@@ -97,6 +117,7 @@ namespace RapidCheck
             reader.Open(videoPath);
             videoWidth = reader.Width;
             videoHeight = reader.Height;
+            background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
             if(maxFrameNum == 0)
             {
                 this.maxFrameNum = (int)reader.FrameCount;

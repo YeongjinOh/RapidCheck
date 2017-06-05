@@ -84,7 +84,7 @@ namespace RapidCheck
         }
         public void overlay()
         {
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            //Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
             VideoFileWriter writer = new VideoFileWriter();
             string outputPath = string.Format(@"C:\videos\output\video{0}_{1}_{2}_{3}.avi", videoid, maxFrameNum, outputFrameNum, clusterNum);
             if(System.IO.File.Exists(outputPath)) //해당 이름을 가진 파일이 존재한다면,,,,
@@ -98,17 +98,16 @@ namespace RapidCheck
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
                     int id = overlayOrders[resFrame][idx].id;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f);
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f, ObjList[id].getStartFrameNum());
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
             }
             writer.Close();
         }
-        
         public void overlayLive()
         {
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            //Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
             startBtn.Enabled = true;
             trackingBar.Enabled = true;
@@ -145,7 +144,6 @@ namespace RapidCheck
             {
                 sw.Start();
                 Bitmap BitCopy = (Bitmap)background.Clone();
-                String tmpId = "";
                 for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
@@ -165,8 +163,7 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
-                    tmpId += id.ToString() + " ";
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha);
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha, ObjList[id].getStartFrameNum());
                 }
                 trackingBar.Value += 1;
                 if (resFrame == outputFrameNum - 1)
@@ -192,7 +189,6 @@ namespace RapidCheck
             isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y)) ||
             isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y + rect2.Height));
         }
-
         public bool isIntersectPoint(Rectangle rect, Point po)
         {
             return rect.X < po.X && rect.X + rect.Width > po.X && rect.Y < po.Y && rect.Y + rect.Height > po.Y;
@@ -253,7 +249,7 @@ namespace RapidCheck
                 }
             }
         }
-        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha)
+        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, int frameNum)
         {
             try
             {
@@ -262,11 +258,16 @@ namespace RapidCheck
                     
                     using (Graphics gr = Graphics.FromImage(back))
                     {
+                        //set alpha
                         ColorMatrix matrix = new ColorMatrix();
                         matrix.Matrix33 = alpha; //0.7~0.75
                         ImageAttributes att = new ImageAttributes();
                         att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+
+                        //drawing time(frame num)
+                        gr.DrawString(frameNum.ToString(), drawFont, drawBrush, position.X, position.Y-20);
+                        //draw
                         gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
                     }
                 }
@@ -383,7 +384,19 @@ namespace RapidCheck
                     foreach (int objid in objidByFrame[frameNum])
                     {
                         Rectangle temp = ObjList[objid].getNextCropArea();
-                        ObjList[objid].addCropImage(videoFrame.Clone(temp, videoFrame.PixelFormat));
+                        Bitmap bit = videoFrame.Clone(temp, videoFrame.PixelFormat);
+                        ObjList[objid].addCropImage(bit);
+
+                        if (ObjList[objid].cropImages.Count == 1)
+                        {   
+                            //set string
+                            dataGridView.Invoke(new Action(() =>
+                            {
+                                string cont = string.Format("object id : {0}\nstart time : {1}\nend time : {2}\nmain color : {3}\ndirection : {4}", objid, "123", "345", "red", "31");
+                                dataGridView.Rows.Add(bit, cont);
+                                dataGridView.Rows[dataGridView.RowCount - 1].Height = bit.Height;
+                            }));
+                        }
                     }
                 }
                 videoFrame.Dispose();

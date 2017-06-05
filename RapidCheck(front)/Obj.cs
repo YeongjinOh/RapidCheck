@@ -14,7 +14,7 @@ namespace RapidCheck
         public int currentImagePositionIdx { get; set; }
         private List<int> cropPositionNum;
         private List<Rectangle> cropAreas;
-        private List<Bitmap> cropImages;
+        public List<Bitmap> cropImages;
         public int OrderingCnt { get; set; }
         //public static int width { get; set; }
         //public static int height { get; set; }
