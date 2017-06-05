@@ -14,6 +14,7 @@ using System.Runtime.InteropServices;
 using System.Drawing.Imaging;
 using System.Threading;
 using AxWMPLib; //player
+using Shell32;
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
@@ -44,6 +45,7 @@ namespace RapidCheck
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(tabPage3.Width, tabPage3.Height);
 
+            test();
             //color button
             radioButton1.Text = "빨간색";
             radioButton2.Text = "노란색";
@@ -235,5 +237,31 @@ namespace RapidCheck
         private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
         private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
         private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
+        private void test()
+        {
+            List<string> arrHeaders = new List<string>();
+
+            Shell32.Shell shell = new Shell32.Shell();
+            Shell32.Folder objFolder;
+            objFolder = shell.NameSpace(@"C:\videos\");
+            Shell32.FolderItem fi;
+            fi = objFolder.ParseName("tracking.mp4");
+            string temp = objFolder.GetDetailsOf(fi, 4);
+            temp = temp.Split('오')[1];
+            string AmPm = temp.Split(' ')[0];
+            string hour = temp.Split(' ')[1].Split(':')[0];
+            string min = temp.Split(' ')[1].Split(':')[1];
+            if (AmPm == "후")
+            {
+                int h = Int32.Parse(hour) + 12;
+                if (h == 24) h = 12;
+                hour = h.ToString();
+            }
+            else if(Int32.Parse(hour) == 12)
+            {
+                hour = "0";
+            }
+            MessageBox.Show(hour + ":" + min);
+        }
     }
 }

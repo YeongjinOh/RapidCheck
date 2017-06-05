@@ -393,8 +393,12 @@ namespace RapidCheck
                             dataGridView.Invoke(new Action(() =>
                             {
                                 string cont = string.Format("object id : {0}\nstart time : {1}\nend time : {2}\nmain color : {3}\ndirection : {4}", objid, "123", "345", "red", "31");
-                                dataGridView.Rows.Add(bit, cont);
-                                dataGridView.Rows[dataGridView.RowCount - 1].Height = bit.Height;
+
+                                int gridHeight = 100;
+                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight));
+                                dataGridView.Rows.Add(gridImg, cont);
+                                //dataGridView.Rows[dataGridView.RowCount - 1].Height = bit.Height;
+                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridHeight;
                             }));
                         }
                     }
