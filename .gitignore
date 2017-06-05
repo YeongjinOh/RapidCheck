@@ -23,7 +23,7 @@ dataset/
 my_testset
 MNIST_data/
 mnist_ckpt/
-
+tmp/
 # for jupyter notebook
 .ipynb_checkpoints/
 data/
