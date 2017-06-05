@@ -1,4 +1,5 @@
 import pymysql
+import os
 
 def say(*words, verbalise=False):
 	if verbalise:
@@ -85,5 +86,25 @@ class DB_Helper:
 		self.conn.close()
 
 # Model History Save Modules in RapidCheck Darkeras
-def save_model(model, save_type='weights'):
-	pass
+def save_model(model, steps, save_folder, save_type='weights'):
+	"""
+		model : keras model
+		save_type : all -> weights + full model
+					weights -> only weights save
+					model -> only model save 
+	"""
+	if save_type == 'weights':
+		model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(steps))
+		json_arch = model.to_json()
+		# with open(os.path.join(save_folder))
+	elif save_type == 'model':
+		model.save(trained_save_weights_prefix + 'steps{}.h5'.format(steps))
+	elif save_type == 'all':
+		model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(steps))
+		model.save(trained_save_weights_prefix + 'steps{}.h5'.format(steps))
+
+if __name__ == '__main__':
+	s = "dfkjasidfajfl\
+								dkfjrikdsflkjefdsfliejsdfl\n\
+				asdfj"
+	print(s)
