@@ -45,7 +45,6 @@ namespace RapidCheck
             formSize = new Size(this.Width, this.Height);
             pnlSize = new Size(tabPage3.Width, tabPage3.Height);
 
-            test();
             //color button
             radioButton1.Text = "빨간색";
             radioButton2.Text = "노란색";
@@ -100,14 +99,13 @@ namespace RapidCheck
             {
                 videoPath = videoFilePath.FileName;
             }
-            videoPath = @"C:\videos\tracking.mp4";
-
+            string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
             int maxFrameNum = 10000;
             int frameStep = 5;
             int minTrackingLength = 47;
             int clusterNum = 6;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
 
             //trackbar
             trackBar1.Minimum = 0;
@@ -237,15 +235,13 @@ namespace RapidCheck
         private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
         private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
         private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
-        private void test()
+        private string setCreateTime(string folderPath, string fileName)
         {
-            List<string> arrHeaders = new List<string>();
-
             Shell32.Shell shell = new Shell32.Shell();
             Shell32.Folder objFolder;
-            objFolder = shell.NameSpace(@"C:\videos\");
+            objFolder = shell.NameSpace(folderPath);
             Shell32.FolderItem fi;
-            fi = objFolder.ParseName("tracking.mp4");
+            fi = objFolder.ParseName(fileName);
             string temp = objFolder.GetDetailsOf(fi, 4);
             temp = temp.Split('오')[1];
             string AmPm = temp.Split(' ')[0];
@@ -261,7 +257,7 @@ namespace RapidCheck
             {
                 hour = "0";
             }
-            MessageBox.Show(hour + ":" + min);
+            return hour + ":" + min;
         }
     }
 }

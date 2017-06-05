@@ -98,7 +98,7 @@ namespace RapidCheck
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
                     int id = overlayOrders[resFrame][idx].id;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f, ObjList[id].getStartFrameNum());
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f);
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
@@ -144,6 +144,7 @@ namespace RapidCheck
             {
                 sw.Start();
                 Bitmap BitCopy = (Bitmap)background.Clone();
+                int passTimeSec, frameHour, frameMin, frameSec;
                 for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
@@ -163,7 +164,18 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha, ObjList[id].getStartFrameNum());
+                    int currentFrameNum = ObjList[id].getStartFrameNum() + frameStep * orderingCnt;
+                    passTimeSec = currentFrameNum / frameRate;
+                    frameHour = passTimeSec / 3600;
+                    passTimeSec = passTimeSec % 3600;
+                    DateTime printTime = createTime;
+                    printTime = printTime.AddHours(frameHour);
+                    frameMin = passTimeSec / 60;
+                    passTimeSec = passTimeSec % 60;
+                    printTime = printTime.AddMinutes(frameMin);
+                    frameSec = passTimeSec;
+                    printTime = printTime.AddSeconds(frameSec);
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha, printTime.ToString("HH:mm:ss"));
                 }
                 trackingBar.Value += 1;
                 if (resFrame == outputFrameNum - 1)
@@ -249,7 +261,7 @@ namespace RapidCheck
                 }
             }
         }
-        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, int frameNum)
+        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, string time = null)
         {
             try
             {
@@ -266,7 +278,8 @@ namespace RapidCheck
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
 
                         //drawing time(frame num)
-                        gr.DrawString(frameNum.ToString(), drawFont, drawBrush, position.X, position.Y-20);
+                        if(time != null)
+                            gr.DrawString(time, drawFont, drawBrush, position.X, position.Y-20);
                         //draw
                         gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
                     }

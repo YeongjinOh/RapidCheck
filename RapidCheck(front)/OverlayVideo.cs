@@ -59,6 +59,8 @@ namespace RapidCheck
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
         private int speed;
+        private System.DateTime createTime;
+        private int frameRate;
 
         //drawing style
         System.Drawing.Font drawFont;
@@ -76,7 +78,7 @@ namespace RapidCheck
         public int clickFramePosition { set; get; } // mouse click frame position
 
         public OverlayVideo() { }
-        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 12);
@@ -106,6 +108,7 @@ namespace RapidCheck
             this.frameStep = frameStep;
             this.clusterNum = clusterNum;
             this.speed = 1;
+            this.createTime = new System.DateTime(2017, 1, 1, Int32.Parse(createTime.Split(':')[0]), Int32.Parse(createTime.Split(':')[1]), 0);
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)
             {
@@ -115,6 +118,7 @@ namespace RapidCheck
             //read video info
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
+            frameRate = reader.FrameRate;
             videoWidth = reader.Width;
             videoHeight = reader.Height;
             background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
