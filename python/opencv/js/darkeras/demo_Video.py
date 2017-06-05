@@ -15,15 +15,16 @@ from utils.BoxUtils import post_progress
 from yolo.process import preprocess
 
 from utils.help import DB_Helper, DB_Item
+import os
 
 K.set_image_dim_ordering('th')
 
 is_freeze = True
 # weigths_path = 'models/train/yolo-2class-complete.h5'
-
-weigths_path = 'models/train/'+cfg.model_name+'-complete.h5'
+weigths_path = os.path.join(cfg.model_folder, cfg.model_name) + '-steps8000.h5'
+# weigths_path = 'models/train/'+cfg.model_name+'-complete.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
-test_threshold = 0.3
+test_threshold = 0.4
 
 # weigths_path = 'models/train/yolo-2class-voc2007-train-cell28-steps40000.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
@@ -38,7 +39,7 @@ model.summary()
 # video_name = 'persons1.mp4'
 #video_name = 'apart_car1.mp4'
 # video_name = 'demo2.mp4'
-video_name = 'test.mp4'
+video_name = 'tracking.mp4'
 
 # video_name = 'videoplayback.mp4'
 # video_name = 'car_video2.mp4'
@@ -49,14 +50,16 @@ videoId = 3 # TODO: video id would be get by runtime
 frameNum = 0
 frameSteps = 3
 items = []
-# cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
-cap = cv2.VideoCapture('C:\\Users\\Soma2\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
+cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
+# cap = cv2.VideoCapture('C:\\Users\\Soma2\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
 cv2.resizeWindow('Detection Window', 600,600)
 try:
 	while True:
 		ret, frame = cap.read()
 		frameNum += 1
+		# if frameNum <= 64000:
+		# 	continue
 		if frameNum % frameSteps != 0:
 			continue
 	

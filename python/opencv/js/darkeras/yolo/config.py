@@ -1,8 +1,8 @@
 # Global config variables
 import os
 # import yolo.conf.vgg16_2class_config as c
-import yolo.conf.yolo_2class_base_config as c
-# import yolo.conf.yolo_2class_config as c
+# import yolo.conf.yolo_2class_base_config as c
+import yolo.conf.yolo_2class_config as c
 # import yolo.conf.yolo_tiny_config as c
 # import yolo.conf.cifar100_based_config as c
 model_folder = c.model_folder
