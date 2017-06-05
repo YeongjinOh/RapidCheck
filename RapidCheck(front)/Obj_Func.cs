@@ -10,12 +10,22 @@ namespace RapidCheck
     public partial class Obj
     {
         public int getFrameCnt() { return cropImages.Count; }
-        public Rectangle getCropArea() { return cropAreas[currentAreaPositionIdx++]; }
+        public Rectangle getNextCropArea() { return cropAreas[currentAreaPositionIdx++]; }
         public Bitmap getNextCropImage() { return cropImages[currentImagePositionIdx++]; }
         public void addCropPositionNum(int frame) { cropPositionNum.Add(frame); }
         public void addCropImage(Bitmap cropImage)
         {
             cropImages.Add(cropImage);
+        }
+        public Bitmap getCropImage(int index)
+        {
+            currentImagePositionIdx = index;
+            return getNextCropImage();
+        }
+        public Rectangle getCropArea(int index)
+        {
+            currentAreaPositionIdx = index;
+            return getNextCropArea();
         }
         //public bool emptyImage() //삭제 예정
         //{
@@ -29,7 +39,9 @@ namespace RapidCheck
         }
         public double[] getStartingPoint()
         {
-            double[] ret = {cropAreas[0].X, cropAreas[0].Y};
+            int XWidth = cropAreas[0].X + cropAreas[0].Width;
+            int YHeight = cropAreas[0].Y + cropAreas[0].Height;
+            double[] ret = {XWidth, YHeight};
             return ret;
         }
     }

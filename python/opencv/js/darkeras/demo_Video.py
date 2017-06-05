@@ -10,7 +10,7 @@ from keras import backend as K
 import tensorflow as tf
 import yolo.config as cfg
 
-from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model
+from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_THdim_model
 from utils.BoxUtils import post_progress
 from yolo.process import preprocess
 
@@ -20,11 +20,15 @@ K.set_image_dim_ordering('th')
 
 is_freeze = True
 # weigths_path = 'models/train/yolo-2class-complete.h5'
-weigths_path = 'models/train/yolo-2class-mydata-onlycartracking-cell14-steps4000.h5'
-# weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
-test_threshold = 0.2
 
+weigths_path = 'models/train/'+cfg.model_name+'-complete.h5'
+# weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
+test_threshold = 0.3
+
+# weigths_path = 'models/train/yolo-2class-voc2007-train-cell28-steps40000.h5'
+# weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 model = yolo_tiny_THdim_model(is_freeze)
+# model = yolo_shortdense_THdim_model(is_freeze)
 model.load_weights(weigths_path)
 model.summary()
 
@@ -34,15 +38,16 @@ model.summary()
 # video_name = 'persons1.mp4'
 #video_name = 'apart_car1.mp4'
 # video_name = 'demo2.mp4'
-video_name = 'playback.mp4'
+video_name = 'test.mp4'
+
 # video_name = 'videoplayback.mp4'
-# video_name = 'car_video5.mp4'
+# video_name = 'car_video2.mp4'
 # video_name = 'car_night_video.mp4'
 # video_name  = 'cctv4.mp4'
 # video_name = 'car_view_video3.avi'
 videoId = 3 # TODO: video id would be get by runtime
 frameNum = 0
-frameSteps = 2
+frameSteps = 3
 items = []
 # cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 cap = cv2.VideoCapture('C:\\Users\\Soma2\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
@@ -54,7 +59,7 @@ try:
 		frameNum += 1
 		if frameNum % frameSteps != 0:
 			continue
-		# cv2.imshow('Original Window', frame)
+	
 		print("FrameNum : {}".format(frameNum))
 		img = preprocess(frame)
 		batch = np.expand_dims(img, axis=0)
@@ -66,7 +71,7 @@ try:
 		
 		# if len(items) >= 100:
 		# 	db.insert(items)
-		# 	print("DB Insert 100 items Done..")
+		# 	print("DB Insert 100 items Done..********************************")
 		# 	del items
 		# 	items = []
 		cv2.imshow('Detection Window', out_img)
@@ -79,7 +84,7 @@ except Exception:
 	print("Exception Occured")
 finally:
 	# db.close()
-	print("DB Closed in Finally..")
+	# print("DB Closed in Finally..")
 	cap.release()
 	cv2.destroyAllWindows()
 

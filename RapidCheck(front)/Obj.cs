@@ -14,7 +14,8 @@ namespace RapidCheck
         public int currentImagePositionIdx { get; set; }
         private List<int> cropPositionNum;
         private List<Rectangle> cropAreas;
-        private List<Bitmap> cropImages;
+        public List<Bitmap> cropImages;
+        public int OrderingCnt { get; set; }
         //public static int width { get; set; }
         //public static int height { get; set; }
 
@@ -24,6 +25,7 @@ namespace RapidCheck
             objectid = id;
             currentAreaPositionIdx = 0;
             currentImagePositionIdx = 0;
+            OrderingCnt = 0;
             cropPositionNum = new List<int>();
             cropAreas = new List<Rectangle>();
             cropImages = new List<Bitmap>();
@@ -31,6 +33,10 @@ namespace RapidCheck
         public int getLength()
         {
             return cropAreas.Count;
+        }
+        public int getStartFrameNum()
+        {
+            return cropPositionNum[0];
         }
     }
 }

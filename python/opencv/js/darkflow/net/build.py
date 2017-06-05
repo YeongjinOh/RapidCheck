@@ -1,6 +1,10 @@
 import tensorflow as tf
 import time
 from dark.darknet import Darknet
+from .framework import create_framework
+from . import flow
+from . import help
+from .ops import op_create, identity, HEADER, LINE
 
 class dotdict(dict):
 	"""dot.notation access to dictionary attributes to replace FLAGS when not needed"""
@@ -21,6 +25,8 @@ class TFNet(object):
 	})
 
 	# import methods
+	return_predict = flow.return_predict
+	say = help.say
 
 	def __init__(self, FLAGS, darkent=None):
 		self.ntrain = 0
@@ -34,5 +40,53 @@ class TFNet(object):
 		if darkent is None:
 			print("Initialize Darkent..")
 			darknet = Darknet(FLAGS)
+			self.ntrain = len(darknet.layers)
+			print("self.ntrain : {}".format(self.ntrain))
 
-		print("This is FLAGS : ", FLAGS)
+		self.darknet = darknet
+		args = [darknet.meta, FLAGS]
+		self.num_layer = len(darknet.layers)
+		print("self.num_layer : {}".format(self.num_layer))
+		self.framework = create_framework(*args)
+
+		self.meta = darknet.meta
+		print("self.meta : ", self.meta)
+		self.FLAGS = FLAGS
+		self.say("This is FLAGS : ", self.FLAGS)
+
+		self.say('\nBuilding net ...')
+		start = time.time()
+		self.graph = tf.Graph()
+
+		with self.graph.as_default() as g:
+			self.build_forward()
+			self.setup_meta_ops()
+		self.say('Finished in {}s\n'.format(
+			time.time() - start))
+
+	def build_forward(self):
+		
+		# Placeholders
+		inp_size = [None] + self.meta['inp_size']
+		print("build_forward::inp_size.shape : ", inp_size)
+		self.inp = tf.placeholder(tf.float32, inp_size, 'input')
+		self.feed = dict() # other placeholders
+
+		# Build the forward pass
+		state = identity(self.inp)
+		roof = self.num_layer - self.ntrain
+		self.say("roof : ", roof)
+		self.say(HEADER, LINE)
+		print(self.darknet.layers)
+		for i, each_layer in enumerate(self.darknet.layers):
+			scope = '{}-{}'.format(str(i), each_layer.type)
+			print(scope)
+			args = [each_layer, state, i, roof, self.feed]
+			print(args)
+			state = op_create(*args)
+			mess = state.verbalise()
+			self.say(mess)
+		self.say(LINE)
+
+	def setup_meta_ops(self):
+		pass

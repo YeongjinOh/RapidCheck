@@ -51,11 +51,14 @@ namespace RapidCheck
             int group = 3;
             for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
             {
-                List<int> temp = new List<int>();
+                List<objIdAndOrderingCnt> temp = new List<objIdAndOrderingCnt>();
                 for (int objectidListIdx = 0; (objectidListIdx < objectidList.Count) && (overlayFrameNum >=(objectidListIdx/group)*offset); objectidListIdx++)
                 {
                     int id = objectidList[objectidListIdx];
-                    temp.Add(id);
+                    int orderingCnt = ObjList[id].OrderingCnt;
+                    objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
+                    temp.Add(newOrder);
+                    ObjList[id].OrderingCnt++;
                 }
                 overlayOrders.Add(temp);
             }
@@ -64,12 +67,16 @@ namespace RapidCheck
         {
             for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
             {
-                List<int> currentObjid = new List<int>();
+                List<objIdAndOrderingCnt> currentObjid = new List<objIdAndOrderingCnt>();
                 for (int groupIdx = 0; groupIdx < startingGroup.Count; groupIdx++)
                 {
                     if(startingGroup[groupIdx].hasNext())
                     {
-                        currentObjid.Add(startingGroup[groupIdx].getNextId(ref ObjList));
+                        int id = startingGroup[groupIdx].getNextId(ref ObjList);
+                        int orderingCnt = ObjList[id].OrderingCnt;
+                        objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
+                        currentObjid.Add(newOrder);
+                        ObjList[id].OrderingCnt++;
                     }
                 }
                 overlayOrders.Add(currentObjid);
@@ -77,46 +84,120 @@ namespace RapidCheck
         }
         public void overlay()
         {
-            /*
-            overlayFrames = new List<Bitmap>();
-            //drawing
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
-            for (int resFrame = 0; resFrame < overlayOrders.Count; resFrame++)
-            {
-                Bitmap BitCopy = (Bitmap)background.Clone();
-                for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
-                {
-                    int id = overlayOrders[resFrame][idx];
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
-                }
-                overlayFrames.Add(BitCopy);
-                BitCopy.Dispose();
-            }
-            */
-            Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            //Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
             VideoFileWriter writer = new VideoFileWriter();
             string outputPath = string.Format(@"C:\videos\output\video{0}_{1}_{2}_{3}.avi", videoid, maxFrameNum, outputFrameNum, clusterNum);
             if(System.IO.File.Exists(outputPath)) //해당 이름을 가진 파일이 존재한다면,,,,
             {
-                outputPath = outputPath + "_" + System.DateTime.Now.ToString("MM_dd hh_mm");
+                outputPath = outputPath.Replace(".avi",string.Format("_{0}.avi", System.DateTime.Now.ToString("_hh시mm분")));
             }
-            writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
+            writer.Open(outputPath, videoWidth, videoHeight, frameStep, VideoCodec.H264);
             for (int resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 Bitmap BitCopy = (Bitmap)background.Clone();
                 for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
                 {
-                    int id = overlayOrders[resFrame][idx];
-                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getCropArea());
+                    int id = overlayOrders[resFrame][idx].id;
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getNextCropImage(), ObjList[id].getNextCropArea(), 0.75f, ObjList[id].getStartFrameNum());
                 }
                 writer.WriteVideoFrame(BitCopy);
                 BitCopy.Dispose();
             }
             writer.Close();
         }
+        public void overlayLive()
+        {
+            //Bitmap background = new Bitmap(@"C:\videos\Background\0.bmp"); //*****Background는....0번째 프레임?
+            Graphics gs = pictureBoxVideo.CreateGraphics();
+            startBtn.Enabled = true;
+            trackingBar.Enabled = true;
+            startBtn.Text = "Pause";
+
+            // set draw size
+            int drawWidth = pictureBoxVideo.Width;
+            int drawHeight = pictureBoxVideo.Height;
+            if (background.Height * drawWidth > background.Width * drawHeight)
+            {
+                drawHeight = pictureBoxVideo.Height;
+                drawWidth = (int)((double)pictureBoxVideo.Height * ((double)background.Width / (double)background.Height));
+            }
+            else if (background.Height * drawWidth < background.Width * drawHeight)
+            {
+                drawWidth = pictureBoxVideo.Width;
+                drawHeight = (int)((double)pictureBoxVideo.Width * ((double)background.Height / (double)background.Width));
+            }
+            //set draw position
+            int drawX = (pictureBoxVideo.Width - drawWidth) / 2;
+            int drawY = (pictureBoxVideo.Height - drawHeight) / 2;
+            //set puictureBox
+            pictureBoxVideo.Height = drawHeight;
+            pictureBoxVideo.Width = drawWidth;
+            pictureBoxVideo.Location = new Point(drawX, drawY);
+
+
+            //overlay time
+            int frameTime = 1000 / frameStep;
+            System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+            float alphaMin = 0.4f, alphaDiff = 0.2f;
+            //**********************DRAWING CODE**********************
+            for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
+            {
+                sw.Start();
+                Bitmap BitCopy = (Bitmap)background.Clone();
+                for (overlayObjIdx=0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
+                {
+                    int id = overlayOrders[resFrame][overlayObjIdx].id;
+                    int orderingCnt = overlayOrders[resFrame][overlayObjIdx].orderingCnt;
+                    Rectangle currentObjectArea = ObjList[id].getCropArea(orderingCnt);
+                    float alpha = 0.8f;
+                    
+                    for (int prevOverlayObjIdx = 0; prevOverlayObjIdx < overlayObjIdx; prevOverlayObjIdx++)
+                    {
+                        int previd = overlayOrders[resFrame][prevOverlayObjIdx].id;
+                        int prevOrderingCnt = overlayOrders[resFrame][prevOverlayObjIdx].orderingCnt;
+                        Rectangle prevObjectArea = ObjList[previd].getCropArea(prevOrderingCnt);
+                        if (isIntersect(currentObjectArea, prevObjectArea))
+                        {
+                            alpha -= alphaDiff;
+                        }
+                    }
+                    if (alpha < alphaMin)
+                        alpha = alphaMin;
+                    BitCopy = combinedImage(BitCopy, ObjList[id].getCropImage(orderingCnt), currentObjectArea, alpha, ObjList[id].getStartFrameNum());
+                }
+                trackingBar.Value += 1;
+                if (resFrame == outputFrameNum - 1)
+                {
+                    startBtn.Text = "Start";
+                }
+                sw.Stop();
+                do
+                {
+                    gs.DrawImage(BitCopy, new Rectangle(0, 0, drawWidth, drawHeight));
+                    if (frameTime - (int)sw.ElapsedMilliseconds > 0) { System.Threading.Thread.Sleep(frameTime - (int)sw.ElapsedMilliseconds); }
+                    sw.Reset();
+                    frameTime = 1000 / frameStep / speed;
+                    
+                } while (startBtn.Text == "Start");
+                BitCopy.Dispose();
+            }
+        }
+        public bool isIntersect(Rectangle rect1, Rectangle rect2)
+        {
+            return isIntersectPoint(rect1, new Point(rect2.X, rect2.Y)) ||
+            isIntersectPoint(rect1, new Point(rect2.X, rect2.Y+rect2.Height)) ||
+            isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y)) ||
+            isIntersectPoint(rect1, new Point(rect2.X + rect2.Width, rect2.Y + rect2.Height));
+        }
+        public bool isIntersectPoint(Rectangle rect, Point po)
+        {
+            return rect.X < po.X && rect.X + rect.Width > po.X && rect.Y < po.Y && rect.Y + rect.Height > po.Y;
+        }
         public void setObjidList()
         {
-            bool useFilter = false;
+            // TODO
+            return;
+            bool useFilter = true;
             if (!useFilter)
             {
                 objectidList.Clear();
@@ -124,7 +205,6 @@ namespace RapidCheck
                 {
                     ObjList[idIdx].currentAreaPositionIdx = 0;
                     ObjList[idIdx].currentImagePositionIdx = 0;
-                    //ObjList[idIdx].resetPosition();
                     objectidList.Add(idIdx);
                 }
             }
@@ -166,12 +246,10 @@ namespace RapidCheck
                     objectidList.Add(id);
                     ObjList[id].currentAreaPositionIdx = 0;
                     ObjList[id].currentImagePositionIdx = 0;
-                    //ObjList[id].resetPosition();
-                    //MessageBox.Show(id.ToString());
                 }
             }
         }
-        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position)
+        public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, int frameNum)
         {
             try
             {
@@ -180,11 +258,16 @@ namespace RapidCheck
                     
                     using (Graphics gr = Graphics.FromImage(back))
                     {
+                        //set alpha
                         ColorMatrix matrix = new ColorMatrix();
-                        matrix.Matrix33 = 0.75f; //0.7~0.75
+                        matrix.Matrix33 = alpha; //0.7~0.75
                         ImageAttributes att = new ImageAttributes();
                         att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+
+                        //drawing time(frame num)
+                        gr.DrawString(frameNum.ToString(), drawFont, drawBrush, position.X, position.Y-20);
+                        //draw
                         gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
                     }
                 }
@@ -236,6 +319,9 @@ namespace RapidCheck
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
 
+                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum < {1} group by objectId;", videoid, maxFrameNum);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "objCnt");
 
                     dt = ds.Tables["maxid"];
                     int maxObjectid = 0;
@@ -244,7 +330,15 @@ namespace RapidCheck
                         maxObjectid = Convert.ToInt32(dr["maxid"]);
                     }
                     //set ObjectidList
-                    setDefaultObjectidList(maxObjectid);
+                    // setDefaultObjectidList(maxObjectid);
+                    dt = ds.Tables["objCnt"];
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (Convert.ToInt32(dr["cnt"]) > minTrackingLength)
+                        {
+                            objectidList.Add(Convert.ToInt32(dr["objectId"]));
+                        }
+                    }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
                     foreach (DataRow dr in dt.Rows)
@@ -277,7 +371,7 @@ namespace RapidCheck
                 Console.WriteLine("getMysqlObjList() ERROR");
             }
         }
-        public void imageCrop(string videoPath)
+        public void imageCrop()
         {
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
@@ -289,8 +383,24 @@ namespace RapidCheck
                 {
                     foreach (int objid in objidByFrame[frameNum])
                     {
-                        Rectangle temp = ObjList[objid].getCropArea();
-                        ObjList[objid].addCropImage(videoFrame.Clone(temp, videoFrame.PixelFormat));
+                        Rectangle temp = ObjList[objid].getNextCropArea();
+                        Bitmap bit = videoFrame.Clone(temp, videoFrame.PixelFormat);
+                        ObjList[objid].addCropImage(bit);
+
+                        if (ObjList[objid].cropImages.Count == 1)
+                        {   
+                            //set string
+                            dataGridView.Invoke(new Action(() =>
+                            {
+                                string cont = string.Format("object id : {0}\nstart time : {1}\nend time : {2}\nmain color : {3}\ndirection : {4}", objid, "123", "345", "red", "31");
+
+                                int gridHeight = 100;
+                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight));
+                                dataGridView.Rows.Add(gridImg, cont);
+                                //dataGridView.Rows[dataGridView.RowCount - 1].Height = bit.Height;
+                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridHeight;
+                            }));
+                        }
                     }
                 }
                 videoFrame.Dispose();
@@ -316,7 +426,6 @@ namespace RapidCheck
             cropArea.Width += 20;
             cropArea.Height += 20;
 
-            //일단은... width x height
             if (cropArea.X > videoWidth) cropArea.X /= 2;
             if (cropArea.Y > videoHeight) cropArea.Y /= 2;
             //if (cropArea.X < 0) cropArea.X = 0;
@@ -327,23 +436,76 @@ namespace RapidCheck
         public void kMeasFunc()
         {
             var kmeas = new KMeans(k:clusterNum);
-            double[][] points = new double[ObjList.Count][];
-            for (int i = 0; i < ObjList.Count; i++)
+            double[][] points = new double[objectidList.Count][];
+
+            for (int i = 0; i < objectidList.Count; i++)
             {
-                points[i] = ObjList[i].getStartingPoint();
+                int id = objectidList[i];
+                points[i] = ObjList[id].getStartingPoint();
             }
             KMeansClusterCollection clusters = kmeas.Learn(points);
             int[] output = clusters.Decide(points);
-            
-            for (int id = 0; id < ObjList.Count; id++)
+
+            for (int i = 0; i < objectidList.Count; i++)
             {
-                startingGroup[output[id]].Add(id);
+                int id = objectidList[i];
+                startingGroup[output[i]].Add(id);
             }
             //sort
             for (int k = 0; k < startingGroup.Count; k++)
             {
                 startingGroup[k].sort(ref ObjList);
             }
+        }
+        public void setResFrame(int resFrameNum)
+        {
+            this.resFrame = resFrameNum;
+        }
+        private double min(double num1, double num2)
+        {
+            return num1 > num2 ? num2 : num1;
+        }
+        public int getClickedObjectOriginalFrameNum(double clickPositionX, double clickPositionY)
+        {
+            /*
+            int startFrame = -1;
+            for(int idx = 0 ; idx < overlayOrders[resFrame].Count ; idx ++) // id의 인덱스
+            {
+                int id = overlayOrders[resFrame][idx].id;
+                int orderingCnt = overlayOrders[resFrame][idx].orderingCnt;
+                Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
+                if( (objRect.X < clickPositionX) && (objRect.Width+objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height+objRect.Y > clickPositionY))
+                {
+                    startFrame = ObjList[id].getStartFrameNum();
+                    break;
+                }
+            }
+            return startFrame;
+             */
+            int startFrame = -1;
+            double maxClickedPositionArea = 0;
+            for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++) // id의 인덱스
+            {
+                int id = overlayOrders[resFrame][idx].id;
+                int orderingCnt = overlayOrders[resFrame][idx].orderingCnt;
+                Rectangle objRect = ObjList[id].getCropArea(orderingCnt);
+                if ((objRect.X < clickPositionX) && (objRect.Width + objRect.X > clickPositionX) && (objRect.Y < clickPositionY) && (objRect.Height + objRect.Y > clickPositionY))
+                {
+                    double clickedPositionWidth = min(clickPositionX - objRect.X, objRect.Width + objRect.X - clickPositionX);
+                    double clickedPositionHeight = min(clickPositionY - objRect.Y, objRect.Height + objRect.Y - clickPositionY);
+                    double curClickedPositionArea = clickedPositionWidth * clickedPositionHeight;
+                    if (maxClickedPositionArea < curClickedPositionArea)
+                    {
+                        startFrame = ObjList[id].getStartFrameNum();
+                        maxClickedPositionArea = curClickedPositionArea;
+                    }
+                }
+            }
+            return startFrame;
+        }
+        public void setSpeed(int speed)
+        {
+            this.speed = speed;
         }
     }
 }

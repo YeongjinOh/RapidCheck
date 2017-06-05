@@ -1,1 +1,1 @@
-yolo\yolo-2class-voc2007-train-cell28.parsed car person
+yolo\from-cell14base-mydata.parsed car person

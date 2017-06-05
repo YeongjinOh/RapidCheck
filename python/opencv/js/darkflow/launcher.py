@@ -6,6 +6,9 @@ from os import sep
 options = {"model": "cfg{}yolo-tiny.cfg".format(sep),
 		"load":"",
 		"threshold": 0.1,
-		"gpu":1.0}
+		"gpu":1.0, "verbalise":True}
 
 tfnet = TFNet(options)
+im  = cv2.imread('test/dog.jpg')
+print(type(im), im.shape)
+print(tfnet.return_predict(im))

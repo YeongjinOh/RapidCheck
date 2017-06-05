@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using System.Collections.Generic; //List
 using System.Drawing; //Bitmap
 using System.Drawing.Imaging;
 using MySql.Data.MySqlClient;
@@ -17,6 +15,26 @@ using System.Diagnostics;
 //time
 namespace RapidCheck
 {
+    public class objDataGridView
+    {
+        public DataGridViewImageColumn img;
+        public string contents;
+        public objDataGridView(DataGridViewImageColumn img, string contents)
+        {
+            this.img = img;
+            this.contents = contents;
+        }
+    }
+    public class objIdAndOrderingCnt
+    {
+        public int id {get; set;}
+        public int orderingCnt {get;set;}
+        public objIdAndOrderingCnt(int id, int orderingCnt)
+        {
+            this.id = id;
+            this.orderingCnt = orderingCnt;
+        }
+    }
     public partial class OverlayVideo
     {
         //private List<string> colors; //검색 조건들 이후에 추가..
@@ -24,14 +42,14 @@ namespace RapidCheck
         private List<int> objectidList; //분석에 사용된 id
         private Dictionary<int, List<int>> objidByFrame; //key : frame, value : Objid //해당 frame에 등장한 object //crop할 위치 확인용
         private List<Bitmap> overlayFrames; //result Frame
-        private List<List<int>> overlayOrders; //overlayOrders[i] : i번째 output frame에 등장해야 할 Object id들의 리스트
+        private List<List<objIdAndOrderingCnt>> overlayOrders; //overlayOrders[i] : i번째 output frame에 등장해야 할 Object id들의 리스트
 
         private List<int> trackingTableFrameNum;
         private List<int> trackingTableObjid;
         private List<Rectangle> trackingTableRectangle;
         private string videoPath;
-        private int videoWidth;
-        private int videoHeight;
+        public int videoWidth { get; set; }
+        public int videoHeight { get; set; }
         private int frameStep;
         private int videoid;
         private int outputFrameNum;
@@ -40,17 +58,43 @@ namespace RapidCheck
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
+        private int speed;
+
+        //drawing style
+        System.Drawing.Font drawFont;
+        System.Drawing.SolidBrush drawBrush;
+        //background
+        Bitmap background;
         
-        //overlayOrders의 길이와 overlayFrames의 길이는 같아야한다??? 디펜던시가 있다
+        //UI
+        PictureBox pictureBoxVideo;
+        TrackBar trackingBar;
+        Button startBtn;
+        DataGridView dataGridView;
+        public int resFrame { get; set; }
+        public int overlayObjIdx { set; get; }
+        public int clickFramePosition { set; get; } // mouse click frame position
+
         public OverlayVideo() { }
-        public OverlayVideo(string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
+            //drawing style
+            drawFont = new System.Drawing.Font("Arial", 12);
+            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            //UI
+            this.dataGridView = dataGridView;
+            this.trackingBar = TrackingBar;
+            this.pictureBoxVideo = pictureBoxVideo;
+            this.startBtn = startBtn;
+            this.resFrame = 0;
+            this.overlayObjIdx = 0;
+            this.clickFramePosition = 0;
             //------------------------------변수 초기화-----------------------------
             ObjList = new List<Obj>(); //DB Table
             objectidList = new List<int>();
             objidByFrame = new Dictionary<int, List<int>>();
             overlayFrames = new List<Bitmap>();
-            overlayOrders = new List<List<int>>();
+            overlayOrders = new List<List<objIdAndOrderingCnt>>();
             
             trackingTableObjid = new List<int>();
             trackingTableFrameNum = new List<int>();
@@ -61,6 +105,7 @@ namespace RapidCheck
             this.minTrackingLength = minTrackingLength;
             this.frameStep = frameStep;
             this.clusterNum = clusterNum;
+            this.speed = 1;
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)
             {
@@ -72,9 +117,10 @@ namespace RapidCheck
             reader.Open(videoPath);
             videoWidth = reader.Width;
             videoHeight = reader.Height;
+            background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
             if(maxFrameNum == 0)
             {
-                this.maxFrameNum = (int)reader.FrameCount; //왜 reader.FrameCount는 long형식일까??
+                this.maxFrameNum = (int)reader.FrameCount;
             }
             reader.Close();
             //------------------------------/변수 초기화-----------------------------

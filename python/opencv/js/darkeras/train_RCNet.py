@@ -1,28 +1,39 @@
 import h5py
+import os
 import numpy as np
 import cv2
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import yolo.config as cfg
-from utils.help import say, conv_weigths_flatten
+from utils.help import say, conv_weigths_flatten, save_model
 
 import keras.backend as K
-from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model
+from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_THdim_model
 
 if cfg.image_dim_order == 'th':
 	K.set_image_dim_ordering('th')
 
-pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
-# pretrain_weight_path = 'models/train/yolo-2class-voc2007-train-cell14-steps40000.h5'
+# 새로 학습
+# pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+
+# 초벌구이 학습
+# pretrain_weight_path = 'models/train/yolo-2class-voc2007-base-shortdense-cell14-steps24000.h5'
 # pretrain_weight_path = 'models/train/yolo-2class-complete.h5'
-# pretrain_weight_path = 'models/train/yolo-2class-mydata-3video-complete.h5'
+
+# 추가 학습
+# pretrain_weight_path = 'models/train/{}-complete.h5'.format(cfg.model_name)
+pretrain_weight_path = 'models/train/yolo-2class-voc2007-train-cell14-steps40000.h5'
+
 is_freeze = True
 verbalise = True
 
 freeze_layer_weights = None
 trainable_layer_weights = None
 show_trainable_state = False # 여기를 True 로 바꾸면, conv layer 와 dense layer 의 학습별 weigths 가 변하는지 안변하는지를 확인할 수 있다.
-trained_save_weights_prefix = 'models/train/{}-'.format(cfg.model_name)
+# trained_save_weights_prefix = 'models/train/{}-'.format(cfg.model_name)
+if not os.path.exists(cfg.model_folder):
+	os.mkdir(cfg.model_folder)
+	print("Make New Model Folder on {}".format(cfg.model_folder))
 
 print(cfg.dataset_abs_location)
 
@@ -30,6 +41,7 @@ sess = tf.Session()
 K.set_session(sess)
 
 model = yolo_tiny_THdim_model()
+# model = yolo_shortdense_THdim_model()
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
@@ -50,6 +62,7 @@ sess.run(tf.global_variables_initializer())
 model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
+
 for i, (x_batch, datum) in enumerate(batches):
 	train_feed_dict = {
 	   loss_ph[key]:datum[key] for key in loss_ph 
@@ -86,10 +99,12 @@ for i, (x_batch, datum) in enumerate(batches):
 	# 	model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 	# 	say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
    
-	if i % 5000 == 0:
-		model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
-		say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
+	if i % 4000 == 0:
+		# save_model(model, save_folder, file_name, steps, descriptions, save_type='weights'):
+		save_model(model, cfg.model_folder, cfg.model_name, i, cfg.descriptions)
+		# model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
+		# say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
 
 say('Training All Done..', verbalise=verbalise)
-model.save_weights(trained_save_weights_prefix + 'complete.h5')
+# model.save_weights(trained_save_weights_prefix + 'complete.h5')
 say("Save weights : ", trained_save_weights_prefix + 'complete.h5', verbalise=verbalise)
