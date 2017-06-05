@@ -79,6 +79,14 @@ double innerProduct(Point2d p1, Point2d p2)
 	return p1.x * p2.x + p1.y + p2.y;
 }
 
+bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext)
+{
+	Rect lastRectOfPrev = trackletPrev.back().getTargetArea(), firstRectOfNext = trackletNext.front().getTargetArea();
+	int intersectionArea = (lastRectOfPrev & firstRectOfNext).area();
+	printf("intersection area : %d\n", intersectionArea);
+	return intersectionArea > 0;
+}
+
 bool isValidCarMotion(tracklet& trackletPrev, tracklet& trackletNext)
 {
 	int n = trackletPrev.size();

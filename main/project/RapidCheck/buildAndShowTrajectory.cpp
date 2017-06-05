@@ -149,8 +149,9 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 			{
 				RCTrajectory& curTrajectory = trajectoriesStillBeingTracked[i];
 				tracklet &curTracklet = curTrajectory.getTargets(), &nextTracklet = curSegmentTracklets[j];
-				// TODO
-				// if (isValidCarMotion(curTracklet, nextTracklet))
+				
+				//if (isValidCarMotion(curTracklet, nextTracklet))
+				if (isValidMotion(curTracklet, nextTracklet))
 				{
 					int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
 					double similarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
@@ -314,6 +315,12 @@ void buildAndShowTrajectory(App app)
 	}
 		
 	// show Trajectory
-	// showTrajectory(framePedestrians, trajectoryPedestrians);
-	showTrajectory(frameCars, trajectoryCars);
+	if (USE_PEDESTRIANS_ONLY)
+	{
+		showTrajectory(framePedestrians, trajectoryPedestrians);
+	}
+	else 
+	{
+		showTrajectory(frameCars, trajectoryCars);
+	}
 }
