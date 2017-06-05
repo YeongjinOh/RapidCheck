@@ -22,7 +22,7 @@ if cfg.image_dim_order == 'th':
 
 # 추가 학습
 # pretrain_weight_path = 'models/train/{}-complete.h5'.format(cfg.model_name)
-pretrain_weight_path = 'models/train/yolo-2class-voc2007-train-cell14-steps40000.h5'
+pretrain_weight_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps20000.h5'
 
 is_freeze = True
 verbalise = True

@@ -50,6 +50,21 @@ def parse(exclusive = False):
 	print('Result saved to {}'.format(save_to))
 	return dumps
 
+def flipChunk(chunk):
+	# chunk[0] = chunk[0](before .) + 'reverse' + '.jpg'
+	width = chunk[1][0]
+	height = chunk[1][1]
+	objs = chunk[1][2]
+	for obj in objs:
+		xmin = obj[1]
+		xmax = obj[3]
+		# obj[1] = width -1 - xmax
+		obj[1] = width - xmax
+		obj[3] = width - xmin
+
+def chunkToXml(chunk):
+	pass
+
 def _batch(chunk):
 	"""
 	Takes a chunk of parsed annotations
