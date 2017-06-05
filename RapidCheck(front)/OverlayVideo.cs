@@ -61,6 +61,7 @@ namespace RapidCheck
         private int speed;
         private System.DateTime createTime;
         private int frameRate;
+        public bool drawTime { get; set; }
 
         //drawing style
         System.Drawing.Font drawFont;
@@ -108,6 +109,7 @@ namespace RapidCheck
             this.frameStep = frameStep;
             this.clusterNum = clusterNum;
             this.speed = 1;
+            this.drawTime = true;
             this.createTime = new System.DateTime(2017, 1, 1, Int32.Parse(createTime.Split(':')[0]), Int32.Parse(createTime.Split(':')[1]), 0);
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)

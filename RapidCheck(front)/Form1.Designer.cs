@@ -35,8 +35,8 @@
             this.panelObject = new System.Windows.Forms.Panel();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.timeLabel = new System.Windows.Forms.Label();
-            this.stateLabel = new System.Windows.Forms.Label();
+            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelProgress = new System.Windows.Forms.Panel();
             this.VideoBtn = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -77,8 +77,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.radioButtonTimeOn = new System.Windows.Forms.RadioButton();
+            this.radioButtonTimeOff = new System.Windows.Forms.RadioButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -129,9 +129,9 @@
             // panelObject
             // 
             this.panelObject.BackColor = System.Drawing.Color.Transparent;
+            this.panelObject.Controls.Add(this.radioButtonTimeOff);
+            this.panelObject.Controls.Add(this.radioButtonTimeOn);
             this.panelObject.Controls.Add(this.panelGrid);
-            this.panelObject.Controls.Add(this.timeLabel);
-            this.panelObject.Controls.Add(this.stateLabel);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
             this.panelObject.Name = "panelObject";
@@ -142,9 +142,9 @@
             // 
             this.panelGrid.Controls.Add(this.dataGridView1);
             this.panelGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelGrid.Location = new System.Drawing.Point(0, 138);
+            this.panelGrid.Location = new System.Drawing.Point(0, 50);
             this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Size = new System.Drawing.Size(438, 532);
+            this.panelGrid.Size = new System.Drawing.Size(438, 620);
             this.panelGrid.TabIndex = 16;
             // 
             // dataGridView1
@@ -160,27 +160,21 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 30;
-            this.dataGridView1.Size = new System.Drawing.Size(438, 532);
+            this.dataGridView1.Size = new System.Drawing.Size(438, 620);
             this.dataGridView1.TabIndex = 0;
             // 
-            // timeLabel
+            // Column1
             // 
-            this.timeLabel.AutoSize = true;
-            this.timeLabel.Location = new System.Drawing.Point(10, 53);
-            this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Size = new System.Drawing.Size(39, 17);
-            this.timeLabel.TabIndex = 15;
-            this.timeLabel.Text = "Time";
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column1.HeaderText = "Image";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
             // 
-            // stateLabel
+            // Column2
             // 
-            this.stateLabel.AutoSize = true;
-            this.stateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stateLabel.Location = new System.Drawing.Point(6, 15);
-            this.stateLabel.Name = "stateLabel";
-            this.stateLabel.Size = new System.Drawing.Size(88, 38);
-            this.stateLabel.TabIndex = 14;
-            this.stateLabel.Text = "state";
+            this.Column2.HeaderText = "Contents";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             // 
             // panelProgress
             // 
@@ -602,18 +596,29 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Column1
+            // radioButtonTimeOn
             // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.HeaderText = "Image";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
+            this.radioButtonTimeOn.AutoSize = true;
+            this.radioButtonTimeOn.Checked = true;
+            this.radioButtonTimeOn.Location = new System.Drawing.Point(3, 6);
+            this.radioButtonTimeOn.Name = "radioButtonTimeOn";
+            this.radioButtonTimeOn.Size = new System.Drawing.Size(80, 21);
+            this.radioButtonTimeOn.TabIndex = 17;
+            this.radioButtonTimeOn.TabStop = true;
+            this.radioButtonTimeOn.Text = "Time on";
+            this.radioButtonTimeOn.UseVisualStyleBackColor = true;
+            this.radioButtonTimeOn.CheckedChanged += new System.EventHandler(this.radioButtonTimeOn_CheckedChanged);
             // 
-            // Column2
+            // radioButtonTimeOff
             // 
-            this.Column2.HeaderText = "Contents";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
+            this.radioButtonTimeOff.AutoSize = true;
+            this.radioButtonTimeOff.Location = new System.Drawing.Point(3, 26);
+            this.radioButtonTimeOff.Name = "radioButtonTimeOff";
+            this.radioButtonTimeOff.Size = new System.Drawing.Size(80, 21);
+            this.radioButtonTimeOff.TabIndex = 17;
+            this.radioButtonTimeOff.Text = "Time off";
+            this.radioButtonTimeOff.UseVisualStyleBackColor = true;
+            this.radioButtonTimeOff.CheckedChanged += new System.EventHandler(this.radioButtonTimeOff_CheckedChanged);
             // 
             // Form1
             // 
@@ -689,8 +694,6 @@
         private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.Panel panelVideoPart;
         private System.Windows.Forms.Button VideoBtn;
-        private System.Windows.Forms.Label stateLabel;
-        private System.Windows.Forms.Label timeLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.RadioButton radioButtonX1;
@@ -700,6 +703,8 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.RadioButton radioButtonTimeOff;
+        private System.Windows.Forms.RadioButton radioButtonTimeOn;
     }
 }
 

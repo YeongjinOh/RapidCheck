@@ -64,9 +64,6 @@ namespace RapidCheck
             progressBar1.Style = ProgressBarStyle.Continuous;
             progressBar1.Enabled = true;
             
-            //text box
-            stateLabel.Text = "";
-
             //video player
             MaximizeBox = false;
 
@@ -83,6 +80,10 @@ namespace RapidCheck
             dataGridView1.Columns[1].Width = panelObject.Width / 2;
             dataGridView1.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True; //support multiline text
             dataGridView1.ColumnHeadersVisible = false;
+
+            //draw time on/off
+            radioButtonTimeOn.Enabled = false;
+            radioButtonTimeOff.Enabled = false;
         }
 
         string videoPath = null;
@@ -101,7 +102,7 @@ namespace RapidCheck
             }
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
             int maxFrameNum = 10000;
-            int frameStep = 5;
+            int frameStep = 3;
             int minTrackingLength = 47;
             int clusterNum = 6;
             outputFrameNum = 500;
@@ -117,11 +118,9 @@ namespace RapidCheck
         delegate void rapidChain(ref System.Diagnostics.Stopwatch sw, string state, rapidModule dele);
         private void basicFlow(ref System.Diagnostics.Stopwatch sw, string state, rapidModule dele)
         {
-            stateLabel.Text = state;
             sw.Start();
             dele();
             sw.Stop();
-            timeLabel.Text = string.Format("{0}\n{1,-15} : {2} ms", timeLabel.Text, dele.Method.ToString().Replace("Void ",""), sw.ElapsedMilliseconds.ToString());
             //timeLabel.Text + "\noverlay : " + sw.ElapsedMilliseconds.ToString() + "ms";
             sw.Reset();
             progressBar1.PerformStep();
@@ -152,6 +151,8 @@ namespace RapidCheck
             radioButtonX2.Enabled = true;
             radioButtonX4.Enabled = true;
             radioButtonX1.Checked = true;
+            radioButtonTimeOn.Enabled = true;
+            radioButtonTimeOff.Enabled = true;
             myRapidModule.Add(rapid.overlayLive);
             rapidChain myRapidChain = new rapidChain(basicFlow);
             for (int idx = 0; idx < myRapidModule.Count; idx++)
@@ -159,7 +160,6 @@ namespace RapidCheck
                 myRapidChain(ref sw, states[idx], myRapidModule[idx]);
             }
             progressBar1.Value = 100;
-            stateLabel.Text = "...";
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -258,6 +258,15 @@ namespace RapidCheck
                 hour = "0";
             }
             return hour + ":" + min;
+        }
+
+        private void radioButtonTimeOn_CheckedChanged(object sender, EventArgs e)
+        {
+            rapidCheck.drawTime = true;
+        }
+        private void radioButtonTimeOff_CheckedChanged(object sender, EventArgs e)
+        {
+            rapidCheck.drawTime = false;
         }
     }
 }

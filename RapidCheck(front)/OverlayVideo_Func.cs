@@ -278,7 +278,7 @@ namespace RapidCheck
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
 
                         //drawing time(frame num)
-                        if(time != null)
+                        if(time != null & drawTime)
                             gr.DrawString(time, drawFont, drawBrush, position.X, position.Y-20);
                         //draw
                         gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
@@ -318,7 +318,7 @@ namespace RapidCheck
                     {
                         videoid = Convert.ToInt32(dr["videoid"]);
                     }
-                    videoid = 1; //test
+                    videoid = 3; //test
 
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
@@ -397,6 +397,14 @@ namespace RapidCheck
                     foreach (int objid in objidByFrame[frameNum])
                     {
                         Rectangle temp = ObjList[objid].getNextCropArea();
+                        try
+                        {
+                            Bitmap bit2 = videoFrame.Clone(temp, videoFrame.PixelFormat);
+                        }
+                        catch(Exception e)
+                        {
+                            MessageBox.Show(temp.ToString());
+                        }
                         Bitmap bit = videoFrame.Clone(temp, videoFrame.PixelFormat);
                         ObjList[objid].addCropImage(bit);
 
@@ -439,10 +447,20 @@ namespace RapidCheck
             cropArea.Width += 20;
             cropArea.Height += 20;
 
+            if (cropArea.X < 0)
+            {
+                cropArea.Width += cropArea.X;
+                cropArea.X = 0;
+            }
+            if (cropArea.Y < 0)
+            {
+                cropArea.Height += cropArea.Y;
+                cropArea.Y = 0;
+            }
             if (cropArea.X > videoWidth) cropArea.X /= 2;
             if (cropArea.Y > videoHeight) cropArea.Y /= 2;
-            //if (cropArea.X < 0) cropArea.X = 0;
-            //if (cropArea.Y < 0) cropArea.Y = 0;
+            if (cropArea.X > videoWidth) cropArea.X = videoWidth - 1;
+            if (cropArea.Y > videoHeight) cropArea.Y = videoHeight - 1;
             if (cropArea.X + cropArea.Width > videoWidth) cropArea.Width = videoWidth - cropArea.X;
             if (cropArea.Y + cropArea.Height > videoHeight) cropArea.Height = videoHeight - cropArea.Y;
         }
