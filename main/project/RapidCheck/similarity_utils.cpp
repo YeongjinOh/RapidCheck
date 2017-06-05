@@ -45,7 +45,13 @@ double calcBackwardDeviationError(tracklet& trackletPrev, tracklet& trackletNext
 double calcSimilarityMotion(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
 {
 	double deviationError = calcForwardDeviationError(trackletPrev, trackletNext, segmentIndexDiff) + calcBackwardDeviationError(trackletPrev, trackletNext, segmentIndexDiff);
-	return exp(-deviationError / STANDARD_DEVIATION);
+	Rect lastRectOfPrev = trackletPrev.back().getTargetArea(), firstRectOfNext = trackletNext.front().getTargetArea();
+	int intersectionArea = (lastRectOfPrev & firstRectOfNext).area();
+	double similarityJaccard = (double)intersectionArea / (lastRectOfPrev.area() + firstRectOfNext.area() - intersectionArea);
+	double similarityMotion = exp(-deviationError / STANDARD_DEVIATION);
+	if (segmentIndexDiff == 1)
+		similarityMotion = similarityMotion * similarityJaccard;
+	return  similarityMotion;
 }
 
 // calculate appearance similarity between two tracklets
