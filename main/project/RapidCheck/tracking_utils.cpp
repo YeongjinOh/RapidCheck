@@ -91,6 +91,243 @@ void printIndices(vector<int>& selectedIndices)
 }
 
 // Build one optimal tracklet of given segment
+void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy)
+{
+	// (n+1)-th frame
+	int n = selectedTargets.size();
+
+	// base case
+	if (n == LOW_LEVEL_TRACKLETS) {
+
+		// handle outliers
+		vector<int> inlierCandidates;
+		for (int i = 0; i < n; i++)
+		{
+			if (selectedIndices[i] != -1)
+			{
+				inlierCandidates.push_back(i);
+			}
+		}
+
+		// at least 4 inliers needed
+		if (inlierCandidates.size() < 4)
+			return;
+
+		// find the best pair of points which have
+		// 1. minimum number of outlier
+		// 2. minimum of maxDist
+		double outlierDistThres = 100.0;
+		int minCntOutlier = LOW_LEVEL_TRACKLETS;
+		double minMaxDist = INFINITY;
+		int inlierIdx1 = -1, inlierIdx2 = -1;
+
+		vector<int> minOutliers, outliers;
+		for (int i = 1; i < inlierCandidates.size(); i++)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				int idx1 = inlierCandidates[i], idx2 = inlierCandidates[j];
+				Point p1 = selectedTargets[idx1].getCenterPoint(), p2 = selectedTargets[idx2].getCenterPoint();
+				double x1 = p1.x, y1 = p1.y, x2 = p2.x, y2 = p2.y;
+				// predict cluster center
+				double x0 = x2 + (x1 - x2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * idx2) / (2 * (idx1 - idx2));
+				double y0 = y2 + (y1 - y2) * ((LOW_LEVEL_TRACKLETS - 1) - 2 * idx2) / (2 * (idx1 - idx2));
+				double maxDist = 0;
+				// calculate maximal distance from cluster p0 to point pk
+				int cntOutlier = 0;
+				outliers.clear();
+				for (int k = 0; k < inlierCandidates.size(); k++)
+				{
+					int idx0 = inlierCandidates[k];
+					Point p_k = selectedTargets[idx0].getCenterPoint();
+					double x_k = p_k.x, y_k = p_k.y;
+					double dist = sqrt((x0 - x_k)*(x0 - x_k) + (y0 - y_k)*(y0 - y_k));
+
+					if (dist > outlierDistThres)
+					{
+						outliers.push_back(idx0);
+						cntOutlier++;
+					}
+					maxDist = max(maxDist, dist);
+				}
+				if (minCntOutlier > cntOutlier || (minCntOutlier == cntOutlier && minMaxDist > maxDist))
+				{
+					minCntOutlier = cntOutlier;
+					minMaxDist = maxDist;
+					inlierIdx1 = idx1;
+					inlierIdx2 = idx2;
+					minOutliers.clear();
+					minOutliers.assign(outliers.begin(), outliers.end());
+				}
+			}
+		}
+
+		if (minCntOutlier > 0)
+		{
+			// we can recover at most 2 outliers including dummy nodes
+			if (inlierCandidates.size() - minCntOutlier < 4)
+				return;
+
+			// erase outliers
+			for (int i = 0; i < minOutliers.size(); i++)
+			{
+				int outlierIdx = minOutliers[i];
+				inlierCandidates.erase(find(inlierCandidates.begin(), inlierCandidates.end(), outlierIdx));
+			}
+
+			// change outliers with dummy nodes
+			for (int i = 0; i < minOutliers.size(); i++)
+			{
+				int outlierIdx = minOutliers[i];
+				selectedIndices[outlierIdx] = -1;
+				selectedTargets[outlierIdx] = Target();
+				useDummy = true;
+			}
+			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
+			return;
+		}
+
+		// reconstruct dummy nodes
+		if (useDummy)
+		{
+			vector<int> dummyIndices;
+
+			for (int i = 0; i < n; i++)
+			{
+				if (selectedIndices[i] == -1)
+					dummyIndices.push_back(i);
+			}
+
+			// reconstruct at most 2 dummy nodes
+			if (dummyIndices.size() > 2)
+				return;
+
+			// case 1. only one dummy node
+			if (dummyIndices.size() == 1)
+			{
+				int idx = dummyIndices[0];
+				if (idx == 0)
+					reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
+				else if (idx == n - 1)
+					reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
+				else
+					reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx);
+			}
+
+			// case 2. two dummy nodes
+			else if (dummyIndices.size() == 2)
+			{
+				int idx1 = dummyIndices[0], idx2 = dummyIndices[1];
+				if (idx1 + 1 == idx2)
+				{
+					if (idx1 == 0 && idx2 == 1)
+					{
+						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+					}
+					else if (idx1 == n - 2 && idx2 == n - 1)
+					{
+						reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+						reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+					}
+					else
+						reconstructMiddleTwoDummies(selectedIndices, selectedTargets, frames, frameNumber, idx1, idx2);
+				}
+				else
+				{
+					if (idx1 == 0)
+					{
+						if (idx2 == n - 1)
+							reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						else
+							reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						reconstructLeftDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+					}
+					else {
+						if (idx2 == n - 1)
+							reconstructRightDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						else
+							reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx2);
+						reconstructMiddleOneDummy(selectedIndices, selectedTargets, frames, frameNumber, idx1);
+					}
+				}
+			}
+
+		}
+
+		// compute cost
+		// cost value is linear combination of cost_appearance and cost_motion
+		double costAppearance = 0.0, costMotion = 0.0;
+		for (int i = 0; i < n; i++)
+		{
+			for (int j = 0; j < i; j++)
+			{
+				costAppearance += compareHist(selectedTargets[i].hist, selectedTargets[j].hist, 0);
+			}
+			for (int j = 1; j < n - 1; j++)
+			{
+				Point motionErrVector = selectedTargets[i].getCenterPoint() - selectedTargets[j].getCenterPoint() - (i - j)*(selectedTargets[j + 1].getCenterPoint() - selectedTargets[j].getCenterPoint());
+				double motionCost = getNormValueFromVector(motionErrVector);
+				costMotion += motionCost;
+			}
+		}
+		double cost = costAppearance + MIXTURE_CONSTANT * costMotion;
+
+		// if this cost is minimum
+		if (costMin > cost)
+		{
+			costMin = cost;
+			// change solution
+			solution.assign(selectedIndices.begin(), selectedIndices.end());
+		}
+		return;
+	}
+
+	// recursive process
+	// assumption 1 : selectedIndices and selectedTargets have the same length
+	// assumption 2 : the length of selectedTargets(= n) is less than or equal to LOW_LEVEL_TRACKLETS (= 6)
+	// assumption 3 : frameNumber indicates (start frame number + offset) where offset is length of selectedTargets
+	Frame& frame = frames[frameNumber];
+	vector<Target>& targets = frame.getTargets();
+	double cost;
+	int cnt = 0;
+	for (int i = 0; i < targets.size(); i++)
+	{
+		Target& curTarget = targets[i];
+		if (curTarget.found)
+			continue;
+
+		// branch cutting using simple position comparison
+		if (selectedTargets.size() > 0 && selectedIndices.back() != -1)
+		{
+			Target& prevTarget = selectedTargets.back();
+			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
+			double motionCost = getNormValueFromVector(motionErrVector);
+			if (motionCost > CONTINUOUS_MOTION_COST_THRE)
+				continue;
+		}
+		// recursive backtracking
+		selectedTargets.push_back(targets[i]);
+		selectedIndices.push_back(i);
+		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
+		selectedIndices.pop_back();
+		selectedTargets.pop_back();
+		cnt++;
+	}
+
+	// if not used, use dummy
+	if (useDummy && (n < 2 || cnt == 0))
+	{
+		// recursive backtracking
+		selectedTargets.push_back(Target());
+		selectedIndices.push_back(-1);
+		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
+		selectedIndices.pop_back();
+		selectedTargets.pop_back();
+	}
+}
+
+// Build one optimal tracklet of given segment
 void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy)
 {
 
@@ -102,9 +339,15 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 
 		// handle outliers
 		vector<int> inlierCandidates;
-		for (int i = 0; i < n; i++)
-			if (selectedIndices[i] != -1)
+		for (int i = 0; i < n; i++) 
+		{
+			if (selectedIndices[i] != -1) 
+			{
 				inlierCandidates.push_back(i);
+			}
+				
+		}
+			
 
 		// at least 4 inliers needed
 		if (inlierCandidates.size() < 4)
@@ -418,7 +661,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 }
 
 // Read targets in MAX_FRAMES frames from DataBase
-void readTargets(VideoCapture& cap, vector<Frame>& frames)
+void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Frame>& frameCars)
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
@@ -438,16 +681,26 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	cout << "total frame count : " << totalFrameCount << endl;
 
-	// read result from database and build mapFrameNumToPedestrians
-	vector<vector<int > > res;
-	map<int, vector<Rect> > mapFrameNumToPedestrians;
-	//db.selectDetection(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	// read detection result from database and build mapFrameNumToPedestrians
+	vector<vector<int> > detectionResultsPedestrians, detectionResultsCars;
+	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
+	//db.selectDetection(detectionResultsPedestrians, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	db.selectDetection2(detectionResultsPedestrians, videoId, 1, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+
 	int carClassId = 0;
-	db.selectDetection2(res, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
-	for (int i = 0; i < res.size(); i++)
+	db.selectDetection2(detectionResultsCars, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	
+	for (int i = 0; i < detectionResultsPedestrians.size(); i++)
 	{
-		int frameNum = res[i][0], x = res[i][1], y = res[i][2], width = res[i][3], height = res[i][4], classId = res[i][5];
+		int frameNum = detectionResultsPedestrians[i][0], x = detectionResultsPedestrians[i][1], y = detectionResultsPedestrians[i][2],
+			width = detectionResultsPedestrians[i][3], height = detectionResultsPedestrians[i][4], classId = detectionResultsPedestrians[i][5];
 		mapFrameNumToPedestrians[frameNum].push_back(Rect(x, y, width, height));
+	}
+	for (int i = 0; i < detectionResultsCars.size(); i++)
+	{
+		int frameNum = detectionResultsCars[i][0], x = detectionResultsCars[i][1], y = detectionResultsCars[i][2],
+			width = detectionResultsCars[i][3], height = detectionResultsCars[i][4], classId = detectionResultsCars[i][5];
+		mapFrameNumToCars[frameNum].push_back(Rect(x, y, width, height));
 	}
 
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
@@ -465,17 +718,19 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			cap >> frameSkipped;
 		}
 		
+		/* Build framePedestrians*/
+
 		// create histograms
-		vector<Rect>& found = mapFrameNumToPedestrians[frameNum];
-		vector<Target> targets;
+		vector<Rect>& pedestriansRects = mapFrameNumToPedestrians[frameNum];
+		vector<Target> pedestrianTargets;
 		
 		// shrink rect smaller
 		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
-		for (int i = 0; i < found.size(); ++i)
+		for (int i = 0; i < pedestriansRects.size(); ++i)
 		{
 			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
-			Rect& r = found[i];
+			Rect& r = pedestriansRects[i];
 			if (RESIZE_DETECTION_AREA)
 			{
 				r.x += r.width * (1 - widthRatio) / 2;
@@ -493,10 +748,44 @@ void readTargets(VideoCapture& cap, vector<Frame>& frames)
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
-
+			pedestrianTargets.push_back(Target(r, hist, whiteRatio, blackRatio));
 		}
-		frames.push_back(Frame(frameNum, targets));
+		framePedestrians.push_back(Frame(frameNum, pedestrianTargets));
+
+		/* Build frameCars */
+
+		// create histograms
+		vector<Rect>& carRects = mapFrameNumToCars[frameNum];
+		vector<Target> carTargets;
+
+		for (int i = 0; i < carRects.size(); ++i)
+		{
+			Mat imgHSV, imgWhite, imgBlack;
+			MatND hist;
+			Rect& r = carRects[i];
+
+			/* cars don't need to be resized
+			if (RESIZE_DETECTION_AREA)
+			{
+				r.x += r.width * (1 - widthRatio) / 2;
+				r.width = r.width * widthRatio;
+				r.y += r.height * (1 - heightRatio) / 2 - r.height * shiftUpperRatio;
+				r.height = r.height * heightRatio;
+			}
+			*/
+
+			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
+
+			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
+			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
+			int area = imgHSV.rows * imgHSV.cols;
+			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
+			carTargets.push_back(Target(r, hist, whiteRatio, blackRatio));
+		}
+		frameCars.push_back(Frame(frameNum, carTargets));
 	}
 }
 

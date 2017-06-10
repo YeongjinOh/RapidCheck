@@ -28,3 +28,12 @@ double calcSimilarityAppearance(tracklet& trackletPrev, tracklet& trackletNext, 
 */
 double calcSimilarity(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff);
 
+/**
+	check if two tracklets can be merged as continuous motion model
+*/
+bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext);
+
+/**
+	check if two tracklets can be merged as valid car motion
+*/
+bool isValidCarMotion(tracklet& trackletPrev, tracklet& trackletNext);

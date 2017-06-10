@@ -50,7 +50,23 @@ def parse(exclusive = False):
 	print('Result saved to {}'.format(save_to))
 	return dumps
 
-def _batch(chunk):
+
+def flipChunk(chunk):
+	# chunk[0] = chunk[0](before .) + 'reverse' + '.jpg'
+	width = chunk[1][0]
+	height = chunk[1][1]
+	objs = chunk[1][2]
+	for obj in objs:
+		xmin = obj[1]
+		xmax = obj[3]
+		# obj[1] = width -1 - xmax
+		obj[1] = width - xmax
+		obj[3] = width - xmin
+
+def chunkToXml(chunk):
+	pass
+
+def _batch(chunk, is_test=False):
 	"""
 	Takes a chunk of parsed annotations
 	returns value for placeholders of net's 
@@ -63,7 +79,10 @@ def _batch(chunk):
 	# preprocess
 	jpg = chunk[0]; w, h, allobj_ = chunk[1]
 	allobj = deepcopy(allobj_)
-	path = os.path.join(cfg.imageset_location, jpg)
+	if not is_test:
+		path = os.path.join(cfg.imageset_location, jpg)
+	else:
+		path = os.path.join(cfg.test_imageset_location, jpg)
 	img = preprocess(path, allobj)
 
 	# Calculate regression target
@@ -159,6 +178,30 @@ def shuffle():
 			yield x_batch, feed_batch
 
 		print('Finish {} epoch'.format(i+1))
+
+def test_shuffle():
+	batch_size = cfg.batch_size
+	test_data = pascal_voc_clean_xml(cfg.test_ann_location, cfg.classes_name, False)
+	test_size = len(test_data)
+	print("Test Dataset of {} instance(s)".format(test_size))
+
+	shuffle_idx = perm(np.arange(test_size))
+	print("Test shuffle index : ", shuffle_idx[0:10])
+	x_batch = list()
+	feed_batch = dict()
+
+	for j in range(batch_size):
+		test_instance = test_data[shuffle_idx[j]]
+		inp, new_feed = _batch(test_instance, is_test=True)
+
+		if inp is None: continue
+		x_batch += [np.expand_dims(inp, 0)]
+		for key in new_feed:
+			new = new_feed[key]
+			old_feed = feed_batch.get(key, np.zeros((0,)+new.shape))
+			feed_batch[key] = np.concatenate([old_feed, [new]])
+	x_batch = np.concatenate(x_batch, 0)
+	return x_batch, feed_batch
 
 if __name__ == '__main__':
 	print("hello")

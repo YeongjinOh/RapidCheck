@@ -14,10 +14,26 @@ void showTracklet(App app)
 	vector<Scalar> colors = getRandomColors();
 	
 	// build target detected frames
-	vector<Frame> frames;
-	//detectTargets(app, cap, frames);
-	readTargets(cap, frames);
-	cout << "Detection finished" << endl;
+	vector<Frame> frames, framePedestrians, frameCars;
+	clock_t t = clock();
+	if (SELECT_DETECTION_RESPONSE)
+	{
+		readTargets(cap, framePedestrians, frameCars);
+	}
+	else
+	{
+		detectTargets(app, cap, frames);
+	}
+	if (USE_PEDESTRIANS_ONLY)
+	{
+		frames = framePedestrians;
+	}
+	else
+	{
+		frames = frameCars;
+	}
+	t = clock() - t;
+	printf("Detection takes %d(ms)\n", t);
 
 	// build all tracklets
 	vector<Segment> segments;

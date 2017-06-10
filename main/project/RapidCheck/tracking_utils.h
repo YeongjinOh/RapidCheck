@@ -105,6 +105,21 @@ void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& s
 */
 void printIndices(vector<int>& selectedIndices);
 
+
+/**
+	Build one optimal tracklet of given segment consisting of cars.
+	Optimal tracklet means list of targets with length of LOW_LEVEL_TRACKLETS(= 6) with minimal cost among all possible combinations
+
+	@param solution solution indices of each frames which indicates optimal tracklet
+	@param selectedIndices indices of selected target of each frames
+	@param selectedTargets selected targets of each frames
+	@param frames list of frames including this segment
+	@param frameNumber number of frame checked in this recursion
+	@param costMin minimum of cost so far
+	@param useDummy boolean flag. if true, add dummy nodes and reconrstruct them.
+*/
+void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy = false);
+
 /**
 	Build one optimal tracklet of given segment.
 	Optimal tracklet means list of targets with length of LOW_LEVEL_TRACKLETS(= 6) with minimal cost among all possible combinations
@@ -118,7 +133,6 @@ void printIndices(vector<int>& selectedIndices);
 	@param useDummy boolean flag. if true, add dummy nodes and reconrstruct them.
 */
 void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy = false);
-
 /**
 	Detect targets in MAX_FRAMES frames
 
@@ -142,9 +156,10 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
 	Read targets in MAX_FRAMES frames from DataBase
 
 	@param cap video variable
-	@param frames list of frames to be implemented detection
+	@param framePedestrians list of frames of pedestrians to be implemented detection
+	@param frameCars list of frames of cars to be implemented detection
 */
-void readTargets(VideoCapture& cap, vector<Frame>& frames);
+void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Frame>& frameCars);
 /**
 	Read trajectories in MAX_FRAMES frames from DataBase
 

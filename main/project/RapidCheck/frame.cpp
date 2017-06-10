@@ -17,7 +17,7 @@ int Frame::getFrameNumbers()
 {
 	return frameNumber;
 }
-vector<Rect> Frame::getPedestrians()
+vector<Rect> Frame::getRects()
 {
 	vector<Rect> pedestrians;
 	for (int i = 0; i < targets.size(); i++)
@@ -26,7 +26,7 @@ vector<Rect> Frame::getPedestrians()
 	}
 	return pedestrians;
 }
-Rect & Frame::getPedestrian(int idx)
+Rect & Frame::getRect(int idx)
 {
 	if (idx < targets.size())
 		return targets[idx].getTargetArea();

@@ -148,7 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="buildTrajectory.cpp" />
+    <ClCompile Include="buildAndShowTrajectory.cpp" />
     <ClCompile Include="compareSimilarity.cpp" />
     <ClCompile Include="showDetection.cpp" />
     <ClCompile Include="showTrackletClusters.cpp" />

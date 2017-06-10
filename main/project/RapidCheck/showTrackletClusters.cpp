@@ -26,83 +26,47 @@ void showTrackletClusters(App app)
 		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
 	}
 		
-	// initialize variables for histogram
-	// Using 50 bins for hue and 60 for saturation
-	int h_bins = 50; int s_bins = 60;
-	int histSize[] = { h_bins, s_bins };
-	// hue varies from 0 to 179, saturation from 0 to 255
-	float h_ranges[] = { 0, 180 };
-	float s_ranges[] = { 0, 256 };
-	const float* ranges[] = { h_ranges, s_ranges };
-	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
-	
-	vector<Frame> frames;
-	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
-	for (int frameNum = START_FRAME_NUM; frameNum < START_FRAME_NUM + MAX_FRAMES; frameNum++) {
-		
-		// get frame from the video
-		cap >> frame;
-	
-		// stop the program if no more images
-		if (frame.rows == 0 || frame.cols == 0)
-			break;
-
-		vector<Rect> found, found_filtered;
-
-		// implement hog detection
-		app.getHogResults(frame, found);
-		size_t i, j;
-		for (int i = 0; i<found.size(); i++)
-		{
-			Rect r = found[i];
-			for (j = 0; j<found.size(); j++)
-				if (j != i && (r & found[j]) == r)
-					break;
-			if (j == found.size())
-				found_filtered.push_back(r);
-		}
-		for (i = 0; i<found_filtered.size(); i++)
-		{
-			Rect &r = found_filtered[i];
-			r.x += cvRound(r.width*0.1);
-			r.width = cvRound(r.width*0.8);
-			r.y += cvRound(r.height*0.07);
-			r.height = cvRound(r.height*0.8);
-		}
-
-		// create histograms
-		vector<MatND> hists;
-		for (int i = 0; i < found_filtered.size(); ++i)
-		{
-			Mat temp;
-			MatND hist;
-			cvtColor(frame(found_filtered[i]), temp, COLOR_BGR2HSV);
-			calcHist(&temp, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
-			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			hists.push_back(hist);
-		}
-	
-		frames.push_back(Frame(frameNum, found_filtered, hists));
+	// build target detected frames
+	vector<Frame> frames, framePedestrians, frameCars;
+	if (SELECT_DETECTION_RESPONSE)
+	{
+		readTargets(cap, framePedestrians, frameCars);
 	}
-
+	else
+	{
+		detectTargets(app, cap, frames);
+	}
+	if (USE_PEDESTRIANS_ONLY)
+	{
+		frames = framePedestrians;
+	}
+	else
+	{
+		frames = frameCars;
+	}
 	cout << "Detection finished" << endl;
 	
-	int frameNum = 1, objectId;
+	// open windows
+	for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
+	{
+		namedWindow("Frame #" + to_string(i + 1));
+		moveWindow("Frame #" + to_string(i + 1), 400*(i/3), (280*(i%3)));
+	}
+	int frameNum = 0, objectId;
 	while (true)
 	{
 		printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
+		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
 
 		// get frame
 		Mat frame;
 		cap >> frame;
 
 		// draw detection responses of the first frame in this segment with green rectangle
-		vector<Rect> & pedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1].getPedestrians();
-		// &prevPedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1 - 1].getPedestrians();
+		vector<Rect> & pedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1].getRects();
+		// &prevPedestrians = frames[frameNum + LOW_LEVEL_TRACKLETS - 1 - 1].getRects();
 		//for (int i = 0; i < pedestrians.size(); i++)
 		//	rectangle(frame, pedestrians[i], GREEN, 2, 1);
 
@@ -112,14 +76,14 @@ void showTrackletClusters(App app)
 		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 		{
 			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum + START_FRAME_NUM + i);
+			cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + i);
 			// get frame
 			Mat cluster;
 			cap >> cluster;
 			segment.push_back(cluster);
 
 			// draw detection responses with white rectangle in each cluster
-			vector<Rect>& pedestrians = frames[frameNum + i].getPedestrians();
+			vector<Rect>& pedestrians = frames[frameNum + i].getRects();
 			for (int j = 0; j < pedestrians.size(); j++)
 			{
 				Rect rect = pedestrians[j];
@@ -144,8 +108,9 @@ void showTrackletClusters(App app)
 			solution.clear();
 			
 			// build solution
-			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
-			
+			// getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+			getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
 			{
@@ -171,7 +136,7 @@ void showTrackletClusters(App app)
 				circle(frame, target.getCenterPoint(), 1, colors[objectId], 2);
 
 				// draw found object in each frame
-				 rectangle(segment[i], curFrame.getPedestrian(solution[i]), colors[objectId], 4, 1);
+				rectangle(segment[i], curFrame.getRect(solution[i]), colors[objectId], 4, 1);
 				 putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.getTargetArea().height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
 				target.found = true;
 

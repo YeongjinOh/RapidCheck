@@ -12,8 +12,17 @@ void showTrajectory ()
 	// show trajectories
 	Mat frame, frameOrigin, frameSkipped;
 
-	vector<Frame> frames;
-	readTargets(cap, frames);
+	vector<Frame> frames, framePedestrians, frameCars;
+	readTargets(cap, framePedestrians, frameCars);
+	if (USE_PEDESTRIANS_ONLY)
+	{
+		frames = framePedestrians;
+	}
+	else
+	{
+		frames = frameCars;
+	}
+	
 	cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
 
 	// read trajectories from database
@@ -43,14 +52,14 @@ void showTrajectory ()
 				rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId) % NUM_OF_COLORS], 2);
 				putText(frame, to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(10, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1, colors[(objectId) % NUM_OF_COLORS], 1);
 			}
-			vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getPedestrians();
+			vector<Rect> pedestrians = frames[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
 			for (int i = 0; i < pedestrians.size(); i++) 
 			{
 				rectangle(frameOrigin, pedestrians[i], WHITE, 2);
 			}
 
-			imshow("tracklets", frame);
-			imshow("origin", frameOrigin);
+			imshow("Trajectory", frame);
+			imshow("Detection response", frameOrigin);
 
 			// key handling
 			int key = waitKey(130);

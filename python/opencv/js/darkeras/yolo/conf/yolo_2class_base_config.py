@@ -9,22 +9,24 @@ only 2class classifier yolo model config
 import os
 
 model_folder = os.path.join('models', 'train', 'yolo-2class-cell14')
-model_name = 'base-voc2007-with-dropout-05'
+model_name = 'base-voc2007-trainval'
 classes_name = ["car", "person"]
 
 # dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
-dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
+# dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','voc_dataset','VOCdevkit', 'VOC2007')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_11-2012','VOCdevkit','VOC2012')
-# dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_06-2007','VOCdevkit','VOC2007')
+dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_06-2007','VOCdevkit','VOC2007')
 # dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','my_trainset', 'datacenter_mydata')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','my_trainset', 'datacenter_mydata')
-test_dataset_abs_location = None
+test_dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtest_06-2007','VOCdevkit','VOC2007')
+
 # ann_location = os.path.join(dataset_abs_location, 'annotations')
 ann_location = os.path.join(dataset_abs_location, 'Annotations')
-test_ann_location = None
+test_ann_location = os.path.join(test_dataset_abs_location, 'Annotations')
+
 # imageset_location = os.path.join(dataset_abs_location, 'images')
 imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
-test_imageset_location = None
+test_imageset_location = os.path.join(test_dataset_abs_location, 'JPEGImages')
 
 cell_size = 14
 num_classes = len(classes_name)
@@ -45,7 +47,7 @@ trainer='adam'
 image_dim_order = 'th'
 norm_type = 'scale_down'
 
-descriptions = "2017-06-06\n\
+descriptions = "2017-06-05\n\
 cell size : {}\n\
 num_classes : {}\n\
 boxes_per_cell : {}\n\
@@ -59,9 +61,8 @@ lr : {}\n\
 trainer : {}\n\
 image_dim_order : {}\n\
 norm_type : {}\n\
-Bottleneck 을 깨끗하게 초기화해둔 상태에서 Dropout = 0.5 를 하나 마지막에 끼운 상태로 학습을 시작한다.\n\
-베이스를 만드는 과정에서 Dropout 이 효과가 있을지는 미지수이다. \n\
-베이스를 Dropout 이 들어간 상태에서, mydata 도 dropout 레이어를 추가했을 시 도메인 결과에 어떠한 변화가 있는지를 확인할 필요가 있다.\n\
-다음실험은 mydata 도메인에서도 dropout 레이어를 추가하여 학습하여, 스킵된 프레임에서의 안정성과 정확성을 확인한다.".format(cell_size, 
+Bottleneck layer 를 깨끗하게 초기화 시킨뒤에 voc2007 trainval 과 test set 으로 돌려보는 실험을 한다..\n\
+현재 사용하고 있는  base 는 pretrain/yolo-tiny-origin-thdim-named.h5 를 이용할 것 이다. \n\
+다음실험은 train loss 와 test loss History 를 효과적으로 기록하고 사용할 수 있어야 한다.".format(cell_size, 
 	num_classes, 
 	boxes_per_cell, class_scale, object_scale, noobject_scale, coord_scale, inp_size[0], epochs, lr, trainer, image_dim_order, norm_type,)
