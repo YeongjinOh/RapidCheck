@@ -55,6 +55,9 @@
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.radioButtonCar = new System.Windows.Forms.RadioButton();
+            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
+            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
             this.direction5 = new System.Windows.Forms.Button();
             this.direction6 = new System.Windows.Forms.Button();
             this.direction4 = new System.Windows.Forms.Button();
@@ -79,9 +82,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.radioButtonCar = new System.Windows.Forms.RadioButton();
-            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
-            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
+            this.button1 = new System.Windows.Forms.Button();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -132,6 +133,7 @@
             // panelObject
             // 
             this.panelObject.BackColor = System.Drawing.Color.Transparent;
+            this.panelObject.Controls.Add(this.button1);
             this.panelObject.Controls.Add(this.radioButtonTimeOff);
             this.panelObject.Controls.Add(this.radioButtonTimeOn);
             this.panelObject.Controls.Add(this.panelGrid);
@@ -398,6 +400,39 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // radioButtonCar
+            // 
+            this.radioButtonCar.AutoSize = true;
+            this.radioButtonCar.Location = new System.Drawing.Point(147, 102);
+            this.radioButtonCar.Name = "radioButtonCar";
+            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
+            this.radioButtonCar.TabIndex = 3;
+            this.radioButtonCar.TabStop = true;
+            this.radioButtonCar.Text = "자동차";
+            this.radioButtonCar.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonPeople
+            // 
+            this.radioButtonPeople.AutoSize = true;
+            this.radioButtonPeople.Location = new System.Drawing.Point(146, 81);
+            this.radioButtonPeople.Name = "radioButtonPeople";
+            this.radioButtonPeople.Size = new System.Drawing.Size(53, 21);
+            this.radioButtonPeople.TabIndex = 4;
+            this.radioButtonPeople.TabStop = true;
+            this.radioButtonPeople.Text = "사람";
+            this.radioButtonPeople.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBoth
+            // 
+            this.radioButtonBoth.AutoSize = true;
+            this.radioButtonBoth.Location = new System.Drawing.Point(146, 59);
+            this.radioButtonBoth.Name = "radioButtonBoth";
+            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
+            this.radioButtonBoth.TabIndex = 5;
+            this.radioButtonBoth.TabStop = true;
+            this.radioButtonBoth.Text = "사람, 자동차";
+            this.radioButtonBoth.UseVisualStyleBackColor = true;
+            // 
             // direction5
             // 
             this.direction5.Location = new System.Drawing.Point(831, 138);
@@ -626,38 +661,15 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // radioButtonCar
+            // button1
             // 
-            this.radioButtonCar.AutoSize = true;
-            this.radioButtonCar.Location = new System.Drawing.Point(147, 102);
-            this.radioButtonCar.Name = "radioButtonCar";
-            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
-            this.radioButtonCar.TabIndex = 3;
-            this.radioButtonCar.TabStop = true;
-            this.radioButtonCar.Text = "자동차";
-            this.radioButtonCar.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonPeople
-            // 
-            this.radioButtonPeople.AutoSize = true;
-            this.radioButtonPeople.Location = new System.Drawing.Point(146, 81);
-            this.radioButtonPeople.Name = "radioButtonPeople";
-            this.radioButtonPeople.Size = new System.Drawing.Size(53, 21);
-            this.radioButtonPeople.TabIndex = 4;
-            this.radioButtonPeople.TabStop = true;
-            this.radioButtonPeople.Text = "사람";
-            this.radioButtonPeople.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonBoth
-            // 
-            this.radioButtonBoth.AutoSize = true;
-            this.radioButtonBoth.Location = new System.Drawing.Point(146, 59);
-            this.radioButtonBoth.Name = "radioButtonBoth";
-            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
-            this.radioButtonBoth.TabIndex = 5;
-            this.radioButtonBoth.TabStop = true;
-            this.radioButtonBoth.Text = "사람, 자동차";
-            this.radioButtonBoth.UseVisualStyleBackColor = true;
+            this.button1.Location = new System.Drawing.Point(222, 14);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 30);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "filter test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -746,6 +758,7 @@
         private System.Windows.Forms.RadioButton radioButtonCar;
         private System.Windows.Forms.RadioButton radioButtonPeople;
         private System.Windows.Forms.RadioButton radioButtonBoth;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -141,6 +141,8 @@ namespace RapidCheck
                         MySqlDataAdapter adapter = new MySqlDataAdapter();
                         DataTable dt = new DataTable();
 
+                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
+                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
                         string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
                         adapter.Fill(ds, "objIds");
@@ -150,6 +152,13 @@ namespace RapidCheck
                             tempObjidList.Add(Convert.ToInt32(dr["objectId"]));
                         }
                         objectidList = tempObjidList.Intersect(objectidList).ToList();
+
+                        //OrderingCnt초기화
+                        foreach (int i in objectidList)
+                        {
+                            ObjList[idxbyObjid[i]].OrderingCnt = 0;
+                        }
+                        overlayOrders.Clear();
                     }
                 }
             }
@@ -158,7 +167,6 @@ namespace RapidCheck
                 MessageBox.Show("Database conn && Filtering Error");
             }
         }
-
         public void addObj()
         {
             for (int idx = 0; idx < objectidList.Count; idx++)
@@ -234,6 +242,7 @@ namespace RapidCheck
             KMeansClusterCollection clusters = kmeas.Learn(points);
             int[] output = clusters.Decide(points);
 
+            setStartingGroup();
             for (int i = 0; i < objectidList.Count; i++)
             {
                 int id = objectidList[i];
@@ -246,7 +255,7 @@ namespace RapidCheck
                 startingGroup[k].sort(ref ObjList, ref idxbyObjid);
             }
         }
-        public void buildOverlayOrderUsingCluster() // 애를 만든다. overlayOrders;
+        public void buildOverlayOrderUsingCluster() // overlayOrders;
         {
             for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
             {
@@ -276,8 +285,6 @@ namespace RapidCheck
         {
             background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
-            //startBtn.Enabled = true;
-            //trackingBar.Enabled = true;
             startBtn.Text = "Pause";
 
             // set draw size
@@ -455,6 +462,14 @@ namespace RapidCheck
             return startFrame;
         }
         private double min(double num1, double num2) { return num1 > num2 ? num2 : num1; }
+        private void setStartingGroup()
+        {
+            startingGroup.Clear();
+            for (int i = 0; i < clusterNum; i++)
+            {
+                startingGroup.Add(new StartingGroup());
+            }
+        }
 
         //******************************Not used******************************
         //public void buildOverlayOrder() // 애를 만든다. overlayOrders;

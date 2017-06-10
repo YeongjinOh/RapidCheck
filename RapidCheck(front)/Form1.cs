@@ -28,6 +28,8 @@ namespace RapidCheck
         /*****************/RapidCheck.OverlayVideo rapidCheck;          /*****************/
         /*****************/delegate void rapidModule();                 /*****************/
         /*****************/delegate void rapidChain(rapidModule dele);  /*****************/
+        /*****************/Thread overlayModule;                        /*****************/
+        /*****************/List<rapidModule> myRapidModule = new List<rapidModule>();/*****************/
         //******************************Form******************************
         public Form1()
         {
@@ -53,28 +55,35 @@ namespace RapidCheck
             int clusterNum = 6;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
-            new Thread(() => rapidRun(ref rapidCheck)).Start();
+            
+            rapidFunc();
+            overlayModule = new Thread(() => rapidRun());
+            overlayModule.Start();
         }
         private void basicFlow(rapidModule dele)
         {
             dele();
             progressBar1.PerformStep();
         }
-        private void rapidRun(ref RapidCheck.OverlayVideo rapid)
+        private void rapidFunc()
         {
-            List<rapidModule> myRapidModule = new List<rapidModule>();
-            myRapidModule.Add(rapid.getMysqlObjList);
-            myRapidModule.Add(rapid.addObj);
-            myRapidModule.Add(rapid.imageCrop);
-            myRapidModule.Add(rapid.setFileterObjectidList); //filetering test
-            myRapidModule.Add(rapid.kMeasFunc);
-            myRapidModule.Add(rapid.buildOverlayOrderUsingCluster);
-            setOverlayUI();
-            myRapidModule.Add(rapid.overlayLive);
-
+            myRapidModule.Add(rapidCheck.getMysqlObjList);
+            myRapidModule.Add(rapidCheck.addObj);
+            myRapidModule.Add(rapidCheck.imageCrop);
+            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
+            myRapidModule.Add(rapidCheck.overlayLive);
+        }
+        private void rapidRun()
+        {
             rapidChain myRapidChain = new rapidChain(basicFlow);
             for (int idx = 0; idx < myRapidModule.Count; idx++)
             {
+                if (myRapidModule[idx].Method.ToString() == "Void overlayLive()" )
+                {
+                    setOverlayUI();
+                }
+                MessageBox.Show(myRapidModule[idx].Method.ToString());
                 myRapidChain(myRapidModule[idx]);
             }
             progressBar1.Value = 100;
@@ -91,6 +100,20 @@ namespace RapidCheck
                 videoPath = videoFilePath.FileName;
                 startOverlayModule();
             }
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            overlayModule.Abort();
+            Thread.Sleep(10);
+
+            myRapidModule.Clear();
+            myRapidModule.Add(rapidCheck.setFileterObjectidList); //filetering test
+            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
+            myRapidModule.Add(rapidCheck.overlayLive);
+
+            overlayModule = new Thread(() => rapidRun());
+            overlayModule.Start();
         }
         //******************************UI SETTING******************************
         private void setUI()
@@ -139,12 +162,16 @@ namespace RapidCheck
             //draw time on/off
             radioButtonTimeOn.Enabled = false;
             radioButtonTimeOff.Enabled = false;
+
+            //test filter btn
+            button1.Enabled = false;
         } //default UI setting
         private void setOverlayUI()
         {
             //trackBar
             trackBar1.Minimum = 0;
             trackBar1.Maximum = outputFrameNum - 1;
+            trackBar1.Value = 0;
             //enable
             trackBar1.Enabled = true;
             radioButtonX1.Enabled = true;
@@ -154,6 +181,7 @@ namespace RapidCheck
             radioButtonTimeOn.Enabled = true;
             radioButtonTimeOff.Enabled = true;
             startBtn.Enabled = true;
+            button1.Enabled = true;
         } //UI enable = True
         //******************************UI EVENT******************************
         private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e) //비디오 클릭하면 원본 영상 틀어주는 함수

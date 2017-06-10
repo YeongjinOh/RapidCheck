@@ -117,7 +117,7 @@ namespace RapidCheck
             this.createTime = new System.DateTime(2017, 1, 1, Int32.Parse(createTime.Split(':')[0]), Int32.Parse(createTime.Split(':')[1]), 0);
             this.objType = 1; //default는 둘 다 검색
             this.maxObjectid = 0;
-            startingGroup = new List<StartingGroup>(clusterNum);
+            startingGroup = new List<StartingGroup>();
             for (int i = 0; i < clusterNum; i++)
             {
                 startingGroup.Add(new StartingGroup());
