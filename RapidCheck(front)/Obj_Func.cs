@@ -44,5 +44,23 @@ namespace RapidCheck
             double[] ret = {XWidth, YHeight};
             return ret;
         }
+        public void setStartTime(int frameStep, int frameRate, DateTime createTime)
+        {
+            int passTimeSec, frameHour, frameMin, frameSec;
+
+            int currentFrameNum = cropPositionNum[0] + frameStep;
+            passTimeSec = currentFrameNum / frameRate;
+            frameHour = passTimeSec / 3600;
+            passTimeSec = passTimeSec % 3600;
+            DateTime startTime = createTime;
+            startTime = startTime.AddHours(frameHour);
+            frameMin = passTimeSec / 60;
+            passTimeSec = passTimeSec % 60;
+            startTime = startTime.AddMinutes(frameMin);
+            frameSec = passTimeSec;
+            startTime = startTime.AddSeconds(frameSec);
+
+            this.startTime = startTime;
+        }
     }
 }

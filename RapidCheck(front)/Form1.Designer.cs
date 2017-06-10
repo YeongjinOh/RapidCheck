@@ -33,6 +33,8 @@
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
+            this.radioButtonTimeOff = new System.Windows.Forms.RadioButton();
+            this.radioButtonTimeOn = new System.Windows.Forms.RadioButton();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
@@ -77,11 +79,9 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.radioButtonTimeOn = new System.Windows.Forms.RadioButton();
-            this.radioButtonTimeOff = new System.Windows.Forms.RadioButton();
-            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
-            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
             this.radioButtonCar = new System.Windows.Forms.RadioButton();
+            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
+            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -92,7 +92,6 @@
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
-            this.panelSearch.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
@@ -141,6 +140,30 @@
             this.panelObject.Name = "panelObject";
             this.panelObject.Size = new System.Drawing.Size(438, 670);
             this.panelObject.TabIndex = 2;
+            // 
+            // radioButtonTimeOff
+            // 
+            this.radioButtonTimeOff.AutoSize = true;
+            this.radioButtonTimeOff.Location = new System.Drawing.Point(3, 26);
+            this.radioButtonTimeOff.Name = "radioButtonTimeOff";
+            this.radioButtonTimeOff.Size = new System.Drawing.Size(80, 21);
+            this.radioButtonTimeOff.TabIndex = 17;
+            this.radioButtonTimeOff.Text = "Time off";
+            this.radioButtonTimeOff.UseVisualStyleBackColor = true;
+            this.radioButtonTimeOff.CheckedChanged += new System.EventHandler(this.radioButtonTimeOff_CheckedChanged);
+            // 
+            // radioButtonTimeOn
+            // 
+            this.radioButtonTimeOn.AutoSize = true;
+            this.radioButtonTimeOn.Checked = true;
+            this.radioButtonTimeOn.Location = new System.Drawing.Point(3, 6);
+            this.radioButtonTimeOn.Name = "radioButtonTimeOn";
+            this.radioButtonTimeOn.Size = new System.Drawing.Size(80, 21);
+            this.radioButtonTimeOn.TabIndex = 17;
+            this.radioButtonTimeOn.TabStop = true;
+            this.radioButtonTimeOn.Text = "Time on";
+            this.radioButtonTimeOn.UseVisualStyleBackColor = true;
+            this.radioButtonTimeOn.CheckedChanged += new System.EventHandler(this.radioButtonTimeOn_CheckedChanged);
             // 
             // panelGrid
             // 
@@ -266,7 +289,7 @@
             // 
             this.panelVideoPart.Controls.Add(this.pictureBoxVideo);
             this.panelVideoPart.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelVideoPart.Location = new System.Drawing.Point(0, 67);
+            this.panelVideoPart.Location = new System.Drawing.Point(0, 16);
             this.panelVideoPart.Name = "panelVideoPart";
             this.panelVideoPart.Size = new System.Drawing.Size(1072, 621);
             this.panelVideoPart.TabIndex = 3;
@@ -307,13 +330,10 @@
             // panelSearch
             // 
             this.panelSearch.BackColor = System.Drawing.Color.Transparent;
-            this.panelSearch.Controls.Add(this.radioButtonCar);
-            this.panelSearch.Controls.Add(this.radioButtonPeople);
-            this.panelSearch.Controls.Add(this.radioButtonBoth);
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSearch.Location = new System.Drawing.Point(0, 0);
             this.panelSearch.Name = "panelSearch";
-            this.panelSearch.Size = new System.Drawing.Size(1072, 67);
+            this.panelSearch.Size = new System.Drawing.Size(1072, 16);
             this.panelSearch.TabIndex = 0;
             // 
             // tabPage3
@@ -347,6 +367,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.radioButtonCar);
+            this.tabPage1.Controls.Add(this.radioButtonPeople);
+            this.tabPage1.Controls.Add(this.radioButtonBoth);
             this.tabPage1.Controls.Add(this.direction5);
             this.tabPage1.Controls.Add(this.direction6);
             this.tabPage1.Controls.Add(this.direction4);
@@ -603,65 +626,38 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // radioButtonTimeOn
+            // radioButtonCar
             // 
-            this.radioButtonTimeOn.AutoSize = true;
-            this.radioButtonTimeOn.Checked = true;
-            this.radioButtonTimeOn.Location = new System.Drawing.Point(3, 6);
-            this.radioButtonTimeOn.Name = "radioButtonTimeOn";
-            this.radioButtonTimeOn.Size = new System.Drawing.Size(80, 21);
-            this.radioButtonTimeOn.TabIndex = 17;
-            this.radioButtonTimeOn.TabStop = true;
-            this.radioButtonTimeOn.Text = "Time on";
-            this.radioButtonTimeOn.UseVisualStyleBackColor = true;
-            this.radioButtonTimeOn.CheckedChanged += new System.EventHandler(this.radioButtonTimeOn_CheckedChanged);
-            // 
-            // radioButtonTimeOff
-            // 
-            this.radioButtonTimeOff.AutoSize = true;
-            this.radioButtonTimeOff.Location = new System.Drawing.Point(3, 26);
-            this.radioButtonTimeOff.Name = "radioButtonTimeOff";
-            this.radioButtonTimeOff.Size = new System.Drawing.Size(80, 21);
-            this.radioButtonTimeOff.TabIndex = 17;
-            this.radioButtonTimeOff.Text = "Time off";
-            this.radioButtonTimeOff.UseVisualStyleBackColor = true;
-            this.radioButtonTimeOff.CheckedChanged += new System.EventHandler(this.radioButtonTimeOff_CheckedChanged);
-            // 
-            // radioButtonBoth
-            // 
-            this.radioButtonBoth.AutoSize = true;
-            this.radioButtonBoth.Location = new System.Drawing.Point(27, 3);
-            this.radioButtonBoth.Name = "radioButtonBoth";
-            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
-            this.radioButtonBoth.TabIndex = 0;
-            this.radioButtonBoth.TabStop = true;
-            this.radioButtonBoth.Text = "사람, 자동차";
-            this.radioButtonBoth.UseVisualStyleBackColor = true;
-            this.radioButtonBoth.CheckedChanged += new System.EventHandler(this.radioButtonBoth_CheckedChanged);
+            this.radioButtonCar.AutoSize = true;
+            this.radioButtonCar.Location = new System.Drawing.Point(147, 102);
+            this.radioButtonCar.Name = "radioButtonCar";
+            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
+            this.radioButtonCar.TabIndex = 3;
+            this.radioButtonCar.TabStop = true;
+            this.radioButtonCar.Text = "자동차";
+            this.radioButtonCar.UseVisualStyleBackColor = true;
             // 
             // radioButtonPeople
             // 
             this.radioButtonPeople.AutoSize = true;
-            this.radioButtonPeople.Location = new System.Drawing.Point(27, 25);
+            this.radioButtonPeople.Location = new System.Drawing.Point(146, 81);
             this.radioButtonPeople.Name = "radioButtonPeople";
             this.radioButtonPeople.Size = new System.Drawing.Size(53, 21);
-            this.radioButtonPeople.TabIndex = 0;
+            this.radioButtonPeople.TabIndex = 4;
             this.radioButtonPeople.TabStop = true;
             this.radioButtonPeople.Text = "사람";
             this.radioButtonPeople.UseVisualStyleBackColor = true;
-            this.radioButtonPeople.CheckedChanged += new System.EventHandler(this.radioButtonPeople_CheckedChanged);
             // 
-            // radioButtonCar
+            // radioButtonBoth
             // 
-            this.radioButtonCar.AutoSize = true;
-            this.radioButtonCar.Location = new System.Drawing.Point(24, 46);
-            this.radioButtonCar.Name = "radioButtonCar";
-            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
-            this.radioButtonCar.TabIndex = 0;
-            this.radioButtonCar.TabStop = true;
-            this.radioButtonCar.Text = "자동차";
-            this.radioButtonCar.UseVisualStyleBackColor = true;
-            this.radioButtonCar.CheckedChanged += new System.EventHandler(this.radioButtonCar_CheckedChanged);
+            this.radioButtonBoth.AutoSize = true;
+            this.radioButtonBoth.Location = new System.Drawing.Point(146, 59);
+            this.radioButtonBoth.Name = "radioButtonBoth";
+            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
+            this.radioButtonBoth.TabIndex = 5;
+            this.radioButtonBoth.TabStop = true;
+            this.radioButtonBoth.Text = "사람, 자동차";
+            this.radioButtonBoth.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -674,7 +670,6 @@
             this.Name = "Form1";
             this.Text = "RapidCheck";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.panelObject.ResumeLayout(false);
@@ -687,8 +682,6 @@
             this.panelVideoPart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
-            this.panelSearch.ResumeLayout(false);
-            this.panelSearch.PerformLayout();
             this.tabPage3.ResumeLayout(false);
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();

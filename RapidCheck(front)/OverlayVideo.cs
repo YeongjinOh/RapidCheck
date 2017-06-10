@@ -59,7 +59,9 @@ namespace RapidCheck
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
-        private int speed;
+        public int speed{get;set;}
+        public int fps { get; set; }
+        private int maxObjectid;
         private System.DateTime createTime;
         private int frameRate;
         public bool drawTime { get; set; }
@@ -83,8 +85,8 @@ namespace RapidCheck
         public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
-            drawFont = new System.Drawing.Font("Arial", 12);
-            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            drawFont = new System.Drawing.Font("Arial", 14);
+            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
             //UI
             this.dataGridView = dataGridView;
             this.trackingBar = TrackingBar;
@@ -114,6 +116,7 @@ namespace RapidCheck
             this.drawTime = true;
             this.createTime = new System.DateTime(2017, 1, 1, Int32.Parse(createTime.Split(':')[0]), Int32.Parse(createTime.Split(':')[1]), 0);
             this.objType = 1; //default는 둘 다 검색
+            this.maxObjectid = 0;
             startingGroup = new List<StartingGroup>(clusterNum);
             for (int i = 0; i < clusterNum; i++)
             {
@@ -127,6 +130,8 @@ namespace RapidCheck
             videoWidth = reader.Width;
             videoHeight = reader.Height;
             background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
+            fps = reader.FrameRate;
+            
             if(maxFrameNum == 0)
             {
                 this.maxFrameNum = (int)reader.FrameCount;
