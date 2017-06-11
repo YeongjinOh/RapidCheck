@@ -4,115 +4,7 @@
 
 using namespace cv;
 
-/**
-	Show trajectory
-*/
-void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars)
-{
-	VideoCapture cap(VIDEOFILE);
 
-	// initialize colors	
-	vector<Scalar> colors = getRandomColors();
-
-	// show trajectories
-	Mat frame, frameOrigin, frameSkipped;
-	int timeToSleep = 130;
-	while (true) {
-		int objectId = 0;
-		cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
-		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
-		{
-			// Segment & segment = segments[segmentNumber];
-			printf("segmentNum : %d\n", segmentNumber);
-			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
-			{
-				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
-				// cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-				cap >> frame;
-				for (int i = 1; i < FRAME_STEP; i++)
-					cap >> frame;
-
-				frame.copyTo(frameOrigin);
-
-				// draw pedestrian
-				for (int objectId = 0; objectId < trajectoryPedestrians.size(); objectId++)
-				{
-					RCTrajectory& trajectory = trajectoryPedestrians[objectId];
-					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
-					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
-					rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId) % NUM_OF_COLORS], 2);
-					if (INSERT_TRACKING_INTO_DB)
-					{
-						db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
-					}
-					putText(frame, "Pede #" + to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, colors[(objectId) % NUM_OF_COLORS], 2);
-				}
-
-				for (int objectId = 0; objectId < trajectoryCars.size(); objectId++)
-				{
-					RCTrajectory& trajectory = trajectoryCars[objectId];
-					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
-					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
-					Scalar carColor = colors[(objectId + trajectoryPedestrians.size()) % NUM_OF_COLORS];
-					rectangle(frame, currentFramePedestrian.getTargetArea(), carColor, 2);
-					if (INSERT_TRACKING_INTO_DB)
-					{
-						db.insertTracking(videoId, objectId, frameNum, currentFramePedestrian.getTargetArea().x, currentFramePedestrian.getTargetArea().y, currentFramePedestrian.getTargetArea().width, currentFramePedestrian.getTargetArea().height);
-					}
-					putText(frame, "Car #" + to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, carColor, 2);
-				}
-
-				vector<Rect> pedestrianRects = framePedestrians[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
-				for (int i = 0; i < pedestrianRects.size(); i++) {
-					rectangle(frameOrigin, pedestrianRects[i], WHITE, 2);
-				}
-				vector<Rect> carRects = frameCars[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
-				for (int i = 0; i < carRects.size(); i++) {
-					rectangle(frameOrigin, carRects[i], CYAN, 2);
-				}
-
-				rectangle(frame, Rect(0, 0, 180, 30), WHITE, -1);
-				rectangle(frameOrigin, Rect(0, 0, 180, 30), WHITE, -1);
-				putText(frame, "Frame #" + to_string(frameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
-				putText(frameOrigin, "Frame #" + to_string(frameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
-				imshow("Trajectory", frame);
-				imshow("Detection response", frameOrigin);
-
-				// key handling
-				int key = waitKey(timeToSleep);
-
-				if (key == 27) break;
-				else if (key == (int)('r'))
-				{
-					segmentNumber = NUM_OF_SEGMENTS;
-					break;
-				}
-				else if (key == (int)('p'))
-				{
-					key = waitKey(0);
-				}
-				else if (key == (int)('['))
-				{
-					timeToSleep += 10;
-				}
-				else if (key == (int)(']'))
-				{
-					timeToSleep -= 10;
-					if (timeToSleep < 1)
-						timeToSleep = 1;
-				}
-				else if (key == (int)('b'))
-				{
-					segmentNumber = max(0, segmentNumber-10);
-					frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
-					cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
-					break;
-				}
-			}
-		}
-		waitKey(0);
-	}
-}
 
 void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectories)
 {
@@ -135,7 +27,8 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 	{
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& curSegmentTracklets = segment.getTracklets();
-		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
+		if (DEBUG)
+			printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
 
 		// move trajectories finished from trajectoriesStillBeingTracked to trajectoriesFinished
 		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end();)
@@ -172,11 +65,14 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 					if (similarity > TRAJECTORY_MATCH_SIMILARITY_THRES)
 						graphSimilarity[i][j] = similarity;
 				}
-				printf("%.2lf ", graphSimilarity[i][j]);
+				if (DEBUG)
+					printf("%.2lf ", graphSimilarity[i][j]);
 			}
-			std::cout << endl;
+			if (DEBUG)
+				printf("\n");
 		}
-		std::cout << endl;
+		if (DEBUG)
+			printf("\n");
 		vector<bool> mergedNextTracket(curSegmentTracklets.size(), false);
 		while (true)
 		{
@@ -283,7 +179,7 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 
 	@param app frame reader with basic parameters set
 */
-void buildAndShowTrajectory(App app)
+void buildAndShowTrajectory()
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
@@ -297,11 +193,12 @@ void buildAndShowTrajectory(App app)
 	}
 	else
 	{
-		detectTargets(app, cap, framePedestrians);
-		//detectAndInsertResultIntoDB(app, cap);
+		detectTargets(cap, framePedestrians);
+		// detectAndInsertResultIntoDB(cap);
 	}
 	t = clock() - t;
-	printf("Detection takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Detection takes %d(ms)\n", t);
 	
 	// build all tracklets
 	t = clock();
@@ -309,7 +206,8 @@ void buildAndShowTrajectory(App app)
 	buildTracklets(framePedestrians, segmentPedestrians);
 	buildTracklets(frameCars, segmentCars);
 	t = clock() - t;
-	printf("Tracklet takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Tracklet takes %d(ms)\n", t);
 
 
 	// build trajectories
@@ -318,17 +216,19 @@ void buildAndShowTrajectory(App app)
 	buildTrajectory(segmentPedestrians, trajectoryPedestrians);
 	buildTrajectory(segmentCars, trajectoryCars);
 	t = clock() - t;
-	printf("Trajectory takes %d(ms)\n", t);
+	//if (DEBUG)
+		printf("Trajectory takes %d(ms)\n", t);
 	
-
-	// insert direction counts into DB
+	// insert into DB
+	if (INSERT_TRACKING_INTO_DB)
+	{
+		insertTrackingIntoDB(trajectoryPedestrians, trajectoryCars);
+	}
 	if (INSERT_OBJECT_INFO_INTO_DB)
 	{
-		insertObjectInfoIntoDB(trajectoryPedestrians);
-		insertObjectInfoIntoDB(trajectoryCars);
+		insertObjectInfoIntoDB(trajectoryPedestrians, trajectoryCars);
 	}
 		
-	// show Trajectory
-	
+	// show Trajectory	
 	showTrajectory(framePedestrians, frameCars, trajectoryPedestrians, trajectoryCars);
 }

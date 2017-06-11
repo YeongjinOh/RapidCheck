@@ -32,14 +32,15 @@ def conv_weigths_flatten(layer_weights_comp):
 	return flatten
 
 class DB_Item:
-	def __init__(self, videoId, frameNum, _class, x, y, w, h):
+	def __init__(self, videoId, frameNum, _class, x, y, w, h, confidence):
 		self.videoId = videoId
 		self.frameNum = frameNum
 		self._class = _class
 		self.x, self.y, self.w, self.h = x, y, w, h
+		self.confidence = confidence
 
 	def to_list(self):
-		return [self.videoId, self.frameNum, self._class, self.x, self.y, self.w, self.h]
+		return [self.videoId, self.frameNum, self._class, self.x, self.y, self.w, self.h, self.confidence]
 
 class DB_Helper:
 	curr_table_name = 'detection2'
@@ -60,7 +61,7 @@ class DB_Helper:
 			table_name = self.curr_table_name
 		
 		# if table column change, it also need to change for sequence by changed table.
-		sql = 'insert into '+table_name+' values (NULL, {}, {}, {}, {}, {}, {}, {})'
+		sql = 'insert into '+table_name+' values (NULL, {}, {}, {}, {}, {}, {}, {}, {})'
 		for each_item in items:
 			self.curs.execute(sql.format(*each_item.to_list()))
 		self.conn.commit()
@@ -68,13 +69,19 @@ class DB_Helper:
 	def select(self, table_name=None, condition=None):
 		if table_name is None:
 			table_name = self.curr_table_name
-
+		
 		sql = "select * from "+table_name
+		if condition:
+			for key in condition:
+				sql += ' where {}={}'.format(key, condition[key])
+
 		self.curs.execute(sql)
  
 		# Data Fetch
 		rows = self.curs.fetchall()
-		print(type(rows), rows)
+		rows = rows[0]
+		# print(type(rows), rows) # <class 'tuple'> ((4, 'C:videoscctv5.mp4', 5, 0, None),)
+		return {'videoId':rows[0], 'videoPath':rows[1], 'frameSteps':rows[2], 'status':rows[3]}
 
 	def delete(self, table_name=None):
 		if table_name is None:

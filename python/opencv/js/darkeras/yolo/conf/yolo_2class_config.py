@@ -9,7 +9,7 @@ only 2class classifier yolo model config
 import os
 
 model_folder = os.path.join('models', 'train', 'yolo-2class-cell14')
-model_name = 'base-voc2007-with-dropout-05'
+model_name = 'from-cell14-mydata-tracking-mydata-20000'
 classes_name = ["car", "person"]
 
 # dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')

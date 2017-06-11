@@ -169,7 +169,7 @@ def post_progress(net_out, im, is_save = True, threshold=0.01):
 		#    2, 1.5, (0, 0, 255))
 		cv2.putText(imgcv, class_name+" {:.2f}".format(confidence), (int(left), int(top-12)), 2, 1.5, class_color)
 		# append objects
-		objects.append([max_indx, left, top, int(right-left), int(bot-top)])
+		objects.append([max_indx, left, top, int(right-left), int(bot-top), confidence])
 	if not is_save: 
 		# not save
 		# to db

@@ -78,10 +78,10 @@ public:
 		insert(query);
 	}
 	
-	void selectTracking(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
+	void selectTracking(vector<vector<int> >& rows, int videoId, int classId, int start_frame, int end_frame, int frame_step)
 	{
-		char query[200];
-		sprintf(query, "SELECT objectId, frameNum, x, y, width, height FROM tracking WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
+		char query[500];
+		sprintf(query, "SELECT tracking.objectId, frameNum, x, y, width, height FROM tracking INNER JOIN objectInfo ON tracking.videoId = objectinfo.videoId and tracking.objectId = objectinfo.objectId WHERE tracking.videoId = %d AND objectinfo.classId = %d AND tracking.frameNum >= %d AND tracking.frameNum < %d AND tracking.frameNum %c %d = %d;", videoId, classId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
 		select(query, rows);
 	}
 	void selectDetection(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
@@ -96,7 +96,7 @@ public:
 		sprintf(query, "SELECT frameNum, x, y, width, height, class FROM detection2 WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d and class = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step, classId);
 		select(query, rows);
 	}
-	void insertObjectInfo(int videoId, int objectId, vector<float> directionRatios, double speed, vector<float> colorRatios)
+	void insertObjectInfo(int videoId, int objectId, int classId, vector<float> directionRatios, double speed, vector<float> colorRatios)
 	{
 		if (speed >= 10000.0)
 		{
@@ -116,7 +116,7 @@ public:
 		string colorValues = "";
 		for (int i = 0; i < NUM_OF_COLOR_CLASSES; i++)
 			colorValues += std::to_string(colorRatios[i]).substr(0,5) + ", ";
-		sprintf(query, "INSERT INTO objectInfo (videoId, objectId, %s %s speed) VALUES (%d, %d, %s %s %8lf);", directionKeys.c_str(), colorKeys.c_str(), videoId, objectId, directionValues.c_str(), colorValues.c_str(), speed);
+		sprintf(query, "INSERT INTO objectInfo (videoId, objectId, classId, %s %s speed) VALUES (%d, %d, %d, %s %s %8lf);", directionKeys.c_str(), colorKeys.c_str(), videoId, objectId, classId, directionValues.c_str(), colorValues.c_str(), speed);
 		insert(query);
 	}
 };

@@ -30,11 +30,11 @@ using cv::RNG;
 #define RED Scalar(0,0,255)
 #define CYAN Scalar(255,255,0)
 
-void showDetection(App app);
-void showTrackletClusters(App app);
-void showTracklet(App app);
-void buildAndShowTrajectory(App app);
-void compareSimilarity(App app);
+void showDetection();
+void showTrackletClusters();
+void showTracklet();
+void buildAndShowTrajectory();
+void compareSimilarity();
 void showTrajectory();
 
 // Database

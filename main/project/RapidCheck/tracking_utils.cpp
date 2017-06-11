@@ -568,8 +568,10 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 }
 
 // Detect targets in MAX_FRAMES frames
-void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
+void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 {
+	App app = App();
+
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
 	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
@@ -586,12 +588,14 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	int frameNum = START_FRAME_NUM;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
-	cout << "total frame count : " << totalFrameCount << endl;
+	if (DEBUG)
+		printf("total frame count : %d\n", totalFrameCount);
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
 	{
 		if (frameNum >= totalFrameCount)
 		{
-			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			if (DEBUG)
+				printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
 		
@@ -679,16 +683,16 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	int frameNum = START_FRAME_NUM;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
-	cout << "total frame count : " << totalFrameCount << endl;
+	if (DEBUG)
+		printf("total frame count : %d\n", totalFrameCount);
 
 	// read detection result from database and build mapFrameNumToPedestrians
 	vector<vector<int> > detectionResultsPedestrians, detectionResultsCars;
 	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
-	//db.selectDetection(detectionResultsPedestrians, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
-	db.selectDetection2(detectionResultsPedestrians, videoId, 1, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
-
-	int carClassId = 0;
-	db.selectDetection2(detectionResultsCars, videoId, carClassId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	
+	// TODO : use detection table
+	db.selectDetection2(detectionResultsPedestrians, videoId, CLASS_ID_PEDESTRIAN, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	db.selectDetection2(detectionResultsCars, videoId, CLASS_ID_CAR, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	
 	for (int i = 0; i < detectionResultsPedestrians.size(); i++)
 	{
@@ -707,8 +711,13 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	{
 		if (frameNum >= totalFrameCount)
 		{
-			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			if (DEBUG)
+				printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
+		}
+		if (frameCnt % 1000 == 0 && DEBUG)
+		{
+			printf("readTarget of frameCnt #%d\n", frameCnt);
 		}
 
 		// get frame from the video
@@ -790,11 +799,11 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 }
 
 // Read trajectories in MAX_FRAMES frames from DataBase
-void readTrajectories(vector<RCTrajectory>& trajectories)
+void readTrajectories(vector<RCTrajectory>& trajectories, int classId)
 {
 	vector<vector<int > > res;
 	map<int, int> objectIdToIdx; // convert objectId to index of trajectories
-	db.selectTracking(res, videoId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	db.selectTracking(res, videoId, classId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
 	for (int i = 0; i < res.size(); i++) {
 		int objectId = res[i][0], frameNum = res[i][1], x = res[i][2], y = res[i][3], width = res[i][4], height = res[i][5];
 		Target target(Rect(x, y, width, height));
@@ -806,26 +815,28 @@ void readTrajectories(vector<RCTrajectory>& trajectories)
 		}
 		trajectories[objectIdToIdx[objectId]].addTarget(target);
 	}
-
 }
 
 
 // Detect targets in MAX_FRAMES frames and insert result into DB
-void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
+void detectAndInsertResultIntoDB(VideoCapture& cap)
 {
-	
+	App app = App();
+
 	Mat frame, frameSkipped;
 	int frameNum = START_FRAME_NUM;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
-	cout << "total frame count : " << totalFrameCount << endl;
+	if (DEBUG)
+		printf("total frame count : %d\n", totalFrameCount);
 	int classId = 0;
 	time_t t = clock();
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
 	{
 		if (frameNum >= totalFrameCount)
 		{
-			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			if (DEBUG)
+				printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
 		
@@ -850,7 +861,8 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 		}
 	}
 	t = clock() - t;
-	printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
+	if (DEBUG)
+		printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
 }
 
 // Build all tracklets of given frames
@@ -951,12 +963,147 @@ void buildAllTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& ml
 	}
 }
 
-
-void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories)
+void insertTrackingIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars)
 {
-	for (int i = 0; i < trajectories.size(); i++)
+	for (int objectId = 0; objectId < trajectoryPedestrians.size(); objectId++)
 	{
-		trajectories[i].normalizeColorRatios();
-		db.insertObjectInfo(VIDEOID, i, trajectories[i].getDirectionRatios(), 0.0, trajectories[i].getColorRatios());
+		RCTrajectory& curTrajectoryPedestrian = trajectoryPedestrians[objectId];
+		std::vector<Target> targetPedestrians = curTrajectoryPedestrian.getTargets();
+		int startFrameNum = curTrajectoryPedestrian.getStartSegmentNum() * LOW_LEVEL_TRACKLETS * FRAME_STEP;
+		for (int targetId = 0; targetId < targetPedestrians.size(); targetId++)
+		{
+			Rect& targetArea = targetPedestrians[targetId].getTargetArea();
+			db.insertTracking(videoId, objectId, startFrameNum + targetId * FRAME_STEP, targetArea.x, targetArea.y, targetArea.width, targetArea.height);
+		}
+
+	}
+	for (int objectId = 0; objectId < trajectoryCars.size(); objectId++)
+	{
+		RCTrajectory& curTrajectoryCar = trajectoryCars[objectId];
+		std::vector<Target> targetCars = curTrajectoryCar.getTargets();
+		int startFrameNum = curTrajectoryCar.getStartSegmentNum() * LOW_LEVEL_TRACKLETS * FRAME_STEP;
+		for (int targetId = 0; targetId < targetCars.size(); targetId++)
+		{
+			Rect& targetArea = targetCars[targetId].getTargetArea();
+			db.insertTracking(videoId, trajectoryPedestrians.size() + objectId, startFrameNum + targetId * FRAME_STEP, targetArea.x, targetArea.y, targetArea.width, targetArea.height);
+		}
+	}
+}
+
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars)
+{
+	for (int i = 0; i < trajectoryPedestrians.size(); i++)
+	{
+		trajectoryPedestrians[i].normalizeColorRatios();
+		db.insertObjectInfo(VIDEOID, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), 0.0, trajectoryPedestrians[i].getColorRatios());
+	}
+	for (int i = 0; i < trajectoryCars.size(); i++)
+	{
+		trajectoryCars[i].normalizeColorRatios();
+		db.insertObjectInfo(VIDEOID, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), 0.0, trajectoryCars[i].getColorRatios());
+	}
+}
+
+void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars)
+{
+	VideoCapture cap(VIDEOFILE);
+
+	// initialize colors	
+	vector<Scalar> colors = getRandomColors();
+
+	// show trajectories
+	double resizeRatio = 0.75;
+	int marginTop = 200;
+	namedWindow("Trajectory");
+	namedWindow("Detection response");
+	moveWindow("Trajectory", 0, marginTop);
+	moveWindow("Detection response", cap.get(CV_CAP_PROP_FRAME_WIDTH) * resizeRatio, marginTop);
+	
+	Mat frame, frameOrigin, frameSkipped;
+	int timeToSleep = 130;
+	while (true) {
+		int objectId = 0;
+		cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
+		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+		{
+			if (DEBUG)
+				printf("segmentNum : %d\n", segmentNumber);
+			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
+			{
+				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+				cap >> frame;
+				for (int i = 1; i < FRAME_STEP; i++)
+					cap >> frame;
+
+				frame.copyTo(frameOrigin);
+				for (int objectId = 0; objectId < trajectoryPedestrians.size(); objectId++)
+				{
+					RCTrajectory& trajectory = trajectoryPedestrians[objectId];
+					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
+					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
+					rectangle(frame, currentFramePedestrian.getTargetArea(), colors[(objectId) % NUM_OF_COLORS], 2);
+					putText(frame, "Pede #" + to_string(objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, colors[(objectId) % NUM_OF_COLORS], 2);
+				}
+				for (int objectId = 0; objectId < trajectoryCars.size(); objectId++)
+				{
+					RCTrajectory& trajectory = trajectoryCars[objectId];
+					if (segmentNumber < trajectory.getStartSegmentNum() || segmentNumber > trajectory.getEndSegmentNum()) continue;
+					Target& currentFramePedestrian = trajectory.getTarget(LOW_LEVEL_TRACKLETS * (segmentNumber - trajectory.getStartSegmentNum()) + frameIdx);
+					Scalar carColor = colors[(objectId + trajectoryPedestrians.size()) % NUM_OF_COLORS];
+					rectangle(frame, currentFramePedestrian.getTargetArea(), carColor, 2);
+					putText(frame, "Car #" + to_string(trajectoryPedestrians.size() + objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, carColor, 2);
+				}
+
+				vector<Rect> pedestrianRects = framePedestrians[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
+				for (int i = 0; i < pedestrianRects.size(); i++) {
+					rectangle(frameOrigin, pedestrianRects[i], WHITE, 2);
+				}
+				vector<Rect> carRects = frameCars[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
+				for (int i = 0; i < carRects.size(); i++) {
+					rectangle(frameOrigin, carRects[i], CYAN, 2);
+				}
+
+				rectangle(frame, Rect(0, 0, 180, 30), WHITE, -1);
+				rectangle(frameOrigin, Rect(0, 0, 180, 30), WHITE, -1);
+				putText(frame, "Frame #" + to_string(frameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
+				putText(frameOrigin, "Frame #" + to_string(frameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
+				resize(frame, frame, Size(frame.size().width * resizeRatio, frame.size().height * resizeRatio));
+				resize(frameOrigin, frameOrigin, Size(frameOrigin.size().width * resizeRatio, frameOrigin.size().height * resizeRatio));
+				imshow("Trajectory", frame);
+				imshow("Detection response", frameOrigin);
+
+				// key handling
+				int key = waitKey(timeToSleep);
+
+				if (key == 27) break;
+				else if (key == (int)('r'))
+				{
+					segmentNumber = NUM_OF_SEGMENTS;
+					break;
+				}
+				else if (key == (int)('p'))
+				{
+					key = waitKey(0);
+				}
+				else if (key == (int)('['))
+				{
+					timeToSleep += 10;
+				}
+				else if (key == (int)(']'))
+				{
+					timeToSleep -= 10;
+					if (timeToSleep < 1)
+						timeToSleep = 1;
+				}
+				else if (key == (int)('b'))
+				{
+					segmentNumber = max(0, segmentNumber - 10);
+					frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+					cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+					break;
+				}
+			}
+		}
+		waitKey(0);
 	}
 }
