@@ -33,12 +33,20 @@
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
-            this.radioButtonTimeOff = new System.Windows.Forms.RadioButton();
-            this.radioButtonTimeOn = new System.Windows.Forms.RadioButton();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.시간출력ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.onToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.방향설정ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.아래ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.색상설정ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.검정ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.하얀ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelProgress = new System.Windows.Forms.Panel();
             this.VideoBtn = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -61,7 +69,6 @@
             this.direction5 = new System.Windows.Forms.Button();
             this.direction6 = new System.Windows.Forms.Button();
             this.direction4 = new System.Windows.Forms.Button();
-            this.direction = new System.Windows.Forms.Button();
             this.direction7 = new System.Windows.Forms.Button();
             this.direction3 = new System.Windows.Forms.Button();
             this.direction8 = new System.Windows.Forms.Button();
@@ -82,12 +89,13 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
+            this.조건초기화ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
             this.panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.panelProgress.SuspendLayout();
             this.panelVideo.SuspendLayout();
             this.panelVideoPart.SuspendLayout();
@@ -133,39 +141,13 @@
             // panelObject
             // 
             this.panelObject.BackColor = System.Drawing.Color.Transparent;
-            this.panelObject.Controls.Add(this.button1);
-            this.panelObject.Controls.Add(this.radioButtonTimeOff);
-            this.panelObject.Controls.Add(this.radioButtonTimeOn);
             this.panelObject.Controls.Add(this.panelGrid);
+            this.panelObject.Controls.Add(this.menuStrip1);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
             this.panelObject.Name = "panelObject";
             this.panelObject.Size = new System.Drawing.Size(438, 670);
             this.panelObject.TabIndex = 2;
-            // 
-            // radioButtonTimeOff
-            // 
-            this.radioButtonTimeOff.AutoSize = true;
-            this.radioButtonTimeOff.Location = new System.Drawing.Point(3, 26);
-            this.radioButtonTimeOff.Name = "radioButtonTimeOff";
-            this.radioButtonTimeOff.Size = new System.Drawing.Size(80, 21);
-            this.radioButtonTimeOff.TabIndex = 17;
-            this.radioButtonTimeOff.Text = "Time off";
-            this.radioButtonTimeOff.UseVisualStyleBackColor = true;
-            this.radioButtonTimeOff.CheckedChanged += new System.EventHandler(this.radioButtonTimeOff_CheckedChanged);
-            // 
-            // radioButtonTimeOn
-            // 
-            this.radioButtonTimeOn.AutoSize = true;
-            this.radioButtonTimeOn.Checked = true;
-            this.radioButtonTimeOn.Location = new System.Drawing.Point(3, 6);
-            this.radioButtonTimeOn.Name = "radioButtonTimeOn";
-            this.radioButtonTimeOn.Size = new System.Drawing.Size(80, 21);
-            this.radioButtonTimeOn.TabIndex = 17;
-            this.radioButtonTimeOn.TabStop = true;
-            this.radioButtonTimeOn.Text = "Time on";
-            this.radioButtonTimeOn.UseVisualStyleBackColor = true;
-            this.radioButtonTimeOn.CheckedChanged += new System.EventHandler(this.radioButtonTimeOn_CheckedChanged);
             // 
             // panelGrid
             // 
@@ -204,6 +186,89 @@
             this.Column2.HeaderText = "Contents";
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.시간출력ToolStripMenuItem,
+            this.조건초기화ToolStripMenuItem,
+            this.방향설정ToolStripMenuItem,
+            this.색상설정ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(438, 28);
+            this.menuStrip1.TabIndex = 19;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 시간출력ToolStripMenuItem
+            // 
+            this.시간출력ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.onToolStripMenuItem,
+            this.offToolStripMenuItem});
+            this.시간출력ToolStripMenuItem.Name = "시간출력ToolStripMenuItem";
+            this.시간출력ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
+            this.시간출력ToolStripMenuItem.Text = "시간 출력";
+            // 
+            // onToolStripMenuItem
+            // 
+            this.onToolStripMenuItem.Name = "onToolStripMenuItem";
+            this.onToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
+            this.onToolStripMenuItem.Text = "On";
+            this.onToolStripMenuItem.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
+            // 
+            // offToolStripMenuItem
+            // 
+            this.offToolStripMenuItem.Name = "offToolStripMenuItem";
+            this.offToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
+            this.offToolStripMenuItem.Text = "Off";
+            this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
+            // 
+            // 방향설정ToolStripMenuItem
+            // 
+            this.방향설정ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem2,
+            this.아래ToolStripMenuItem});
+            this.방향설정ToolStripMenuItem.Name = "방향설정ToolStripMenuItem";
+            this.방향설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
+            this.방향설정ToolStripMenuItem.Text = "방향 설정";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(98, 26);
+            this.toolStripMenuItem2.Text = "↑";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.UpToolStripMenuItem2_Click);
+            // 
+            // 아래ToolStripMenuItem
+            // 
+            this.아래ToolStripMenuItem.Name = "아래ToolStripMenuItem";
+            this.아래ToolStripMenuItem.Size = new System.Drawing.Size(98, 26);
+            this.아래ToolStripMenuItem.Text = "↓";
+            this.아래ToolStripMenuItem.Click += new System.EventHandler(this.DownToolStripMenuItem_Click);
+            // 
+            // 색상설정ToolStripMenuItem
+            // 
+            this.색상설정ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.검정ToolStripMenuItem,
+            this.하얀ToolStripMenuItem});
+            this.색상설정ToolStripMenuItem.Name = "색상설정ToolStripMenuItem";
+            this.색상설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
+            this.색상설정ToolStripMenuItem.Text = "색상 설정";
+            // 
+            // 검정ToolStripMenuItem
+            // 
+            this.검정ToolStripMenuItem.Name = "검정ToolStripMenuItem";
+            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.검정ToolStripMenuItem.Text = "검정";
+            this.검정ToolStripMenuItem.Click += new System.EventHandler(this.BlackToolStripMenuItem_Click);
+            // 
+            // 하얀ToolStripMenuItem
+            // 
+            this.하얀ToolStripMenuItem.Name = "하얀ToolStripMenuItem";
+            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.하얀ToolStripMenuItem.Text = "하얀";
             // 
             // panelProgress
             // 
@@ -375,7 +440,6 @@
             this.tabPage1.Controls.Add(this.direction5);
             this.tabPage1.Controls.Add(this.direction6);
             this.tabPage1.Controls.Add(this.direction4);
-            this.tabPage1.Controls.Add(this.direction);
             this.tabPage1.Controls.Add(this.direction7);
             this.tabPage1.Controls.Add(this.direction3);
             this.tabPage1.Controls.Add(this.direction8);
@@ -462,15 +526,6 @@
             this.direction4.Text = "→";
             this.direction4.UseVisualStyleBackColor = true;
             this.direction4.Click += new System.EventHandler(this.direction4_Click);
-            // 
-            // direction
-            // 
-            this.direction.Location = new System.Drawing.Point(779, 87);
-            this.direction.Name = "direction";
-            this.direction.Size = new System.Drawing.Size(46, 46);
-            this.direction.TabIndex = 2;
-            this.direction.Text = "direction";
-            this.direction.UseVisualStyleBackColor = true;
             // 
             // direction7
             // 
@@ -661,15 +716,12 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // button1
+            // 조건초기화ToolStripMenuItem
             // 
-            this.button1.Location = new System.Drawing.Point(222, 14);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(128, 30);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "filter test";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.조건초기화ToolStripMenuItem.Name = "조건초기화ToolStripMenuItem";
+            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
+            this.조건초기화ToolStripMenuItem.Text = "조건 초기화";
+            this.조건초기화ToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -678,6 +730,7 @@
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
             this.Font = new System.Drawing.Font("Segoe UI Symbol", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.Text = "RapidCheck";
@@ -688,6 +741,8 @@
             this.panelObject.PerformLayout();
             this.panelGrid.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.panelProgress.ResumeLayout(false);
             this.panelVideo.ResumeLayout(false);
             this.panelVideo.PerformLayout();
@@ -728,7 +783,6 @@
         private System.Windows.Forms.Button direction5;
         private System.Windows.Forms.Button direction6;
         private System.Windows.Forms.Button direction4;
-        private System.Windows.Forms.Button direction;
         private System.Windows.Forms.Button direction7;
         private System.Windows.Forms.Button direction3;
         private System.Windows.Forms.Button direction8;
@@ -753,12 +807,20 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.RadioButton radioButtonTimeOff;
-        private System.Windows.Forms.RadioButton radioButtonTimeOn;
         private System.Windows.Forms.RadioButton radioButtonCar;
         private System.Windows.Forms.RadioButton radioButtonPeople;
         private System.Windows.Forms.RadioButton radioButtonBoth;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 시간출력ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem onToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem offToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 방향설정ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 아래ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem 색상설정ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 검정ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 하얀ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 조건초기화ToolStripMenuItem;
     }
 }
 
