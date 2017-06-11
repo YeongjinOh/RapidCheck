@@ -57,11 +57,6 @@ namespace RapidCheck
                         MySqlCommand cmd = new MySqlCommand(insertCMD, conn);
                         cmd.ExecuteNonQuery();
                     }
-                   
-
-
-
-
 
                     //SELECT
                     SQL = String.Format("Select videoId, status from rapidcheck.file where path=\"{0}\"", videoPath);
@@ -84,9 +79,14 @@ namespace RapidCheck
                             // TODO : read config file and change file path relatively
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
                             string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1}", videoid, maxFrameNum);
-                            Process P = Process.Start(pro, args);
-                            P.WaitForExit();
-                            int result = P.ExitCode;
+                            var p = new System.Diagnostics.Process();
+                            p.StartInfo.FileName = pro;
+                            p.StartInfo.Arguments = args;
+                            p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                            p.Start();
+                            p.WaitForExit();
+
+                            int result = p.ExitCode;
                             if (result == 0)
                             {
                                 SQL = string.Format("UPDATE file SET status=1 WHERE videoId = {0};", videoid);
@@ -115,9 +115,13 @@ namespace RapidCheck
 
                             string pro = @"C:\Users\SoMa\Desktop\RapidCheck\main\Tracking_Engine\x64\Debug\Tracking_Engine.exe";
                             string args = string.Format("{0} {1}", videoid, maxFrameNum);
-                            Process P = Process.Start(pro, args);
-                            P.WaitForExit();
-                            int result = P.ExitCode;
+                            var p = new System.Diagnostics.Process();
+                            p.StartInfo.FileName = pro;
+                            p.StartInfo.Arguments = args;
+                            p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                            p.Start();
+                            p.WaitForExit();
+                            int result = p.ExitCode;
                             if (result == 0)
                             {
                                 SQL = string.Format("UPDATE file SET status=2 WHERE videoId = {0};", videoid);

@@ -49,7 +49,7 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 100;
+            int maxFrameNum = 10000;
             //int frameStep = 3;
             int analysisFPS = 5; //default
             int minTrackingLength = 29;
