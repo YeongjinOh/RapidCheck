@@ -43,7 +43,7 @@ class DB_Item:
 		return [self.videoId, self.frameNum, self._class, self.x, self.y, self.w, self.h, self.confidence]
 
 class DB_Helper:
-	curr_table_name = 'detection2'
+	curr_table_name = 'detection'
 	def __init__(self, conn=None, curs=None):
 		self.conn = conn # db connection
 		self.curs = curs # db cursor
@@ -61,7 +61,7 @@ class DB_Helper:
 			table_name = self.curr_table_name
 		
 		# if table column change, it also need to change for sequence by changed table.
-		sql = 'insert into '+table_name+' values (NULL, {}, {}, {}, {}, {}, {}, {}, {})'
+		sql = 'insert into '+table_name+' (videoId, frameNum, classId, x, y, width, height, confidence) values ({}, {}, {}, {}, {}, {}, {}, {});'
 		for each_item in items:
 			self.curs.execute(sql.format(*each_item.to_list()))
 		self.conn.commit()

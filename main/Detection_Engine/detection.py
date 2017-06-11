@@ -31,7 +31,7 @@ if args.videoId:
 	row = db.select(table_name='file', condition={'videoId':videoId})
 	video_path = row['videoPath']
 	frameSteps = row['frameSteps']
-#exit()
+
 K.set_image_dim_ordering('th')
 
 is_freeze = True
@@ -53,52 +53,41 @@ model.load_weights(weigths_path)
 frameNum = 0
 items = []
 cap = cv2.VideoCapture(video_path)
-print (video_path)
-#cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
-#cv2.resizeWindow('Detection Window', 600,600)
-
 try:
 	while True:
 		ret, frame = cap.read()
 		frameNum += 1
-		# if frameNum <= 64000:
-		# 	continue
+
+		## TODO
+		if frameNum > 100:
+		 	break
+		 	
 		if frameNum % frameSteps != 0:
 			continue
 	
 		print("FrameNum : {}".format(frameNum))
-		# frame2 = frame.copy()
 		img = preprocess(frame)
 		batch = np.expand_dims(img, axis=0)
 		net_out = model.predict(batch)
 		out_img, objects, is_object = post_progress(net_out[0], im=frame, is_save=False, threshold=test_threshold)
 
-		# net_out2 = model2.predict(batch)
-		# out_img2, objects2, is_object2 = post_progress(net_out2[0], im=frame2, is_save=False, threshold=0.2)
-		# if is_object:
-		# 	for each_object in objects:
-		# 		items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4], each_object[5]))
+		if is_object:
+			for each_object in objects:
+				items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4], each_object[5]))
 		
-		# if len(items) >= 100:
-		# 	db.insert(items)
-		# 	print("DB Insert 100 items Done..********************************")
-		# 	del items
-		# 	items = []
-		# cv2.imshow('Compare Window', out_img2)
-		cv2.imshow('Detection Window', out_img)
-		wk = cv2.waitKey(1)
-		if wk & 0xFF == ord('q'):
-			break
-		elif wk & 0xFF == ord(' '):
-			cv2.waitKey(0)
+		if len(items) >= 100:
+			db.insert(items, table_name='detection')
+			print("DB Insert 100 items Done..********************************")
+			del items
+			items = []
+
 except Exception:
 	print("Exception Occured")
+	exit(-1)
 finally:
+	db.insert(items, table_name='detection')
 	db.close()
 	print("DB Closed in Finally..")
 	cap.release()
-	cv2.destroyAllWindows()
-
-# db.insert(items)
-# print("DB Insert 100 items Done..")
-# del items
+	
+exit(0)
