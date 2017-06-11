@@ -65,7 +65,8 @@ video_name = 'tracking.mp4'
 
 frameNum = 0
 items = []
-cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
+cap = cv2.VideoCapture(video_path)
+# cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 # cap = cv2.VideoCapture('C:\\Users\\Soma2\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
 cv2.resizeWindow('Detection Window', 600,600)
@@ -107,11 +108,14 @@ try:
 			cv2.waitKey(0)
 except Exception:
 	print("Exception Occured")
+	exit(-1)
 finally:
 	db.close()
 	print("DB Closed in Finally..")
 	cap.release()
 	cv2.destroyAllWindows()
+
+exit(0)
 
 # db.insert(items)
 # print("DB Insert 100 items Done..")
