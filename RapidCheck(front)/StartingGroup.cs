@@ -21,11 +21,11 @@ namespace RapidCheck
             currentidPosition = 0;
             currentIndex = 0;
         }
-        public int getNextId(ref List<Obj> objList)
+        public int getNextId(ref List<Obj> objList, ref List<int> idxbyObjid)
         {
             int objId = idList[currentIndex];
             currentidPosition++;
-            if (objList[objId].getLength() == currentidPosition)
+            if (objList[idxbyObjid[objId]].getLength() == currentidPosition)
             {
                 currentIndex++;
                 currentidPosition = 0;
@@ -41,12 +41,12 @@ namespace RapidCheck
             idList.Add(id);
         }
 
-        public void sort(ref List<Obj> ObjList)
+        public void sort(ref List<Obj> ObjList, ref List<int> idxbyObjid)
         {
             for (int idx=0; idx < idList.Count; idx++)
             {
-                int objId = idList[idx];
-                lengthList.Add(ObjList[objId].getLength());
+                int objId = idList[idx]; //idxbyObjid
+                lengthList.Add(ObjList[idxbyObjid[objId]].getLength());
             }
 
             for (int i = 0; i < lengthList.Count; i++)
