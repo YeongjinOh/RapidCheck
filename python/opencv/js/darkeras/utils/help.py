@@ -69,13 +69,19 @@ class DB_Helper:
 	def select(self, table_name=None, condition=None):
 		if table_name is None:
 			table_name = self.curr_table_name
-
+		
 		sql = "select * from "+table_name
+		if condition:
+			for key in condition:
+				sql += ' where {}={}'.format(key, condition[key])
+
 		self.curs.execute(sql)
  
 		# Data Fetch
 		rows = self.curs.fetchall()
-		print(type(rows), rows)
+		rows = rows[0]
+		# print(type(rows), rows) # <class 'tuple'> ((4, 'C:videoscctv5.mp4', 5, 0, None),)
+		return {'videoId':rows[0], 'videoPath':rows[1], 'frameSteps':rows[2], 'status':rows[3]}
 
 	def delete(self, table_name=None):
 		if table_name is None:
