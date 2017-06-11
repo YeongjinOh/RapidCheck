@@ -32,14 +32,15 @@ def conv_weigths_flatten(layer_weights_comp):
 	return flatten
 
 class DB_Item:
-	def __init__(self, videoId, frameNum, _class, x, y, w, h):
+	def __init__(self, videoId, frameNum, _class, x, y, w, h, confidence):
 		self.videoId = videoId
 		self.frameNum = frameNum
 		self._class = _class
 		self.x, self.y, self.w, self.h = x, y, w, h
+		self.confidence = confidence
 
 	def to_list(self):
-		return [self.videoId, self.frameNum, self._class, self.x, self.y, self.w, self.h]
+		return [self.videoId, self.frameNum, self._class, self.x, self.y, self.w, self.h, self.confidence]
 
 class DB_Helper:
 	curr_table_name = 'detection2'
@@ -60,7 +61,7 @@ class DB_Helper:
 			table_name = self.curr_table_name
 		
 		# if table column change, it also need to change for sequence by changed table.
-		sql = 'insert into '+table_name+' values (NULL, {}, {}, {}, {}, {}, {}, {})'
+		sql = 'insert into '+table_name+' values (NULL, {}, {}, {}, {}, {}, {}, {}, {})'
 		for each_item in items:
 			self.curs.execute(sql.format(*each_item.to_list()))
 		self.conn.commit()

@@ -33,6 +33,10 @@ model = yolo_tiny_THdim_model(is_freeze)
 model.load_weights(weigths_path)
 model.summary()
 
+# for compare 2 models
+model2 = yolo_tiny_THdim_model(is_freeze)
+model2.load_weights('models/train/yolo-2class-voc2007-train-cell14-steps40000.h5')
+
 # db = DB_Helper()
 # db.open()
 # db.delete()
@@ -46,7 +50,7 @@ video_name = 'tracking.mp4'
 # video_name = 'car_night_video.mp4'
 # video_name  = 'cctv4.mp4'
 # video_name = 'car_view_video3.avi'
-videoId = 3 # TODO: video id would be get by runtime
+videoId = 2 # TODO: video id would be get by runtime
 frameNum = 0
 frameSteps = 3
 items = []
@@ -54,6 +58,8 @@ cap = cv2.VideoCapture('C:\\Users\\SoMa\\myworkspace\\RapidCheck\\python\\opencv
 # cap = cv2.VideoCapture('C:\\Users\\Soma2\\myworkspace\\RapidCheck\\python\\opencv\\js\\darkeras\\test\\my_testset\\'+video_name)
 cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
 cv2.resizeWindow('Detection Window', 600,600)
+cv2.namedWindow('Compare Window', cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Compare Window', 600, 600)
 try:
 	while True:
 		ret, frame = cap.read()
@@ -64,19 +70,24 @@ try:
 			continue
 	
 		print("FrameNum : {}".format(frameNum))
+		frame2 = frame.copy()
 		img = preprocess(frame)
 		batch = np.expand_dims(img, axis=0)
 		net_out = model.predict(batch)
 		out_img, objects, is_object = post_progress(net_out[0], im=frame, is_save=False, threshold=test_threshold)
+
+		net_out2 = model2.predict(batch)
+		out_img2, objects2, is_object2 = post_progress(net_out2[0], im=frame2, is_save=False, threshold=0.2)
 		# if is_object:
 		# 	for each_object in objects:
-		# 		items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4]))
+		# 		items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4], each_object[5]))
 		
 		# if len(items) >= 100:
 		# 	db.insert(items)
 		# 	print("DB Insert 100 items Done..********************************")
 		# 	del items
 		# 	items = []
+		cv2.imshow('Compare Window', out_img2)
 		cv2.imshow('Detection Window', out_img)
 		wk = cv2.waitKey(1)
 		if wk & 0xFF == ord('q'):
