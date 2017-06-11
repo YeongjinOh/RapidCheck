@@ -32,14 +32,21 @@ namespace RapidCheck
         {
             try
             {
-                Process P = Process.Start(@"c:\users\soma\desktop\r.bat");
+                videoid = 610;
+                string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
+                string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1}", videoid, maxFrameNum);
+                MessageBox.Show(args);
+                Process P = Process.Start(pro, args);
+
                 P.WaitForExit();
                 int result = P.ExitCode;
+                MessageBox.Show(result + "");
             }
             catch
             {
                 MessageBox.Show("CMD ERROR");
             }
+            return;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(strConn))
