@@ -18,6 +18,9 @@ from utils.help import DB_Helper, DB_Item
 import os
 import argparse
 
+root_path = '../../../Detection_Engine/'
+os.chdir(root_path)
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--videoId', type=int, help='VideoId for detecting works', required=True)
 parser.add_argument('--maxFrame', type=int, help='MaxFrame for detecting works', required=True)
@@ -35,7 +38,6 @@ if args.videoId:
 
 
 K.set_image_dim_ordering('th')
-root_path = '../../../Detection_Engine/'
 is_freeze = True
 # weigths_path = 'models/train/yolo-2class-complete.h5'
 # weigths_path = os.path.join(cfg.model_folder, cfg.model_name) + '-steps8000.h5'
@@ -48,7 +50,7 @@ test_threshold = 0.4
 # weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 model = yolo_tiny_THdim_model(is_freeze)
 # model = yolo_shortdense_THdim_model(is_freeze)
-model.load_weights(root_path + weigths_path)
+model.load_weights(weigths_path)
 #model.summary()
 
 

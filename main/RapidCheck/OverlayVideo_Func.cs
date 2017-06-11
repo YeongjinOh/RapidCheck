@@ -30,23 +30,7 @@ namespace RapidCheck
         //****************************** Main function ******************************
         public void getMysqlObjList()
         {
-            try
-            {
-                videoid = 610;
-                string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
-                string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1}", videoid, maxFrameNum);
-                MessageBox.Show(args);
-                Process P = Process.Start(pro, args);
-
-                P.WaitForExit();
-                int result = P.ExitCode;
-                MessageBox.Show(result + "");
-            }
-            catch
-            {
-                MessageBox.Show("CMD ERROR");
-            }
-            return;
+            int status = 0;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(strConn))
@@ -56,6 +40,7 @@ namespace RapidCheck
                     DataSet ds = new DataSet();
                     MySqlDataAdapter adapter = new MySqlDataAdapter();
                     DataTable dt = new DataTable();
+                    conn.Open();
                     string SQL = String.Format("select exists ( select videoId from rapidcheck.file where path=\"{0}\" and frameStep = {1}) as checkFlag;", videoPath, frameStep);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "checkFlag");
@@ -67,50 +52,92 @@ namespace RapidCheck
                     if(checkFlag == 0)
                     {
                         //INSERT
-                        conn.Open();
+                        
                         string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep) values ('{0}',{1});", videoPath, frameStep);
                         MySqlCommand cmd = new MySqlCommand(insertCMD, conn);
                         cmd.ExecuteNonQuery();
                     }
-
-                    //연동하는부분
-                    //var detection = new System.Diagnostics.Process()
-                    //{
-                    //    EnableRaisingEvents = true
-                    //};
-                    //detection.StartInfo.FileName = @"C:\Users\trevor\Desktop\cpp.bat";
-                    //detection.StartInfo.RedirectStandardOutput = true;
-                    //detection.StartInfo.UseShellExecute = false;
-                    ////test.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;\
-
-                    ////test.OutputDataReceived += test_OutputDataReceived;
-
-                    //detection.Start();
-                    //detection.BeginOutputReadLine();
-                    //detection.WaitForExit();
-
-                    
-                    //while (!detection.HasExited)
-                    //{
-                    //    await Task.Delay(500);
-
-                    //    detection.Refresh();
-                    //}
                    
-                    //
+
+
 
 
 
                     //SELECT
-                    SQL = String.Format("Select videoId from rapidcheck.file where path=\"{0}\"", videoPath);
+                    SQL = String.Format("Select videoId, status from rapidcheck.file where path=\"{0}\"", videoPath);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoid");
                     dt = ds.Tables["videoid"];
                     foreach (DataRow dr in dt.Rows)
                     {
                         videoid = Convert.ToInt32(dr["videoid"]);
+                        status = Convert.ToInt32(dr["status"]);
                     }
-                    videoid = 3; //ToDo
+
+                    // detection
+                    if (status == 0)
+                    {
+
+                        //연동하는부분
+                        try
+                        {
+                            // TODO : read config file and change file path relatively
+                            string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
+                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1}", videoid, maxFrameNum);
+                            Process P = Process.Start(pro, args);
+                            P.WaitForExit();
+                            int result = P.ExitCode;
+                            if (result == 0)
+                            {
+                                SQL = string.Format("UPDATE file SET status=1 WHERE videoId = {0};", videoid);
+                                MySqlCommand cmd = new MySqlCommand(SQL, conn);
+                                cmd.ExecuteNonQuery();
+                                status = 1;
+                            }
+                            else
+                            {
+                                MessageBox.Show("DETECTION ERROR");
+                            }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("DETECTION ERROR");
+                        }
+                    }
+
+                    if (status == 1)
+                    {
+                        //연동하는부분
+                        try
+                        {
+                            string dir = @"..\..\..\Tracking_Engine\RapidCheck";
+                            System.IO.Directory.SetCurrentDirectory(dir);
+
+                            string pro = @"C:\Users\SoMa\Desktop\RapidCheck\main\Tracking_Engine\x64\Debug\Tracking_Engine.exe";
+                            string args = string.Format("{0} {1}", videoid, maxFrameNum);
+                            Process P = Process.Start(pro, args);
+                            P.WaitForExit();
+                            int result = P.ExitCode;
+                            if (result == 0)
+                            {
+                                SQL = string.Format("UPDATE file SET status=2 WHERE videoId = {0};", videoid);
+                                MySqlCommand cmd = new MySqlCommand(SQL, conn);
+                                cmd.ExecuteNonQuery();
+                                status = 2;
+                            }
+                            else
+                            {
+                                MessageBox.Show("TRACKING ERROR");
+                            }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("TRACKING ERROR");
+                        }
+                    }
+
+                    // TODO
+                    videoid = 3;
 
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
