@@ -33,10 +33,12 @@
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
+            this.radioButtonTimeOff = new System.Windows.Forms.RadioButton();
+            this.radioButtonTimeOn = new System.Windows.Forms.RadioButton();
             this.panelGrid = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.timeLabel = new System.Windows.Forms.Label();
-            this.stateLabel = new System.Windows.Forms.Label();
+            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelProgress = new System.Windows.Forms.Panel();
             this.VideoBtn = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -53,6 +55,9 @@
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.radioButtonCar = new System.Windows.Forms.RadioButton();
+            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
+            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
             this.direction5 = new System.Windows.Forms.Button();
             this.direction6 = new System.Windows.Forms.Button();
             this.direction4 = new System.Windows.Forms.Button();
@@ -77,8 +82,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.button1 = new System.Windows.Forms.Button();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -129,22 +133,47 @@
             // panelObject
             // 
             this.panelObject.BackColor = System.Drawing.Color.Transparent;
+            this.panelObject.Controls.Add(this.button1);
+            this.panelObject.Controls.Add(this.radioButtonTimeOff);
+            this.panelObject.Controls.Add(this.radioButtonTimeOn);
             this.panelObject.Controls.Add(this.panelGrid);
-            this.panelObject.Controls.Add(this.timeLabel);
-            this.panelObject.Controls.Add(this.stateLabel);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
             this.panelObject.Name = "panelObject";
             this.panelObject.Size = new System.Drawing.Size(438, 670);
             this.panelObject.TabIndex = 2;
             // 
+            // radioButtonTimeOff
+            // 
+            this.radioButtonTimeOff.AutoSize = true;
+            this.radioButtonTimeOff.Location = new System.Drawing.Point(3, 26);
+            this.radioButtonTimeOff.Name = "radioButtonTimeOff";
+            this.radioButtonTimeOff.Size = new System.Drawing.Size(80, 21);
+            this.radioButtonTimeOff.TabIndex = 17;
+            this.radioButtonTimeOff.Text = "Time off";
+            this.radioButtonTimeOff.UseVisualStyleBackColor = true;
+            this.radioButtonTimeOff.CheckedChanged += new System.EventHandler(this.radioButtonTimeOff_CheckedChanged);
+            // 
+            // radioButtonTimeOn
+            // 
+            this.radioButtonTimeOn.AutoSize = true;
+            this.radioButtonTimeOn.Checked = true;
+            this.radioButtonTimeOn.Location = new System.Drawing.Point(3, 6);
+            this.radioButtonTimeOn.Name = "radioButtonTimeOn";
+            this.radioButtonTimeOn.Size = new System.Drawing.Size(80, 21);
+            this.radioButtonTimeOn.TabIndex = 17;
+            this.radioButtonTimeOn.TabStop = true;
+            this.radioButtonTimeOn.Text = "Time on";
+            this.radioButtonTimeOn.UseVisualStyleBackColor = true;
+            this.radioButtonTimeOn.CheckedChanged += new System.EventHandler(this.radioButtonTimeOn_CheckedChanged);
+            // 
             // panelGrid
             // 
             this.panelGrid.Controls.Add(this.dataGridView1);
             this.panelGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelGrid.Location = new System.Drawing.Point(0, 138);
+            this.panelGrid.Location = new System.Drawing.Point(0, 50);
             this.panelGrid.Name = "panelGrid";
-            this.panelGrid.Size = new System.Drawing.Size(438, 532);
+            this.panelGrid.Size = new System.Drawing.Size(438, 620);
             this.panelGrid.TabIndex = 16;
             // 
             // dataGridView1
@@ -160,27 +189,21 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 30;
-            this.dataGridView1.Size = new System.Drawing.Size(438, 532);
+            this.dataGridView1.Size = new System.Drawing.Size(438, 620);
             this.dataGridView1.TabIndex = 0;
             // 
-            // timeLabel
+            // Column1
             // 
-            this.timeLabel.AutoSize = true;
-            this.timeLabel.Location = new System.Drawing.Point(10, 53);
-            this.timeLabel.Name = "timeLabel";
-            this.timeLabel.Size = new System.Drawing.Size(39, 17);
-            this.timeLabel.TabIndex = 15;
-            this.timeLabel.Text = "Time";
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column1.HeaderText = "Image";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
             // 
-            // stateLabel
+            // Column2
             // 
-            this.stateLabel.AutoSize = true;
-            this.stateLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 19.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.stateLabel.Location = new System.Drawing.Point(6, 15);
-            this.stateLabel.Name = "stateLabel";
-            this.stateLabel.Size = new System.Drawing.Size(88, 38);
-            this.stateLabel.TabIndex = 14;
-            this.stateLabel.Text = "state";
+            this.Column2.HeaderText = "Contents";
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             // 
             // panelProgress
             // 
@@ -268,7 +291,7 @@
             // 
             this.panelVideoPart.Controls.Add(this.pictureBoxVideo);
             this.panelVideoPart.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelVideoPart.Location = new System.Drawing.Point(0, 67);
+            this.panelVideoPart.Location = new System.Drawing.Point(0, 16);
             this.panelVideoPart.Name = "panelVideoPart";
             this.panelVideoPart.Size = new System.Drawing.Size(1072, 621);
             this.panelVideoPart.TabIndex = 3;
@@ -312,7 +335,7 @@
             this.panelSearch.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSearch.Location = new System.Drawing.Point(0, 0);
             this.panelSearch.Name = "panelSearch";
-            this.panelSearch.Size = new System.Drawing.Size(1072, 67);
+            this.panelSearch.Size = new System.Drawing.Size(1072, 16);
             this.panelSearch.TabIndex = 0;
             // 
             // tabPage3
@@ -346,6 +369,9 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.radioButtonCar);
+            this.tabPage1.Controls.Add(this.radioButtonPeople);
+            this.tabPage1.Controls.Add(this.radioButtonBoth);
             this.tabPage1.Controls.Add(this.direction5);
             this.tabPage1.Controls.Add(this.direction6);
             this.tabPage1.Controls.Add(this.direction4);
@@ -373,6 +399,39 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonCar
+            // 
+            this.radioButtonCar.AutoSize = true;
+            this.radioButtonCar.Location = new System.Drawing.Point(147, 102);
+            this.radioButtonCar.Name = "radioButtonCar";
+            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
+            this.radioButtonCar.TabIndex = 3;
+            this.radioButtonCar.TabStop = true;
+            this.radioButtonCar.Text = "자동차";
+            this.radioButtonCar.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonPeople
+            // 
+            this.radioButtonPeople.AutoSize = true;
+            this.radioButtonPeople.Location = new System.Drawing.Point(146, 81);
+            this.radioButtonPeople.Name = "radioButtonPeople";
+            this.radioButtonPeople.Size = new System.Drawing.Size(53, 21);
+            this.radioButtonPeople.TabIndex = 4;
+            this.radioButtonPeople.TabStop = true;
+            this.radioButtonPeople.Text = "사람";
+            this.radioButtonPeople.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonBoth
+            // 
+            this.radioButtonBoth.AutoSize = true;
+            this.radioButtonBoth.Location = new System.Drawing.Point(146, 59);
+            this.radioButtonBoth.Name = "radioButtonBoth";
+            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
+            this.radioButtonBoth.TabIndex = 5;
+            this.radioButtonBoth.TabStop = true;
+            this.radioButtonBoth.Text = "사람, 자동차";
+            this.radioButtonBoth.UseVisualStyleBackColor = true;
             // 
             // direction5
             // 
@@ -602,18 +661,15 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // Column1
+            // button1
             // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column1.HeaderText = "Image";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            this.Column2.HeaderText = "Contents";
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
+            this.button1.Location = new System.Drawing.Point(222, 14);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(128, 30);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "filter test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
@@ -626,7 +682,6 @@
             this.Name = "Form1";
             this.Text = "RapidCheck";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.panelObject.ResumeLayout(false);
@@ -689,8 +744,6 @@
         private System.Windows.Forms.Button startBtn;
         private System.Windows.Forms.Panel panelVideoPart;
         private System.Windows.Forms.Button VideoBtn;
-        private System.Windows.Forms.Label stateLabel;
-        private System.Windows.Forms.Label timeLabel;
         private System.Windows.Forms.ProgressBar progressBar1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.RadioButton radioButtonX1;
@@ -700,6 +753,12 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.RadioButton radioButtonTimeOff;
+        private System.Windows.Forms.RadioButton radioButtonTimeOn;
+        private System.Windows.Forms.RadioButton radioButtonCar;
+        private System.Windows.Forms.RadioButton radioButtonPeople;
+        private System.Windows.Forms.RadioButton radioButtonBoth;
+        private System.Windows.Forms.Button button1;
     }
 }
 

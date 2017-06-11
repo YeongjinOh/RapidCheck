@@ -43,6 +43,7 @@ namespace RapidCheck
         private Dictionary<int, List<int>> objidByFrame; //key : frame, value : Objid //해당 frame에 등장한 object //crop할 위치 확인용
         private List<Bitmap> overlayFrames; //result Frame
         private List<List<objIdAndOrderingCnt>> overlayOrders; //overlayOrders[i] : i번째 output frame에 등장해야 할 Object id들의 리스트
+        private List<int> idxbyObjid; //objid로 인덱스 접근
 
         private List<int> trackingTableFrameNum;
         private List<int> trackingTableObjid;
@@ -58,8 +59,13 @@ namespace RapidCheck
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
         private int clusterNum;
-        private int speed;
-
+        public int speed{get;set;}
+        public int fps { get; set; }
+        private int maxObjectid;
+        private System.DateTime createTime;
+        private int frameRate;
+        public bool drawTime { get; set; }
+        public int objType; //1 = both, 2 = people, 3 = car
         //drawing style
         System.Drawing.Font drawFont;
         System.Drawing.SolidBrush drawBrush;
@@ -76,11 +82,11 @@ namespace RapidCheck
         public int clickFramePosition { set; get; } // mouse click frame position
 
         public OverlayVideo() { }
-        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int frameStep = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
-            drawFont = new System.Drawing.Font("Arial", 12);
-            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.Black);
+            drawFont = new System.Drawing.Font("Arial", 14);
+            drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
             //UI
             this.dataGridView = dataGridView;
             this.trackingBar = TrackingBar;
@@ -95,6 +101,7 @@ namespace RapidCheck
             objidByFrame = new Dictionary<int, List<int>>();
             overlayFrames = new List<Bitmap>();
             overlayOrders = new List<List<objIdAndOrderingCnt>>();
+
             
             trackingTableObjid = new List<int>();
             trackingTableFrameNum = new List<int>();
@@ -106,7 +113,11 @@ namespace RapidCheck
             this.frameStep = frameStep;
             this.clusterNum = clusterNum;
             this.speed = 1;
-            startingGroup = new List<StartingGroup>(clusterNum);
+            this.drawTime = true;
+            this.createTime = new System.DateTime(2017, 1, 1, Int32.Parse(createTime.Split(':')[0]), Int32.Parse(createTime.Split(':')[1]), 0);
+            this.objType = 1; //default는 둘 다 검색
+            this.maxObjectid = 0;
+            startingGroup = new List<StartingGroup>();
             for (int i = 0; i < clusterNum; i++)
             {
                 startingGroup.Add(new StartingGroup());
@@ -115,9 +126,12 @@ namespace RapidCheck
             //read video info
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
+            frameRate = reader.FrameRate;
             videoWidth = reader.Width;
             videoHeight = reader.Height;
             background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
+            fps = reader.FrameRate;
+            
             if(maxFrameNum == 0)
             {
                 this.maxFrameNum = (int)reader.FrameCount;

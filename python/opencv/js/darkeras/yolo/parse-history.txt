@@ -1,1 +1,1 @@
-yolo\from-cell14base-mydata.parsed car person
+yolo\base-voc2007-with-dropout-05.parsed car person
