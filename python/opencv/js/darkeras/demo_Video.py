@@ -16,7 +16,14 @@ from yolo.process import preprocess
 
 from utils.help import DB_Helper, DB_Item
 import os
+import argparse
 
+parser = argparse.ArgumentParser()
+parser.add_argument('--videoId', type=int, help='VideoId for detecting works')
+args = parser.parse_args()
+if args['videoId']:
+	print("video id : ", args['videoId'])
+exit()
 K.set_image_dim_ordering('th')
 
 is_freeze = True
