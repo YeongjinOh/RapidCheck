@@ -2,13 +2,11 @@
 using namespace cv;
 
 /**
-	Show similarities of given target paris
-
-	@param app frame reader with basic parameters set
+	Show similarities of given target pairs
 */
-void showDetection(App app)
+void showDetection()
 {
-	
+	App app = App();
 	Mat frame, targetImage;
 	Target target;
 	bool hasTarget = false;

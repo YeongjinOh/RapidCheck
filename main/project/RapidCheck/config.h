@@ -2,7 +2,7 @@
 #define CONFIG_H
 
 // VideoCapture configuration
-const int MAX_FRAMES = 200;
+const int MAX_FRAMES = 1000;
 const int START_FRAME_NUM = 2001;
 const int FRAME_STEP = 3;
 const int VIDEOID = 3;
@@ -13,6 +13,9 @@ const bool USE_PEDESTRIANS_ONLY = true;
 const static char* VIDEOFILES[4] = { "videos/street.avi", "videos/tracking.mp4", "videos/demo.mp4", "videos/tracking.mp4" };
 const static int videoId = VIDEOID;
 const static char* VIDEOFILE = VIDEOFILES[videoId];
+
+const int CLASS_ID_CAR = 0;
+const int CLASS_ID_PEDESTRIAN = 1;
 
 // Histogram
 const int NUM_OF_HUE_BINS = 16;

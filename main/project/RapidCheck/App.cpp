@@ -1,4 +1,5 @@
 #include "App.h"
+#include "config.h"
 
 using namespace cv;
 
@@ -37,14 +38,15 @@ Args::Args()
 	gamma_corr = true;
 }
 
-
-
-App::App(const Args& s)
+App::App()
 {
-	cv::cuda::printShortCudaDeviceInfo(cv::cuda::getDevice());
 
-	args = s;
-	cout << "\nControls:\n"
+	if (DEBUG)
+		cv::cuda::printShortCudaDeviceInfo(cv::cuda::getDevice());
+
+	args = Args();
+	if (DEBUG)
+		cout << "\nControls:\n"
 		<< "\tESC - exit\n"
 		<< "\tm - change mode GPU <-> CPU\n"
 		<< "\tg - convert image to gray or not\n"
@@ -66,20 +68,23 @@ App::App(const Args& s)
 
 	gamma_corr = args.gamma_corr;
 
-	cout << "Scale: " << scale << endl;
-	if (args.resize_src)
-		cout << "Resized source: (" << args.width << ", " << args.height << ")\n";
-	cout << "Group threshold: " << gr_threshold << endl;
-	cout << "Levels number: " << nlevels << endl;
-	cout << "Win size: (" << args.win_width << ", " << args.win_width * 2 << ")\n";
-	cout << "Win stride: (" << args.win_stride_width << ", " << args.win_stride_height << ")\n";
-	cout << "Block size: (" << args.block_width << ", " << args.block_width << ")\n";
-	cout << "Block stride: (" << args.block_stride_width << ", " << args.block_stride_height << ")\n";
-	cout << "Cell size: (" << args.cell_width << ", " << args.cell_width << ")\n";
-	cout << "Bins number: " << args.nbins << endl;
-	cout << "Hit threshold: " << hit_threshold << endl;
-	cout << "Gamma correction: " << gamma_corr << endl;
-	cout << endl;
+	if (DEBUG) 
+	{
+		cout << "Scale: " << scale << endl;
+		if (args.resize_src)
+			cout << "Resized source: (" << args.width << ", " << args.height << ")\n";
+		cout << "Group threshold: " << gr_threshold << endl;
+		cout << "Levels number: " << nlevels << endl;
+		cout << "Win size: (" << args.win_width << ", " << args.win_width * 2 << ")\n";
+		cout << "Win stride: (" << args.win_stride_width << ", " << args.win_stride_height << ")\n";
+		cout << "Block size: (" << args.block_width << ", " << args.block_width << ")\n";
+		cout << "Block stride: (" << args.block_stride_width << ", " << args.block_stride_height << ")\n";
+		cout << "Cell size: (" << args.cell_width << ", " << args.cell_width << ")\n";
+		cout << "Bins number: " << args.nbins << endl;
+		cout << "Hit threshold: " << hit_threshold << endl;
+		cout << "Gamma correction: " << gamma_corr << endl;
+		cout << endl;
+	}
 
 	// initialize hog
 	Size win_stride(args.win_stride_width, args.win_stride_height);

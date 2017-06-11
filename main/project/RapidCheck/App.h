@@ -60,7 +60,6 @@ class App
 {
 public:
 	App();
-	App(const Args& s);
 	void getHogResults(Mat& frame, vector<Rect>& found);
 	void handleKey(char key);
 

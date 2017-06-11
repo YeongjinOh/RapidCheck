@@ -49,12 +49,13 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 10000;
-            int frameStep = 3;
+            int maxFrameNum = 70000;
+            //int frameStep = 3;
+            int analysisFPS = 5; //default
             int minTrackingLength = 29;
             int clusterNum = 6;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, frameStep, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
@@ -83,7 +84,6 @@ namespace RapidCheck
                 {
                     setOverlayUI();
                 }
-                MessageBox.Show(myRapidModule[idx].Method.ToString());
                 myRapidChain(myRapidModule[idx]);
             }
             progressBar1.Value = 100;
@@ -100,20 +100,6 @@ namespace RapidCheck
                 videoPath = videoFilePath.FileName;
                 startOverlayModule();
             }
-        }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            overlayModule.Abort();
-            Thread.Sleep(10);
-
-            myRapidModule.Clear();
-            myRapidModule.Add(rapidCheck.setFileterObjectidList); //filetering test
-            myRapidModule.Add(rapidCheck.kMeasFunc);
-            myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
-            myRapidModule.Add(rapidCheck.overlayLive);
-
-            overlayModule = new Thread(() => rapidRun());
-            overlayModule.Start();
         }
         //******************************UI SETTING******************************
         private void setUI()
@@ -158,13 +144,6 @@ namespace RapidCheck
             dataGridView1.Columns[1].Width = panelObject.Width / 2;
             dataGridView1.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True; //support multiline text
             dataGridView1.ColumnHeadersVisible = false;
-
-            //draw time on/off
-            radioButtonTimeOn.Enabled = false;
-            radioButtonTimeOff.Enabled = false;
-
-            //test filter btn
-            button1.Enabled = false;
         } //default UI setting
         private void setOverlayUI()
         {
@@ -178,10 +157,7 @@ namespace RapidCheck
             radioButtonX2.Enabled = true;
             radioButtonX4.Enabled = true;
             radioButtonX1.Checked = true;
-            radioButtonTimeOn.Enabled = true;
-            radioButtonTimeOff.Enabled = true;
             startBtn.Enabled = true;
-            button1.Enabled = true;
         } //UI enable = True
         //******************************UI EVENT******************************
         private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e) //비디오 클릭하면 원본 영상 틀어주는 함수
@@ -242,8 +218,7 @@ namespace RapidCheck
             trackBar1.Value = Convert.ToInt32(1.0 * outputFrameNum * e.Location.X / trackBar1.Width);
         }
         //******************************BUTTON EVENT******************************
-        private void radioButtonTimeOn_CheckedChanged(object sender, EventArgs e) { rapidCheck.drawTime = true; }
-        private void radioButtonTimeOff_CheckedChanged(object sender, EventArgs e) { rapidCheck.drawTime = false; }
+       
         private void radioButtonBoth_CheckedChanged(object sender, EventArgs e) { rapidCheck.objType = 1; }
         private void radioButtonPeople_CheckedChanged(object sender, EventArgs e) { rapidCheck.objType = 2; }
         private void radioButtonCar_CheckedChanged(object sender, EventArgs e) { rapidCheck.objType = 3; }
@@ -268,5 +243,59 @@ namespace RapidCheck
         private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
         private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
         private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
+
+        private void onToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.drawTime = true;
+        }
+        private void offToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.drawTime = false;
+        }
+
+        private void DownToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and direction0 + direction1 + direction2  > 0.7";
+            direction();
+        }
+
+        private void UpToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and direction5 + direction6 + direction7 > 0.7";
+            direction();
+        }
+
+        private void direction()
+        {
+            overlayModule.Abort();
+            Thread.Sleep(1);
+            myRapidModule.Clear();
+            myRapidModule.Add(rapidCheck.setFileterObjectidList); //filetering test
+            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
+            myRapidModule.Add(rapidCheck.overlayLive);
+
+            overlayModule = new Thread(() => rapidRun());
+            overlayModule.Start();
+        }
+
+        private void BlackToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color9 > 0.3";
+            direction();
+        }
+
+        private void ResetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            overlayModule.Abort();
+            Thread.Sleep(1);
+            myRapidModule.Clear();
+            myRapidModule.Add(rapidCheck.resetObjectidList);
+            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
+            myRapidModule.Add(rapidCheck.overlayLive);
+            overlayModule = new Thread(() => rapidRun());
+            overlayModule.Start();
+        }
     }
 }

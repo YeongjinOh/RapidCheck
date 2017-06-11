@@ -140,7 +140,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	@param cap video variable
 	@param frames list of frames to be implemented detection
 */
-void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
+void detectTargets(VideoCapture& cap, vector<Frame>& frames);
 
 
 /**
@@ -149,7 +149,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
 	@param app frame reader with basic parameters set
 	@param cap video variable
 */
-void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
+void detectAndInsertResultIntoDB(VideoCapture& cap);
 
 
 /**
@@ -166,7 +166,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	@param cap video variable
 	@param trajectories list of trajectories to be implemented tracking
 */
-void readTrajectories(vector<RCTrajectory>& trajectories);
+void readTrajectories(vector<RCTrajectory>& trajectories, int classId);
 /**
 	Build all tracklets of given frames
 
@@ -189,12 +189,24 @@ void getTrajectory(vector<int>& solution);
 */
 void buildTrajectories(vector<Segment>& segments, vector<MidLevelSegemet>& mlSegments);
 
+/**
+	Insert tracking informations  into database
+
+	@param trajectoryPedestrians list of trajectory of pedestrians
+	@param trajectoryCars list of trajectory of cars
+*/
+void insertTrackingIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars);
 
 /**
 	Insert object informations such as direction counts, color ratios into database
 
-	@param trajectories list of trajectory of each object
+	@param trajectoryPedestrians list of trajectory of pedestrians
+	@param trajectoryCars list of trajectory of cars
 */
-void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectories);
+void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars);
 
+/**
+	read and show trajectory
+*/
+void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars);
 #endif

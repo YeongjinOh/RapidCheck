@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Accord.Video.VFW;
 using Accord.Video.FFMPEG;
 using Accord.MachineLearning; //knn test
+using System.Diagnostics;
 namespace RapidCheck
 {
     public partial class OverlayVideo
@@ -31,21 +32,70 @@ namespace RapidCheck
         {
             try
             {
+                Process P = Process.Start(@"c:\users\soma\desktop\r.bat");
+                P.WaitForExit();
+                int result = P.ExitCode;
+            }
+            catch
+            {
+                MessageBox.Show("CMD ERROR");
+            }
+            try
+            {
                 using (MySqlConnection conn = new MySqlConnection(strConn))
                 {
-                    //INSERT
-                    conn.Open();
-                    videoPath = videoPath.Replace(@"\", @"\\");
-                    string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep) values ('{0}',{1});", videoPath, frameStep);
-                    MySqlCommand cmd = new MySqlCommand(insertCMD, conn);
-                    cmd.ExecuteNonQuery();
-
-                    //SELECT
+                    //INTRO Check the video file
+                    int checkFlag = 0;
                     DataSet ds = new DataSet();
                     MySqlDataAdapter adapter = new MySqlDataAdapter();
                     DataTable dt = new DataTable();
+                    string SQL = String.Format("select exists ( select videoId from rapidcheck.file where path=\"{0}\" and frameStep = {1}) as checkFlag;", videoPath, frameStep);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "checkFlag");
+                    dt = ds.Tables["checkFlag"];
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        checkFlag = Convert.ToInt32(dr["checkFlag"]);
+                    }
+                    if(checkFlag == 0)
+                    {
+                        //INSERT
+                        conn.Open();
+                        string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep) values ('{0}',{1});", videoPath, frameStep);
+                        MySqlCommand cmd = new MySqlCommand(insertCMD, conn);
+                        cmd.ExecuteNonQuery();
+                    }
 
-                    string SQL = String.Format("Select videoId from rapidcheck.file where path=\"{0}\"", videoPath);
+                    //연동하는부분
+                    //var detection = new System.Diagnostics.Process()
+                    //{
+                    //    EnableRaisingEvents = true
+                    //};
+                    //detection.StartInfo.FileName = @"C:\Users\trevor\Desktop\cpp.bat";
+                    //detection.StartInfo.RedirectStandardOutput = true;
+                    //detection.StartInfo.UseShellExecute = false;
+                    ////test.StartInfo.WindowStyle  = ProcessWindowStyle.Hidden;\
+
+                    ////test.OutputDataReceived += test_OutputDataReceived;
+
+                    //detection.Start();
+                    //detection.BeginOutputReadLine();
+                    //detection.WaitForExit();
+
+                    
+                    //while (!detection.HasExited)
+                    //{
+                    //    await Task.Delay(500);
+
+                    //    detection.Refresh();
+                    //}
+                   
+                    //
+
+
+
+                    //SELECT
+                    SQL = String.Format("Select videoId from rapidcheck.file where path=\"{0}\"", videoPath);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoid");
                     dt = ds.Tables["videoid"];
@@ -91,9 +141,9 @@ namespace RapidCheck
                         {
                             int objid = Convert.ToInt32(dr["objectId"]);
                             objectidList.Add(objid);
+                            originObjectidList.Add(objid); //copy
                         }
                     }
-                   
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
                     foreach (DataRow dr in dt.Rows)
@@ -143,7 +193,7 @@ namespace RapidCheck
 
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
-                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
+                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 {2};", videoid, maxObjectid, condition);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
                         adapter.Fill(ds, "objIds");
                         dt = ds.Tables["objIds"];
@@ -154,11 +204,7 @@ namespace RapidCheck
                         objectidList = tempObjidList.Intersect(objectidList).ToList();
 
                         //OrderingCnt초기화
-                        foreach (int i in objectidList)
-                        {
-                            ObjList[idxbyObjid[i]].OrderingCnt = 0;
-                        }
-                        overlayOrders.Clear();
+                        resetOrdering();
                     }
                 }
             }
@@ -229,9 +275,10 @@ namespace RapidCheck
         }
         public void kMeasFunc()
         {
-            if (clusterNum > objectidList.Count)
-                clusterNum = objectidList.Count;
-            var kmeas = new KMeans(k:clusterNum);
+            int applyClusterNum = clusterNum;
+            if (applyClusterNum > objectidList.Count)
+                applyClusterNum = objectidList.Count;
+            var kmeas = new KMeans(k: applyClusterNum);
             double[][] points = new double[objectidList.Count][];
 
             for (int i = 0; i < objectidList.Count; i++)
@@ -470,7 +517,19 @@ namespace RapidCheck
                 startingGroup.Add(new StartingGroup());
             }
         }
-
+        public void resetObjectidList()
+        {
+            objectidList = originObjectidList.GetRange(0, originObjectidList.Count);
+            resetOrdering();
+        }
+        private void resetOrdering()
+        {
+            foreach (int i in objectidList)
+            {
+                ObjList[idxbyObjid[i]].OrderingCnt = 0;
+            }
+            overlayOrders.Clear();
+        }
         //******************************Not used******************************
         //public void buildOverlayOrder() // 애를 만든다. overlayOrders;
         //{
