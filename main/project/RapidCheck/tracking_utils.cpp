@@ -568,8 +568,10 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 }
 
 // Detect targets in MAX_FRAMES frames
-void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
+void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 {
+	App app = App();
+
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
 	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
@@ -586,12 +588,14 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames)
 	int frameNum = START_FRAME_NUM;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
-	cout << "total frame count : " << totalFrameCount << endl;
+	if (DEBUG)
+		printf("total frame count : %d\n", totalFrameCount);
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
 	{
 		if (frameNum >= totalFrameCount)
 		{
-			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			if (DEBUG)
+				printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
 		
@@ -679,7 +683,8 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	int frameNum = START_FRAME_NUM;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
-	cout << "total frame count : " << totalFrameCount << endl;
+	if (DEBUG)
+		printf("total frame count : %d\n", totalFrameCount);
 
 	// read detection result from database and build mapFrameNumToPedestrians
 	vector<vector<int> > detectionResultsPedestrians, detectionResultsCars;
@@ -706,10 +711,11 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	{
 		if (frameNum >= totalFrameCount)
 		{
-			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			if (DEBUG)
+				printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
-		if (frameCnt % 1000 == 0)
+		if (frameCnt % 1000 == 0 && DEBUG)
 		{
 			printf("readTarget of frameCnt #%d\n", frameCnt);
 		}
@@ -813,21 +819,24 @@ void readTrajectories(vector<RCTrajectory>& trajectories, int classId)
 
 
 // Detect targets in MAX_FRAMES frames and insert result into DB
-void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
+void detectAndInsertResultIntoDB(VideoCapture& cap)
 {
-	
+	App app = App();
+
 	Mat frame, frameSkipped;
 	int frameNum = START_FRAME_NUM;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
-	cout << "total frame count : " << totalFrameCount << endl;
+	if (DEBUG)
+		printf("total frame count : %d\n", totalFrameCount);
 	int classId = 0;
 	time_t t = clock();
 	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
 	{
 		if (frameNum >= totalFrameCount)
 		{
-			printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
+			if (DEBUG)
+				printf("frameNum(%d) is bigger than total frame count(%d).\n", frameNum, totalFrameCount);
 			return;
 		}
 		
@@ -852,7 +861,8 @@ void detectAndInsertResultIntoDB(App& app, VideoCapture& cap)
 		}
 	}
 	t = clock() - t;
-	printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
+	if (DEBUG)
+		printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
 }
 
 // Build all tracklets of given frames
@@ -1016,7 +1026,8 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 		cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
 		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
 		{
-			printf("segmentNum : %d\n", segmentNumber);
+			if (DEBUG)
+				printf("segmentNum : %d\n", segmentNumber);
 			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 			{
 				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;

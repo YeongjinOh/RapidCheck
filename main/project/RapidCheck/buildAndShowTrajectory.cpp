@@ -27,7 +27,8 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 	{
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& curSegmentTracklets = segment.getTracklets();
-		printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
+		if (DEBUG)
+			printf("segmentNum : %d, # of tracklets : %d\n", segmentNum, curSegmentTracklets.size());
 
 		// move trajectories finished from trajectoriesStillBeingTracked to trajectoriesFinished
 		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end();)
@@ -64,11 +65,14 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 					if (similarity > TRAJECTORY_MATCH_SIMILARITY_THRES)
 						graphSimilarity[i][j] = similarity;
 				}
-				printf("%.2lf ", graphSimilarity[i][j]);
+				if (DEBUG)
+					printf("%.2lf ", graphSimilarity[i][j]);
 			}
-			std::cout << endl;
+			if (DEBUG)
+				printf("\n");
 		}
-		std::cout << endl;
+		if (DEBUG)
+			printf("\n");
 		vector<bool> mergedNextTracket(curSegmentTracklets.size(), false);
 		while (true)
 		{
@@ -175,7 +179,7 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 
 	@param app frame reader with basic parameters set
 */
-void buildAndShowTrajectory(App app)
+void buildAndShowTrajectory()
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
@@ -189,11 +193,12 @@ void buildAndShowTrajectory(App app)
 	}
 	else
 	{
-		detectTargets(app, cap, framePedestrians);
-		//detectAndInsertResultIntoDB(app, cap);
+		detectTargets(cap, framePedestrians);
+		// detectAndInsertResultIntoDB(cap);
 	}
 	t = clock() - t;
-	printf("Detection takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Detection takes %d(ms)\n", t);
 	
 	// build all tracklets
 	t = clock();
@@ -201,7 +206,8 @@ void buildAndShowTrajectory(App app)
 	buildTracklets(framePedestrians, segmentPedestrians);
 	buildTracklets(frameCars, segmentCars);
 	t = clock() - t;
-	printf("Tracklet takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Tracklet takes %d(ms)\n", t);
 
 
 	// build trajectories
@@ -210,7 +216,8 @@ void buildAndShowTrajectory(App app)
 	buildTrajectory(segmentPedestrians, trajectoryPedestrians);
 	buildTrajectory(segmentCars, trajectoryCars);
 	t = clock() - t;
-	printf("Trajectory takes %d(ms)\n", t);
+	//if (DEBUG)
+		printf("Trajectory takes %d(ms)\n", t);
 	
 	// insert into DB
 	if (INSERT_TRACKING_INTO_DB)

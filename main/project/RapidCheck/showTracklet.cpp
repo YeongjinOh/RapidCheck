@@ -5,7 +5,7 @@ using namespace cv;
 
 	@param app frame reader with basic parameters set
 */
-void showTracklet(App app)
+void showTracklet()
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
@@ -22,7 +22,7 @@ void showTracklet(App app)
 	}
 	else
 	{
-		detectTargets(app, cap, frames);
+		detectTargets(cap, frames);
 	}
 	if (USE_PEDESTRIANS_ONLY)
 	{
@@ -33,12 +33,14 @@ void showTracklet(App app)
 		frames = frameCars;
 	}
 	t = clock() - t;
-	printf("Detection takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Detection takes %d(ms)\n", t);
 
 	// build all tracklets
 	vector<Segment> segments;
 	buildTracklets(frames, segments);
-	cout << "Tracklets built" << endl;
+	if (DEBUG)
+		printf("Tracklets built\n");;
 
 	// show tracklets
 	Mat frame;

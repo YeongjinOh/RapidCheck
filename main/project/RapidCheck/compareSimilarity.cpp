@@ -5,10 +5,8 @@ using namespace cv;
 
 /**
 	calculate and compare similarity between two tracklets
-
-	@param app frame reader with basic parameters set
 */
-void compareSimilarity(App app)
+void compareSimilarity()
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
@@ -25,7 +23,7 @@ void compareSimilarity(App app)
 	}
 	else
 	{
-		detectTargets(app, cap, frames);
+		detectTargets(cap, frames);
 	}
 	if (USE_PEDESTRIANS_ONLY)
 	{
@@ -36,14 +34,16 @@ void compareSimilarity(App app)
 		frames = frameCars;
 	}
 	t = clock() - t;
-	printf("Detection takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Detection takes %d(ms)\n", t);
 
 	// build all tracklets
 	vector<Segment> segments;
 	t = clock();
 	buildTracklets(frames, segments);
 	t = clock() - t;
-	printf("Tracking takes %d(ms)\n", t);
+	if (DEBUG)
+		printf("Tracking takes %d(ms)\n", t);
 
 	int segmentIdxPrev = 0, segmentIdxNext = 1, targetIdxPrev = 0;
 	Mat framePrev, frameNext;

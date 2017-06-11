@@ -2,10 +2,8 @@
 using namespace cv;
 /**
 	Show how to build tracklet from given detection results
-
-	@param app frame reader with basic parameters set
 */
-void showTrackletClusters(App app)
+void showTrackletClusters()
 {
 	// set input video
 	VideoCapture cap(VIDEOFILE);
@@ -34,7 +32,7 @@ void showTrackletClusters(App app)
 	}
 	else
 	{
-		detectTargets(app, cap, frames);
+		detectTargets(cap, frames);
 	}
 	if (USE_PEDESTRIANS_ONLY)
 	{
@@ -44,7 +42,8 @@ void showTrackletClusters(App app)
 	{
 		frames = frameCars;
 	}
-	cout << "Detection finished" << endl;
+	if (DEBUG)
+		printf("Detection finished\n");
 	
 	// open windows
 	for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
@@ -55,7 +54,8 @@ void showTrackletClusters(App app)
 	int frameNum = 0, objectId;
 	while (true)
 	{
-		printf("\n\nFrame #%d", frameNum);
+		if (DEBUG)
+			printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
 		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
@@ -117,14 +117,18 @@ void showTrackletClusters(App app)
 				if (useDummy)
 					break;
 				useDummy = true;
-				printf("\nSolutions from dummy nodes reconstruction");
+				if (DEBUG)
+					printf("\nSolutions from dummy nodes reconstruction");
 				continue;
 			}
-			cout << endl;
+			if (DEBUG)
+				printf("\n");
 
-			if (DEBUG) 
+			if (DEBUG)
+			{
 				printf("cost:%f\n", costMin);
-			printf("object %d : ", objectId);
+				printf("object %d : ", objectId);
+			}
 
 			// for each solution
 			for (int i = 0; i < solution.size(); i++)
@@ -137,10 +141,10 @@ void showTrackletClusters(App app)
 
 				// draw found object in each frame
 				rectangle(segment[i], curFrame.getRect(solution[i]), colors[objectId], 4, 1);
-				 putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.getTargetArea().height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
+				putText(segment[i], std::to_string(objectId), target.getCenterPoint() - Point(10,10+target.getTargetArea().height/2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
 				target.found = true;
-
-				printf("%d ", solution[i]);
+				if (DEBUG)
+					printf("%d ", solution[i]);
 			}
 			objectId++;
 		}

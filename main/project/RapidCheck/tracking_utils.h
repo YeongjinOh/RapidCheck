@@ -140,7 +140,7 @@ void getTracklet(vector<int>& solution, vector<int>& selectedIndices, vector<Tar
 	@param cap video variable
 	@param frames list of frames to be implemented detection
 */
-void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
+void detectTargets(VideoCapture& cap, vector<Frame>& frames);
 
 
 /**
@@ -149,7 +149,7 @@ void detectTargets(App& app, VideoCapture& cap, vector<Frame>& frames);
 	@param app frame reader with basic parameters set
 	@param cap video variable
 */
-void detectAndInsertResultIntoDB(App& app, VideoCapture& cap);
+void detectAndInsertResultIntoDB(VideoCapture& cap);
 
 
 /**
