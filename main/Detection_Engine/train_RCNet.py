@@ -11,11 +11,12 @@ import keras.backend as K
 from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_THdim_model, yolo_tiny_THdim_dropout_model
 
 K.set_learning_phase(1) #set learning phase
+
 if cfg.image_dim_order == 'th':
 	K.set_image_dim_ordering('th')
 
 # 새로 학습
-pretrain_weight_path = 'models/pretrain/yolo-tiny-origin-thdim-named.h5'
+pretrain_weight_path = cfg.pretrained_model
 
 # 초벌구이 위에서 학습
 # pretrain_weight_path = 'models/train/yolo-2class-voc2007-base-shortdense-cell14-steps24000.h5'
@@ -41,8 +42,8 @@ print(cfg.dataset_abs_location)
 sess = tf.Session()
 K.set_session(sess)
 
-# model = yolo_tiny_THdim_model()
-model = yolo_tiny_THdim_dropout_model()
+model = yolo_tiny_THdim_model()
+# model = yolo_tiny_THdim_dropout_model()
 # model = yolo_shortdense_THdim_model()
 model.summary()
 
@@ -121,4 +122,4 @@ for i, (x_batch, datum) in enumerate(batches):
 
 say('Training All Done..', verbalise=verbalise)
 # model.save_weights(trained_save_weights_prefix + 'complete.h5')
-say("Save weights : ", trained_save_weights_prefix + 'complete.h5', verbalise=verbalise)
+# say("Save weights : ", trained_save_weights_prefix + 'complete.h5', verbalise=verbalise)
