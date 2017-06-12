@@ -4,7 +4,7 @@ using namespace cv;
 
 void showTrajectory ()
 {
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 	vector<Frame> frames, framePedestrians, frameCars;
 	readTargets(cap, framePedestrians, frameCars);
 	

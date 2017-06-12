@@ -15,7 +15,7 @@ void showDetection()
 	std::vector<Rect2d> found_filtered;
 
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 	// cap.set(CV_CAP_PROP_FRAME_WIDTH, 320);
 	// cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
 	cap >> frame;
@@ -34,9 +34,9 @@ void showDetection()
 	// Use the o-th and 1-st channels
 	int channels[] = { 0, 1 };
 	int frameCnt = 0;
-	while (frameCnt < MAX_FRAMES)
+	while (frameCnt < numOfFrames)
 	{
-		int frameNumber = START_FRAME_NUM + frameCnt*FRAME_STEP;
+		int frameNumber = startFrameNum + frameCnt * frameStep;
 		cap.set(CV_CAP_PROP_POS_FRAMES, frameNumber);
 		// get frame from the video
 		cap >> frame;

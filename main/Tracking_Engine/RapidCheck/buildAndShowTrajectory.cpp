@@ -182,7 +182,7 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 void buildAndShowTrajectory()
 {
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// build target detected frames
 	vector<Frame> framePedestrians, frameCars;

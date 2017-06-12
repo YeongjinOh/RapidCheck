@@ -1,6 +1,6 @@
 # Project local configuration
-main/project/RapidCheck/config.h
-config.h
+#main/project/RapidCheck/config.h
+#config.h
 
 # image ignore
 *.jpg

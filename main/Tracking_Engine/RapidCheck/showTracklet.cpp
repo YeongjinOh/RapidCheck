@@ -8,7 +8,7 @@ using namespace cv;
 void showTracklet()
 {
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// initialize colors	
 	vector<Scalar> colors = getRandomColors();
@@ -53,7 +53,7 @@ void showTracklet()
 		Segment & segment = segments[segmentNumber];
 		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
-			int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+			int frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
 			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 			cap >> frame;
 
