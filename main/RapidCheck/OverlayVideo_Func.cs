@@ -215,42 +215,7 @@ namespace RapidCheck
                 Console.WriteLine("getMysqlObjList() ERROR");
             }
         }
-        public void setFileterObjectidList()
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(strConn))
-                {
-                    if (maxObjectid != 0 )
-                    {
-                        List<int> tempObjidList = new List<int>();
-
-                        DataSet ds = new DataSet(); //이것들 전역변수로 선언해야하나..???
-                        MySqlDataAdapter adapter = new MySqlDataAdapter();
-                        DataTable dt = new DataTable();
-
-                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
-                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
-                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 {2};", videoid, maxObjectid, condition);
-                        adapter.SelectCommand = new MySqlCommand(SQL, conn);
-                        adapter.Fill(ds, "objIds");
-                        dt = ds.Tables["objIds"];
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            tempObjidList.Add(Convert.ToInt32(dr["objectId"]));
-                        }
-                        objectidList = tempObjidList.Intersect(objectidList).ToList();
-
-                        //OrderingCnt초기화
-                        resetOrdering();
-                    }
-                }
-            }
-            catch
-            {
-                MessageBox.Show("Database conn && Filtering Error");
-            }
-        }
+        
         public void addObj()
         {
             for (int idx = 0; idx < objectidList.Count; idx++)
@@ -281,7 +246,6 @@ namespace RapidCheck
             {
                 dataGridView.Invoke(new Action(() =>
                 {
-
                     Bitmap videoFrame = reader.ReadVideoFrame();
                     if (objidByFrame.ContainsKey(frameNum))
                     {
@@ -311,6 +275,50 @@ namespace RapidCheck
             }
             reader.Close();
         }
+        public void setFileterObjectidList()
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(strConn))
+                {
+                    if (maxObjectid != 0)
+                    {
+                        List<int> tempObjidList = new List<int>();
+
+                        DataSet ds = new DataSet(); //이것들 전역변수로 선언해야하나..???
+                        MySqlDataAdapter adapter = new MySqlDataAdapter();
+                        DataTable dt = new DataTable();
+
+                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
+                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
+                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 {2};", videoid, maxObjectid, condition);
+                        adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                        adapter.Fill(ds, "objIds");
+                        dt = ds.Tables["objIds"];
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            tempObjidList.Add(Convert.ToInt32(dr["objectId"]));
+                        }
+                        objectidList = tempObjidList.Intersect(objectidList).ToList();
+                        if (objectidList.Count == 0)
+                        {
+                            MessageBox.Show("해당 조건에 맞는 대상이 없습니다.");
+                            resetObjectidList();
+                        }
+                        else
+                        {
+                            //OrderingCnt초기화
+                            resetOrdering();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Database conn && Filtering Error");
+            }
+        }
+
         public void kMeasFunc()
         {
             int applyClusterNum = clusterNum;
@@ -332,7 +340,6 @@ namespace RapidCheck
             {
                 int id = objectidList[i];
                 startingGroup[output[i]].Add(id);
-                //startingGroup[i%8].Add(id);
             }
             //sort
             for (int k = 0; k < startingGroup.Count; k++)
@@ -359,19 +366,8 @@ namespace RapidCheck
                 overlayOrders.Add(currentObjid);
             }
         }
-        public void setDefaultObjectidList(int maxObjectid)
+        public void setPictureBoxSize()
         {
-            for (int idx = 0; idx < maxObjectid; idx++)
-            {
-                objectidList.Add(idx);
-            }
-        }
-        public void overlayLive()
-        {
-            background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
-            Graphics gs = pictureBoxVideo.CreateGraphics();
-            startBtn.Text = "Pause";
-
             // set draw size
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
@@ -392,7 +388,14 @@ namespace RapidCheck
             pictureBoxVideo.Height = drawHeight;
             pictureBoxVideo.Width = drawWidth;
             pictureBoxVideo.Location = new Point(drawX, drawY);
-
+        }
+        public void overlayLive()
+        {
+            background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
+            Graphics gs = pictureBoxVideo.CreateGraphics();
+            startBtn.Text = "Pause";
+            int drawWidth = pictureBoxVideo.Width;
+            int drawHeight = pictureBoxVideo.Height;
             //overlay time
             int frameTime = 1000 / frameStep;
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();

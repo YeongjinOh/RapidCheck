@@ -49,7 +49,7 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 10000;
+            int maxFrameNum = 1000;
             //int frameStep = 3;
             int analysisFPS = 5; //default
             int minTrackingLength = 29;
@@ -73,6 +73,7 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.imageCrop);
             myRapidModule.Add(rapidCheck.kMeasFunc);
             myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
+            myRapidModule.Add(rapidCheck.setPictureBoxSize);
             myRapidModule.Add(rapidCheck.overlayLive);
         }
         private void rapidRun()
