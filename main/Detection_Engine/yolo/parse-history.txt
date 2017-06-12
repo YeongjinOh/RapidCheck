@@ -1,1 +1,1 @@
-yolo\base-voc2007-with-dropout-05.parsed car person
+yolo\only-video_217193.parsed car person
