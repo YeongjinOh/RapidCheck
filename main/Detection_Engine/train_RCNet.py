@@ -5,7 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import yolo.config as cfg
-from utils.help import say, conv_weigths_flatten, save_model
+from utils.help import say, conv_weigths_flatten, save_model, plot_model_history
 
 import keras.backend as K
 from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_THdim_model, yolo_tiny_THdim_dropout_model
@@ -66,7 +66,10 @@ model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
 
-for i, (x_batch, datum) in enumerate(batches):
+train_histories = {}
+train_histories['train_loss'] = []
+
+for i, (x_batch, datum) in enumerate(batches, start=4000):
 	train_feed_dict = {
 	   loss_ph[key]:datum[key] for key in loss_ph 
 	}
@@ -89,6 +92,7 @@ for i, (x_batch, datum) in enumerate(batches):
 	# 	say("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val), verbalise=True)
 	# else:
 	say("step {} - train loss {}".format(i, loss_val), verbalise=True)
+	train_histories['train_loss'].append(loss_val)
 
 	if show_trainable_state:
 		conv1 = model.layers[0]
@@ -117,6 +121,7 @@ for i, (x_batch, datum) in enumerate(batches):
 	if i % 4000 == 0:
 		# save_model(model, save_folder, file_name, steps, descriptions, save_type='weights'):
 		save_model(model, cfg.model_folder, cfg.model_name, i, cfg.descriptions)
+		plot_model_history(train_histories, cfg.model_folder, cfg.model_name)
 		# model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 		# say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
 

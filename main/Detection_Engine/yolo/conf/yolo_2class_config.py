@@ -8,8 +8,8 @@ only 2class classifier yolo model config
 # Global config variables
 import os
 
-pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14', 'from-cell14base-mydata-steps100000.h5')
-
+# pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14', 'from-cell14base-mydata-steps100000.h5')
+pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14-mydata100000', 'only-video_217193-steps4000.h5')
 model_folder = os.path.join('models', 'train', 'yolo-2class-cell14-mydata100000')
 model_name = 'only-video_217193'
 classes_name = ["car", "person"]
@@ -40,7 +40,7 @@ coord_scale = 5
 
 inp_size = 448, 448, 3
 batch_size = 32
-epochs=2000
+epochs=20000
 
 lr=0.0001
 trainer='adam'
