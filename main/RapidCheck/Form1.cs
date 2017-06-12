@@ -15,6 +15,8 @@ using System.Drawing.Imaging;
 using System.Threading;
 using AxWMPLib; //player
 using Shell32;
+using CefSharp;
+using CefSharp.WinForms;
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
@@ -49,7 +51,7 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 1000;
+            int maxFrameNum = 10000;
             //int frameStep = 3;
             int analysisFPS = 5; //default
             int minTrackingLength = 29;
@@ -297,6 +299,25 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.overlayLive);
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
+        }
+
+        public ChromiumWebBrowser browser;
+
+        private void materialTabSelector1_Click(object sender, EventArgs e)
+        {
+            Cef.Initialize(new CefSettings());
+            //browser = new ChromiumWebBrowser("http://www.naver.com");
+            //browser = new ChromiumWebBrowser();
+            browser = new ChromiumWebBrowser("http://www.naver.com")
+            {
+                Dock = DockStyle.Fill,
+                Size = Size,
+            };
+            panelWebbrowser.Controls.Add(browser);
+            browser.Size = new Size(panelWebbrowser.Size.Width, panelWebbrowser.Size.Height);
+            //browser.Height = panelWebbrowser.Height;
+            //browser.Width = panelWebbrowser.Width;
+            //browser.Dock = DockStyle.Fill;
         }
     }
 }

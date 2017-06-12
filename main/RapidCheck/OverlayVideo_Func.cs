@@ -495,6 +495,7 @@ namespace RapidCheck
         }
         public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, string time = null)
         {
+            int min_diff = 1000;
             try
             {
                 if ((back != null) | (front != null))
@@ -508,9 +509,33 @@ namespace RapidCheck
                         ImageAttributes att = new ImageAttributes();
                         att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                        Bitmap diffBmp = back.Clone(position, back.PixelFormat);
+                        for (int y = 0; y < diffBmp.Height; y++)
+                        {
+                            for (int x = 0; x < diffBmp.Width; x++)
+                            {
+                                // Calculate the pixels' difference.
+                                Color color1 = front.GetPixel(x, y);
+                                Color color2 = diffBmp.GetPixel(x, y);
 
-                        //draw
-                        gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
+                                int diff = (color1.R - color2.R) * (color1.R - color2.R) +
+                                        (color1.G - color2.G) * (color1.G - color2.G)+
+                                        (color1.B - color2.B) * (color1.B - color2.B);
+                                if (diff >= min_diff)
+                                {
+                                    diffBmp.SetPixel(x, y, color1);
+                                }                                
+                                else
+                                {
+                                    diffBmp.SetPixel(x, y, color2);
+                                }
+                                
+                            }
+                        }
+
+                            //draw
+                        gr.DrawImage(diffBmp, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
+                        
                         //drawing time(frame num)
                         if(time != null & drawTime)
                         {

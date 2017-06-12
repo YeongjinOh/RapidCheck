@@ -41,6 +41,7 @@
             this.시간출력ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.조건초기화ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.방향설정ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.아래ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -85,11 +86,13 @@
             this.radioButton10 = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.panelWebbrowser = new System.Windows.Forms.Panel();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.조건초기화ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -106,6 +109,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -116,6 +120,7 @@
             this.materialTabControl1.Controls.Add(this.tabPage2);
             this.materialTabControl1.Controls.Add(this.tabPage3);
             this.materialTabControl1.Controls.Add(this.tabPage1);
+            this.materialTabControl1.Controls.Add(this.tabPage4);
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             this.materialTabControl1.Location = new System.Drawing.Point(12, 103);
@@ -225,6 +230,13 @@
             this.offToolStripMenuItem.Text = "Off";
             this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
             // 
+            // 조건초기화ToolStripMenuItem
+            // 
+            this.조건초기화ToolStripMenuItem.Name = "조건초기화ToolStripMenuItem";
+            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
+            this.조건초기화ToolStripMenuItem.Text = "조건 초기화";
+            this.조건초기화ToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
+            // 
             // 방향설정ToolStripMenuItem
             // 
             this.방향설정ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -260,14 +272,14 @@
             // 검정ToolStripMenuItem
             // 
             this.검정ToolStripMenuItem.Name = "검정ToolStripMenuItem";
-            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.검정ToolStripMenuItem.Text = "검정";
             this.검정ToolStripMenuItem.Click += new System.EventHandler(this.BlackToolStripMenuItem_Click);
             // 
             // 하얀ToolStripMenuItem
             // 
             this.하얀ToolStripMenuItem.Name = "하얀ToolStripMenuItem";
-            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.하얀ToolStripMenuItem.Text = "하얀";
             // 
             // panelProgress
@@ -699,6 +711,37 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.panelWebbrowser);
+            this.tabPage4.Controls.Add(this.webBrowser1);
+            this.tabPage4.Location = new System.Drawing.Point(4, 26);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(1516, 743);
+            this.tabPage4.TabIndex = 3;
+            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // panelWebbrowser
+            // 
+            this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
+            this.panelWebbrowser.Name = "panelWebbrowser";
+            this.panelWebbrowser.Size = new System.Drawing.Size(1510, 737);
+            this.panelWebbrowser.TabIndex = 1;
+            // 
+            // webBrowser1
+            // 
+            this.webBrowser1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.webBrowser1.Location = new System.Drawing.Point(3, 3);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(1510, 737);
+            this.webBrowser1.TabIndex = 0;
+            // 
             // materialTabSelector1
             // 
             this.materialTabSelector1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -711,17 +754,11 @@
             this.materialTabSelector1.Size = new System.Drawing.Size(1548, 31);
             this.materialTabSelector1.TabIndex = 1;
             this.materialTabSelector1.Text = "materialTabSelector1";
+            this.materialTabSelector1.Click += new System.EventHandler(this.materialTabSelector1_Click);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
-            // 
-            // 조건초기화ToolStripMenuItem
-            // 
-            this.조건초기화ToolStripMenuItem.Name = "조건초기화ToolStripMenuItem";
-            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
-            this.조건초기화ToolStripMenuItem.Text = "조건 초기화";
-            this.조건초기화ToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -755,6 +792,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -821,6 +859,9 @@
         private System.Windows.Forms.ToolStripMenuItem 검정ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 하얀ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 조건초기화ToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.WebBrowser webBrowser1;
+        private System.Windows.Forms.Panel panelWebbrowser;
     }
 }
 
