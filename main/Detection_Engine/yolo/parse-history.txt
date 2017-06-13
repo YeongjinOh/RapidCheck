@@ -1,1 +1,1 @@
-yolo\only-video_217193.parsed car person
+yolo\dropout-mydata-train.parsed car person
