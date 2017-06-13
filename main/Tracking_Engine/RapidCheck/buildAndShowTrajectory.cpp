@@ -3,7 +3,7 @@
 #include "RCTrajectory.h"
 
 using namespace cv;
-
+using namespace rc;
 
 
 void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectories)
@@ -182,7 +182,7 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 void buildAndShowTrajectory()
 {
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// build target detected frames
 	vector<Frame> framePedestrians, frameCars;
@@ -231,4 +231,29 @@ void buildAndShowTrajectory()
 		
 	// show Trajectory	
 	showTrajectory(framePedestrians, frameCars, trajectoryPedestrians, trajectoryCars);
+}
+
+
+void analysisVideo()
+{
+	// set input video
+	VideoCapture cap(filepath);
+
+	// build target detected frames
+	vector<Frame> framePedestrians, frameCars;
+	readTargets(cap, framePedestrians, frameCars);
+	
+	// build all tracklets
+	vector<Segment> segmentPedestrians, segmentCars;
+	buildTracklets(framePedestrians, segmentPedestrians);
+	buildTracklets(frameCars, segmentCars);
+
+	// build trajectories
+	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;
+	buildTrajectory(segmentPedestrians, trajectoryPedestrians);
+	buildTrajectory(segmentCars, trajectoryCars);
+
+	// insert into DB
+	insertTrackingIntoDB(trajectoryPedestrians, trajectoryCars);
+	insertObjectInfoIntoDB(trajectoryPedestrians, trajectoryCars);
 }

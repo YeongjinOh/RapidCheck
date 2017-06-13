@@ -1,5 +1,7 @@
 #include "tracking_utils.h"
 using namespace cv;
+using namespace rc;
+
 /**
 	Build tracklets of all segements and then, show trace of tracklets
 
@@ -8,7 +10,7 @@ using namespace cv;
 void showTracklet()
 {
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// initialize colors	
 	vector<Scalar> colors = getRandomColors();
@@ -47,13 +49,13 @@ void showTracklet()
 	vector<Point> centers;
 	vector<int> objectIds;
 	vector<tracklet> entirePedestrianTracklets;
-	int objectId = 0;
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+	int objectId = 0, numOfSegments = (numOfFrames-1)/LOW_LEVEL_TRACKLETS;
+	for (int segmentNumber = 0; segmentNumber < numOfSegments; segmentNumber++)
 	{
 		Segment & segment = segments[segmentNumber];
 		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 		{
-			int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+			int frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
 			cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 			cap >> frame;
 

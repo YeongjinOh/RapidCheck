@@ -2,6 +2,7 @@
 #include "similarity_utils.h"
 #include <time.h>
 using namespace cv;
+using namespace rc;
 
 /**
 	calculate and compare similarity between two tracklets
@@ -9,7 +10,7 @@ using namespace cv;
 void compareSimilarity()
 {
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// initialize colors	
 	vector<Scalar> colors = getRandomColors();
@@ -53,8 +54,8 @@ void compareSimilarity()
 	while (true)
 	{
 		// set frame
-		int prevFrameNum = FRAME_STEP*(LOW_LEVEL_TRACKLETS * segmentIdxPrev + (LOW_LEVEL_TRACKLETS / 2)) + START_FRAME_NUM;
-		int nextFrameNum = FRAME_STEP*(LOW_LEVEL_TRACKLETS * segmentIdxNext + (LOW_LEVEL_TRACKLETS / 2)) + START_FRAME_NUM;
+		int prevFrameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentIdxPrev + (LOW_LEVEL_TRACKLETS / 2)) + startFrameNum;
+		int nextFrameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentIdxNext + (LOW_LEVEL_TRACKLETS / 2)) + startFrameNum;
 		cap.set(CV_CAP_PROP_POS_FRAMES, prevFrameNum);
 		cap >> framePrev;
 		cap.set(CV_CAP_PROP_POS_FRAMES, nextFrameNum);

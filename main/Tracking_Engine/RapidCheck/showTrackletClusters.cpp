@@ -1,12 +1,14 @@
 #include "tracking_utils.h"
 using namespace cv;
+using namespace rc;
+
 /**
 	Show how to build tracklet from given detection results
 */
 void showTrackletClusters()
 {
 	// set input video
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// random number generator
 	RNG rng(0xFFFFF0FF);
@@ -58,7 +60,7 @@ void showTrackletClusters()
 			printf("\n\nFrame #%d", frameNum);
 
 		// set frame number
-		cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + LOW_LEVEL_TRACKLETS - 1);
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameStep * (frameNum-1) + startFrameNum + LOW_LEVEL_TRACKLETS - 1);
 
 		// get frame
 		Mat frame;
@@ -76,7 +78,7 @@ void showTrackletClusters()
 		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 		{
 			// set frame number
-			cap.set(CV_CAP_PROP_POS_FRAMES, FRAME_STEP * (frameNum-1) + START_FRAME_NUM + i);
+			cap.set(CV_CAP_PROP_POS_FRAMES, frameStep * (frameNum-1) + startFrameNum + i);
 			// get frame
 			Mat cluster;
 			cap >> cluster;
@@ -163,11 +165,11 @@ void showTrackletClusters()
 		int key = waitKey(0);
 		if (key == 27) break;
 		if (key == (int)('m'))
-			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, MAX_FRAMES - LOW_LEVEL_TRACKLETS);
+			frameNum = min(frameNum + LOW_LEVEL_TRACKLETS, numOfFrames - LOW_LEVEL_TRACKLETS);
 		else if (key == (int)('v'))
 			frameNum = max(frameNum - LOW_LEVEL_TRACKLETS, 1);
 		else if (key == (int)('n'))
-			frameNum = min(frameNum + 1, MAX_FRAMES - 1);
+			frameNum = min(frameNum + 1, numOfFrames - 1);
 		else if (key == (int)('b'))
 			frameNum = max(frameNum - 1, 1);
 		else if (key == (int)('r'))

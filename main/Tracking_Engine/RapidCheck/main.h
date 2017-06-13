@@ -34,11 +34,22 @@ void showDetection();
 void showTrackletClusters();
 void showTracklet();
 void buildAndShowTrajectory();
+void analysisVideo();
 void compareSimilarity();
 void showTrajectory();
 
 // Database
 
 static DB db;
+
+namespace rc 
+{
+	extern char* filepath;
+	extern int videoId;
+	extern int numOfFrames;
+	extern int startFrameNum;
+	extern int frameStep;
+	extern int endFrameNum;
+};
 
 #endif

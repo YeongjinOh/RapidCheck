@@ -1,5 +1,6 @@
 #include "tracking_utils.h"
 using namespace cv;
+using namespace rc;
 
 // Generate random colors
 vector<Scalar> getRandomColors()
@@ -585,12 +586,12 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 
 	Mat frame, frameSkipped;
 	
-	int frameNum = START_FRAME_NUM;
+	int frameNum = startFrameNum;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	if (DEBUG)
 		printf("total frame count : %d\n", totalFrameCount);
-	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP) 
+	for (int frameCnt = 0; frameCnt < numOfFrames; frameCnt++, frameNum += frameStep) 
 	{
 		if (frameNum >= totalFrameCount)
 		{
@@ -601,7 +602,7 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 		
 		// get frame from the video
 		cap >> frame;
-		for (int i = 1; i < FRAME_STEP; i++)
+		for (int i = 1; i < frameStep; i++)
 		{
 			cap >> frameSkipped;
 		}
@@ -680,7 +681,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 
 	Mat frame, frameSkipped;
 
-	int frameNum = START_FRAME_NUM;
+	int frameNum = startFrameNum;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	if (DEBUG)
@@ -691,8 +692,8 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
 	
 	// TODO : use detection table
-	db.selectDetection2(detectionResultsPedestrians, videoId, CLASS_ID_PEDESTRIAN, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
-	db.selectDetection2(detectionResultsCars, videoId, CLASS_ID_CAR, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	db.selectDetection(detectionResultsPedestrians, videoId, CLASS_ID_PEDESTRIAN, startFrameNum, endFrameNum, frameStep);
+	db.selectDetection(detectionResultsCars, videoId, CLASS_ID_CAR, startFrameNum, endFrameNum, frameStep);
 	
 	for (int i = 0; i < detectionResultsPedestrians.size(); i++)
 	{
@@ -707,7 +708,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		mapFrameNumToCars[frameNum].push_back(Rect(x, y, width, height));
 	}
 
-	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
+	for (int frameCnt = 0; frameCnt < numOfFrames; frameCnt++, frameNum += frameStep)
 	{
 		if (frameNum >= totalFrameCount)
 		{
@@ -722,7 +723,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 
 		// get frame from the video
 		cap >> frame;
-		for (int i = 1; i < FRAME_STEP; i++)
+		for (int i = 1; i < frameStep; i++)
 		{
 			cap >> frameSkipped;
 		}
@@ -803,13 +804,13 @@ void readTrajectories(vector<RCTrajectory>& trajectories, int classId)
 {
 	vector<vector<int > > res;
 	map<int, int> objectIdToIdx; // convert objectId to index of trajectories
-	db.selectTracking(res, videoId, classId, START_FRAME_NUM, START_FRAME_NUM + FRAME_STEP * MAX_FRAMES, FRAME_STEP);
+	db.selectTracking(res, videoId, classId, startFrameNum, endFrameNum, frameStep);
 	for (int i = 0; i < res.size(); i++) {
 		int objectId = res[i][0], frameNum = res[i][1], x = res[i][2], y = res[i][3], width = res[i][4], height = res[i][5];
 		Target target(Rect(x, y, width, height));
 		if (objectIdToIdx.find(objectId) == objectIdToIdx.end())  {
 			objectIdToIdx[objectId] = trajectories.size();
-			int segmentNum = (frameNum - START_FRAME_NUM) / (FRAME_STEP*LOW_LEVEL_TRACKLETS);
+			int segmentNum = (frameNum - startFrameNum) / (frameStep*LOW_LEVEL_TRACKLETS);
 			RCTrajectory newTrajectory(segmentNum);
 			trajectories.push_back(newTrajectory);
 		}
@@ -824,14 +825,14 @@ void detectAndInsertResultIntoDB(VideoCapture& cap)
 	App app = App();
 
 	Mat frame, frameSkipped;
-	int frameNum = START_FRAME_NUM;
+	int frameNum = startFrameNum;
 	cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 	totalFrameCount = cap.get(CV_CAP_PROP_FRAME_COUNT);
 	if (DEBUG)
 		printf("total frame count : %d\n", totalFrameCount);
 	int classId = 0;
 	time_t t = clock();
-	for (int frameCnt = 0; frameCnt < MAX_FRAMES; frameCnt++, frameNum += FRAME_STEP)
+	for (int frameCnt = 0; frameCnt < numOfFrames; frameCnt++, frameNum += frameStep)
 	{
 		if (frameNum >= totalFrameCount)
 		{
@@ -842,7 +843,7 @@ void detectAndInsertResultIntoDB(VideoCapture& cap)
 		
 		// get frame from the video
 		cap >> frame;
-		for (int i = 1; i < FRAME_STEP; i++)
+		for (int i = 1; i < frameStep; i++)
 		{
 			cap >> frameSkipped;
 		}
@@ -862,17 +863,17 @@ void detectAndInsertResultIntoDB(VideoCapture& cap)
 	}
 	t = clock() - t;
 	if (DEBUG)
-		printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, START_FRAME_NUM, START_FRAME_NUM + MAX_FRAMES, FRAME_STEP);
+		printf("detection and insertion into DB takes %d(ms) from %d to %d by %d-step", t, startFrameNum, endFrameNum, frameStep);
 }
 
 // Build all tracklets of given frames
 void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 {
 	// build all segments
-	int frameNum = 0;
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
+	int frameNum = 0, numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
+	for (int segmentNumber = 0; segmentNumber < numOfSegments && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		Segment segment(frameNum + START_FRAME_NUM);
+		Segment segment(frameNum + startFrameNum);
 
 		// create tracklet
 		vector<int> solution;
@@ -969,11 +970,11 @@ void insertTrackingIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<RC
 	{
 		RCTrajectory& curTrajectoryPedestrian = trajectoryPedestrians[objectId];
 		std::vector<Target> targetPedestrians = curTrajectoryPedestrian.getTargets();
-		int startFrameNum = curTrajectoryPedestrian.getStartSegmentNum() * LOW_LEVEL_TRACKLETS * FRAME_STEP;
+		int startFrameNum = curTrajectoryPedestrian.getStartSegmentNum() * LOW_LEVEL_TRACKLETS * frameStep;
 		for (int targetId = 0; targetId < targetPedestrians.size(); targetId++)
 		{
 			Rect& targetArea = targetPedestrians[targetId].getTargetArea();
-			db.insertTracking(videoId, objectId, startFrameNum + targetId * FRAME_STEP, targetArea.x, targetArea.y, targetArea.width, targetArea.height);
+			db.insertTracking(videoId, objectId, startFrameNum + targetId * frameStep, targetArea.x, targetArea.y, targetArea.width, targetArea.height);
 		}
 
 	}
@@ -981,11 +982,11 @@ void insertTrackingIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<RC
 	{
 		RCTrajectory& curTrajectoryCar = trajectoryCars[objectId];
 		std::vector<Target> targetCars = curTrajectoryCar.getTargets();
-		int startFrameNum = curTrajectoryCar.getStartSegmentNum() * LOW_LEVEL_TRACKLETS * FRAME_STEP;
+		int curStartFrameNum = curTrajectoryCar.getStartSegmentNum() * LOW_LEVEL_TRACKLETS * frameStep;
 		for (int targetId = 0; targetId < targetCars.size(); targetId++)
 		{
 			Rect& targetArea = targetCars[targetId].getTargetArea();
-			db.insertTracking(videoId, trajectoryPedestrians.size() + objectId, startFrameNum + targetId * FRAME_STEP, targetArea.x, targetArea.y, targetArea.width, targetArea.height);
+			db.insertTracking(videoId, trajectoryPedestrians.size() + objectId, curStartFrameNum + targetId * frameStep, targetArea.x, targetArea.y, targetArea.width, targetArea.height);
 		}
 	}
 }
@@ -995,18 +996,18 @@ void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<
 	for (int i = 0; i < trajectoryPedestrians.size(); i++)
 	{
 		trajectoryPedestrians[i].normalizeColorRatios();
-		db.insertObjectInfo(VIDEOID, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), 0.0, trajectoryPedestrians[i].getColorRatios());
+		db.insertObjectInfo(videoId, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), 0.0, trajectoryPedestrians[i].getColorRatios());
 	}
 	for (int i = 0; i < trajectoryCars.size(); i++)
 	{
 		trajectoryCars[i].normalizeColorRatios();
-		db.insertObjectInfo(VIDEOID, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), 0.0, trajectoryCars[i].getColorRatios());
+		db.insertObjectInfo(videoId, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), 0.0, trajectoryCars[i].getColorRatios());
 	}
 }
 
 void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, vector<RCTrajectory>& trajectoryPedestrians, vector<RCTrajectory>& trajectoryCars)
 {
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 
 	// initialize colors	
 	vector<Scalar> colors = getRandomColors();
@@ -1021,18 +1022,19 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 	
 	Mat frame, frameOrigin, frameSkipped;
 	int timeToSleep = 130;
+	int numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
 	while (true) {
 		int objectId = 0;
-		cap.set(CV_CAP_PROP_POS_FRAMES, START_FRAME_NUM);
-		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+		cap.set(CV_CAP_PROP_POS_FRAMES, startFrameNum);
+		for (int segmentNumber = 0; segmentNumber < numOfSegments; segmentNumber++)
 		{
 			if (DEBUG)
 				printf("segmentNum : %d\n", segmentNumber);
 			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 			{
-				int frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+				int frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
 				cap >> frame;
-				for (int i = 1; i < FRAME_STEP; i++)
+				for (int i = 1; i < frameStep; i++)
 					cap >> frame;
 
 				frame.copyTo(frameOrigin);
@@ -1078,7 +1080,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 				if (key == 27) break;
 				else if (key == (int)('r'))
 				{
-					segmentNumber = NUM_OF_SEGMENTS;
+					segmentNumber = numOfSegments;
 					break;
 				}
 				else if (key == (int)('p'))
@@ -1098,7 +1100,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 				else if (key == (int)('b'))
 				{
 					segmentNumber = max(0, segmentNumber - 10);
-					frameNum = FRAME_STEP * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + START_FRAME_NUM;
+					frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
 					cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 					break;
 				}

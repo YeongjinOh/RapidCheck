@@ -1,10 +1,11 @@
 #include "tracking_utils.h"
 
 using namespace cv;
+using namespace rc;
 
 void showTrajectory ()
 {
-	VideoCapture cap(VIDEOFILE);
+	VideoCapture cap(filepath);
 	vector<Frame> frames, framePedestrians, frameCars;
 	readTargets(cap, framePedestrians, frameCars);
 	

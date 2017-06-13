@@ -84,16 +84,10 @@ public:
 		sprintf(query, "SELECT tracking.objectId, frameNum, x, y, width, height FROM tracking INNER JOIN objectInfo ON tracking.videoId = objectinfo.videoId and tracking.objectId = objectinfo.objectId WHERE tracking.videoId = %d AND objectinfo.classId = %d AND tracking.frameNum >= %d AND tracking.frameNum < %d AND tracking.frameNum %c %d = %d;", videoId, classId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
 		select(query, rows);
 	}
-	void selectDetection(vector<vector<int> >& rows, int videoId, int start_frame, int end_frame, int frame_step)
+	void selectDetection(vector<vector<int> >& rows, int videoId, int classId, int start_frame, int end_frame, int frame_step)
 	{
 		char query[200];
-		sprintf(query, "SELECT frameNum, x, y, width, height, classId FROM detection WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step);
-		select(query, rows);
-	}
-	void selectDetection2(vector<vector<int> >& rows, int videoId, int classId,  int start_frame, int end_frame, int frame_step)
-	{
-		char query[200];
-		sprintf(query, "SELECT frameNum, x, y, width, height, class FROM detection2 WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d and class = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step, classId);
+		sprintf(query, "SELECT frameNum, x, y, width, height, classId FROM detection WHERE videoId = %d AND frameNum >= %d AND frameNum < %d AND frameNum %c %d = %d and classId = %d;", videoId, start_frame, end_frame, '%', frame_step, start_frame%frame_step, classId);
 		select(query, rows);
 	}
 	void insertObjectInfo(int videoId, int objectId, int classId, vector<float> directionRatios, double speed, vector<float> colorRatios)
