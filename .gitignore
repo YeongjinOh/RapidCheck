@@ -31,6 +31,7 @@ models/
 .DS_Store/
 *.weights
 *.parsed
+dropbox
 
 
 # Created by https://www.gitignore.io/api/c++,visualstudio
