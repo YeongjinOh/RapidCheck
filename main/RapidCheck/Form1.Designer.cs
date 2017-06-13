@@ -64,27 +64,8 @@
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.radioButtonCar = new System.Windows.Forms.RadioButton();
-            this.radioButtonPeople = new System.Windows.Forms.RadioButton();
-            this.radioButtonBoth = new System.Windows.Forms.RadioButton();
-            this.direction5 = new System.Windows.Forms.Button();
-            this.direction6 = new System.Windows.Forms.Button();
-            this.direction4 = new System.Windows.Forms.Button();
-            this.direction7 = new System.Windows.Forms.Button();
-            this.direction3 = new System.Windows.Forms.Button();
-            this.direction8 = new System.Windows.Forms.Button();
-            this.direction2 = new System.Windows.Forms.Button();
-            this.direction1 = new System.Windows.Forms.Button();
-            this.radioButton9 = new System.Windows.Forms.RadioButton();
-            this.radioButton8 = new System.Windows.Forms.RadioButton();
-            this.radioButton7 = new System.Windows.Forms.RadioButton();
-            this.radioButton6 = new System.Windows.Forms.RadioButton();
-            this.radioButton5 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton10 = new System.Windows.Forms.RadioButton();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.cartesianChart2 = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChart1 = new LiveCharts.WinForms.CartesianChart();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelWebbrowser = new System.Windows.Forms.Panel();
@@ -93,6 +74,10 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
+            this.cartesianChart3 = new LiveCharts.WinForms.CartesianChart();
+            this.cartesianChart4 = new LiveCharts.WinForms.CartesianChart();
+            this.pieChart1 = new LiveCharts.WinForms.PieChart();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -110,6 +95,7 @@
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -129,16 +115,17 @@
             this.materialTabControl1.SelectedIndex = 0;
             this.materialTabControl1.Size = new System.Drawing.Size(1524, 773);
             this.materialTabControl1.TabIndex = 0;
+            this.materialTabControl1.SelectedIndexChanged += new System.EventHandler(this.materialTabControl1_SelectedIndexChanged);
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.panelObject);
             this.tabPage2.Controls.Add(this.panelProgress);
             this.tabPage2.Controls.Add(this.panelVideo);
-            this.tabPage2.Location = new System.Drawing.Point(4, 26);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1516, 743);
+            this.tabPage2.Size = new System.Drawing.Size(1516, 747);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -151,14 +138,14 @@
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
             this.panelObject.Name = "panelObject";
-            this.panelObject.Size = new System.Drawing.Size(438, 670);
+            this.panelObject.Size = new System.Drawing.Size(438, 674);
             this.panelObject.TabIndex = 2;
             // 
             // panelGrid
             // 
             this.panelGrid.Controls.Add(this.dataGridView1);
             this.panelGrid.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panelGrid.Location = new System.Drawing.Point(0, 50);
+            this.panelGrid.Location = new System.Drawing.Point(0, 54);
             this.panelGrid.Name = "panelGrid";
             this.panelGrid.Size = new System.Drawing.Size(438, 620);
             this.panelGrid.TabIndex = 16;
@@ -167,6 +154,7 @@
             // 
             this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ScrollBar;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1,
@@ -203,7 +191,7 @@
             this.색상설정ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(438, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(438, 24);
             this.menuStrip1.TabIndex = 19;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -213,27 +201,27 @@
             this.onToolStripMenuItem,
             this.offToolStripMenuItem});
             this.시간출력ToolStripMenuItem.Name = "시간출력ToolStripMenuItem";
-            this.시간출력ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
+            this.시간출력ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.시간출력ToolStripMenuItem.Text = "시간 출력";
             // 
             // onToolStripMenuItem
             // 
             this.onToolStripMenuItem.Name = "onToolStripMenuItem";
-            this.onToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
+            this.onToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
             this.onToolStripMenuItem.Text = "On";
             this.onToolStripMenuItem.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
             // 
             // offToolStripMenuItem
             // 
             this.offToolStripMenuItem.Name = "offToolStripMenuItem";
-            this.offToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
+            this.offToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
             this.offToolStripMenuItem.Text = "Off";
             this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
             // 
             // 조건초기화ToolStripMenuItem
             // 
             this.조건초기화ToolStripMenuItem.Name = "조건초기화ToolStripMenuItem";
-            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
+            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
             this.조건초기화ToolStripMenuItem.Text = "조건 초기화";
             this.조건초기화ToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
             // 
@@ -243,20 +231,20 @@
             this.toolStripMenuItem2,
             this.아래ToolStripMenuItem});
             this.방향설정ToolStripMenuItem.Name = "방향설정ToolStripMenuItem";
-            this.방향설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
+            this.방향설정ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.방향설정ToolStripMenuItem.Text = "방향 설정";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(98, 26);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(85, 22);
             this.toolStripMenuItem2.Text = "↑";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.UpToolStripMenuItem2_Click);
             // 
             // 아래ToolStripMenuItem
             // 
             this.아래ToolStripMenuItem.Name = "아래ToolStripMenuItem";
-            this.아래ToolStripMenuItem.Size = new System.Drawing.Size(98, 26);
+            this.아래ToolStripMenuItem.Size = new System.Drawing.Size(85, 22);
             this.아래ToolStripMenuItem.Text = "↓";
             this.아래ToolStripMenuItem.Click += new System.EventHandler(this.DownToolStripMenuItem_Click);
             // 
@@ -266,20 +254,20 @@
             this.검정ToolStripMenuItem,
             this.하얀ToolStripMenuItem});
             this.색상설정ToolStripMenuItem.Name = "색상설정ToolStripMenuItem";
-            this.색상설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
+            this.색상설정ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
             this.색상설정ToolStripMenuItem.Text = "색상 설정";
             // 
             // 검정ToolStripMenuItem
             // 
             this.검정ToolStripMenuItem.Name = "검정ToolStripMenuItem";
-            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.검정ToolStripMenuItem.Text = "검정";
             this.검정ToolStripMenuItem.Click += new System.EventHandler(this.BlackToolStripMenuItem_Click);
             // 
             // 하얀ToolStripMenuItem
             // 
             this.하얀ToolStripMenuItem.Name = "하얀ToolStripMenuItem";
-            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
+            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.하얀ToolStripMenuItem.Text = "하얀";
             // 
             // panelProgress
@@ -325,7 +313,7 @@
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelVideo.Location = new System.Drawing.Point(3, 3);
             this.panelVideo.Name = "panelVideo";
-            this.panelVideo.Size = new System.Drawing.Size(1072, 737);
+            this.panelVideo.Size = new System.Drawing.Size(1072, 741);
             this.panelVideo.TabIndex = 0;
             // 
             // radioButtonX4
@@ -333,7 +321,7 @@
             this.radioButtonX4.AutoSize = true;
             this.radioButtonX4.Location = new System.Drawing.Point(1016, 713);
             this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX4.TabIndex = 5;
             this.radioButtonX4.TabStop = true;
             this.radioButtonX4.Text = "x4";
@@ -345,7 +333,7 @@
             this.radioButtonX2.AutoSize = true;
             this.radioButtonX2.Location = new System.Drawing.Point(967, 713);
             this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX2.TabIndex = 5;
             this.radioButtonX2.TabStop = true;
             this.radioButtonX2.Text = "x2";
@@ -357,7 +345,7 @@
             this.radioButtonX1.AutoSize = true;
             this.radioButtonX1.Location = new System.Drawing.Point(918, 713);
             this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX1.TabIndex = 5;
             this.radioButtonX1.TabStop = true;
             this.radioButtonX1.Text = "x1";
@@ -400,7 +388,7 @@
             this.trackBar1.Enabled = false;
             this.trackBar1.Location = new System.Drawing.Point(2, 689);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1069, 56);
+            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
             this.trackBar1.TabIndex = 2;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
@@ -418,10 +406,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.videoPanel);
-            this.tabPage3.Location = new System.Drawing.Point(4, 26);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1516, 743);
+            this.tabPage3.Size = new System.Drawing.Size(1516, 747);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -432,7 +420,7 @@
             this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoPanel.Location = new System.Drawing.Point(3, 3);
             this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(1510, 737);
+            this.videoPanel.Size = new System.Drawing.Size(1510, 741);
             this.videoPanel.TabIndex = 1;
             // 
             // axWindowsMediaPlayer1
@@ -446,267 +434,42 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.radioButtonCar);
-            this.tabPage1.Controls.Add(this.radioButtonPeople);
-            this.tabPage1.Controls.Add(this.radioButtonBoth);
-            this.tabPage1.Controls.Add(this.direction5);
-            this.tabPage1.Controls.Add(this.direction6);
-            this.tabPage1.Controls.Add(this.direction4);
-            this.tabPage1.Controls.Add(this.direction7);
-            this.tabPage1.Controls.Add(this.direction3);
-            this.tabPage1.Controls.Add(this.direction8);
-            this.tabPage1.Controls.Add(this.direction2);
-            this.tabPage1.Controls.Add(this.direction1);
-            this.tabPage1.Controls.Add(this.radioButton9);
-            this.tabPage1.Controls.Add(this.radioButton8);
-            this.tabPage1.Controls.Add(this.radioButton7);
-            this.tabPage1.Controls.Add(this.radioButton6);
-            this.tabPage1.Controls.Add(this.radioButton5);
-            this.tabPage1.Controls.Add(this.radioButton4);
-            this.tabPage1.Controls.Add(this.radioButton3);
-            this.tabPage1.Controls.Add(this.radioButton2);
-            this.tabPage1.Controls.Add(this.radioButton10);
-            this.tabPage1.Controls.Add(this.radioButton1);
+            this.tabPage1.Controls.Add(this.pieChart1);
+            this.tabPage1.Controls.Add(this.cartesianChart4);
+            this.tabPage1.Controls.Add(this.cartesianChart3);
+            this.tabPage1.Controls.Add(this.cartesianChart2);
+            this.tabPage1.Controls.Add(this.cartesianChart1);
             this.tabPage1.Controls.Add(this.pictureBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1516, 743);
+            this.tabPage1.Size = new System.Drawing.Size(1516, 747);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // radioButtonCar
+            // cartesianChart2
             // 
-            this.radioButtonCar.AutoSize = true;
-            this.radioButtonCar.Location = new System.Drawing.Point(147, 102);
-            this.radioButtonCar.Name = "radioButtonCar";
-            this.radioButtonCar.Size = new System.Drawing.Size(65, 21);
-            this.radioButtonCar.TabIndex = 3;
-            this.radioButtonCar.TabStop = true;
-            this.radioButtonCar.Text = "자동차";
-            this.radioButtonCar.UseVisualStyleBackColor = true;
+            this.cartesianChart2.Location = new System.Drawing.Point(492, 49);
+            this.cartesianChart2.Name = "cartesianChart2";
+            this.cartesianChart2.Size = new System.Drawing.Size(305, 230);
+            this.cartesianChart2.TabIndex = 3;
+            this.cartesianChart2.Text = "cartesianChart2";
             // 
-            // radioButtonPeople
+            // cartesianChart1
             // 
-            this.radioButtonPeople.AutoSize = true;
-            this.radioButtonPeople.Location = new System.Drawing.Point(146, 81);
-            this.radioButtonPeople.Name = "radioButtonPeople";
-            this.radioButtonPeople.Size = new System.Drawing.Size(53, 21);
-            this.radioButtonPeople.TabIndex = 4;
-            this.radioButtonPeople.TabStop = true;
-            this.radioButtonPeople.Text = "사람";
-            this.radioButtonPeople.UseVisualStyleBackColor = true;
-            // 
-            // radioButtonBoth
-            // 
-            this.radioButtonBoth.AutoSize = true;
-            this.radioButtonBoth.Location = new System.Drawing.Point(146, 59);
-            this.radioButtonBoth.Name = "radioButtonBoth";
-            this.radioButtonBoth.Size = new System.Drawing.Size(97, 21);
-            this.radioButtonBoth.TabIndex = 5;
-            this.radioButtonBoth.TabStop = true;
-            this.radioButtonBoth.Text = "사람, 자동차";
-            this.radioButtonBoth.UseVisualStyleBackColor = true;
-            // 
-            // direction5
-            // 
-            this.direction5.Location = new System.Drawing.Point(831, 138);
-            this.direction5.Name = "direction5";
-            this.direction5.Size = new System.Drawing.Size(46, 46);
-            this.direction5.TabIndex = 2;
-            this.direction5.Text = "↘";
-            this.direction5.UseVisualStyleBackColor = true;
-            this.direction5.Click += new System.EventHandler(this.direction5_Click);
-            // 
-            // direction6
-            // 
-            this.direction6.Location = new System.Drawing.Point(779, 139);
-            this.direction6.Name = "direction6";
-            this.direction6.Size = new System.Drawing.Size(46, 46);
-            this.direction6.TabIndex = 2;
-            this.direction6.Text = "↓";
-            this.direction6.UseVisualStyleBackColor = true;
-            this.direction6.Click += new System.EventHandler(this.direction6_Click);
-            // 
-            // direction4
-            // 
-            this.direction4.Location = new System.Drawing.Point(831, 86);
-            this.direction4.Name = "direction4";
-            this.direction4.Size = new System.Drawing.Size(46, 46);
-            this.direction4.TabIndex = 2;
-            this.direction4.Text = "→";
-            this.direction4.UseVisualStyleBackColor = true;
-            this.direction4.Click += new System.EventHandler(this.direction4_Click);
-            // 
-            // direction7
-            // 
-            this.direction7.Location = new System.Drawing.Point(727, 139);
-            this.direction7.Name = "direction7";
-            this.direction7.Size = new System.Drawing.Size(46, 46);
-            this.direction7.TabIndex = 2;
-            this.direction7.Text = "↙";
-            this.direction7.UseVisualStyleBackColor = true;
-            this.direction7.Click += new System.EventHandler(this.direction7_Click);
-            // 
-            // direction3
-            // 
-            this.direction3.Location = new System.Drawing.Point(831, 34);
-            this.direction3.Name = "direction3";
-            this.direction3.Size = new System.Drawing.Size(46, 46);
-            this.direction3.TabIndex = 2;
-            this.direction3.Text = "↗";
-            this.direction3.UseVisualStyleBackColor = true;
-            this.direction3.Click += new System.EventHandler(this.direction3_Click);
-            // 
-            // direction8
-            // 
-            this.direction8.Location = new System.Drawing.Point(727, 87);
-            this.direction8.Name = "direction8";
-            this.direction8.Size = new System.Drawing.Size(46, 46);
-            this.direction8.TabIndex = 2;
-            this.direction8.Text = "←";
-            this.direction8.UseVisualStyleBackColor = true;
-            this.direction8.Click += new System.EventHandler(this.direction8_Click);
-            // 
-            // direction2
-            // 
-            this.direction2.Location = new System.Drawing.Point(779, 35);
-            this.direction2.Name = "direction2";
-            this.direction2.Size = new System.Drawing.Size(46, 46);
-            this.direction2.TabIndex = 2;
-            this.direction2.Text = "↑";
-            this.direction2.UseVisualStyleBackColor = true;
-            this.direction2.Click += new System.EventHandler(this.direction2_Click);
-            // 
-            // direction1
-            // 
-            this.direction1.Location = new System.Drawing.Point(727, 35);
-            this.direction1.Name = "direction1";
-            this.direction1.Size = new System.Drawing.Size(46, 46);
-            this.direction1.TabIndex = 2;
-            this.direction1.Text = "↖";
-            this.direction1.UseVisualStyleBackColor = true;
-            this.direction1.Click += new System.EventHandler(this.direction1_Click);
-            // 
-            // radioButton9
-            // 
-            this.radioButton9.AutoSize = true;
-            this.radioButton9.Checked = true;
-            this.radioButton9.Location = new System.Drawing.Point(571, 125);
-            this.radioButton9.Name = "radioButton9";
-            this.radioButton9.Size = new System.Drawing.Size(110, 21);
-            this.radioButton9.TabIndex = 1;
-            this.radioButton9.TabStop = true;
-            this.radioButton9.Text = "radioButton1";
-            this.radioButton9.UseVisualStyleBackColor = true;
-            this.radioButton9.CheckedChanged += new System.EventHandler(this.radioButton9_CheckedChanged);
-            // 
-            // radioButton8
-            // 
-            this.radioButton8.AutoSize = true;
-            this.radioButton8.Location = new System.Drawing.Point(571, 98);
-            this.radioButton8.Name = "radioButton8";
-            this.radioButton8.Size = new System.Drawing.Size(110, 21);
-            this.radioButton8.TabIndex = 1;
-            this.radioButton8.Text = "radioButton1";
-            this.radioButton8.UseVisualStyleBackColor = true;
-            this.radioButton8.CheckedChanged += new System.EventHandler(this.radioButton8_CheckedChanged);
-            // 
-            // radioButton7
-            // 
-            this.radioButton7.AutoSize = true;
-            this.radioButton7.Location = new System.Drawing.Point(571, 71);
-            this.radioButton7.Name = "radioButton7";
-            this.radioButton7.Size = new System.Drawing.Size(110, 21);
-            this.radioButton7.TabIndex = 1;
-            this.radioButton7.Text = "radioButton1";
-            this.radioButton7.UseVisualStyleBackColor = true;
-            this.radioButton7.CheckedChanged += new System.EventHandler(this.radioButton7_CheckedChanged);
-            // 
-            // radioButton6
-            // 
-            this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(571, 44);
-            this.radioButton6.Name = "radioButton6";
-            this.radioButton6.Size = new System.Drawing.Size(110, 21);
-            this.radioButton6.TabIndex = 1;
-            this.radioButton6.Text = "radioButton1";
-            this.radioButton6.UseVisualStyleBackColor = true;
-            this.radioButton6.CheckedChanged += new System.EventHandler(this.radioButton6_CheckedChanged);
-            // 
-            // radioButton5
-            // 
-            this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(458, 152);
-            this.radioButton5.Name = "radioButton5";
-            this.radioButton5.Size = new System.Drawing.Size(110, 21);
-            this.radioButton5.TabIndex = 1;
-            this.radioButton5.Text = "radioButton1";
-            this.radioButton5.UseVisualStyleBackColor = true;
-            this.radioButton5.CheckedChanged += new System.EventHandler(this.radioButton5_CheckedChanged);
-            // 
-            // radioButton4
-            // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(458, 125);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(110, 21);
-            this.radioButton4.TabIndex = 1;
-            this.radioButton4.Text = "radioButton1";
-            this.radioButton4.UseVisualStyleBackColor = true;
-            this.radioButton4.CheckedChanged += new System.EventHandler(this.radioButton4_CheckedChanged);
-            // 
-            // radioButton3
-            // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(458, 98);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(110, 21);
-            this.radioButton3.TabIndex = 1;
-            this.radioButton3.Text = "radioButton1";
-            this.radioButton3.UseVisualStyleBackColor = true;
-            this.radioButton3.CheckedChanged += new System.EventHandler(this.radioButton3_CheckedChanged);
-            // 
-            // radioButton2
-            // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(458, 71);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(110, 21);
-            this.radioButton2.TabIndex = 1;
-            this.radioButton2.Text = "radioButton1";
-            this.radioButton2.UseVisualStyleBackColor = true;
-            this.radioButton2.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
-            // 
-            // radioButton10
-            // 
-            this.radioButton10.AutoSize = true;
-            this.radioButton10.Location = new System.Drawing.Point(571, 152);
-            this.radioButton10.Name = "radioButton10";
-            this.radioButton10.Size = new System.Drawing.Size(110, 21);
-            this.radioButton10.TabIndex = 1;
-            this.radioButton10.Text = "radioButton1";
-            this.radioButton10.UseVisualStyleBackColor = true;
-            this.radioButton10.CheckedChanged += new System.EventHandler(this.radioButton10_CheckedChanged);
-            // 
-            // radioButton1
-            // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Location = new System.Drawing.Point(458, 44);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(110, 21);
-            this.radioButton1.TabIndex = 1;
-            this.radioButton1.Text = "radioButton1";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.cartesianChart1.Location = new System.Drawing.Point(67, 49);
+            this.cartesianChart1.Name = "cartesianChart1";
+            this.cartesianChart1.Size = new System.Drawing.Size(375, 197);
+            this.cartesianChart1.TabIndex = 1;
+            this.cartesianChart1.Text = "cartesianChart1";
             // 
             // pictureBox1
             // 
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1510, 737);
+            this.pictureBox1.Size = new System.Drawing.Size(1510, 741);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -715,10 +478,10 @@
             // 
             this.tabPage4.Controls.Add(this.panelWebbrowser);
             this.tabPage4.Controls.Add(this.webBrowser1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 26);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1516, 743);
+            this.tabPage4.Size = new System.Drawing.Size(1516, 747);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -728,7 +491,7 @@
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
             this.panelWebbrowser.Name = "panelWebbrowser";
-            this.panelWebbrowser.Size = new System.Drawing.Size(1510, 737);
+            this.panelWebbrowser.Size = new System.Drawing.Size(1510, 741);
             this.panelWebbrowser.TabIndex = 1;
             // 
             // webBrowser1
@@ -739,7 +502,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1510, 737);
+            this.webBrowser1.Size = new System.Drawing.Size(1510, 741);
             this.webBrowser1.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -754,23 +517,62 @@
             this.materialTabSelector1.Size = new System.Drawing.Size(1548, 31);
             this.materialTabSelector1.TabIndex = 1;
             this.materialTabSelector1.Text = "materialTabSelector1";
-            this.materialTabSelector1.Click += new System.EventHandler(this.materialTabSelector1_Click);
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // pictureBoxLogo
+            // 
+            this.pictureBoxLogo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxLogo.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBoxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxLogo.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxLogo.Image")));
+            this.pictureBoxLogo.Location = new System.Drawing.Point(16, 25);
+            this.pictureBoxLogo.Name = "pictureBoxLogo";
+            this.pictureBoxLogo.Size = new System.Drawing.Size(131, 35);
+            this.pictureBoxLogo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxLogo.TabIndex = 2;
+            this.pictureBoxLogo.TabStop = false;
+            // 
+            // cartesianChart3
+            // 
+            this.cartesianChart3.Location = new System.Drawing.Point(67, 312);
+            this.cartesianChart3.Name = "cartesianChart3";
+            this.cartesianChart3.Size = new System.Drawing.Size(385, 229);
+            this.cartesianChart3.TabIndex = 4;
+            this.cartesianChart3.Text = "cartesianChart3";
+            // 
+            // cartesianChart4
+            // 
+            this.cartesianChart4.Location = new System.Drawing.Point(492, 373);
+            this.cartesianChart4.Name = "cartesianChart4";
+            this.cartesianChart4.Size = new System.Drawing.Size(385, 229);
+            this.cartesianChart4.TabIndex = 4;
+            this.cartesianChart4.Text = "cartesianChart3";
+            // 
+            // pieChart1
+            // 
+            this.pieChart1.Location = new System.Drawing.Point(926, 78);
+            this.pieChart1.Name = "pieChart1";
+            this.pieChart1.Size = new System.Drawing.Size(413, 272);
+            this.pieChart1.TabIndex = 5;
+            this.pieChart1.Text = "pieChart1";
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(1548, 876);
+            this.Controls.Add(this.pictureBoxLogo);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
             this.Font = new System.Drawing.Font("Segoe UI Symbol", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
-            this.Text = "RapidCheck";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
@@ -793,6 +595,7 @@
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage4.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -808,24 +611,6 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ColorDialog colorDialog1;
-        private System.Windows.Forms.RadioButton radioButton7;
-        private System.Windows.Forms.RadioButton radioButton6;
-        private System.Windows.Forms.RadioButton radioButton5;
-        private System.Windows.Forms.RadioButton radioButton4;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton9;
-        private System.Windows.Forms.RadioButton radioButton8;
-        private System.Windows.Forms.RadioButton radioButton10;
-        private System.Windows.Forms.Button direction5;
-        private System.Windows.Forms.Button direction6;
-        private System.Windows.Forms.Button direction4;
-        private System.Windows.Forms.Button direction7;
-        private System.Windows.Forms.Button direction3;
-        private System.Windows.Forms.Button direction8;
-        private System.Windows.Forms.Button direction2;
-        private System.Windows.Forms.Button direction1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panelObject;
         private System.Windows.Forms.Panel panelProgress;
@@ -845,9 +630,6 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
-        private System.Windows.Forms.RadioButton radioButtonCar;
-        private System.Windows.Forms.RadioButton radioButtonPeople;
-        private System.Windows.Forms.RadioButton radioButtonBoth;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem 시간출력ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem onToolStripMenuItem;
@@ -862,6 +644,12 @@
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.Panel panelWebbrowser;
+        private System.Windows.Forms.PictureBox pictureBoxLogo;
+        private LiveCharts.WinForms.CartesianChart cartesianChart2;
+        private LiveCharts.WinForms.CartesianChart cartesianChart1;
+        private LiveCharts.WinForms.CartesianChart cartesianChart4;
+        private LiveCharts.WinForms.CartesianChart cartesianChart3;
+        private LiveCharts.WinForms.PieChart pieChart1;
     }
 }
 
