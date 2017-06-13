@@ -38,7 +38,7 @@ is_freeze = True
 # weigths_path = 'models/train/yolo-2class-complete.h5'
 # weigths_path = os.path.join(cfg.model_folder, cfg.model_name) + '-steps8000.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps44000.h5'
-weigths_path = 'models/train/yolo-2class-cell14-mydata100000/only-video_439532-steps8000.h5'
+weigths_path = 'models/train/yolo-2class-cell14-mydata100000/only-video_217193-steps20000.h5'
 # weigths_path = 'models/train/'+cfg.model_name+'-complete.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 test_threshold = 0.4
@@ -50,14 +50,14 @@ model = yolo_tiny_THdim_model(is_freeze)
 model.load_weights(weigths_path)
 #model.summary()
 
-video_path = os.path.join('test', 'my_testset', 'video_439532.mp4')
+video_path = os.path.join('test', 'my_testset', 'video_217193.mp4')
 frameSteps = 2
 frameNum = 0
 items = []
 cap = cv2.VideoCapture(video_path)
 print (video_path)
-#cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
-#cv2.resizeWindow('Detection Window', 600,600)
+cv2.namedWindow('Detection Window',cv2.WINDOW_NORMAL)
+cv2.resizeWindow('Detection Window', 600,600)
 
 try:
 	while True:

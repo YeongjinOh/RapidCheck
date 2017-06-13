@@ -8,10 +8,11 @@ only 2class classifier yolo model config
 # Global config variables
 import os
 
-pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14', 'from-cell14base-mydata-steps100000.h5')
-
-model_folder = os.path.join('models', 'train', 'yolo-2class-cell14-mydata100000')
-model_name = 'only-video_217193'
+# pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14', 'from-cell14base-mydata-steps100000.h5')
+# pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14-mydata100000', 'only-video_217193-steps4000.h5')
+pretrained_model = os.path.join('dropbox', 'models', 'train', 'yolo-2class-cell14-voctrain', 'base-voc2007-with-dropout-05-steps48000.h5')
+model_folder = os.path.join('models', 'train', 'yolo-2class-cell14-voc-dropout')
+model_name = 'dropout-mydata-train'
 classes_name = ["car", "person"]
 
 # dataset_abs_location = os.path.join('C:\\\\', 'Users', 'SoMa', 'myworkspace', 'RapidLabeling', 'app', 'static', 'datacenter')
@@ -20,7 +21,7 @@ classes_name = ["car", "person"]
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','voc_dataset','VOCtrainval_06-2007','VOCdevkit','VOC2007')
 # dataset_abs_location = os.path.join('C:\\\\','Users','SoMa','myworkspace','my_trainset', 'datacenter_mydata')
 # dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','myworkspace','my_trainset', 'datacenter_mydata')
-dataset_abs_location = os.path.join('C:\\\\','Users','Soma2','Dropbox','RapidCheck', 'dataset', 'datacenter', 'video_217193')
+dataset_abs_location = os.path.join('dropbox', 'dataset', 'datacenter', 'datacenter_mydata')
 test_dataset_abs_location = None
 ann_location = os.path.join(dataset_abs_location, 'annotations')
 # ann_location = os.path.join(dataset_abs_location, 'Annotations')
@@ -40,7 +41,7 @@ coord_scale = 5
 
 inp_size = 448, 448, 3
 batch_size = 32
-epochs=2000
+epochs=20000
 
 lr=0.0001
 trainer='adam'
@@ -48,7 +49,7 @@ trainer='adam'
 image_dim_order = 'th'
 norm_type = 'scale_down'
 
-descriptions = "2017-06-06\n\
+descriptions = "2017-06-13\n\
 cell size : {}\n\
 num_classes : {}\n\
 boxes_per_cell : {}\n\
@@ -63,7 +64,7 @@ trainer : {}\n\
 image_dim_order : {}\n\
 norm_type : {}\n\
 pretrained_model : {}\n\
-mydata100000 에서 video_217193 데이터를 심층학습 시켜본다\n\
+from voc2007 dropout layer -> train mydata with dropout layer\n\
 베이스를 만드는 과정에서 Dropout 이 효과가 있을지는 미지수이다. \n\
 베이스를 Dropout 이 들어간 상태에서, mydata 도 dropout 레이어를 추가했을 시 도메인 결과에 어떠한 변화가 있는지를 확인할 필요가 있다.\n\
 다음실험은 mydata 도메인에서도 dropout 레이어를 추가하여 학습하여, 스킵된 프레임에서의 안정성과 정확성을 확인한다.".format(cell_size, 

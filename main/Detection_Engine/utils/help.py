@@ -1,6 +1,8 @@
 import pymysql
 import os
 import json
+import matplotlib.pyplot as plt
+import numpy as np
 
 def say(*words, verbalise=False):
 	if verbalise:
@@ -122,6 +124,20 @@ def save_model(model, save_folder, file_name, steps, descriptions, save_type='we
 	elif save_type == 'all':
 		model.save_weights(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
 		model.save(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
+
+
+def plot_model_history(model_history, save_path, model_name, record_step=100):
+	fig, axs = plt.subplots(1,1,figsize=(10,5))
+	axs.plot(range(1,len(model_history['train_loss'])*record_step+1, record_step),model_history['train_loss'])
+	# axs.plot(range(1,len(model_history['val_loss'])+1),model_history['val_loss'])
+	axs.set_title('Model Loss')
+	axs.set_ylabel('loss')
+	axs.set_xlabel('Steps')
+	axs.set_xticks(np.arange(1,len(model_history['train_loss'])+1),len(model_history['train_loss'])/10)
+	axs.legend(['train_loss', 'val_loss'], loc='best')
+	# plt.show()
+	fig.savefig(os.path.join(save_path, model_name+'_LossGraph'+'.png'))
+
 
 if __name__ == '__main__':
 	s = "dfkjasidfajfl\

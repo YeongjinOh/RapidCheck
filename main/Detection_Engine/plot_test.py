@@ -22,23 +22,23 @@ import numpy as np
 #     axs[1].legend(['train', 'val'], loc='best')
 #     plt.show()
 
-def plot_model_history(model_history):
-	fig, axs = plt.subplots(1,1,figsize=(15,5))
-	axs.plot(range(1,len(model_history['loss'])+1),model_history['loss'])
-	axs.plot(range(1,len(model_history['val_loss'])+1),model_history['val_loss'])
+def plot_model_history(model_history, save_path):
+	fig, axs = plt.subplots(1,1,figsize=(10,5))
+	axs.plot(range(1,len(model_history['train_loss'])*100+1, 100),model_history['train_loss'])
+	# axs.plot(range(1,len(model_history['val_loss'])+1),model_history['val_loss'])
 	axs.set_title('Model Loss')
-	axs.set_ylabel('Loss')
+	axs.set_ylabel('loss')
 	axs.set_xlabel('Steps')
-	axs.set_xticks(np.arange(1,len(model_history['loss'])+1),len(model_history['loss'])/10)
+	axs.set_xticks(np.arange(1,len(model_history['train_loss'])+1),len(model_history['train_loss'])/10)
 	axs.legend(['train_loss', 'val_loss'], loc='best')
 	plt.show()
-	fig.savefig('tmp/test.png')
+	# fig.savefig(os.path.join(save_path, 'test.png'))
 
 
 if __name__ == '__main__':
 	history = {}
-	history['acc'] = [1,2,3,4,5,5,4,3,4,5]
-	history['val_acc'] = [3,4,4,5,4,3,4,5,6,6]
+	history['train_loss'] = [1,2,3,4,5,5,4,3,4,5]
+	history['val_loss'] = [3,4,4,5,4,3,4,5,6,6]
 	# print(len(history['acc']))
 	# print(len(history['val_acc']))
-	plot_model_history(history)
+	plot_model_history(history, '.')

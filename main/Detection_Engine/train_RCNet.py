@@ -5,7 +5,7 @@ import cv2
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import yolo.config as cfg
-from utils.help import say, conv_weigths_flatten, save_model
+from utils.help import say, conv_weigths_flatten, save_model, plot_model_history
 
 import keras.backend as K
 from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_THdim_model, yolo_tiny_THdim_dropout_model
@@ -42,8 +42,8 @@ print(cfg.dataset_abs_location)
 sess = tf.Session()
 K.set_session(sess)
 
-model = yolo_tiny_THdim_model()
-# model = yolo_tiny_THdim_dropout_model()
+# model = yolo_tiny_THdim_model()
+model = yolo_tiny_THdim_dropout_model()
 # model = yolo_shortdense_THdim_model()
 model.summary()
 
@@ -66,6 +66,10 @@ model.load_weights(pretrain_weight_path, by_name=True)
 
 batches = shuffle()
 
+train_histories = {}
+train_histories['train_loss'] = []
+record_step = 100
+
 for i, (x_batch, datum) in enumerate(batches):
 	train_feed_dict = {
 	   loss_ph[key]:datum[key] for key in loss_ph 
@@ -76,7 +80,8 @@ for i, (x_batch, datum) in enumerate(batches):
 	fetched = sess.run(fetches, feed_dict=train_feed_dict)
 	
 	loss_val = fetched[1]
-	# if i % 100 == 0:
+	if i % record_step == 0:
+		train_histories['train_loss'].append(loss_val)
 	# 	# 100 번마다 한번씩 test loss 를 구해본다.
 	# 	test_x_batch, test_datum = test_shuffle()
 	# 	test_feed_dict = {
@@ -117,6 +122,7 @@ for i, (x_batch, datum) in enumerate(batches):
 	if i % 4000 == 0:
 		# save_model(model, save_folder, file_name, steps, descriptions, save_type='weights'):
 		save_model(model, cfg.model_folder, cfg.model_name, i, cfg.descriptions)
+		plot_model_history(train_histories, cfg.model_folder, cfg.model_name, record_step)
 		# model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 		# say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
 
