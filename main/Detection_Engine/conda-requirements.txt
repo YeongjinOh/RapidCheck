@@ -8,6 +8,7 @@ cycler=0.10.0=py35_0
 decorator=4.0.11=py35_0
 entrypoints=0.2.2=py35_1
 freetype=2.5.5=vc14_2
+graphviz=2.38.0=4
 h5py=2.6.0=np112py35_2
 hdf5=1.8.15.1=vc14_4
 html5lib=0.999=py35_0
