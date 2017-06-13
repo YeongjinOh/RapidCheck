@@ -34,6 +34,7 @@ void showDetection();
 void showTrackletClusters();
 void showTracklet();
 void buildAndShowTrajectory();
+void analysisVideo();
 void compareSimilarity();
 void showTrajectory();
 
@@ -43,14 +44,12 @@ static DB db;
 
 namespace rc 
 {
-//	extern MapInformation mapInf;
-	extern char* filepath;// = "C:/videos/tracking.mp4";
-	extern int videoId;// = 3;
-	extern int numOfFrames;// = 1000;
-	extern int startFrameNum;// = 2001;
-	extern int frameStep;// = 3;
-	extern int endFrameNum;// = startFrameNum + numOfFrames * frameStep;
-
+	extern char* filepath;
+	extern int videoId;
+	extern int numOfFrames;
+	extern int startFrameNum;
+	extern int frameStep;
+	extern int endFrameNum;
 };
 
 #endif

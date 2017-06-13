@@ -90,13 +90,14 @@ int main(int argc, char ** argv)
 {
 	initRCVariables();
 	int operationNum = 5;
-
+	
 	// assign arguments
 	for (int i = 1; i < argc; i++)
 	{
 		if (std::string(argv[i]) == "--videoId")
 		{
 			videoId = atoi(argv[++i]);
+			operationNum = 1;
 		}
 		else if (std::string(argv[i]) == "--operation")
 		{
@@ -117,7 +118,12 @@ int main(int argc, char ** argv)
 		}
 	}
 	numOfFrames = (endFrameNum - startFrameNum) / frameStep;
-	
+	if (argc > 1)
+	{
+		analysisVideo();
+		return 0;
+	}
+
 	switch (operationNum)
 	{
 		case 0:

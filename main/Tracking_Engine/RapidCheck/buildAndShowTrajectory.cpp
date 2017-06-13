@@ -232,3 +232,28 @@ void buildAndShowTrajectory()
 	// show Trajectory	
 	showTrajectory(framePedestrians, frameCars, trajectoryPedestrians, trajectoryCars);
 }
+
+
+void analysisVideo()
+{
+	// set input video
+	VideoCapture cap(filepath);
+
+	// build target detected frames
+	vector<Frame> framePedestrians, frameCars;
+	readTargets(cap, framePedestrians, frameCars);
+	
+	// build all tracklets
+	vector<Segment> segmentPedestrians, segmentCars;
+	buildTracklets(framePedestrians, segmentPedestrians);
+	buildTracklets(frameCars, segmentCars);
+
+	// build trajectories
+	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;
+	buildTrajectory(segmentPedestrians, trajectoryPedestrians);
+	buildTrajectory(segmentCars, trajectoryCars);
+
+	// insert into DB
+	insertTrackingIntoDB(trajectoryPedestrians, trajectoryCars);
+	insertObjectInfoIntoDB(trajectoryPedestrians, trajectoryCars);
+}
