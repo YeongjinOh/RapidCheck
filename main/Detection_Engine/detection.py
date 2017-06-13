@@ -18,8 +18,8 @@ from utils.help import DB_Helper, DB_Item
 import os
 import argparse
 
-root_path = '../../../Detection_Engine/'
-os.chdir(root_path)
+# root_path = '../../../Detection_Engine/'
+# os.chdir(root_path)
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--videoId', type=int, help='VideoId for detecting works', required=True)

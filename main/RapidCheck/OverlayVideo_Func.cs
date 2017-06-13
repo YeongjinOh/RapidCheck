@@ -72,7 +72,8 @@ namespace RapidCheck
                     // detection
                     if (status == 0)
                     {
-
+                        string dir = @"..\..\..\..\Detection_Engine\";
+                        System.IO.Directory.SetCurrentDirectory(dir);
                         //연동하는부분
                         try
                         {
@@ -110,11 +111,11 @@ namespace RapidCheck
                         //연동하는부분
                         try
                         {
-                            string dir = @"..\..\..\Tracking_Engine\RapidCheck";
+                            string dir = @"..\Tracking_Engine\RapidCheck";
                             System.IO.Directory.SetCurrentDirectory(dir);
 
                             string pro = @"C:\Users\SoMa\Desktop\RapidCheck\main\Tracking_Engine\x64\Debug\Tracking_Engine.exe";
-                            string args = string.Format("{0} {1}", videoid, maxFrameNum);
+                            string args = string.Format("--videoId {0} --path {1} --maxFrameNum {2} --frameStep {3}", videoid, videoPath, maxFrameNum, frameStep);
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
