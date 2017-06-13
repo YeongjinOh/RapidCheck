@@ -1,5 +1,17 @@
 #include "main.h"
 
+namespace rc 
+{
+	char* filepath;// = "C:/videos/tracking.mp4";
+	int videoId;// = 3;
+	int numOfFrames;// = 1000;
+	int startFrameNum;// = 2001;
+	int frameStep;// = 3;
+	int endFrameNum;// = startFrameNum + numOfFrames * frameStep;
+}
+
+using namespace rc;
+
 // color extraction tester
 void colorExtractor()
 {
@@ -63,16 +75,49 @@ void colorExtractor()
 
 }
 
+void initRCVariables()
+{
+	filepath = "C:/videos/tracking.mp4";
+	videoId = 3;
+	numOfFrames = 1000;
+	startFrameNum = 0;
+	frameStep = 3;
+	endFrameNum = startFrameNum + numOfFrames * frameStep;
+}
+
 
 int main(int argc, char ** argv)
 {
-	// print arguments
-	for (int i = 0; i < argc; i++)
-	{
-		cout << argv[i] << endl;
-	}
-
+	initRCVariables();
 	int operationNum = 5;
+
+	// assign arguments
+	for (int i = 1; i < argc; i++)
+	{
+		if (std::string(argv[i]) == "--videoId")
+		{
+			videoId = atoi(argv[++i]);
+		}
+		else if (std::string(argv[i]) == "--operation")
+		{
+			operationNum = atoi(argv[++i]);
+		}
+		else if (std::string(argv[i]) == "--frameStep")
+		{
+			frameStep = atoi(argv[++i]);
+		}
+		else if (std::string(argv[i]) == "--maxFrameNum")
+		{
+			startFrameNum = 0;
+			endFrameNum = atoi(argv[++i]);
+		}
+		else if (std::string(argv[i]) == "--path")
+		{
+			filepath = argv[++i];
+		}
+	}
+	numOfFrames = (endFrameNum - startFrameNum) / frameStep;
+	
 	switch (operationNum)
 	{
 		case 0:

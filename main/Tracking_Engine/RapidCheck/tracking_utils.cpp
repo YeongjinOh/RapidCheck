@@ -1,5 +1,6 @@
 #include "tracking_utils.h"
 using namespace cv;
+using namespace rc;
 
 // Generate random colors
 vector<Scalar> getRandomColors()
@@ -869,8 +870,8 @@ void detectAndInsertResultIntoDB(VideoCapture& cap)
 void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
 {
 	// build all segments
-	int frameNum = 0;
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
+	int frameNum = 0, numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
+	for (int segmentNumber = 0; segmentNumber < numOfSegments && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
 		Segment segment(frameNum + startFrameNum);
 
@@ -1021,10 +1022,11 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 	
 	Mat frame, frameOrigin, frameSkipped;
 	int timeToSleep = 130;
+	int numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
 	while (true) {
 		int objectId = 0;
 		cap.set(CV_CAP_PROP_POS_FRAMES, startFrameNum);
-		for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+		for (int segmentNumber = 0; segmentNumber < numOfSegments; segmentNumber++)
 		{
 			if (DEBUG)
 				printf("segmentNum : %d\n", segmentNumber);
@@ -1078,7 +1080,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 				if (key == 27) break;
 				else if (key == (int)('r'))
 				{
-					segmentNumber = NUM_OF_SEGMENTS;
+					segmentNumber = numOfSegments;
 					break;
 				}
 				else if (key == (int)('p'))

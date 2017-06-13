@@ -1,5 +1,6 @@
 #include "main.h"
 using namespace cv;
+using namespace rc;
 
 /**
 	Show similarities of given target pairs

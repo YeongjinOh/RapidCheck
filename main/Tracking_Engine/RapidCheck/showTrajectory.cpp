@@ -1,6 +1,7 @@
 #include "tracking_utils.h"
 
 using namespace cv;
+using namespace rc;
 
 void showTrajectory ()
 {

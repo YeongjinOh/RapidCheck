@@ -3,7 +3,7 @@
 #include "RCTrajectory.h"
 
 using namespace cv;
-
+using namespace rc;
 
 
 void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectories)

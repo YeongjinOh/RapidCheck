@@ -1,5 +1,7 @@
 #include "tracking_utils.h"
 using namespace cv;
+using namespace rc;
+
 /**
 	Build tracklets of all segements and then, show trace of tracklets
 
@@ -47,8 +49,8 @@ void showTracklet()
 	vector<Point> centers;
 	vector<int> objectIds;
 	vector<tracklet> entirePedestrianTracklets;
-	int objectId = 0;
-	for (int segmentNumber = 0; segmentNumber < NUM_OF_SEGMENTS; segmentNumber++)
+	int objectId = 0, numOfSegments = (numOfFrames-1)/LOW_LEVEL_TRACKLETS;
+	for (int segmentNumber = 0; segmentNumber < numOfSegments; segmentNumber++)
 	{
 		Segment & segment = segments[segmentNumber];
 		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)

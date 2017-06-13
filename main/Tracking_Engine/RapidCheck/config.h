@@ -7,12 +7,6 @@ const int NUM_OF_COLORS = 64;
 const bool DEBUG = false;
 const bool USE_PEDESTRIANS_ONLY = true;
 
-static char* filepath = "C:/videos/tracking.mp4";
-static int videoId = 3;
-static int numOfFrames = 1000;
-static int startFrameNum = 2001;
-static int frameStep = 3;
-static int endFrameNum = startFrameNum + numOfFrames * frameStep;
 
 const int CLASS_ID_CAR = 0;
 const int CLASS_ID_PEDESTRIAN = 1;
@@ -25,8 +19,6 @@ const int NUM_OF_SAT_BINS = 6;
 const double MIXTURE_CONSTANT = 0.1;
 const int LOW_LEVEL_TRACKLETS = 6;
 const int MID_LEVEL_TRACKLETS = 6;
-const int NUM_OF_SEGMENTS = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
-const int NUM_OF_MID_LEVEL_SEGMENTS = NUM_OF_SEGMENTS / MID_LEVEL_TRACKLETS;
 const int CONTINUOUS_MOTION_COST_THRE = 30;
 const int CONTINUOUS_MOTION_COST_THRE_CAR = 100;
 const bool RESIZE_DETECTION_AREA = false;

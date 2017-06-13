@@ -2,6 +2,7 @@
 #include "similarity_utils.h"
 #include <time.h>
 using namespace cv;
+using namespace rc;
 
 /**
 	calculate and compare similarity between two tracklets
