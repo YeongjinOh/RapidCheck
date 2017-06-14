@@ -1,1 +1,1 @@
-yolo\dropout-mydata-train.parsed car person
+yolo\from-mydatabase-mot-person.parsed car person
