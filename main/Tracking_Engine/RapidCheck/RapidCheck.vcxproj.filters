@@ -54,6 +54,9 @@
     <ClCompile Include="buildAndShowTrajectory.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="colorExtractor.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="target.h">

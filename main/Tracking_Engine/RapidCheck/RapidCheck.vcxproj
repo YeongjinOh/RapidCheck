@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="buildAndShowTrajectory.cpp" />
+    <ClCompile Include="colorExtractor.cpp" />
     <ClCompile Include="compareSimilarity.cpp" />
     <ClCompile Include="showDetection.cpp" />
     <ClCompile Include="showTrackletClusters.cpp" />
