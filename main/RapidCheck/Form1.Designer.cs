@@ -129,10 +129,10 @@
             this.tabPage2.Controls.Add(this.panelObject);
             this.tabPage2.Controls.Add(this.panelProgress);
             this.tabPage2.Controls.Add(this.panelVideo);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1516, 747);
+            this.tabPage2.Size = new System.Drawing.Size(1516, 743);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -146,7 +146,7 @@
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1075, 70);
             this.panelObject.Name = "panelObject";
-            this.panelObject.Size = new System.Drawing.Size(438, 674);
+            this.panelObject.Size = new System.Drawing.Size(438, 670);
             this.panelObject.TabIndex = 2;
             // 
             // dataGridView2
@@ -157,13 +157,13 @@
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column2});
             this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView2.Location = new System.Drawing.Point(0, 24);
+            this.dataGridView2.Location = new System.Drawing.Point(0, 28);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 23;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(158, 650);
+            this.dataGridView2.Size = new System.Drawing.Size(158, 642);
             this.dataGridView2.TabIndex = 21;
             // 
             // Column2
@@ -182,13 +182,13 @@
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Right;
-            this.dataGridView1.Location = new System.Drawing.Point(158, 24);
+            this.dataGridView1.Location = new System.Drawing.Point(158, 28);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 30;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(280, 650);
+            this.dataGridView1.Size = new System.Drawing.Size(280, 642);
             this.dataGridView1.TabIndex = 20;
             // 
             // Column1
@@ -207,11 +207,11 @@
             this.시간출력ToolStripMenuItem,
             this.조건초기화ToolStripMenuItem,
             this.방향설정ToolStripMenuItem,
-            this.색상설정ToolStripMenuItem,
-            this.영진짱ToolStripMenuItem});
+            this.영진짱ToolStripMenuItem,
+            this.색상설정ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(438, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(438, 28);
             this.menuStrip1.TabIndex = 19;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -221,27 +221,27 @@
             this.onToolStripMenuItem,
             this.offToolStripMenuItem});
             this.시간출력ToolStripMenuItem.Name = "시간출력ToolStripMenuItem";
-            this.시간출력ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.시간출력ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
             this.시간출력ToolStripMenuItem.Text = "시간 출력";
             // 
             // onToolStripMenuItem
             // 
             this.onToolStripMenuItem.Name = "onToolStripMenuItem";
-            this.onToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
+            this.onToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
             this.onToolStripMenuItem.Text = "On";
             this.onToolStripMenuItem.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
             // 
             // offToolStripMenuItem
             // 
             this.offToolStripMenuItem.Name = "offToolStripMenuItem";
-            this.offToolStripMenuItem.Size = new System.Drawing.Size(91, 22);
+            this.offToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
             this.offToolStripMenuItem.Text = "Off";
             this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
             // 
             // 조건초기화ToolStripMenuItem
             // 
             this.조건초기화ToolStripMenuItem.Name = "조건초기화ToolStripMenuItem";
-            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(83, 20);
+            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
             this.조건초기화ToolStripMenuItem.Text = "조건 초기화";
             this.조건초기화ToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
             // 
@@ -251,20 +251,20 @@
             this.toolStripMenuItem2,
             this.아래ToolStripMenuItem});
             this.방향설정ToolStripMenuItem.Name = "방향설정ToolStripMenuItem";
-            this.방향설정ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.방향설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
             this.방향설정ToolStripMenuItem.Text = "방향 설정";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(85, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(98, 26);
             this.toolStripMenuItem2.Text = "↑";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.UpToolStripMenuItem2_Click);
             // 
             // 아래ToolStripMenuItem
             // 
             this.아래ToolStripMenuItem.Name = "아래ToolStripMenuItem";
-            this.아래ToolStripMenuItem.Size = new System.Drawing.Size(85, 22);
+            this.아래ToolStripMenuItem.Size = new System.Drawing.Size(98, 26);
             this.아래ToolStripMenuItem.Text = "↓";
             this.아래ToolStripMenuItem.Click += new System.EventHandler(this.DownToolStripMenuItem_Click);
             // 
@@ -274,20 +274,20 @@
             this.검정ToolStripMenuItem,
             this.하얀ToolStripMenuItem});
             this.색상설정ToolStripMenuItem.Name = "색상설정ToolStripMenuItem";
-            this.색상설정ToolStripMenuItem.Size = new System.Drawing.Size(71, 20);
+            this.색상설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
             this.색상설정ToolStripMenuItem.Text = "색상 설정";
             // 
             // 검정ToolStripMenuItem
             // 
             this.검정ToolStripMenuItem.Name = "검정ToolStripMenuItem";
-            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.검정ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.검정ToolStripMenuItem.Text = "검정";
             this.검정ToolStripMenuItem.Click += new System.EventHandler(this.BlackToolStripMenuItem_Click);
             // 
             // 하얀ToolStripMenuItem
             // 
             this.하얀ToolStripMenuItem.Name = "하얀ToolStripMenuItem";
-            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.하얀ToolStripMenuItem.Size = new System.Drawing.Size(114, 26);
             this.하얀ToolStripMenuItem.Text = "하얀";
             // 
             // 영진짱ToolStripMenuItem
@@ -304,76 +304,76 @@
             this.color8ToolStripMenuItem,
             this.color9ToolStripMenuItem});
             this.영진짱ToolStripMenuItem.Name = "영진짱ToolStripMenuItem";
-            this.영진짱ToolStripMenuItem.Size = new System.Drawing.Size(55, 20);
+            this.영진짱ToolStripMenuItem.Size = new System.Drawing.Size(66, 24);
             this.영진짱ToolStripMenuItem.Text = "영진짱";
             // 
             // color0ToolStripMenuItem
             // 
             this.color0ToolStripMenuItem.Name = "color0ToolStripMenuItem";
-            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color0ToolStripMenuItem.Text = "color0";
             this.color0ToolStripMenuItem.Click += new System.EventHandler(this.color0ToolStripMenuItem_Click);
             // 
             // color1ToolStripMenuItem
             // 
             this.color1ToolStripMenuItem.Name = "color1ToolStripMenuItem";
-            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color1ToolStripMenuItem.Text = "color1";
             this.color1ToolStripMenuItem.Click += new System.EventHandler(this.color1ToolStripMenuItem_Click);
             // 
             // color2ToolStripMenuItem
             // 
             this.color2ToolStripMenuItem.Name = "color2ToolStripMenuItem";
-            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color2ToolStripMenuItem.Text = "color2";
             this.color2ToolStripMenuItem.Click += new System.EventHandler(this.color2ToolStripMenuItem_Click);
             // 
             // color3ToolStripMenuItem
             // 
             this.color3ToolStripMenuItem.Name = "color3ToolStripMenuItem";
-            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color3ToolStripMenuItem.Text = "color3";
             this.color3ToolStripMenuItem.Click += new System.EventHandler(this.color3ToolStripMenuItem_Click);
             // 
             // color4ToolStripMenuItem
             // 
             this.color4ToolStripMenuItem.Name = "color4ToolStripMenuItem";
-            this.color4ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color4ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color4ToolStripMenuItem.Text = "color4";
             this.color4ToolStripMenuItem.Click += new System.EventHandler(this.color4ToolStripMenuItem_Click);
             // 
             // color5ToolStripMenuItem
             // 
             this.color5ToolStripMenuItem.Name = "color5ToolStripMenuItem";
-            this.color5ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color5ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color5ToolStripMenuItem.Text = "color5";
             this.color5ToolStripMenuItem.Click += new System.EventHandler(this.color5ToolStripMenuItem_Click);
             // 
             // color6ToolStripMenuItem
             // 
             this.color6ToolStripMenuItem.Name = "color6ToolStripMenuItem";
-            this.color6ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color6ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color6ToolStripMenuItem.Text = "color6";
             this.color6ToolStripMenuItem.Click += new System.EventHandler(this.color6ToolStripMenuItem_Click);
             // 
             // color7ToolStripMenuItem
             // 
             this.color7ToolStripMenuItem.Name = "color7ToolStripMenuItem";
-            this.color7ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color7ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color7ToolStripMenuItem.Text = "color7";
             this.color7ToolStripMenuItem.Click += new System.EventHandler(this.color7ToolStripMenuItem_Click);
             // 
             // color8ToolStripMenuItem
             // 
             this.color8ToolStripMenuItem.Name = "color8ToolStripMenuItem";
-            this.color8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color8ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color8ToolStripMenuItem.Text = "color8";
             this.color8ToolStripMenuItem.Click += new System.EventHandler(this.color8ToolStripMenuItem_Click);
             // 
             // color9ToolStripMenuItem
             // 
             this.color9ToolStripMenuItem.Name = "color9ToolStripMenuItem";
-            this.color9ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.color9ToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.color9ToolStripMenuItem.Text = "color9";
             this.color9ToolStripMenuItem.Click += new System.EventHandler(this.color9ToolStripMenuItem_Click);
             // 
@@ -420,7 +420,7 @@
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelVideo.Location = new System.Drawing.Point(3, 3);
             this.panelVideo.Name = "panelVideo";
-            this.panelVideo.Size = new System.Drawing.Size(1072, 741);
+            this.panelVideo.Size = new System.Drawing.Size(1072, 737);
             this.panelVideo.TabIndex = 0;
             // 
             // radioButtonX4
@@ -428,7 +428,7 @@
             this.radioButtonX4.AutoSize = true;
             this.radioButtonX4.Location = new System.Drawing.Point(1016, 713);
             this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
             this.radioButtonX4.TabIndex = 5;
             this.radioButtonX4.TabStop = true;
             this.radioButtonX4.Text = "x4";
@@ -440,7 +440,7 @@
             this.radioButtonX2.AutoSize = true;
             this.radioButtonX2.Location = new System.Drawing.Point(967, 713);
             this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
             this.radioButtonX2.TabIndex = 5;
             this.radioButtonX2.TabStop = true;
             this.radioButtonX2.Text = "x2";
@@ -452,7 +452,7 @@
             this.radioButtonX1.AutoSize = true;
             this.radioButtonX1.Location = new System.Drawing.Point(918, 713);
             this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
             this.radioButtonX1.TabIndex = 5;
             this.radioButtonX1.TabStop = true;
             this.radioButtonX1.Text = "x1";
@@ -495,7 +495,7 @@
             this.trackBar1.Enabled = false;
             this.trackBar1.Location = new System.Drawing.Point(2, 689);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
+            this.trackBar1.Size = new System.Drawing.Size(1069, 56);
             this.trackBar1.TabIndex = 2;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
@@ -513,10 +513,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.videoPanel);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Location = new System.Drawing.Point(4, 26);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1516, 747);
+            this.tabPage3.Size = new System.Drawing.Size(1516, 743);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -527,7 +527,7 @@
             this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoPanel.Location = new System.Drawing.Point(3, 3);
             this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(1510, 741);
+            this.videoPanel.Size = new System.Drawing.Size(1510, 737);
             this.videoPanel.TabIndex = 1;
             // 
             // axWindowsMediaPlayer1
@@ -542,10 +542,10 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.pictureBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1516, 747);
+            this.tabPage1.Size = new System.Drawing.Size(1516, 743);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -555,7 +555,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1510, 741);
+            this.pictureBox1.Size = new System.Drawing.Size(1510, 737);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -564,10 +564,10 @@
             // 
             this.tabPage4.Controls.Add(this.panelWebbrowser);
             this.tabPage4.Controls.Add(this.webBrowser1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Location = new System.Drawing.Point(4, 26);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1516, 747);
+            this.tabPage4.Size = new System.Drawing.Size(1516, 743);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -577,7 +577,7 @@
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
             this.panelWebbrowser.Name = "panelWebbrowser";
-            this.panelWebbrowser.Size = new System.Drawing.Size(1510, 741);
+            this.panelWebbrowser.Size = new System.Drawing.Size(1510, 737);
             this.panelWebbrowser.TabIndex = 1;
             // 
             // webBrowser1
@@ -588,7 +588,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1510, 741);
+            this.webBrowser1.Size = new System.Drawing.Size(1510, 737);
             this.webBrowser1.TabIndex = 0;
             // 
             // materialTabSelector1
