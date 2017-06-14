@@ -41,7 +41,7 @@ namespace RapidCheck
                     MySqlDataAdapter adapter = new MySqlDataAdapter();
                     DataTable dt = new DataTable();
                     conn.Open();
-                    string SQL = String.Format("SELECT EXISTS ( SELECT videoId FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum = {2}) AS checkFlag;", videoPath, frameStep, maxFrameNum);
+                    string SQL = String.Format("SELECT EXISTS ( SELECT videoId FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum >= {2}) AS checkFlag;", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "checkFlag");
                     dt = ds.Tables["checkFlag"];
@@ -58,7 +58,7 @@ namespace RapidCheck
                     }
 
                     //SELECT
-                    SQL = String.Format("SELECT videoId, status FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum = {2}", videoPath, frameStep, maxFrameNum);
+                    SQL = String.Format("SELECT videoId, status FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum >= {2}", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoid");
                     dt = ds.Tables["videoid"];
@@ -348,7 +348,7 @@ namespace RapidCheck
                         {
                             tempObjidList.Add(Convert.ToInt32(dr["objectId"]));
                         }
-                        objectidList = tempObjidList.Intersect(objectidList).ToList();
+                        objectidList = tempObjidList.Intersect(originObjectidList).ToList();
                         if (objectidList.Count == 0)
                         {
                             MessageBox.Show("해당 조건에 맞는 대상이 없습니다.");

@@ -61,10 +61,10 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 71000;
+            int maxFrameNum = 70000;
             //int frameStep = 3;
             int analysisFPS = 5; //default
-            int minTrackingLength = 50;
+            int minTrackingLength = 21;
             int clusterNum = 6;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
@@ -289,61 +289,61 @@ namespace RapidCheck
 
         private void color0ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color10 > 0.1";
+            rapidCheck.condition = "and color0 + color15 > 0.1";
             replay();
         }
         
         private void color1ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color11 > 0.1";
+            rapidCheck.condition = "and color1 > 0.1";
             replay();
         }
         
         private void color2ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color12 > 0.1";
+            rapidCheck.condition = "and color2 + color3 > 0.1";
             replay();
         }
         
         private void color3ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color13 > 0.1";
+            rapidCheck.condition = "and color3 + color4 + color5 > 0.1";
             replay();
         }
         
         private void color4ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color14 > 0.1";
+            rapidCheck.condition = "and color6 + color7 > 0.1";
             replay();
         }
         
         private void color5ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color15 > 0.1";
+            rapidCheck.condition = "and color7 + color8 + color9 + color10 + color11> 0.2";
             replay();
         }
         
         private void color6ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color6 > 0.1";
+            rapidCheck.condition = "and color12 + color13 > 0.1";
             replay();
         }
         
         private void color7ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color7 > 0.1";
+            rapidCheck.condition = "and color13 + color14 > 0.1";
             replay();
         }
         
         private void color8ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color8 > 0.1";
+            rapidCheck.condition = "and color16 > 0.8 and color17 > color18";
             replay();
         }
         
         private void color9ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color9 > 0.1";
+            rapidCheck.condition = "and color16 > 0.8 and color18 > 0.4";
             replay();
         }
 
