@@ -343,7 +343,8 @@ namespace RapidCheck
 
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
-                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 {2};", videoid, maxObjectid, condition);
+                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} {2};", videoid, maxObjectid, condition);
+                        MessageBox.Show(SQL);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
                         adapter.Fill(ds, "objIds");
                         dt = ds.Tables["objIds"];

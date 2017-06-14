@@ -34,6 +34,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -84,7 +85,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -165,6 +165,14 @@
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView2.Size = new System.Drawing.Size(158, 650);
             this.dataGridView2.TabIndex = 21;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "People";
+            this.Column2.MinimumWidth = 50;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             // 
             // dataGridView1
             // 
@@ -302,70 +310,70 @@
             // color0ToolStripMenuItem
             // 
             this.color0ToolStripMenuItem.Name = "color0ToolStripMenuItem";
-            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color0ToolStripMenuItem.Text = "color0";
             this.color0ToolStripMenuItem.Click += new System.EventHandler(this.color0ToolStripMenuItem_Click);
             // 
             // color1ToolStripMenuItem
             // 
             this.color1ToolStripMenuItem.Name = "color1ToolStripMenuItem";
-            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color1ToolStripMenuItem.Text = "color1";
             this.color1ToolStripMenuItem.Click += new System.EventHandler(this.color1ToolStripMenuItem_Click);
             // 
             // color2ToolStripMenuItem
             // 
             this.color2ToolStripMenuItem.Name = "color2ToolStripMenuItem";
-            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color2ToolStripMenuItem.Text = "color2";
             this.color2ToolStripMenuItem.Click += new System.EventHandler(this.color2ToolStripMenuItem_Click);
             // 
             // color3ToolStripMenuItem
             // 
             this.color3ToolStripMenuItem.Name = "color3ToolStripMenuItem";
-            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color3ToolStripMenuItem.Text = "color3";
             this.color3ToolStripMenuItem.Click += new System.EventHandler(this.color3ToolStripMenuItem_Click);
             // 
             // color4ToolStripMenuItem
             // 
             this.color4ToolStripMenuItem.Name = "color4ToolStripMenuItem";
-            this.color4ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color4ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color4ToolStripMenuItem.Text = "color4";
             this.color4ToolStripMenuItem.Click += new System.EventHandler(this.color4ToolStripMenuItem_Click);
             // 
             // color5ToolStripMenuItem
             // 
             this.color5ToolStripMenuItem.Name = "color5ToolStripMenuItem";
-            this.color5ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color5ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color5ToolStripMenuItem.Text = "color5";
             this.color5ToolStripMenuItem.Click += new System.EventHandler(this.color5ToolStripMenuItem_Click);
             // 
             // color6ToolStripMenuItem
             // 
             this.color6ToolStripMenuItem.Name = "color6ToolStripMenuItem";
-            this.color6ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color6ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color6ToolStripMenuItem.Text = "color6";
             this.color6ToolStripMenuItem.Click += new System.EventHandler(this.color6ToolStripMenuItem_Click);
             // 
             // color7ToolStripMenuItem
             // 
             this.color7ToolStripMenuItem.Name = "color7ToolStripMenuItem";
-            this.color7ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color7ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color7ToolStripMenuItem.Text = "color7";
             this.color7ToolStripMenuItem.Click += new System.EventHandler(this.color7ToolStripMenuItem_Click);
             // 
             // color8ToolStripMenuItem
             // 
             this.color8ToolStripMenuItem.Name = "color8ToolStripMenuItem";
-            this.color8ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color8ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color8ToolStripMenuItem.Text = "color8";
             this.color8ToolStripMenuItem.Click += new System.EventHandler(this.color8ToolStripMenuItem_Click);
             // 
             // color9ToolStripMenuItem
             // 
             this.color9ToolStripMenuItem.Name = "color9ToolStripMenuItem";
-            this.color9ToolStripMenuItem.Size = new System.Drawing.Size(108, 22);
+            this.color9ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.color9ToolStripMenuItem.Text = "color9";
             this.color9ToolStripMenuItem.Click += new System.EventHandler(this.color9ToolStripMenuItem_Click);
             // 
@@ -620,14 +628,6 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "Rapid.jpg");
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column2.HeaderText = "People";
-            this.Column2.MinimumWidth = 50;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
             // 
             // Form1
             // 
