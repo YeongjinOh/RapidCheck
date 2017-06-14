@@ -48,6 +48,7 @@ namespace RapidCheck
 
         private List<int> trackingTableFrameNum;
         private List<int> trackingTableObjid;
+        private Dictionary<int,int> trackingTableClassid;
         private List<Rectangle> trackingTableRectangle;
         private string videoPath;
         public int videoWidth { get; set; }
@@ -78,19 +79,21 @@ namespace RapidCheck
         PictureBox pictureBoxVideo;
         TrackBar trackingBar;
         Button startBtn;
-        DataGridView dataGridView;
+        DataGridView dataGridView1;
+        DataGridView dataGridView2;
         public int resFrame { get; set; }
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
 
         public OverlayVideo() { }
-        public OverlayVideo(DataGridView dataGridView, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(DataGridView dataGridView1, DataGridView dataGridView2,  Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
             drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
             //UI
-            this.dataGridView = dataGridView;
+            this.dataGridView1 = dataGridView1;
+            this.dataGridView2 = dataGridView2;
             this.trackingBar = TrackingBar;
             this.pictureBoxVideo = pictureBoxVideo;
             this.startBtn = startBtn;
@@ -105,8 +108,8 @@ namespace RapidCheck
             overlayFrames = new List<Bitmap>();
             overlayOrders = new List<List<objIdAndOrderingCnt>>();
 
-            
             trackingTableObjid = new List<int>();
+            trackingTableClassid = new Dictionary<int, int>();
             trackingTableFrameNum = new List<int>();
             trackingTableRectangle = new List<Rectangle>();
             videoPath = path;

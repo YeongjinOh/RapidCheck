@@ -69,6 +69,7 @@ namespace RapidCheck
                         status = Convert.ToInt32(dr["status"]);
                     }
 
+                    /***********************************************************************/status = 2;/***********************************************************************/
                     // detection
                     if (status == 0)
                     {
@@ -142,7 +143,7 @@ namespace RapidCheck
                     }
 
                     // TODO
-                    videoid = 3;
+                    //videoid = 3;
 
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
@@ -151,6 +152,10 @@ namespace RapidCheck
                     SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum < {1} ORDER BY objectId ASC, frameNum ASC", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
+
+                    SQL = string.Format("SELECT objectId, classId FROM rapidcheck.objectinfo where videoId = {0};", videoid);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "classid");                    
 
                     SQL = string.Format("SELECT objectId, frameNum FROM tracking where videoId={0} ORDER BY frameNum ASC", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
@@ -182,6 +187,13 @@ namespace RapidCheck
                             objectidList.Add(objid);
                             originObjectidList.Add(objid); //copy
                         }
+                    }
+                    //set class id table
+                    dt = ds.Tables["classid"];
+                    foreach (DataRow dr in dt.Rows) //dictionay형태이며,,, key = id, value = classid
+                    {
+                        //trackingTableClassid.Add(Convert.ToInt32(dr["id"]), Convert.ToInt32(dr["classId"]));
+                        trackingTableClassid[Convert.ToInt32(dr["objectId"])] = Convert.ToInt32(dr["classId"]);
                     }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
@@ -245,7 +257,7 @@ namespace RapidCheck
             reader.Open(videoPath);
             for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum++)
             {
-                dataGridView.Invoke(new Action(() =>
+                dataGridView1.Invoke(new Action(() =>
                 {
                     Bitmap videoFrame = reader.ReadVideoFrame();
                     if (objidByFrame.ContainsKey(frameNum))
@@ -262,17 +274,56 @@ namespace RapidCheck
 
                             if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                             {
-                                //set string    
-                                string cont = string.Format("object id : {0}\nstart time : {1}\nmain color : {2}\ndirection : {3}", objid, ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm:ss"), "white", "31");
-                                int gridHeight = 100;
-                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight));
-                                dataGridView.Rows.Add(gridImg, cont);
-                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridHeight;
+                                int gridHeight = 150;
+                                int headlineHeight = 20;
+                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight)); // crop img
+                                Bitmap headlineBox = new Bitmap(gridImg.Width, headlineHeight); // obj info
+                                
+                                //SET HEADLINEBOX COLOR WHITE
+                                for(int i = 0;i < headlineBox.Height ; i++)
+                                {
+                                    for(int j = 0 ; j < headlineBox.Width ; j++)
+                                    {
+                                        headlineBox.SetPixel(j, i, Color.White);
+                                    }
+                                }
+
+
+                                RectangleF rectf = new RectangleF(0, 0, headlineBox.Width, headlineBox.Height); // 다음 위치에 택스트를 그린다 (시간)
+
+                                //alpha
+                                ColorMatrix matrix = new ColorMatrix();
+                                matrix.Matrix33 = 0.5f; //0.7~0.75
+                                ImageAttributes att = new ImageAttributes();
+                                att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                                Graphics g = Graphics.FromImage(gridImg);
+                                //System.Drawing.SolidBrush bgcolor = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+                                //g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                                g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
+                                g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("Arial", 8), Brushes.Black, rectf);
+
+                                if (trackingTableClassid[objid] == 0) // class id = 0 => people
+                                {
+                                    dataGridView1.Rows.Add(gridImg);
+                                    dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
+                                    
+                                }
+                                else if (trackingTableClassid[objid] == 1)
+                                {
+                                    dataGridView2.Rows.Add(gridImg);
+                                    dataGridView2.Rows[dataGridView2.RowCount - 1].Height = gridImg.Height;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("DataGridView ERROR");
+                                }
+                                
                             }
                         }
                     }
                     videoFrame.Dispose();
-                }));
+            }));
             }
             reader.Close();
         }
@@ -292,7 +343,8 @@ namespace RapidCheck
 
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
-                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 {2};", videoid, maxObjectid, condition);
+                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} {2};", videoid, maxObjectid, condition);
+                        MessageBox.Show(SQL);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
                         adapter.Fill(ds, "objIds");
                         dt = ds.Tables["objIds"];
@@ -496,7 +548,7 @@ namespace RapidCheck
         }
         public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, string time = null)
         {
-            int min_diff = 1000;
+            int min_diff = 1300;
             try
             {
                 if ((back != null) | (front != null))

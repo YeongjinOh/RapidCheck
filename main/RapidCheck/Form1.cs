@@ -8,6 +8,10 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using LiveCharts;
+//using LiveCharts.Wpf;
+//using LiveCharts.WinForms;
+
 using System.Windows.Forms;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -17,17 +21,13 @@ using AxWMPLib; //player
 using Shell32;
 using CefSharp;
 using CefSharp.WinForms;
-using LiveCharts;
-using LiveCharts.Wpf;
-using LiveCharts.WinForms;
+
 
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
     {
         //******************************전역변수******************************
-        /*****************/private int inputDirection = -1;             /*****************/
-        /*****************/private int color = -1;                      /*****************/
         /*****************/string videoPath = null;                     /*****************/
         /*****************/OpenFileDialog videoFilePath;                /*****************/
         /*****************/int outputFrameNum = 0;                      /*****************/
@@ -47,7 +47,7 @@ namespace RapidCheck
             skinManager.ColorScheme = new ColorScheme(
                 Primary.BlueGrey100, // tab contorol
                 Primary.Blue200, //최상단 
-                Primary.BlueGrey100, 
+                Primary.BlueGrey700, 
                 Accent.LightBlue400, 
                 TextShade.BLACK);
         }
@@ -61,13 +61,13 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 1000;
+            int maxFrameNum = 5000;
             //int frameStep = 3;
             int analysisFPS = 5; //default
             int minTrackingLength = 29;
             int clusterNum = 6;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
@@ -77,6 +77,7 @@ namespace RapidCheck
         {
             dele();
             progressBar1.PerformStep();
+
         }
         private void rapidFunc()
         {
@@ -142,10 +143,10 @@ namespace RapidCheck
             trackBar1.Enabled = false;
 
             //dataGridView
-            dataGridView1.Columns[0].Width = panelObject.Width / 2;
-            dataGridView1.Columns[1].Width = panelObject.Width / 2;
-            dataGridView1.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True; //support multiline text
-            dataGridView1.ColumnHeadersVisible = false;
+            //dataGridView1.Columns[0].Width = panelObject.Width;
+            //dataGridView1.Columns[1].Width = panelObject.Width / 2;
+            //dataGridView1.Columns[1].DefaultCellStyle.WrapMode = DataGridViewTriState.True; //support multiline text
+
         } //default UI setting
         private void setOverlayUI()
         {
@@ -227,24 +228,6 @@ namespace RapidCheck
         private void radioButtonX1_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 1; }
         private void radioButtonX2_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 2; }
         private void radioButtonX4_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 4; }
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) { color = 3; }
-        private void radioButton5_CheckedChanged(object sender, EventArgs e) { color = 4; }
-        private void radioButton6_CheckedChanged(object sender, EventArgs e) { color = 5; }
-        private void radioButton7_CheckedChanged(object sender, EventArgs e) { color = 6; }
-        private void radioButton8_CheckedChanged(object sender, EventArgs e) { color = 7; }
-        private void radioButton9_CheckedChanged(object sender, EventArgs e) { color = 8; }
-        private void radioButton10_CheckedChanged(object sender, EventArgs e) { color = 9; }
-        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
-        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
-        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
-        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
-        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
-        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
-        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
-        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
 
         private void onToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -255,19 +238,21 @@ namespace RapidCheck
             rapidCheck.drawTime = false;
         }
 
+        //------------------------------검색 조건------------------------------
+        //방향
         private void DownToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rapidCheck.condition = "and direction0 + direction1 + direction2  > 0.7";
-            direction();
+            replay();
         }
 
         private void UpToolStripMenuItem2_Click(object sender, EventArgs e)
         {
             rapidCheck.condition = "and direction5 + direction6 + direction7 > 0.7";
-            direction();
+            replay();
         }
 
-        private void direction()
+        private void replay()
         {
             overlayModule.Abort();
             Thread.Sleep(1);
@@ -280,13 +265,14 @@ namespace RapidCheck
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
         }
-
+        //색상
         private void BlackToolStripMenuItem_Click(object sender, EventArgs e)
         {
             rapidCheck.condition = "and color9 > 0.3";
-            direction();
+            replay();
         }
-
+        
+        //초기화
         private void ResetToolStripMenuItem_Click(object sender, EventArgs e)
         {
             overlayModule.Abort();
@@ -299,14 +285,77 @@ namespace RapidCheck
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
         }
+        
 
+        private void color0ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color10 > 0.1";
+            replay();
+        }
+        
+        private void color1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color11 > 0.1";
+            replay();
+        }
+        
+        private void color2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color12 > 0.1";
+            replay();
+        }
+        
+        private void color3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color13 > 0.1";
+            replay();
+        }
+        
+        private void color4ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color14 > 0.1";
+            replay();
+        }
+        
+        private void color5ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color15 > 0.1";
+            replay();
+        }
+        
+        private void color6ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color6 > 0.1";
+            replay();
+        }
+        
+        private void color7ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color7 > 0.1";
+            replay();
+        }
+        
+        private void color8ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color8 > 0.1";
+            replay();
+        }
+        
+        private void color9ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color9 > 0.1";
+            replay();
+        }
+
+
+        //------------------------------tab page control------------------------------
         public ChromiumWebBrowser browser;
         private void materialTabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             int idx = materialTabControl1.SelectedIndex;
             if (idx ==3)
             {
-                browser = new ChromiumWebBrowser("http://www.google.com")
+                browser = new ChromiumWebBrowser("http://www.naver.com")
                 {
                     Dock = DockStyle.Fill,
                     Size = Size,
@@ -316,161 +365,8 @@ namespace RapidCheck
             }
             else if( idx == 2)
             {
-                chartsTest1();
-                chartsTest2();
-                chartsTest3();
-                chartsTest4();
+                //chart
             }
-        }
-
-
-
-        //요약 페이지 코드  -> 나중에 분할 예정
-        private void chartsTest1()
-        {
-            cartesianChart1.Series = new SeriesCollection
-            {
-                new StackedColumnSeries
-                {
-                    Values = new ChartValues<double> {4, 5, 6, 8},
-                    StackMode = StackMode.Values, // this is not necessary, values is the default stack mode
-                    DataLabels = true
-                },
-                new StackedColumnSeries
-                {
-                    Values = new ChartValues<double> {2, 5, 6, 7},
-                    StackMode = StackMode.Values,
-                    DataLabels = true
-                }
-            };
-
-            //adding series updates and animates the chart
-            cartesianChart1.Series.Add(new StackedColumnSeries
-            {
-                Values = new ChartValues<double> { 6, 2, 7 },
-                StackMode = StackMode.Values
-            });
-
-            //adding values also updates and animates
-            cartesianChart1.Series[2].Values.Add(4d);
-
-            cartesianChart1.AxisX.Add(new Axis
-            {
-                Title = "Browser",
-                Labels = new[] { "Chrome", "Mozilla", "Opera", "IE" },
-                Separator = DefaultAxes.CleanSeparator
-            });
-
-            cartesianChart1.AxisY.Add(new Axis
-            {
-                Title = "Usage",
-                LabelFormatter = value => value + " Mill"
-            });
-        }
-        private void chartsTest2()
-        {
-            cartesianChart2.Series = new SeriesCollection
-            {
-                new ColumnSeries
-                {
-                    Title = "2015",
-                    Values = new ChartValues<double> { 10, 50, 39, 50 }
-                }
-            };
-
-            //adding series will update and animate the chart automatically
-            cartesianChart2.Series.Add(new ColumnSeries
-            {
-                Title = "2016",
-                Values = new ChartValues<double> { 11, 56, 42 }
-            });
-
-            //also adding values updates and animates the chart automatically
-            cartesianChart2.Series[1].Values.Add(48d);
-
-            cartesianChart2.AxisX.Add(new Axis
-            {
-                Title = "Sales Man",
-                Labels = new[] { "Maria", "Susan", "Charles", "Frida" }
-            });
-
-            cartesianChart2.AxisY.Add(new Axis
-            {
-                Title = "Sold Apps",
-                LabelFormatter = value => value.ToString("N")
-            });
-        }
-        private void chartsTest3()
-        {
-            cartesianChart3.Series = new SeriesCollection
-            {
-                new RowSeries
-                {
-                    Title = "2015",
-                    Values = new ChartValues<double> { 10, 50, 39, 50 }
-                }
-            };
-
-            //adding series will update and animate the chart automatically
-            cartesianChart3.Series.Add(new RowSeries
-            {
-                Title = "2016",
-                Values = new ChartValues<double> { 11, 56, 42 }
-            });
-
-            //also adding values updates and animates the chart automatically
-            cartesianChart3.Series[1].Values.Add(48d);
-
-            cartesianChart3.AxisY.Add(new Axis
-            {
-                Labels = new[] { "Maria", "Susan", "Charles", "Frida" }
-            });
-
-            cartesianChart3.AxisX.Add(new Axis
-            {
-                LabelFormatter = value => value.ToString("N")
-            });
-
-            var tooltip = new DefaultTooltip
-            {
-                SelectionMode = TooltipSelectionMode.SharedYValues
-            };
-
-            cartesianChart3.DataTooltip = tooltip;
-        }
-        private void chartsTest4()
-        {
-            pieChart1.InnerRadius = 100;
-            pieChart1.LegendLocation = LegendLocation.Right;
-
-            pieChart1.Series = new SeriesCollection
-            {
-                new PieSeries
-                {
-                    Title = "Chrome",
-                    Values = new ChartValues<double> {8},
-                    PushOut = 15,
-                    DataLabels = true
-                },
-                new PieSeries
-                {
-                    Title = "Mozilla",
-                    Values = new ChartValues<double> {6},
-                    DataLabels = true
-                },
-                new PieSeries
-                {
-                    Title = "Opera",
-                    Values = new ChartValues<double> {10},
-                    DataLabels = true
-                },
-                new PieSeries
-                {
-                    Title = "Explorer",
-                    Values = new ChartValues<double> {4},
-                    DataLabels = true
-                }
-            };
         }
     }
 }
