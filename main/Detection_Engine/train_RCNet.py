@@ -8,7 +8,7 @@ import yolo.config as cfg
 from utils.help import say, conv_weigths_flatten, save_model, plot_model_history
 
 import keras.backend as K
-from yolo.net.yolo_tiny_thdim_net import yolo_tiny_THdim_model, yolo_shortdense_THdim_model, yolo_tiny_THdim_dropout_model
+from yolo.net.RCNet_thdim_net import RCNet_THdim_model, RCNet_shortdense_THdim_model, RCNet_THdim_dropout_model
 
 K.set_learning_phase(1) #set learning phase
 
@@ -42,9 +42,9 @@ print(cfg.dataset_abs_location)
 sess = tf.Session()
 K.set_session(sess)
 
-# model = yolo_tiny_THdim_model()
-model = yolo_tiny_THdim_dropout_model()
-# model = yolo_shortdense_THdim_model()
+model = RCNet_THdim_model()
+# model = RCNet_THdim_dropout_model()
+# model = RCNet_shortdense_THdim_model()
 model.summary()
 
 from yolo.training_v1 import darkeras_loss, _TRAINER
