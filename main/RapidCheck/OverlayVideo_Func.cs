@@ -30,7 +30,7 @@ namespace RapidCheck
         //****************************** Main function ******************************
         public void getMysqlObjList()
         {
-            int status = 0;
+            int status = 2;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(strConn))
@@ -67,7 +67,7 @@ namespace RapidCheck
                         videoid = Convert.ToInt32(dr["videoid"]);
                         status = Convert.ToInt32(dr["status"]);
                     }
-                    /*******************************************************************/ status = 2; /*******************************************************************/
+                    /*******************************************************************/ status = 1; /*******************************************************************/
 
                     // detection
                     string dir = @"..\..\..\..\Detection_Engine\";
@@ -303,18 +303,19 @@ namespace RapidCheck
                                 {
                                     dataGridView1.Rows.Add(gridImg);
                                     dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
+                                    gridViewList1.Add(objid);
                                     
                                 }
                                 else if (trackingTableClassid[objid] == 1)
                                 {
                                     dataGridView2.Rows.Add(gridImg);
                                     dataGridView2.Rows[dataGridView2.RowCount - 1].Height = gridImg.Height;
+                                    gridViewList2.Add(objid);
                                 }
                                 else
                                 {
                                     MessageBox.Show("DataGridView ERROR");
                                 }
-                                
                             }
                         }
                     }
@@ -440,7 +441,7 @@ namespace RapidCheck
         }
         public void overlayLive()
         {
-            background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
+            //background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
             startBtn.Text = "Pause";
             int drawWidth = pictureBoxVideo.Width;
@@ -450,10 +451,14 @@ namespace RapidCheck
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             float alphaMin = 0.5f, alphaDiff = 0.3f;
             //**********************DRAWING CODE**********************
+            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader.Open(videoPath);
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 sw.Start();
-                Bitmap BitCopy = (Bitmap)background.Clone();
+                //background = reader.ReadVideoFrame();
+                //Bitmap BitCopy = (Bitmap)background.Clone();
+                Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
@@ -504,6 +509,7 @@ namespace RapidCheck
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
+            reader.Close();
         }
 
         //******************************SubFunction******************************        
@@ -622,6 +628,10 @@ namespace RapidCheck
                 }
             }
             return startFrame;
+        }
+        public DateTime getClickedGridViewOriginalDataTime(int id)
+        {
+            return ObjList[idxbyObjid[id]].startTime;
         }
         private double min(double num1, double num2) { return num1 > num2 ? num2 : num1; }
         private void setStartingGroup()

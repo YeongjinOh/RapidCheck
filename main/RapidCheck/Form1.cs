@@ -21,7 +21,8 @@ using AxWMPLib; //player
 using Shell32;
 using CefSharp;
 using CefSharp.WinForms;
-
+using LiveCharts;
+using LiveCharts.WinForms;
 
 namespace RapidCheck
 {
@@ -36,6 +37,7 @@ namespace RapidCheck
         /*****************/delegate void rapidChain(rapidModule dele);  /*****************/
         /*****************/Thread overlayModule;                        /*****************/
         /*****************/List<rapidModule> myRapidModule = new List<rapidModule>();/*****************/
+        string createTime;
         //******************************Form******************************
         public Form1()
         {
@@ -60,8 +62,8 @@ namespace RapidCheck
         //******************************Overlay Module******************************
         private void startOverlayModule()
         {
-            string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 70000;
+            createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
+            int maxFrameNum = 10000;
             //int frameStep = 3;
             int analysisFPS = 5; //default
             int minTrackingLength = 21;
@@ -337,13 +339,13 @@ namespace RapidCheck
         
         private void color8ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color16 > 0.8 and color17 > color18";
+            rapidCheck.condition = "and color16 > 0.6 and color17 > 0.15";
             replay();
         }
         
         private void color9ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            rapidCheck.condition = "and color16 > 0.8 and color18 > 0.4";
+            rapidCheck.condition = "and color16 > 0.6 and color18 > 0.3";
             replay();
         }
 
@@ -355,7 +357,7 @@ namespace RapidCheck
             int idx = materialTabControl1.SelectedIndex;
             if (idx ==3)
             {
-                browser = new ChromiumWebBrowser("http://www.naver.com")
+                browser = new ChromiumWebBrowser("http://www.rapidcheck.co.kr:5000")
                 {
                     Dock = DockStyle.Fill,
                     Size = Size,
@@ -366,6 +368,50 @@ namespace RapidCheck
             else if( idx == 2)
             {
                 //chart
+            }
+        }
+
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //e.RowIndex;
+            int id = rapidCheck.gridViewList2[e.RowIndex];
+            DateTime startTime = rapidCheck.getClickedGridViewOriginalDataTime(id);
+
+            int hour = Convert.ToInt32(createTime.Split(':')[0]);
+            int min = Convert.ToInt32(createTime.Split(':')[1]);
+            hour = startTime.Hour - hour;
+            min = startTime.Minute - min;
+            int sec = startTime.Second;
+            int position = (hour * 60 + min)*60 + sec;
+
+            if(startTime != null)
+            {
+                materialTabControl1.SelectedTab = tabPage3;
+                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)position;
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //e.RowIndex;
+            int id = rapidCheck.gridViewList1[e.RowIndex];
+            DateTime startTime = rapidCheck.getClickedGridViewOriginalDataTime(id);
+
+            int hour = Convert.ToInt32(createTime.Split(':')[0]);
+            int min = Convert.ToInt32(createTime.Split(':')[1]);
+            hour = startTime.Hour - hour;
+            min = startTime.Minute - min;
+            int sec = startTime.Second;
+            int position = (hour * 60 + min) * 60 + sec;
+
+            if (startTime != null)
+            {
+                materialTabControl1.SelectedTab = tabPage3;
+                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)position;
             }
         }
     }
