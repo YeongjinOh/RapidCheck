@@ -69,6 +69,7 @@ namespace RapidCheck
                         status = Convert.ToInt32(dr["status"]);
                     }
 
+                    /***********************************************************************/status = 2;/***********************************************************************/
                     // detection
                     if (status == 0)
                     {
@@ -142,7 +143,7 @@ namespace RapidCheck
                     }
 
                     // TODO
-                    videoid = 3;
+                    //videoid = 3;
 
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
@@ -262,17 +263,48 @@ namespace RapidCheck
 
                             if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                             {
-                                //set string    
-                                string cont = string.Format("object id : {0}\nstart time : {1}\nmain color : {2}\ndirection : {3}", objid, ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm:ss"), "white", "31");
-                                int gridHeight = 100;
-                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight));
-                                dataGridView.Rows.Add(gridImg, cont);
-                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridHeight;
+                                int gridHeight = 200;
+                                int headlineHeight = 20;
+                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight)); // crop img
+                                Bitmap headlineBox = new Bitmap(gridImg.Width, headlineHeight); // obj info
+                                
+                                //SET HEADLINEBOX COLOR WHITE
+                                for(int i = 0;i < headlineBox.Height ; i++)
+                                {
+                                    for(int j = 0 ; j < headlineBox.Width ; j++)
+                                    {
+                                        headlineBox.SetPixel(j, i, Color.White);
+                                    }
+                                }
+
+
+                                RectangleF rectf = new RectangleF(0, 0, headlineBox.Width, headlineBox.Height); // 다음 위치에 택스트를 그린다 (시간)
+
+                                //alpha
+                                ColorMatrix matrix = new ColorMatrix();
+                                matrix.Matrix33 = 0.5f; //0.7~0.75
+                                ImageAttributes att = new ImageAttributes();
+                                att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
+
+                                Graphics g = Graphics.FromImage(gridImg);
+                                //System.Drawing.SolidBrush bgcolor = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+                                //g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                                g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
+                                g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("Arial", 8), Brushes.Black, rectf);
+                                
+                                
+                                //g.SmoothingMode = SmoothingMode.AntiAlias;
+                                //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                                //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                                //g.DrawImage(bit, new Rectangle(0, 21, bit.Width * gridHeight / bit.Height, gridHeight));
+
+                                dataGridView.Rows.Add(gridImg);
+                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridImg.Height;
                             }
                         }
                     }
                     videoFrame.Dispose();
-                }));
+            }));
             }
             reader.Close();
         }
@@ -496,7 +528,7 @@ namespace RapidCheck
         }
         public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, string time = null)
         {
-            int min_diff = 1000;
+            int min_diff = 1300;
             try
             {
                 if ((back != null) | (front != null))
