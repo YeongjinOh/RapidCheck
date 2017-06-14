@@ -653,8 +653,8 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 			
-			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
-			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			inRange(frame(r), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
+			inRange(frame(r), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
@@ -753,8 +753,9 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 
-			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
-			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			inRange(frame(r), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
+			inRange(frame(r), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
+
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
@@ -788,8 +789,8 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 
-			cv::inRange(imgHSV, Scalar(0, 0, 205, 0), Scalar(180, 255, 255, 0), imgWhite);
-			cv::inRange(imgHSV, Scalar(0, 0, 0, 0), Scalar(180, 255, 50, 0), imgBlack);
+			inRange(frame(r), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
+			inRange(frame(r), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;

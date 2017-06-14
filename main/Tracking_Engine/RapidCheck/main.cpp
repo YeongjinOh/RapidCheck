@@ -15,10 +15,10 @@ using namespace rc;
 void initRCVariables()
 {
 	filepath = "C:/videos/tracking.mp4";
-	videoId = 3;
-	numOfFrames = 1000;
+	videoId = 622;
+	numOfFrames = 5000;
 	startFrameNum = 0;
-	frameStep = 3;
+	frameStep = 4;
 	endFrameNum = startFrameNum + numOfFrames * frameStep;
 }
 
@@ -26,7 +26,7 @@ void initRCVariables()
 int main(int argc, char ** argv)
 {
 	initRCVariables();
-	int operationNum = 6;
+	int operationNum = 1;
 	
 	// assign arguments
 	for (int i = 1; i < argc; i++)
@@ -64,7 +64,7 @@ int main(int argc, char ** argv)
 	switch (operationNum)
 	{
 		case 0:
-			compareSimilarity();
+			analysisVideo();
 			break;
 		case 1:
 			buildAndShowTrajectory();
@@ -84,6 +84,8 @@ int main(int argc, char ** argv)
 		case 6:
 			colorExtractor();
 			break;
+		case 7:
+			compareSimilarity();
 	}
 	return 0;
 }

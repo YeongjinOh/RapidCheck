@@ -38,20 +38,28 @@ std::vector<float> RCTrajectory::getColorRatioFromTracklet(tracklet &tr)
 	Target &representativeTargetInTracklet = tr[LOW_LEVEL_TRACKLETS / 2];
 	MatND &hist = representativeTargetInTracklet.hist;
 	float totalHistSum = 0.0;
+	float achromaticColorHistSum = 0.0;
 	for (int i = 0; i < hist.rows; i++)
 	{
-		int currentColorIdx = i / NUM_HUE_GROUP_SIZE;
 		for (int j = 0; j < hist.cols; j++)
 		{
 			float currentHistValue = hist.at<float>(i, j);
-			colorHistSum[currentColorIdx] += currentHistValue;
 			totalHistSum += currentHistValue;
+			if (j == 0)
+			{
+				achromaticColorHistSum += currentHistValue;
+			}
+			else
+			{
+				colorHistSum[i] += currentHistValue;
+			}
 		}
 	}
-	for (int i = 0; i < NUM_OF_COLOR_CLASSES - 2; i++)
+	for (int i = 0; i < hist.rows; i++)
 	{
 		colorHistSum[i] /= totalHistSum;
 	}
+	colorHistSum[hist.rows] = achromaticColorHistSum / totalHistSum;
 	colorHistSum[NUM_OF_COLOR_CLASSES - 2] = representativeTargetInTracklet.whiteRatio;
 	colorHistSum[NUM_OF_COLOR_CLASSES - 1] = representativeTargetInTracklet.blackRatio;
 	return colorHistSum;
@@ -62,11 +70,6 @@ void RCTrajectory::merge(tracklet &tr)
 	targets.insert(targets.end(), tr.begin(), tr.end());
 	endSegmentNum++;
 	increaseDirectionCount(tr);
-	std::vector<float> colorRatio = getColorRatioFromTracklet(tr);
-	for (int i = 0; i < colorRatios.size(); i++)
-	{
-		colorRatios[i] += colorRatio[i];
-	}
 	cntValidTracklets++;
 }
 
@@ -140,9 +143,5 @@ void RCTrajectory::normalizeColorRatios()
 {
 	for (int i = 0; i < cntDirections.size(); i++) {
 		directionRatios[i] = (float)cntDirections[i] / cntValidTracklets;
-	}
-	for (int i = 0; i < colorRatios.size(); i++)
-	{
-		colorRatios[i] /= cntValidTracklets;
 	}
 }

@@ -111,7 +111,7 @@ void colorExtractor()
 
 
 		calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
-		//normalize(hist, hist, 0, 1, cv::NORM_MINMAX, -1, Mat());
+		normalize(hist, hist, 0, 1, cv::NORM_MINMAX, -1, Mat());
 
 		float totalHistSum = 0.0;
 		vector<float> colorHistSum(hist.rows, 0);
