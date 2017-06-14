@@ -34,9 +34,10 @@ const bool INSERT_TRACKING_INTO_DB = false;
 const bool INSERT_OBJECT_INFO_INTO_DB = false;
 
 // Object Information
+const int WHITE_DIFF_RANGE = 80;
+const int BLACK_DIFF_RANGE = 50;
 const int NUM_OF_DIRECTIONS = 8;
-const int NUM_OF_COLOR_CLASSES = 10;
-const int NUM_HUE_GROUP_SIZE = 2;
+const int NUM_OF_COLOR_CLASSES = 19;
 const static double PI = 3.14159265;
 
 static int totalFrameCount;

@@ -37,6 +37,7 @@ void buildAndShowTrajectory();
 void analysisVideo();
 void compareSimilarity();
 void showTrajectory();
+void colorExtractor();
 
 // Database
 
