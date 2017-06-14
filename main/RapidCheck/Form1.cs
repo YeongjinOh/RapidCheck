@@ -28,8 +28,6 @@ namespace RapidCheck
     public partial class Form1 : MaterialForm
     {
         //******************************전역변수******************************
-        /*****************/private int inputDirection = -1;             /*****************/
-        /*****************/private int color = -1;                      /*****************/
         /*****************/string videoPath = null;                     /*****************/
         /*****************/OpenFileDialog videoFilePath;                /*****************/
         /*****************/int outputFrameNum = 0;                      /*****************/
@@ -69,7 +67,7 @@ namespace RapidCheck
             int minTrackingLength = 29;
             int clusterNum = 6;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
@@ -230,24 +228,6 @@ namespace RapidCheck
         private void radioButtonX1_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 1; }
         private void radioButtonX2_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 2; }
         private void radioButtonX4_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 4; }
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) { color = 3; }
-        private void radioButton5_CheckedChanged(object sender, EventArgs e) { color = 4; }
-        private void radioButton6_CheckedChanged(object sender, EventArgs e) { color = 5; }
-        private void radioButton7_CheckedChanged(object sender, EventArgs e) { color = 6; }
-        private void radioButton8_CheckedChanged(object sender, EventArgs e) { color = 7; }
-        private void radioButton9_CheckedChanged(object sender, EventArgs e) { color = 8; }
-        private void radioButton10_CheckedChanged(object sender, EventArgs e) { color = 9; }
-        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
-        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
-        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
-        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
-        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
-        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
-        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
-        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
 
         private void onToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -387,8 +367,5 @@ namespace RapidCheck
                 //chart
             }
         }
-
-
-       
     }
 }

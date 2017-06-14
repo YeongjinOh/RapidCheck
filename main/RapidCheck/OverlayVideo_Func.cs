@@ -153,6 +153,10 @@ namespace RapidCheck
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
 
+                    SQL = string.Format("SELECT objectId, classId FROM rapidcheck.objectinfo where videoId = {0};", videoid);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "classid");                    
+
                     SQL = string.Format("SELECT objectId, frameNum FROM tracking where videoId={0} ORDER BY frameNum ASC", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
@@ -183,6 +187,13 @@ namespace RapidCheck
                             objectidList.Add(objid);
                             originObjectidList.Add(objid); //copy
                         }
+                    }
+                    //set class id table
+                    dt = ds.Tables["classid"];
+                    foreach (DataRow dr in dt.Rows) //dictionay형태이며,,, key = id, value = classid
+                    {
+                        //trackingTableClassid.Add(Convert.ToInt32(dr["id"]), Convert.ToInt32(dr["classId"]));
+                        trackingTableClassid[Convert.ToInt32(dr["objectId"])] = Convert.ToInt32(dr["classId"]);
                     }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
@@ -246,7 +257,7 @@ namespace RapidCheck
             reader.Open(videoPath);
             for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum++)
             {
-                dataGridView.Invoke(new Action(() =>
+                dataGridView1.Invoke(new Action(() =>
                 {
                     Bitmap videoFrame = reader.ReadVideoFrame();
                     if (objidByFrame.ContainsKey(frameNum))
@@ -263,7 +274,7 @@ namespace RapidCheck
 
                             if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                             {
-                                int gridHeight = 200;
+                                int gridHeight = 150;
                                 int headlineHeight = 20;
                                 Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight)); // crop img
                                 Bitmap headlineBox = new Bitmap(gridImg.Width, headlineHeight); // obj info
@@ -291,15 +302,23 @@ namespace RapidCheck
                                 //g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
                                 g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
                                 g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("Arial", 8), Brushes.Black, rectf);
-                                
-                                
-                                //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                                //g.DrawImage(bit, new Rectangle(0, 21, bit.Width * gridHeight / bit.Height, gridHeight));
 
-                                dataGridView.Rows.Add(gridImg);
-                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridImg.Height;
+                                if (trackingTableClassid[objid] == 0) // class id = 0 => people
+                                {
+                                    dataGridView1.Rows.Add(gridImg);
+                                    dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
+                                    
+                                }
+                                else if (trackingTableClassid[objid] == 1)
+                                {
+                                    dataGridView2.Rows.Add(gridImg);
+                                    dataGridView2.Rows[dataGridView2.RowCount - 1].Height = gridImg.Height;
+                                }
+                                else
+                                {
+                                    MessageBox.Show("DataGridView ERROR");
+                                }
+                                
                             }
                         }
                     }

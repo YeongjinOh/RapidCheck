@@ -10,6 +10,7 @@ namespace RapidCheck
     public partial class Obj
     {
         public int objectid { get; set; }
+        public int classid { get; set; }
         public int currentAreaPositionIdx { get; set; }
         public int currentImagePositionIdx { get; set; }
         private List<int> cropPositionNum;
@@ -25,6 +26,7 @@ namespace RapidCheck
             currentAreaPositionIdx = 0;
             currentImagePositionIdx = 0;
             OrderingCnt = 0;
+            classid = 0;
             cropPositionNum = new List<int>();
             cropAreas = new List<Rectangle>();
             cropImages = new List<Bitmap>();
