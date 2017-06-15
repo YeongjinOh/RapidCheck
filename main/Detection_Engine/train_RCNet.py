@@ -68,6 +68,7 @@ batches = shuffle()
 
 train_histories = {}
 train_histories['train_loss'] = []
+train_histories['val_loss'] = []
 record_step = 100
 
 for i, (x_batch, datum) in enumerate(batches):
@@ -82,18 +83,19 @@ for i, (x_batch, datum) in enumerate(batches):
 	loss_val = fetched[1]
 	if i % record_step == 0:
 		train_histories['train_loss'].append(loss_val)
-	# 	# 100 번마다 한번씩 test loss 를 구해본다.
-	# 	test_x_batch, test_datum = test_shuffle()
-	# 	test_feed_dict = {
-	# 		loss_ph[key]:test_datum[key] for key in loss_ph
-	# 	}
-	# 	test_feed_dict[inp_x] = test_x_batch
-	# 	fetches = [train_op, loss_op]
-	# 	test_fetched = sess.run(fetches, feed_dict=test_feed_dict)
-	# 	test_loss_val = test_fetched[1]
-	# 	say("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val), verbalise=True)
-	# else:
-	say("step {} - train loss {}".format(i, loss_val), verbalise=True)
+		# 100 번마다 한번씩 test loss 를 구해본다.
+		test_x_batch, test_datum = test_shuffle()
+		test_feed_dict = {
+			loss_ph[key]:test_datum[key] for key in loss_ph
+		}
+		test_feed_dict[inp_x] = test_x_batch
+		fetches = [train_op, loss_op]
+		test_fetched = sess.run(fetches, feed_dict=test_feed_dict)
+		test_loss_val = test_fetched[1]
+		train_histories['val_loss'].append(test_loss_val)
+		say("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val), verbalise=True)
+	else:
+		say("step {} - train loss {}".format(i, loss_val), verbalise=True)
 
 	if show_trainable_state:
 		conv1 = model.layers[0]
@@ -122,7 +124,7 @@ for i, (x_batch, datum) in enumerate(batches):
 	if i % 4000 == 0:
 		# save_model(model, save_folder, file_name, steps, descriptions, save_type='weights'):
 		save_model(model, cfg.model_folder, cfg.model_name, i, cfg.descriptions)
-		plot_model_history(train_histories, cfg.model_folder, cfg.model_name, record_step)
+		plot_model_history(train_histories, cfg.model_folder, cfg.model_name, record_step, is_test=True)
 		# model.save_weights(trained_save_weights_prefix + 'steps{}.h5'.format(i))
 		# say("Save weights : ", trained_save_weights_prefix + 'steps{}.h5'.format(i), verbalise=verbalise)
 
