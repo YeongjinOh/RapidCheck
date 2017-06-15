@@ -43,9 +43,9 @@ is_freeze = True
 # weigths_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps44000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-voc-dropout/dropout-mydata-train-steps48000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/only-video_439532-steps8000.h5'
-weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
+# weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-cell14-mydata-tracking-mydata-20000-steps8000.h5'
-# weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
+weigths_path = 'models/train/yolo-2class-cell14-mydata100000/from-mydatabase-mot-person-steps60000.h5'
 test_threshold = 0.4
 
 # weigths_path = 'models/train/yolo-2class-voc2007-train-cell28-steps40000.h5'
@@ -56,8 +56,9 @@ model = RCNet_THdim_model(is_freeze)
 model.load_weights(weigths_path)
 #model.summary()
 
+# video_path = os.path.join('dropbox', 'my_testset', 'PETS09-S2L2_test.mp4')
 # video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_439532', 'video_439532.mp4')
-video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_166497', 'video_166497.mp4')
+video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_PETS09-S2L1', 'street.avi')
 # video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_716195', 'video_716195.mp4')
 frameSteps = 1
 frameNum = -1
