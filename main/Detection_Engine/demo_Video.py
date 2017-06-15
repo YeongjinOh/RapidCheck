@@ -44,6 +44,7 @@ is_freeze = True
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-voc-dropout/dropout-mydata-train-steps48000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/only-video_439532-steps8000.h5'
 weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
+# weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-cell14-mydata-tracking-mydata-20000-steps8000.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-3video-steps5000.h5'
 test_threshold = 0.4
 
@@ -57,8 +58,9 @@ model.load_weights(weigths_path)
 
 # video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_439532', 'video_439532.mp4')
 video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_166497', 'video_166497.mp4')
-frameSteps = 2
-frameNum = 0
+# video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_716195', 'video_716195.mp4')
+frameSteps = 1
+frameNum = -1
 items = []
 cap = cv2.VideoCapture(video_path)
 print (video_path)
@@ -68,9 +70,11 @@ cv2.resizeWindow('Detection Window', 600,600)
 try:
 	while True:
 		ret, frame = cap.read()
+		
 		frameNum += 1
 		# if frameNum <= 64000:
 		# 	continue
+		
 		if frameNum % frameSteps != 0:
 			continue
 	
@@ -91,6 +95,7 @@ try:
 			break
 		elif wk & 0xFF == ord(' '):
 			cv2.waitKey(0)
+		
 except Exception:
 	print("Exception Occured")
 
