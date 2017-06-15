@@ -48,8 +48,8 @@ namespace RapidCheck
             //skinManager.Theme = MaterialSkinManager.Themes.DARK;
             skinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             skinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey100, // tab contorol
-                Primary.Blue200, //최상단 
+                Primary.Grey50, // tab contorol
+                Primary.Grey50, //최상단 
                 Primary.BlueGrey700, 
                 Accent.LightBlue400, 
                 TextShade.BLACK);
@@ -418,43 +418,43 @@ namespace RapidCheck
         }
         private void setChart1()
         {
-            Func<ChartPoint, string> labelPoint = chartPoint =>
-                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+            //Func<ChartPoint, string> labelPoint = chartPoint =>
+            //    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
 
-            pieChart1.Series = new SeriesCollection
-            {
-                new PieSeries
-                {
-                    Title = "Maria",
-                    Values = new ChartValues<double> {3},
-                    PushOut = 15,
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                },
-                new PieSeries
-                {
-                    Title = "Charles",
-                    Values = new ChartValues<double> {4},
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                },
-                new PieSeries
-                {
-                    Title = "Frida",
-                    Values = new ChartValues<double> {6},
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                },
-                new PieSeries
-                {
-                    Title = "Frederic",
-                    Values = new ChartValues<double> {2},
-                    DataLabels = true,
-                    LabelPoint = labelPoint
-                }
-            };
+            //pieChart1.Series = new SeriesCollection
+            //{
+            //    new PieSeries
+            //    {
+            //        Title = "Maria",
+            //        Values = new ChartValues<double> {3},
+            //        PushOut = 15,
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    },
+            //    new PieSeries
+            //    {
+            //        Title = "Charles",
+            //        Values = new ChartValues<double> {4},
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    },
+            //    new PieSeries
+            //    {
+            //        Title = "Frida",
+            //        Values = new ChartValues<double> {6},
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    },
+            //    new PieSeries
+            //    {
+            //        Title = "Frederic",
+            //        Values = new ChartValues<double> {2},
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    }
+            //};
 
-            pieChart1.LegendLocation = LegendLocation.Bottom;
+            //pieChart1.LegendLocation = LegendLocation.Bottom;
         }
     }
 }
