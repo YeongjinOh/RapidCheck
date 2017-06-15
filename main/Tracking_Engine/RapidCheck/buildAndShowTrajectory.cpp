@@ -209,7 +209,6 @@ void buildAndShowTrajectory()
 	if (DEBUG)
 		printf("Tracklet takes %d(ms)\n", t);
 
-
 	// build trajectories
 	t = clock();
 	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;

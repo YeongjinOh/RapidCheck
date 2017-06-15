@@ -735,31 +735,32 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		vector<Target> pedestrianTargets;
 		
 		// shrink rect smaller
-		double widthRatio = 0.5, heightRatio = 0.6, shiftUpperRatio = 0.0;
+		double widthRatio = 0.8, heightRatio = 0.8;
 		for (int i = 0; i < pedestriansRects.size(); ++i)
 		{
 			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
-			Rect& r = pedestriansRects[i];
+			Rect &rectOrigin = pedestriansRects[i], rectSmall = pedestriansRects[i];
+
 			if (RESIZE_DETECTION_AREA)
 			{
-				r.x += r.width * (1 - widthRatio) / 2;
-				r.width = r.width * widthRatio;
-				r.y += r.height * (1 - heightRatio) / 2 - r.height * shiftUpperRatio;
-				r.height = r.height * heightRatio;
+				rectSmall.x += rectSmall.width * (1 - widthRatio) / 2;
+				rectSmall.width *= widthRatio;
+				rectSmall.y += rectSmall.height * (1 - heightRatio) / 2;
+				rectSmall.height *= heightRatio;
 			}
 
-			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			cvtColor(frame(rectSmall), imgHSV, COLOR_BGR2HSV);
 			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 
-			inRange(frame(r), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
-			inRange(frame(r), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
+			inRange(frame(rectSmall), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
+			inRange(frame(rectSmall), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
 
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			pedestrianTargets.push_back(Target(r, hist, whiteRatio, blackRatio));
+			pedestrianTargets.push_back(Target(rectOrigin, hist, whiteRatio, blackRatio));
 		}
 		framePedestrians.push_back(Frame(frameNum, pedestrianTargets));
 
@@ -768,33 +769,30 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		// create histograms
 		vector<Rect>& carRects = mapFrameNumToCars[frameNum];
 		vector<Target> carTargets;
-
 		for (int i = 0; i < carRects.size(); ++i)
 		{
 			Mat imgHSV, imgWhite, imgBlack;
 			MatND hist;
-			Rect& r = carRects[i];
+			Rect &rectOrigin = carRects[i], rectSmall = carRects[i];
 
-			/* cars don't need to be resized
 			if (RESIZE_DETECTION_AREA)
 			{
-				r.x += r.width * (1 - widthRatio) / 2;
-				r.width = r.width * widthRatio;
-				r.y += r.height * (1 - heightRatio) / 2 - r.height * shiftUpperRatio;
-				r.height = r.height * heightRatio;
+				rectSmall.x += rectSmall.width * (1 - widthRatio) / 2;
+				rectSmall.width *= widthRatio;
+				rectSmall.y += rectSmall.height * (1 - heightRatio) / 2;
+				rectSmall.height *=  heightRatio;
 			}
-			*/
-
-			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
+			
+			cvtColor(frame(rectSmall), imgHSV, COLOR_BGR2HSV);
 			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
 
-			inRange(frame(r), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
-			inRange(frame(r), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
+			inRange(frame(rectSmall), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
+			inRange(frame(rectSmall), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
 			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
 			int area = imgHSV.rows * imgHSV.cols;
 			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			carTargets.push_back(Target(r, hist, whiteRatio, blackRatio));
+			carTargets.push_back(Target(rectOrigin, hist, whiteRatio, blackRatio));
 		}
 		frameCars.push_back(Frame(frameNum, carTargets));
 	}
@@ -868,7 +866,7 @@ void detectAndInsertResultIntoDB(VideoCapture& cap)
 }
 
 // Build all tracklets of given frames
-void buildTracklets(vector<Frame>& frames, vector<Segment>& segments)
+void buildTracklets(vector<Frame> frames, vector<Segment>& segments)
 {
 	// build all segments
 	int frameNum = 0, numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
@@ -1024,6 +1022,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 	Mat frame, frameOrigin, frameSkipped;
 	int timeToSleep = 130;
 	int numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
+
 	while (true) {
 		int objectId = 0;
 		cap.set(CV_CAP_PROP_POS_FRAMES, startFrameNum);
@@ -1034,11 +1033,12 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 			for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
 			{
 				int frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
+				
 				cap >> frame;
-				for (int i = 1; i < frameStep; i++)
-					cap >> frame;
-
 				frame.copyTo(frameOrigin);
+				for (int i = 1; i < frameStep; i++)
+					cap >> frameSkipped;
+
 				for (int objectId = 0; objectId < trajectoryPedestrians.size(); objectId++)
 				{
 					RCTrajectory& trajectory = trajectoryPedestrians[objectId];
@@ -1076,7 +1076,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 				imshow("Detection response", frameOrigin);
 
 				// key handling
-				int key = waitKey(timeToSleep);
+				int key = waitKey(0);
 
 				if (key == 27) break;
 				else if (key == (int)('r'))

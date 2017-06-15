@@ -4,8 +4,8 @@
 // VideoCapture configuration
 
 const int NUM_OF_COLORS = 64;
-const bool DEBUG = false;
-const bool USE_PEDESTRIANS_ONLY = true;
+const bool DEBUG = true;
+const bool USE_PEDESTRIANS_ONLY = false;
 
 
 const int CLASS_ID_CAR = 0;
