@@ -22,6 +22,7 @@ using Shell32;
 using CefSharp;
 using CefSharp.WinForms;
 using LiveCharts;
+using LiveCharts.Wpf;
 using LiveCharts.WinForms;
 
 namespace RapidCheck
@@ -63,11 +64,11 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 100;
+            int maxFrameNum = 1750;
             //int frameStep = 3;
             int analysisFPS = 5; //default
             int minTrackingLength = 21;
-            int clusterNum = 6;
+            int clusterNum = 10;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             
@@ -368,6 +369,7 @@ namespace RapidCheck
             else if( idx == 2)
             {
                 //chart
+                setChart1();
             }
         }
 
@@ -413,6 +415,46 @@ namespace RapidCheck
                 axWindowsMediaPlayer1.Ctlcontrols.play();
                 axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)position;
             }
+        }
+        private void setChart1()
+        {
+            Func<ChartPoint, string> labelPoint = chartPoint =>
+                string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            pieChart1.Series = new SeriesCollection
+            {
+                new PieSeries
+                {
+                    Title = "Maria",
+                    Values = new ChartValues<double> {3},
+                    PushOut = 15,
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                },
+                new PieSeries
+                {
+                    Title = "Charles",
+                    Values = new ChartValues<double> {4},
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                },
+                new PieSeries
+                {
+                    Title = "Frida",
+                    Values = new ChartValues<double> {6},
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                },
+                new PieSeries
+                {
+                    Title = "Frederic",
+                    Values = new ChartValues<double> {2},
+                    DataLabels = true,
+                    LabelPoint = labelPoint
+                }
+            };
+
+            pieChart1.LegendLocation = LegendLocation.Bottom;
         }
     }
 }

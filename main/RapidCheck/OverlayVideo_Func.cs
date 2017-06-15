@@ -41,10 +41,11 @@ namespace RapidCheck
                     MySqlDataAdapter adapter = new MySqlDataAdapter();
                     DataTable dt = new DataTable();
                     conn.Open();
-                    string SQL = String.Format("SELECT EXISTS ( SELECT videoId FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum >= {2}) AS checkFlag;", videoPath, frameStep, maxFrameNum);
+                    string SQL = String.Format("SELECT EXISTS ( SELECT videoId FROM rapidcheck.file WHERE path=\"{0}\" AND {1} % frameStep = 0 AND maxFrameNum >= {2}) AS checkFlag;", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "checkFlag");
                     dt = ds.Tables["checkFlag"];
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         checkFlag = Convert.ToInt32(dr["checkFlag"]);
@@ -58,7 +59,7 @@ namespace RapidCheck
                     }
 
                     //SELECT
-                    SQL = String.Format("SELECT videoId, status FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum >= {2}", videoPath, frameStep, maxFrameNum);
+                    SQL = String.Format("SELECT videoId, status FROM rapidcheck.file WHERE path=\"{0}\" AND {1} % frameStep = 0 AND maxFrameNum >= {2}", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoid");
                     dt = ds.Tables["videoid"];
@@ -145,23 +146,23 @@ namespace RapidCheck
                         }
                     }
                     
-                    SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
+                    SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2};", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "maxid");
 
-                    SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum < {1} ORDER BY objectId ASC, frameNum ASC", videoid, maxFrameNum);
+                    SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY objectId ASC, frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
 
                     SQL = string.Format("SELECT objectId, classId FROM rapidcheck.objectinfo where videoId = {0};", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
-                    adapter.Fill(ds, "classid");                    
+                    adapter.Fill(ds, "classid");
 
-                    SQL = string.Format("SELECT objectId, frameNum FROM tracking where videoId={0} ORDER BY frameNum ASC", videoid);
+                    SQL = string.Format("SELECT objectId, frameNum FROM tracking WHERE videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
 
-                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum < {1} group by objectId;", videoid, maxFrameNum);
+                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} group by objectId;", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objCnt");
 
@@ -230,10 +231,10 @@ namespace RapidCheck
         }
         private static void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-            if (outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
+            if (outLine.Data != null && outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
             {
                 int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
-                MessageBox.Show(percent.ToString());
+                //MessageBox.Show(percent.ToString());
             }
         }
         public void addObj()
