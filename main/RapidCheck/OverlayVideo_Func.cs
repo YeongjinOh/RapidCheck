@@ -30,7 +30,7 @@ namespace RapidCheck
         //****************************** Main function ******************************
         public void getMysqlObjList()
         {
-            int status = 0;
+            int status = 2;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(strConn))
@@ -41,7 +41,7 @@ namespace RapidCheck
                     MySqlDataAdapter adapter = new MySqlDataAdapter();
                     DataTable dt = new DataTable();
                     conn.Open();
-                    string SQL = String.Format("select exists ( select videoId from rapidcheck.file where path=\"{0}\" and frameStep = {1}) as checkFlag;", videoPath, frameStep);
+                    string SQL = String.Format("SELECT EXISTS ( SELECT videoId FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum >= {2}) AS checkFlag;", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "checkFlag");
                     dt = ds.Tables["checkFlag"];
@@ -52,14 +52,13 @@ namespace RapidCheck
                     if(checkFlag == 0)
                     {
                         //INSERT
-                        
-                        string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep) values ('{0}',{1});", videoPath, frameStep);
+                        string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep, maxFrameNum) VALUES ('{0}',{1}, {2});", videoPath, frameStep, maxFrameNum);
                         MySqlCommand cmd = new MySqlCommand(insertCMD, conn);
                         cmd.ExecuteNonQuery();
                     }
 
                     //SELECT
-                    SQL = String.Format("Select videoId, status from rapidcheck.file where path=\"{0}\"", videoPath);
+                    SQL = String.Format("SELECT videoId, status FROM rapidcheck.file WHERE path=\"{0}\" AND frameStep = {1} AND maxFrameNum >= {2}", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoid");
                     dt = ds.Tables["videoid"];
@@ -68,13 +67,13 @@ namespace RapidCheck
                         videoid = Convert.ToInt32(dr["videoid"]);
                         status = Convert.ToInt32(dr["status"]);
                     }
+                    /*******************************************************************/ status = 1; /*******************************************************************/
 
-                    /***********************************************************************/status = 2;/***********************************************************************/
                     // detection
+                    string dir = @"..\..\..\..\Detection_Engine\";
+                    System.IO.Directory.SetCurrentDirectory(dir);
                     if (status == 0)
                     {
-                        string dir = @"..\..\..\..\Detection_Engine\";
-                        System.IO.Directory.SetCurrentDirectory(dir);
                         //연동하는부분
                         try
                         {
@@ -100,19 +99,19 @@ namespace RapidCheck
                             {
                                 MessageBox.Show("DETECTION ERROR");
                             }
+                            
                         }
                         catch
                         {
                             MessageBox.Show("DETECTION ERROR");
                         }
                     }
-
                     if (status == 1)
                     {
                         //연동하는부분
                         try
                         {
-                            string dir = @"..\Tracking_Engine\RapidCheck";
+                            dir = @"..\Tracking_Engine\RapidCheck";
                             System.IO.Directory.SetCurrentDirectory(dir);
 
                             string pro = @"C:\Users\SoMa\Desktop\RapidCheck\main\Tracking_Engine\x64\Debug\Tracking_Engine.exe";
@@ -141,10 +140,7 @@ namespace RapidCheck
                             MessageBox.Show("TRACKING ERROR");
                         }
                     }
-
-                    // TODO
-                    //videoid = 3;
-
+                    
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "maxid");
@@ -307,18 +303,19 @@ namespace RapidCheck
                                 {
                                     dataGridView1.Rows.Add(gridImg);
                                     dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
+                                    gridViewList1.Add(objid);
                                     
                                 }
                                 else if (trackingTableClassid[objid] == 1)
                                 {
                                     dataGridView2.Rows.Add(gridImg);
                                     dataGridView2.Rows[dataGridView2.RowCount - 1].Height = gridImg.Height;
+                                    gridViewList2.Add(objid);
                                 }
                                 else
                                 {
                                     MessageBox.Show("DataGridView ERROR");
                                 }
-                                
                             }
                         }
                     }
@@ -352,7 +349,7 @@ namespace RapidCheck
                         {
                             tempObjidList.Add(Convert.ToInt32(dr["objectId"]));
                         }
-                        objectidList = tempObjidList.Intersect(objectidList).ToList();
+                        objectidList = tempObjidList.Intersect(originObjectidList).ToList();
                         if (objectidList.Count == 0)
                         {
                             MessageBox.Show("해당 조건에 맞는 대상이 없습니다.");
@@ -444,7 +441,7 @@ namespace RapidCheck
         }
         public void overlayLive()
         {
-            background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
+            //background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
             startBtn.Text = "Pause";
             int drawWidth = pictureBoxVideo.Width;
@@ -454,10 +451,14 @@ namespace RapidCheck
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             float alphaMin = 0.5f, alphaDiff = 0.3f;
             //**********************DRAWING CODE**********************
+            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader.Open(videoPath);
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 sw.Start();
-                Bitmap BitCopy = (Bitmap)background.Clone();
+                //background = reader.ReadVideoFrame();
+                //Bitmap BitCopy = (Bitmap)background.Clone();
+                Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
@@ -508,6 +509,7 @@ namespace RapidCheck
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
+            reader.Close();
         }
 
         //******************************SubFunction******************************        
@@ -626,6 +628,10 @@ namespace RapidCheck
                 }
             }
             return startFrame;
+        }
+        public DateTime getClickedGridViewOriginalDataTime(int id)
+        {
+            return ObjList[idxbyObjid[id]].startTime;
         }
         private double min(double num1, double num2) { return num1 > num2 ? num2 : num1; }
         private void setStartingGroup()

@@ -50,6 +50,8 @@ namespace RapidCheck
         private List<int> trackingTableObjid;
         private Dictionary<int,int> trackingTableClassid;
         private List<Rectangle> trackingTableRectangle;
+        public List<int> gridViewList1;
+        public List<int> gridViewList2;
         private string videoPath;
         public int videoWidth { get; set; }
         public int videoHeight { get; set; }
@@ -112,6 +114,8 @@ namespace RapidCheck
             trackingTableClassid = new Dictionary<int, int>();
             trackingTableFrameNum = new List<int>();
             trackingTableRectangle = new List<Rectangle>();
+            gridViewList1 = new List<int>();
+            gridViewList2 = new List<int>();
             videoPath = path;
             videoPath = videoPath.Replace(@"\", @"\\");
             this.condition = "";
