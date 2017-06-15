@@ -90,7 +90,7 @@ try:
 				items.append(DB_Item(videoId, frameNum, each_object[0], each_object[1], each_object[2], each_object[3], each_object[4], each_object[5]))
 		
 		if len(items) >= 10:
-			#db.insert(items, table_name='detection')
+			db.insert(items, table_name='detection')
 			print("DB Insert 10 items Done..********************************")
 			del items
 			items = []
@@ -102,7 +102,7 @@ except Exception:
 	print("Exception Occured")
 	exit(-1)
 finally:
-	#db.insert(items, table_name='detection')
+	db.insert(items, table_name='detection')
 	db.close()
 	print("DB Closed in Finally..")
 	print("RapidCheck_Detection {}".format(1000))
