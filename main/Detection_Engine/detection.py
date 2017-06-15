@@ -95,7 +95,7 @@ try:
 			del items
 			items = []
 
-		print("RapidCheck_Detection {}".format(int(frameNum/maxFrame*100)))
+		print("RapidCheck_Detection {}".format(int(frameNum/maxFrame*1000)))
 		
 
 except Exception:
@@ -105,7 +105,7 @@ finally:
 	#db.insert(items, table_name='detection')
 	db.close()
 	print("DB Closed in Finally..")
-	print("RapidCheck_Detection {}".format(100))
+	print("RapidCheck_Detection {}".format(1000))
 	cap.release()
 	
 exit(0)
