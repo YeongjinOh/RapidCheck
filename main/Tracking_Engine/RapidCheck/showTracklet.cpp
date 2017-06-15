@@ -40,7 +40,8 @@ void showTracklet()
 
 	// build all tracklets
 	vector<Segment> segments;
-	buildTracklets(frames, segments);
+	int classId = USE_PEDESTRIANS_ONLY ? 1 : 0;
+	buildTracklets(frames, segments, classId);
 	if (DEBUG)
 		printf("Tracklets built\n");;
 

@@ -32,8 +32,8 @@ void showTrackletClusters()
 	// build all tracklets
 	t = clock();
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians);
-	buildTracklets(frameCars, segmentCars);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
+	buildTracklets(frameCars, segmentCars, 0);
 
 	// open windows
 	for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)

@@ -117,7 +117,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 		// find the best pair of points which have
 		// 1. minimum number of outlier
 		// 2. minimum of maxDist
-		double outlierDistThres = 100.0;
+		double outlierDistThres = 200.0;
 		int minCntOutlier = LOW_LEVEL_TRACKLETS;
 		double minMaxDist = INFINITY;
 		int inlierIdx1 = -1, inlierIdx2 = -1;
@@ -184,7 +184,10 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 				selectedTargets[outlierIdx] = Target();
 				useDummy = true;
 			}
-			getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
+			// TODO
+			// getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
+			getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
+			
 			return;
 		}
 
@@ -299,18 +302,24 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 			continue;
 
 		// branch cutting using simple position comparison
+		// TODO : do not use bracn cutting for Car
+		
 		if (selectedTargets.size() > 0 && selectedIndices.back() != -1)
 		{
 			Target& prevTarget = selectedTargets.back();
 			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
 			double motionCost = getNormValueFromVector(motionErrVector);
-			if (motionCost > CONTINUOUS_MOTION_COST_THRE)
+			if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR)
+			{
 				continue;
+			}
 		}
+		
+
 		// recursive backtracking
 		selectedTargets.push_back(targets[i]);
 		selectedIndices.push_back(i);
-		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
+		getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
 		selectedIndices.pop_back();
 		selectedTargets.pop_back();
 		cnt++;
@@ -322,7 +331,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 		// recursive backtracking
 		selectedTargets.push_back(Target());
 		selectedIndices.push_back(-1);
-		getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
+		getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
 		selectedIndices.pop_back();
 		selectedTargets.pop_back();
 	}
@@ -866,7 +875,7 @@ void detectAndInsertResultIntoDB(VideoCapture& cap)
 }
 
 // Build all tracklets of given frames
-void buildTracklets(vector<Frame> frames, vector<Segment>& segments)
+void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId)
 {
 	// build all segments
 	int frameNum = 0, numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
@@ -886,7 +895,16 @@ void buildTracklets(vector<Frame> frames, vector<Segment>& segments)
 
 			
 			// build solution
-			getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+			if (classId == 1)
+			{
+				getTracklet(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+			}
+			else
+			{
+				getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+			}
+			
+			
 
 			// if no more solution
 			if (solution.size() < LOW_LEVEL_TRACKLETS)
@@ -1012,7 +1030,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 	vector<Scalar> colors = getRandomColors();
 
 	// show trajectories
-	double resizeRatio = 1.0;
+	double resizeRatio = 700.0 / cap.get(CV_CAP_PROP_FRAME_WIDTH);
 	int marginTop = 200;
 	namedWindow("Trajectory");
 	namedWindow("Detection response");
@@ -1056,7 +1074,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 					rectangle(frame, currentFramePedestrian.getTargetArea(), carColor, 2);
 					putText(frame, "Car #" + to_string(trajectoryPedestrians.size() + objectId), currentFramePedestrian.getCenterPoint() - Point(30, 10 + currentFramePedestrian.getTargetArea().height / 2), 1, 1.5, carColor, 2);
 				}
-
+				
 				vector<Rect> pedestrianRects = framePedestrians[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
 				for (int i = 0; i < pedestrianRects.size(); i++) {
 					rectangle(frameOrigin, pedestrianRects[i], WHITE, 2);
@@ -1101,7 +1119,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 				else if (key == (int)('b'))
 				{
 					segmentNumber = max(0, segmentNumber - 10);
-					frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
+					frameNum = frameStep * (LOW_LEVEL_TRACKLETS * (segmentNumber + 1)) + startFrameNum;
 					cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
 					break;
 				}

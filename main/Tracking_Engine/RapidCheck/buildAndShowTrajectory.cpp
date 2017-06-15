@@ -204,8 +204,8 @@ void buildAndShowTrajectory()
 	// build all tracklets
 	t = clock();
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians);
-	buildTracklets(frameCars, segmentCars);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
+	buildTracklets(frameCars, segmentCars, 0);
 	t = clock() - t;
 	if (DEBUG)
 		printf("Tracklet takes %d(ms)\n", t);
@@ -245,8 +245,8 @@ void analysisVideo()
 	
 	// build all tracklets
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians);
-	buildTracklets(frameCars, segmentCars);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
+	buildTracklets(frameCars, segmentCars, 0);
 
 	// build trajectories
 	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;

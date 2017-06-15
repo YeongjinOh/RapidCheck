@@ -41,7 +41,8 @@ void compareSimilarity()
 	// build all tracklets
 	vector<Segment> segments;
 	t = clock();
-	buildTracklets(frames, segments);
+	int classId = USE_PEDESTRIANS_ONLY ? 1 : 0;
+	buildTracklets(frames, segments, classId);
 	t = clock() - t;
 	if (DEBUG)
 		printf("Tracking takes %d(ms)\n", t);

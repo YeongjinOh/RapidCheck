@@ -4,7 +4,7 @@
 // VideoCapture configuration
 
 const int NUM_OF_COLORS = 64;
-const bool DEBUG = true;
+const bool DEBUG = false;
 const bool USE_PEDESTRIANS_ONLY = false;
 
 
@@ -20,7 +20,7 @@ const double MIXTURE_CONSTANT = 0.1;
 const int LOW_LEVEL_TRACKLETS = 6;
 const int MID_LEVEL_TRACKLETS = 6;
 const int CONTINUOUS_MOTION_COST_THRE = 30;
-const int CONTINUOUS_MOTION_COST_THRE_CAR = 100;
+const int CONTINUOUS_MOTION_COST_THRE_CAR = 200;
 const bool RESIZE_DETECTION_AREA = false;
 const bool SELECT_DETECTION_RESPONSE = true;
 
