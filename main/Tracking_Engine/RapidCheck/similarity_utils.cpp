@@ -89,8 +89,8 @@ bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext)
 {
 	Rect lastRectOfPrev = trackletPrev.back().getTargetArea(), firstRectOfNext = trackletNext.front().getTargetArea();
 	int intersectionArea = (lastRectOfPrev & firstRectOfNext).area();
-	if (DEBUG)
-		printf("intersection area : %d\n", intersectionArea);
+	//if (DEBUG)
+	//	printf("intersection area : %d\n", intersectionArea);
 	return intersectionArea > 0;
 }
 

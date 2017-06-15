@@ -62,11 +62,12 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 				{
 					int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
 					double similarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
+					if (DEBUG)
+						printf("%.2lf ", similarity);
 					if (similarity > TRAJECTORY_MATCH_SIMILARITY_THRES)
 						graphSimilarity[i][j] = similarity;
 				}
-				if (DEBUG)
-					printf("%.2lf ", graphSimilarity[i][j]);
+				
 			}
 			if (DEBUG)
 				printf("\n");

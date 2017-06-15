@@ -1012,7 +1012,7 @@ void showTrajectory(vector<Frame>& framePedestrians, vector<Frame>& frameCars, v
 	vector<Scalar> colors = getRandomColors();
 
 	// show trajectories
-	double resizeRatio = 0.75;
+	double resizeRatio = 1.0;
 	int marginTop = 200;
 	namedWindow("Trajectory");
 	namedWindow("Detection response");

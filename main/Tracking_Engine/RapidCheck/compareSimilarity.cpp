@@ -50,6 +50,13 @@ void compareSimilarity()
 	Mat framePrev, frameNext;
 	int compareHistMethods[4] = {CV_COMP_CORREL, CV_COMP_CHISQR, CV_COMP_INTERSECT, CV_COMP_BHATTACHARYYA };
 	int compareHistMethod = compareHistMethods[0];
+	double resizeRatio = 0.5;
+	int marginTop = 200;
+	namedWindow("prev");
+	namedWindow("next");
+	moveWindow("prev", 0, marginTop);
+	moveWindow("next", cap.get(CV_CAP_PROP_FRAME_WIDTH) * resizeRatio, marginTop);
+
 	bool switchM = true, switchS = true, switchF = false, switchB = false; // switch for similarity, forward, backward error
 	while (true)
 	{
@@ -149,6 +156,8 @@ void compareSimilarity()
 		putText(frameNext, "Frame #" + to_string(nextFrameNum), Point(10, 20), CV_FONT_HERSHEY_SIMPLEX, 0.7, BLACK, 2);
 
 		// show result
+		resize(framePrev, framePrev, Size(framePrev.size().width * resizeRatio, framePrev.size().height * resizeRatio));
+		resize(frameNext, frameNext, Size(frameNext.size().width * resizeRatio, frameNext.size().height * resizeRatio));
 		imshow("prev", framePrev);
 		imshow("next", frameNext);
 

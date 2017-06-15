@@ -10,49 +10,81 @@ void showTrackletClusters()
 	// set input video
 	VideoCapture cap(filepath);
 
-	// random number generator
-	RNG rng(0xFFFFF0FF);
-	
-	Mat frame, targetImage;
-	Target target;
-	bool hasTarget = false;
-
 	// initialize colors	
-	vector<Scalar> colors;
-	for (int i = 0; i < NUM_OF_COLORS; i++) 
-	{
-		int icolor = (unsigned)rng;
-		int minimumColor = 0;
-		colors.push_back(Scalar(minimumColor + (icolor & 127), minimumColor + ((icolor >> 8) & 127), minimumColor + ((icolor >> 16) & 127)));
-	}
-		
+	vector<Scalar> colors = getRandomColors();
+
 	// build target detected frames
-	vector<Frame> frames, framePedestrians, frameCars;
+	vector<Frame> framePedestrians, frameCars;
+	clock_t t = clock();
 	if (SELECT_DETECTION_RESPONSE)
 	{
 		readTargets(cap, framePedestrians, frameCars);
 	}
 	else
 	{
-		detectTargets(cap, frames);
+		detectTargets(cap, framePedestrians);
+		// detectAndInsertResultIntoDB(cap);
 	}
-	if (USE_PEDESTRIANS_ONLY)
-	{
-		frames = framePedestrians;
-	}
-	else
-	{
-		frames = frameCars;
-	}
+	t = clock() - t;
 	if (DEBUG)
-		printf("Detection finished\n");
-	
+		printf("Detection takes %d(ms)\n", t);
+
+	// build all tracklets
+	t = clock();
+	vector<Segment> segmentPedestrians, segmentCars;
+	buildTracklets(framePedestrians, segmentPedestrians);
+	buildTracklets(frameCars, segmentCars);
+
 	// open windows
 	for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
 	{
 		namedWindow("Frame #" + to_string(i + 1));
 		moveWindow("Frame #" + to_string(i + 1), 400*(i/3), (280*(i%3)));
 	}
+
+	Mat frame, frameSkipped;
+	int numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
+	cap.set(CV_CAP_PROP_POS_FRAMES, startFrameNum);
+	for (int segmentNumber = 0; segmentNumber < numOfSegments; segmentNumber++)
+	{
+		int frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber) + startFrameNum;
+		cap.set(CV_CAP_PROP_POS_FRAMES, frameNum);
+		vector<tracklet> &curTracklets = segmentCars[segmentNumber].getTracklets();
+		for (int frameIdx = 0; frameIdx < LOW_LEVEL_TRACKLETS; frameIdx++)
+		{
+			frameNum = frameStep * (LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx) + startFrameNum;
+			
+			cap >> frame;
+			for (int i = 1; i < frameStep; i++)
+				cap >> frameSkipped;
+			
+			// Detection responses
+			vector<Rect> carRects = frameCars[LOW_LEVEL_TRACKLETS * segmentNumber + frameIdx].getRects();
+			for (int i = 0; i < carRects.size(); i++) {
+				Rect rect = carRects[i];
+				rectangle(frame, Rect(rect.x - 10, rect.y - 10, rect.width + 20, rect.height + 20), WHITE, 2);
+			}
+
+			// Tracklet results
+			for (int objectId = 0; objectId < curTracklets.size(); objectId++)
+			{
+				Rect rect = curTracklets[objectId][frameIdx].getTargetArea();
+				rectangle(frame, rect, colors[objectId], 4, 1);
+				putText(frame, std::to_string(objectId), curTracklets[objectId][frameIdx].getCenterPoint() - Point(10, 10 + rect.height / 2), CV_FONT_HERSHEY_SIMPLEX, 1, colors[objectId], 3);
+			}
+
+			resize(frame, frame, Size(400, 300));
+			imshow("Frame #" + to_string(frameIdx + 1), frame);
+		}
+		int key = waitKey(0);
+		if (key == 27) break;
+		if (key == (int)('b'))
+			segmentNumber -= 2;
+		else if (key == (int)('r'))
+			segmentNumber = -1;
+	}
+
+	/*
 	int frameNum = 0, objectId;
 	while (true)
 	{
@@ -175,4 +207,5 @@ void showTrackletClusters()
 		else if (key == (int)('r'))
 			frameNum = 1;
 	}
+	*/
 }
