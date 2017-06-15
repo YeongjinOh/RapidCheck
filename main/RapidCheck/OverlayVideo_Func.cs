@@ -30,7 +30,7 @@ namespace RapidCheck
         //****************************** Main function ******************************
         public void getMysqlObjList()
         {
-            int status = 2;
+            int status = 0;
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(strConn))
@@ -67,8 +67,6 @@ namespace RapidCheck
                         videoid = Convert.ToInt32(dr["videoid"]);
                         status = Convert.ToInt32(dr["status"]);
                     }
-                    /*******************************************************************/ status = 1; /*******************************************************************/
-
                     // detection
                     string dir = @"..\..\..\..\Detection_Engine\";
                     System.IO.Directory.SetCurrentDirectory(dir);
@@ -79,12 +77,18 @@ namespace RapidCheck
                         {
                             // TODO : read config file and change file path relatively
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
-                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1}", videoid, maxFrameNum);
+                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3}", videoid, maxFrameNum, videoPath, frameStep);
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
                             p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+                            p.StartInfo.RedirectStandardOutput = true;
+                            p.StartInfo.UseShellExecute = false;
+                            p.OutputDataReceived += processOutputHandler;
+
                             p.Start();
+                            p.BeginOutputReadLine();
                             p.WaitForExit();
 
                             int result = p.ExitCode;
@@ -224,7 +228,14 @@ namespace RapidCheck
                 Console.WriteLine("getMysqlObjList() ERROR");
             }
         }
-        
+        private static void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            if (outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
+            {
+                int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
+                MessageBox.Show(percent.ToString());
+            }
+        }
         public void addObj()
         {
             for (int idx = 0; idx < objectidList.Count; idx++)
