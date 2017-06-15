@@ -45,7 +45,7 @@ is_freeze = True
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/only-video_439532-steps8000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-cell14-mydata-tracking-mydata-20000-steps8000.h5'
-weigths_path = 'models/train/yolo-2class-cell14-mydata100000/from-mydatabase-mot-person-steps60000.h5'
+weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-mydatabase-mot-person-steps16000.h5'
 test_threshold = 0.4
 
 # weigths_path = 'models/train/yolo-2class-voc2007-train-cell28-steps40000.h5'
