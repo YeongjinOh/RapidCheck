@@ -14,8 +14,8 @@ using namespace rc;
 
 void initRCVariables()
 {
-	filepath = "C:/videos/video_166497_test.mp4";
-	videoId = 702;
+	filepath = "C:/videos/video_716195_test.mp4";
+	videoId = 703;
 	startFrameNum = 0;
 	frameStep = 2;
 	endFrameNum = 1750;
