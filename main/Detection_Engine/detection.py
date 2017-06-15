@@ -28,7 +28,7 @@ parser.add_argument('--frameSteps', type=int, help='frameSteps for detecting wor
 parser.add_argument('--maxFrame', type=int, help='MaxFrame for detecting works', required=True)
 args = parser.parse_args()
 # db.delete()
-if args.videoPath and args.maxFrame and args.videoId, args.frameSteps:
+if args.videoPath and args.maxFrame and args.videoId and args.frameSteps:
 	videoId = args.videoId
 	video_path = args.videoPath
 	frameSteps = args.frameSteps
