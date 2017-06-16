@@ -204,8 +204,8 @@ void buildAndShowTrajectory()
 	// build all tracklets
 	t = clock();
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians, 1);
 	buildTracklets(frameCars, segmentCars, 0);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
 	t = clock() - t;
 	if (DEBUG)
 		printf("Tracklet takes %d(ms)\n", t);
@@ -256,4 +256,6 @@ void analysisVideo()
 	// insert into DB
 	insertTrackingIntoDB(trajectoryPedestrians, trajectoryCars);
 	insertObjectInfoIntoDB(trajectoryPedestrians, trajectoryCars);
+	if (PRINT_PROGRESS)
+		printf("RapidCheck_Tracking %d\n", 1000);
 }

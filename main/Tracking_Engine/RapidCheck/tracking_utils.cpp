@@ -804,6 +804,9 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			carTargets.push_back(Target(rectOrigin, hist, whiteRatio, blackRatio));
 		}
 		frameCars.push_back(Frame(frameNum, carTargets));
+		int progressMod = numOfFrames / 500;
+		if (PRINT_PROGRESS && (progressMod == 0 || frameCnt % progressMod == 0))
+			printf("RapidCheck_Tracking %d\n", frameCnt * 500 / numOfFrames);
 	}
 }
 
@@ -928,6 +931,9 @@ void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId
 
 		}
 		segments.push_back(segment);
+		int progressMod = numOfSegments / 250;
+		if (PRINT_PROGRESS && (progressMod == 0 || segmentNumber % progressMod == 0))
+			printf("RapidCheck_Tracking %d\n", 500 + 250*classId + segmentNumber * 250 / numOfSegments);
 	}
 }
 

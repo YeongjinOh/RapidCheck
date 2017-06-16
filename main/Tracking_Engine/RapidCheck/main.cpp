@@ -18,14 +18,14 @@ void initRCVariables()
 	videoId = 703;
 	startFrameNum = 0;
 	frameStep = 2;
-	endFrameNum = 1750;
+	endFrameNum = 17000;
 	numOfFrames = (endFrameNum - startFrameNum) / frameStep;
 }
 
 int main(int argc, char ** argv)
 {
 	initRCVariables();
-	int operationNum = 3;
+	int operationNum = 1;
 	
 	// assign arguments
 	for (int i = 1; i < argc; i++)

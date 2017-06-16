@@ -6,7 +6,7 @@
 const int NUM_OF_COLORS = 64;
 const bool DEBUG = false;
 const bool USE_PEDESTRIANS_ONLY = false;
-
+const bool PRINT_PROGRESS = true;
 
 const int CLASS_ID_CAR = 0;
 const int CLASS_ID_PEDESTRIAN = 1;
