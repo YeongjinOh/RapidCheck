@@ -282,11 +282,26 @@ namespace RapidCheck
         {
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
-            for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum++)
+
+            int cropMaxFrameNum = 0;
+            for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum += frameStep)
             {
-                dataGridView1.Invoke(new Action(() =>
+                 if (objidByFrame.ContainsKey(frameNum))
+                 {
+                     cropMaxFrameNum = frameNum;
+                 }
+            }
+
+            for (int frameNum = 0; frameNum < cropMaxFrameNum/*reader.FrameCount*/; frameNum++)
+            {
+                Bitmap videoFrame = reader.ReadVideoFrame();
+                if (frameNum % frameStep != 0)
                 {
-                    Bitmap videoFrame = reader.ReadVideoFrame();
+                    videoFrame.Dispose();
+                    continue;
+                }
+                dataGridView1.Invoke(new Action(() =>
+                { 
                     if (objidByFrame.ContainsKey(frameNum))
                     {
                         foreach (int objid in objidByFrame[frameNum])
@@ -350,9 +365,10 @@ namespace RapidCheck
                             }
                         }
                     }
-                    videoFrame.Dispose();
+                    //videoFrame.Dispose();
                 }));
-                int percent = frameNum * 100 / maxFrameNum;
+                videoFrame.Dispose();
+                int percent = frameNum * 100 / cropMaxFrameNum;
                 labelProgress.Text = "Detection 100%\nTracking 100%\nOverlay " + percent + "%";
             }
             reader.Close();
