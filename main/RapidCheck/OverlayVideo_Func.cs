@@ -41,10 +41,11 @@ namespace RapidCheck
                     MySqlDataAdapter adapter = new MySqlDataAdapter();
                     DataTable dt = new DataTable();
                     conn.Open();
-                    string SQL = String.Format("select exists ( select videoId from rapidcheck.file where path=\"{0}\" and frameStep = {1}) as checkFlag;", videoPath, frameStep);
+                    string SQL = String.Format("SELECT EXISTS ( SELECT videoId FROM rapidcheck.file WHERE path=\"{0}\" AND {1} % frameStep = 0 AND maxFrameNum >= {2}) AS checkFlag;", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "checkFlag");
                     dt = ds.Tables["checkFlag"];
+
                     foreach (DataRow dr in dt.Rows)
                     {
                         checkFlag = Convert.ToInt32(dr["checkFlag"]);
@@ -52,14 +53,13 @@ namespace RapidCheck
                     if(checkFlag == 0)
                     {
                         //INSERT
-                        
-                        string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep) values ('{0}',{1});", videoPath, frameStep);
+                        string insertCMD = String.Format("INSERT INTO rapidcheck.file(path, frameStep, maxFrameNum) VALUES ('{0}',{1}, {2});", videoPath, frameStep, maxFrameNum);
                         MySqlCommand cmd = new MySqlCommand(insertCMD, conn);
                         cmd.ExecuteNonQuery();
                     }
 
                     //SELECT
-                    SQL = String.Format("Select videoId, status from rapidcheck.file where path=\"{0}\"", videoPath);
+                    SQL = String.Format("SELECT videoId, status FROM rapidcheck.file WHERE path=\"{0}\" AND {1} % frameStep = 0 AND maxFrameNum >= {2}", videoPath, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoid");
                     dt = ds.Tables["videoid"];
@@ -68,24 +68,28 @@ namespace RapidCheck
                         videoid = Convert.ToInt32(dr["videoid"]);
                         status = Convert.ToInt32(dr["status"]);
                     }
-
-                    /***********************************************************************/status = 2;/***********************************************************************/
                     // detection
+                    string dir = @"..\..\..\..\Detection_Engine\";
+                    System.IO.Directory.SetCurrentDirectory(dir);
                     if (status == 0)
                     {
-                        string dir = @"..\..\..\..\Detection_Engine\";
-                        System.IO.Directory.SetCurrentDirectory(dir);
                         //연동하는부분
                         try
                         {
                             // TODO : read config file and change file path relatively
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
-                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1}", videoid, maxFrameNum);
+                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3}", videoid, maxFrameNum, videoPath, frameStep);
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
                             p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+
+                            p.StartInfo.RedirectStandardOutput = true;
+                            p.StartInfo.UseShellExecute = false;
+                            p.OutputDataReceived += processOutputHandler;
+
                             p.Start();
+                            p.BeginOutputReadLine();
                             p.WaitForExit();
 
                             int result = p.ExitCode;
@@ -100,19 +104,19 @@ namespace RapidCheck
                             {
                                 MessageBox.Show("DETECTION ERROR");
                             }
+                            
                         }
                         catch
                         {
                             MessageBox.Show("DETECTION ERROR");
                         }
                     }
-
                     if (status == 1)
                     {
                         //연동하는부분
                         try
                         {
-                            string dir = @"..\Tracking_Engine\RapidCheck";
+                            dir = @"..\Tracking_Engine\RapidCheck";
                             System.IO.Directory.SetCurrentDirectory(dir);
 
                             string pro = @"C:\Users\SoMa\Desktop\RapidCheck\main\Tracking_Engine\x64\Debug\Tracking_Engine.exe";
@@ -141,23 +145,24 @@ namespace RapidCheck
                             MessageBox.Show("TRACKING ERROR");
                         }
                     }
-
-                    // TODO
-                    //videoid = 3;
-
-                    SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum < {1};", videoid, maxFrameNum);
+                    
+                    SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2};", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "maxid");
 
-                    SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum < {1} ORDER BY objectId ASC, frameNum ASC", videoid, maxFrameNum);
+                    SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY objectId ASC, frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
 
-                    SQL = string.Format("SELECT objectId, frameNum FROM tracking where videoId={0} ORDER BY frameNum ASC", videoid);
+                    SQL = string.Format("SELECT objectId, classId FROM rapidcheck.objectinfo where videoId = {0};", videoid);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "classid");
+
+                    SQL = string.Format("SELECT objectId, frameNum FROM tracking WHERE videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
 
-                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum < {1} group by objectId;", videoid, maxFrameNum);
+                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} group by objectId;", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objCnt");
 
@@ -183,6 +188,13 @@ namespace RapidCheck
                             objectidList.Add(objid);
                             originObjectidList.Add(objid); //copy
                         }
+                    }
+                    //set class id table
+                    dt = ds.Tables["classid"];
+                    foreach (DataRow dr in dt.Rows) //dictionay형태이며,,, key = id, value = classid
+                    {
+                        //trackingTableClassid.Add(Convert.ToInt32(dr["id"]), Convert.ToInt32(dr["classId"]));
+                        trackingTableClassid[Convert.ToInt32(dr["objectId"])] = Convert.ToInt32(dr["classId"]);
                     }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
@@ -217,7 +229,14 @@ namespace RapidCheck
                 Console.WriteLine("getMysqlObjList() ERROR");
             }
         }
-        
+        private static void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            if (outLine.Data != null && outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
+            {
+                int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
+                //MessageBox.Show(percent.ToString());
+            }
+        }
         public void addObj()
         {
             for (int idx = 0; idx < objectidList.Count; idx++)
@@ -246,7 +265,7 @@ namespace RapidCheck
             reader.Open(videoPath);
             for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum++)
             {
-                dataGridView.Invoke(new Action(() =>
+                dataGridView1.Invoke(new Action(() =>
                 {
                     Bitmap videoFrame = reader.ReadVideoFrame();
                     if (objidByFrame.ContainsKey(frameNum))
@@ -263,7 +282,7 @@ namespace RapidCheck
 
                             if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                             {
-                                int gridHeight = 200;
+                                int gridHeight = 150;
                                 int headlineHeight = 20;
                                 Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight)); // crop img
                                 Bitmap headlineBox = new Bitmap(gridImg.Width, headlineHeight); // obj info
@@ -291,15 +310,24 @@ namespace RapidCheck
                                 //g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
                                 g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
                                 g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("Arial", 8), Brushes.Black, rectf);
-                                
-                                
-                                //g.SmoothingMode = SmoothingMode.AntiAlias;
-                                //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                                //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                                //g.DrawImage(bit, new Rectangle(0, 21, bit.Width * gridHeight / bit.Height, gridHeight));
 
-                                dataGridView.Rows.Add(gridImg);
-                                dataGridView.Rows[dataGridView.RowCount - 1].Height = gridImg.Height;
+                                if (trackingTableClassid[objid] == 0) // class id = 0 => people
+                                {
+                                    dataGridView1.Rows.Add(gridImg);
+                                    dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
+                                    gridViewList1.Add(objid);
+                                    
+                                }
+                                else if (trackingTableClassid[objid] == 1)
+                                {
+                                    dataGridView2.Rows.Add(gridImg);
+                                    dataGridView2.Rows[dataGridView2.RowCount - 1].Height = gridImg.Height;
+                                    gridViewList2.Add(objid);
+                                }
+                                else
+                                {
+                                    MessageBox.Show("DataGridView ERROR");
+                                }
                             }
                         }
                     }
@@ -324,7 +352,8 @@ namespace RapidCheck
 
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
-                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and classId = 0 {2};", videoid, maxObjectid, condition);
+                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} {2};", videoid, maxObjectid, condition);
+                        MessageBox.Show(SQL);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
                         adapter.Fill(ds, "objIds");
                         dt = ds.Tables["objIds"];
@@ -332,7 +361,7 @@ namespace RapidCheck
                         {
                             tempObjidList.Add(Convert.ToInt32(dr["objectId"]));
                         }
-                        objectidList = tempObjidList.Intersect(objectidList).ToList();
+                        objectidList = tempObjidList.Intersect(originObjectidList).ToList();
                         if (objectidList.Count == 0)
                         {
                             MessageBox.Show("해당 조건에 맞는 대상이 없습니다.");
@@ -424,7 +453,7 @@ namespace RapidCheck
         }
         public void overlayLive()
         {
-            background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
+            //background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
             startBtn.Text = "Pause";
             int drawWidth = pictureBoxVideo.Width;
@@ -434,10 +463,14 @@ namespace RapidCheck
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             float alphaMin = 0.5f, alphaDiff = 0.3f;
             //**********************DRAWING CODE**********************
+            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader.Open(videoPath);
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 sw.Start();
-                Bitmap BitCopy = (Bitmap)background.Clone();
+                //background = reader.ReadVideoFrame();
+                //Bitmap BitCopy = (Bitmap)background.Clone();
+                Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
@@ -488,6 +521,7 @@ namespace RapidCheck
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
+            reader.Close();
         }
 
         //******************************SubFunction******************************        
@@ -606,6 +640,10 @@ namespace RapidCheck
                 }
             }
             return startFrame;
+        }
+        public DateTime getClickedGridViewOriginalDataTime(int id)
+        {
+            return ObjList[idxbyObjid[id]].startTime;
         }
         private double min(double num1, double num2) { return num1 > num2 ? num2 : num1; }
         private void setStartingGroup()

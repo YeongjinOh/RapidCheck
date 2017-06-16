@@ -126,10 +126,11 @@ def save_model(model, save_folder, file_name, steps, descriptions, save_type='we
 		model.save(os.path.join(save_folder, file_name) + '-steps{}.h5'.format(steps))
 
 
-def plot_model_history(model_history, save_path, model_name, record_step=100):
+def plot_model_history(model_history, save_path, model_name, record_step=100, is_test=False):
 	fig, axs = plt.subplots(1,1,figsize=(10,5))
-	axs.plot(range(1,len(model_history['train_loss'])*record_step+1, record_step),model_history['train_loss'])
-	# axs.plot(range(1,len(model_history['val_loss'])+1),model_history['val_loss'])
+	axs.plot(range(1,len(model_history['train_loss'])*record_step+1, record_step), model_history['train_loss'])
+	if is_test:
+		axs.plot(range(1,len(model_history['val_loss'])*record_step+1, record_step), model_history['val_loss'])
 	axs.set_title('Model Loss')
 	axs.set_ylabel('loss')
 	axs.set_xlabel('Steps')

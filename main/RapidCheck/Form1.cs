@@ -21,15 +21,15 @@ using AxWMPLib; //player
 using Shell32;
 using CefSharp;
 using CefSharp.WinForms;
-
+using LiveCharts;
+using LiveCharts.Wpf;
+using LiveCharts.WinForms;
 
 namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
     {
         //******************************전역변수******************************
-        /*****************/private int inputDirection = -1;             /*****************/
-        /*****************/private int color = -1;                      /*****************/
         /*****************/string videoPath = null;                     /*****************/
         /*****************/OpenFileDialog videoFilePath;                /*****************/
         /*****************/int outputFrameNum = 0;                      /*****************/
@@ -38,6 +38,7 @@ namespace RapidCheck
         /*****************/delegate void rapidChain(rapidModule dele);  /*****************/
         /*****************/Thread overlayModule;                        /*****************/
         /*****************/List<rapidModule> myRapidModule = new List<rapidModule>();/*****************/
+        string createTime;
         //******************************Form******************************
         public Form1()
         {
@@ -47,8 +48,8 @@ namespace RapidCheck
             //skinManager.Theme = MaterialSkinManager.Themes.DARK;
             skinManager.Theme = MaterialSkinManager.Themes.LIGHT;
             skinManager.ColorScheme = new ColorScheme(
-                Primary.BlueGrey100, // tab contorol
-                Primary.Blue200, //최상단 
+                Primary.Grey50, // tab contorol
+                Primary.Grey50, //최상단 
                 Primary.BlueGrey700, 
                 Accent.LightBlue400, 
                 TextShade.BLACK);
@@ -62,14 +63,14 @@ namespace RapidCheck
         //******************************Overlay Module******************************
         private void startOverlayModule()
         {
-            string createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 5000;
+            createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
+            int maxFrameNum = 1750;
             //int frameStep = 3;
             int analysisFPS = 5; //default
-            int minTrackingLength = 29;
-            int clusterNum = 6;
+            int minTrackingLength = 21;
+            int clusterNum = 10;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
@@ -230,24 +231,6 @@ namespace RapidCheck
         private void radioButtonX1_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 1; }
         private void radioButtonX2_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 2; }
         private void radioButtonX4_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 4; }
-        private void radioButton1_CheckedChanged(object sender, EventArgs e) { color = 0; }
-        private void radioButton2_CheckedChanged(object sender, EventArgs e) { color = 1; }
-        private void radioButton3_CheckedChanged(object sender, EventArgs e) { color = 2; }
-        private void radioButton4_CheckedChanged(object sender, EventArgs e) { color = 3; }
-        private void radioButton5_CheckedChanged(object sender, EventArgs e) { color = 4; }
-        private void radioButton6_CheckedChanged(object sender, EventArgs e) { color = 5; }
-        private void radioButton7_CheckedChanged(object sender, EventArgs e) { color = 6; }
-        private void radioButton8_CheckedChanged(object sender, EventArgs e) { color = 7; }
-        private void radioButton9_CheckedChanged(object sender, EventArgs e) { color = 8; }
-        private void radioButton10_CheckedChanged(object sender, EventArgs e) { color = 9; }
-        private void direction1_Click(object sender, EventArgs e) { inputDirection = 1; }
-        private void direction2_Click(object sender, EventArgs e) { inputDirection = 2; }
-        private void direction3_Click(object sender, EventArgs e) { inputDirection = 3; }
-        private void direction4_Click(object sender, EventArgs e) { inputDirection = 4; }
-        private void direction5_Click(object sender, EventArgs e) { inputDirection = 5; }
-        private void direction6_Click(object sender, EventArgs e) { inputDirection = 6; }
-        private void direction7_Click(object sender, EventArgs e) { inputDirection = 7; }
-        private void direction8_Click(object sender, EventArgs e) { inputDirection = 8; }
 
         private void onToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -305,66 +288,67 @@ namespace RapidCheck
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
         }
-        //영진짱
-        /**************************************영진짱을 위한 함수 ************************************/private void color0ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color0 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color1ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color1 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color2ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color2 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color3ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color3 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color4ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color4 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color5ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color5 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color6ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color6 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color7ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color7 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color8ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color8 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
-        /**************************************영진짱을 위한 함수 ************************************/
-        /**************************************영진짱을 위한 함수 ************************************/private void color9ToolStripMenuItem_Click(object sender, EventArgs e)
-        /**************************************영진짱을 위한 함수 ************************************/{
-        /**************************************영진짱을 위한 함수 ************************************/    rapidCheck.condition = "and color9 > 0.3";
-        /**************************************영진짱을 위한 함수 ************************************/    replay();
-        /**************************************영진짱을 위한 함수 ************************************/}
+        
+
+        private void color0ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color0 + color15 > 0.1";
+            replay();
+        }
+        
+        private void color1ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color1 > 0.1";
+            replay();
+        }
+        
+        private void color2ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color2 + color3 > 0.1";
+            replay();
+        }
+        
+        private void color3ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color3 + color4 + color5 > 0.1";
+            replay();
+        }
+        
+        private void color4ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color6 + color7 > 0.1";
+            replay();
+        }
+        
+        private void color5ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color7 + color8 + color9 + color10 + color11> 0.2";
+            replay();
+        }
+        
+        private void color6ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color12 + color13 > 0.1";
+            replay();
+        }
+        
+        private void color7ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color13 + color14 > 0.1";
+            replay();
+        }
+        
+        private void color8ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color16 > 0.6 and color17 > 0.15";
+            replay();
+        }
+        
+        private void color9ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            rapidCheck.condition = "and color16 > 0.6 and color18 > 0.3";
+            replay();
+        }
 
 
         //------------------------------tab page control------------------------------
@@ -374,7 +358,7 @@ namespace RapidCheck
             int idx = materialTabControl1.SelectedIndex;
             if (idx ==3)
             {
-                browser = new ChromiumWebBrowser("http://www.naver.com")
+                browser = new ChromiumWebBrowser("http://www.rapidcheck.co.kr:5000")
                 {
                     Dock = DockStyle.Fill,
                     Size = Size,
@@ -385,10 +369,92 @@ namespace RapidCheck
             else if( idx == 2)
             {
                 //chart
+                setChart1();
             }
         }
 
+        private void dataGridView2_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //e.RowIndex;
+            int id = rapidCheck.gridViewList2[e.RowIndex];
+            DateTime startTime = rapidCheck.getClickedGridViewOriginalDataTime(id);
 
-       
+            int hour = Convert.ToInt32(createTime.Split(':')[0]);
+            int min = Convert.ToInt32(createTime.Split(':')[1]);
+            hour = startTime.Hour - hour;
+            min = startTime.Minute - min;
+            int sec = startTime.Second;
+            int position = (hour * 60 + min)*60 + sec;
+
+            if(startTime != null)
+            {
+                materialTabControl1.SelectedTab = tabPage3;
+                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)position;
+            }
+        }
+
+        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //e.RowIndex;
+            int id = rapidCheck.gridViewList1[e.RowIndex];
+            DateTime startTime = rapidCheck.getClickedGridViewOriginalDataTime(id);
+
+            int hour = Convert.ToInt32(createTime.Split(':')[0]);
+            int min = Convert.ToInt32(createTime.Split(':')[1]);
+            hour = startTime.Hour - hour;
+            min = startTime.Minute - min;
+            int sec = startTime.Second;
+            int position = (hour * 60 + min) * 60 + sec;
+
+            if (startTime != null)
+            {
+                materialTabControl1.SelectedTab = tabPage3;
+                axWindowsMediaPlayer1.URL = videoFilePath.FileName;
+                axWindowsMediaPlayer1.Ctlcontrols.play();
+                axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)position;
+            }
+        }
+        private void setChart1()
+        {
+            //Func<ChartPoint, string> labelPoint = chartPoint =>
+            //    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
+
+            //pieChart1.Series = new SeriesCollection
+            //{
+            //    new PieSeries
+            //    {
+            //        Title = "Maria",
+            //        Values = new ChartValues<double> {3},
+            //        PushOut = 15,
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    },
+            //    new PieSeries
+            //    {
+            //        Title = "Charles",
+            //        Values = new ChartValues<double> {4},
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    },
+            //    new PieSeries
+            //    {
+            //        Title = "Frida",
+            //        Values = new ChartValues<double> {6},
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    },
+            //    new PieSeries
+            //    {
+            //        Title = "Frederic",
+            //        Values = new ChartValues<double> {2},
+            //        DataLabels = true,
+            //        LabelPoint = labelPoint
+            //    }
+            //};
+
+            //pieChart1.LegendLocation = LegendLocation.Bottom;
+        }
     }
 }
