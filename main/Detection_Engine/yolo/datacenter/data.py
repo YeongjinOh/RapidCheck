@@ -7,6 +7,10 @@ import numpy as np
 import os
 import yolo.config as cfg
 
+def _video_walk(datacenter_root_path):
+	for folder, subfolders, files in os.walk(datacenter_root_path):
+		print(folder)
+
 def parse(exclusive = False):
 	"""
 	Decide whether to parse the annotation or not, 
