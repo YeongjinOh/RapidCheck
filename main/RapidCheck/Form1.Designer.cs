@@ -94,7 +94,6 @@
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.panelLog.SuspendLayout();
             this.panelVideo.SuspendLayout();
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
@@ -227,11 +226,11 @@
             // panelLog
             // 
             this.panelLog.BackColor = System.Drawing.Color.Ivory;
-            this.panelLog.Controls.Add(this.labelProgress);
             this.panelLog.Location = new System.Drawing.Point(5, 887);
             this.panelLog.Name = "panelLog";
             this.panelLog.Size = new System.Drawing.Size(560, 92);
             this.panelLog.TabIndex = 1;
+            this.panelLog.Paint += new System.Windows.Forms.PaintEventHandler(this.panelLog_Paint);
             // 
             // panelVideo
             // 
@@ -300,6 +299,7 @@
             // panelVideoPart
             // 
             this.panelVideoPart.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.panelVideoPart.Controls.Add(this.labelProgress);
             this.panelVideoPart.Controls.Add(this.pictureBoxVideo);
             this.panelVideoPart.Location = new System.Drawing.Point(6, 3);
             this.panelVideoPart.Margin = new System.Windows.Forms.Padding(30);
@@ -797,11 +797,11 @@
             // 
             this.labelProgress.AutoSize = true;
             this.labelProgress.BackColor = System.Drawing.Color.DimGray;
-            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
+            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
             this.labelProgress.ForeColor = System.Drawing.Color.Black;
-            this.labelProgress.Location = new System.Drawing.Point(61, 20);
+            this.labelProgress.Location = new System.Drawing.Point(470, 562);
             this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(0, 31);
+            this.labelProgress.Size = new System.Drawing.Size(0, 25);
             this.labelProgress.TabIndex = 2;
             // 
             // Form1
@@ -823,10 +823,9 @@
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.panelLog.ResumeLayout(false);
-            this.panelLog.PerformLayout();
             this.panelVideo.ResumeLayout(false);
             this.panelVideoPart.ResumeLayout(false);
+            this.panelVideoPart.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panelCondition.ResumeLayout(false);

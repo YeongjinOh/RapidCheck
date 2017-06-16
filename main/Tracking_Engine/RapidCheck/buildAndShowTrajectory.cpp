@@ -257,5 +257,5 @@ void analysisVideo()
 	insertTrackingIntoDB(trajectoryPedestrians, trajectoryCars);
 	insertObjectInfoIntoDB(trajectoryPedestrians, trajectoryCars);
 	if (PRINT_PROGRESS)
-		printf("RapidCheck_Tracking %d\n", 1000);
+		printf("RapidCheck_Tracking %d\n", 100);
 }

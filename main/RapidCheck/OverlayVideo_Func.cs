@@ -23,7 +23,7 @@ namespace RapidCheck
 
         //-----------여기가 분기 포인트.... 검색 조건 들어올시...---------//
 
-        //kMeasFunc
+        //objectClustering
         //buildOverlayOrderUsingCluster
         //overlayLive
 
@@ -246,12 +246,12 @@ namespace RapidCheck
                 if (outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
                 {
                     int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
-                    labelProgress.Text = "Analyzing (Detection)" + percent + "%";
+                    labelProgress.Text = "Detection " + percent + "%";
                 }
                 else if (outLine.Data.Split(' ')[0] == "RapidCheck_Tracking")
                 {
                     int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
-                    labelProgress.Text = "Analyzing (Tracking)" + percent + "%";
+                    labelProgress.Text = "Detection 100%\nTracking " + percent + "%";
                 }
             }
         }
@@ -351,7 +351,9 @@ namespace RapidCheck
                         }
                     }
                     videoFrame.Dispose();
-            }));
+                }));
+                int percent = frameNum * 100 / maxFrameNum;
+                labelProgress.Text = "Detection 100%\nTracking 100%\nOverlay " + percent + "%";
             }
             reader.Close();
         }
@@ -400,7 +402,7 @@ namespace RapidCheck
             }
         }
 
-        public void kMeasFunc()
+        public void objectClustering()
         {
             int applyClusterNum = clusterNum;
             if (applyClusterNum > objectidList.Count)
@@ -427,6 +429,7 @@ namespace RapidCheck
             {
                 startingGroup[k].sort(ref ObjList, ref idxbyObjid);
             }
+            labelProgress.Text = "Detection 100%\nTracking 100%\nOverlay 100%";
         }
         public void buildOverlayOrderUsingCluster() // overlayOrders;
         {
@@ -469,6 +472,7 @@ namespace RapidCheck
             pictureBoxVideo.Height = drawHeight;
             pictureBoxVideo.Width = drawWidth;
             pictureBoxVideo.Location = new Point(drawX, drawY);
+            labelProgress.Dispose();
         }
         public void overlayLive()
         {

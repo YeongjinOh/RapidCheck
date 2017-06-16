@@ -86,11 +86,11 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.getMysqlObjList);
             myRapidModule.Add(rapidCheck.addObj);
             myRapidModule.Add(rapidCheck.imageCrop);
-            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.objectClustering);
             myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
             myRapidModule.Add(rapidCheck.setPictureBoxSize);
             myRapidModule.Add(rapidCheck.overlayLive);
-        }
+        } 
         private void rapidRun()
         {
             rapidChain myRapidChain = new rapidChain(basicFlow);
@@ -114,7 +114,7 @@ namespace RapidCheck
             {
                 videoPath = videoFilePath.FileName;
                 startOverlayModule();
-                labelProgress.Text = "Analyzing 0%";
+                labelProgress.Text = "Loading...";
             }
         }
         //******************************UI SETTING******************************
@@ -254,7 +254,7 @@ namespace RapidCheck
             Thread.Sleep(1);
             myRapidModule.Clear();
             myRapidModule.Add(rapidCheck.setFileterObjectidList); //filetering test
-            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.objectClustering);
             myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
             myRapidModule.Add(rapidCheck.overlayLive);
 
@@ -275,7 +275,7 @@ namespace RapidCheck
             Thread.Sleep(1);
             myRapidModule.Clear();
             myRapidModule.Add(rapidCheck.resetObjectidList);
-            myRapidModule.Add(rapidCheck.kMeasFunc);
+            myRapidModule.Add(rapidCheck.objectClustering);
             myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
             myRapidModule.Add(rapidCheck.overlayLive);
             overlayModule = new Thread(() => rapidRun());
@@ -540,6 +540,11 @@ namespace RapidCheck
         }
 
         private void panelVideo_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panelLog_Paint(object sender, PaintEventArgs e)
         {
 
         }
