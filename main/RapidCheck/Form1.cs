@@ -70,7 +70,7 @@ namespace RapidCheck
             int minTrackingLength = 21;
             int clusterNum = 10;
             outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
@@ -114,6 +114,7 @@ namespace RapidCheck
             {
                 videoPath = videoFilePath.FileName;
                 startOverlayModule();
+                labelProgress.Text = "Analyzing 0%";
             }
         }
         //******************************UI SETTING******************************

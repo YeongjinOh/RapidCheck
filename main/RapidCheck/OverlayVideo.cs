@@ -83,17 +83,19 @@ namespace RapidCheck
         Button startBtn;
         DataGridView dataGridView1;
         DataGridView dataGridView2;
+        Label labelProgress;
         public int resFrame { get; set; }
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
 
         public OverlayVideo() { }
-        public OverlayVideo(DataGridView dataGridView1, DataGridView dataGridView2,  Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2,  Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
             drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
             //UI
+            this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
             this.dataGridView2 = dataGridView2;
             this.trackingBar = TrackingBar;

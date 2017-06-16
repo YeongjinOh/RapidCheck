@@ -82,8 +82,9 @@ namespace RapidCheck
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
-                            p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
 
+                            p.StartInfo.CreateNoWindow = true;
+                            p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                             p.StartInfo.RedirectStandardOutput = true;
                             p.StartInfo.UseShellExecute = false;
                             p.OutputDataReceived += processOutputHandler;
@@ -124,9 +125,18 @@ namespace RapidCheck
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
+                            
+                            p.StartInfo.RedirectStandardOutput = true;
+                            
                             p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                            p.StartInfo.CreateNoWindow = true;
+                            p.StartInfo.UseShellExecute = false;
+                            p.OutputDataReceived += processOutputHandler;
+
                             p.Start();
+                            p.BeginOutputReadLine();
                             p.WaitForExit();
+
                             int result = p.ExitCode;
                             if (result == 0)
                             {
@@ -229,14 +239,23 @@ namespace RapidCheck
                 Console.WriteLine("getMysqlObjList() ERROR");
             }
         }
-        private static void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        private void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
-            if (outLine.Data != null && outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
+            if (outLine.Data != null)
             {
-                int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
-                //MessageBox.Show(percent.ToString());
+                if (outLine.Data.Split(' ')[0] == "RapidCheck_Detection")
+                {
+                    int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
+                    labelProgress.Text = "Analyzing (Detection)" + percent + "%";
+                }
+                else if (outLine.Data.Split(' ')[0] == "RapidCheck_Tracking")
+                {
+                    int percent = Convert.ToInt32(outLine.Data.Split(' ')[1]);
+                    labelProgress.Text = "Analyzing (Tracking)" + percent + "%";
+                }
             }
         }
+
         public void addObj()
         {
             for (int idx = 0; idx < objectidList.Count; idx++)
@@ -461,7 +480,7 @@ namespace RapidCheck
             //overlay time
             int frameTime = 1000 / frameStep;
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            float alphaMin = 0.5f, alphaDiff = 0.3f;
+            float alphaMin = 0.5f, alphaDiff = 0.1f;
             //**********************DRAWING CODE**********************
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
@@ -477,7 +496,7 @@ namespace RapidCheck
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
                     int orderingCnt = overlayOrders[resFrame][overlayObjIdx].orderingCnt;
                     Rectangle currentObjectArea = ObjList[idxbyObjid[id]].getCropArea(orderingCnt);
-                    float alpha = 0.9f;
+                    float alpha = 0.8f;
 
                     for (int prevOverlayObjIdx = 0; prevOverlayObjIdx < overlayObjIdx; prevOverlayObjIdx++)
                     {

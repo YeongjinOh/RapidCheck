@@ -88,11 +88,13 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.panel5 = new System.Windows.Forms.Panel();
             this.panel6 = new System.Windows.Forms.Panel();
+            this.labelProgress = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.panelLog.SuspendLayout();
             this.panelVideo.SuspendLayout();
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
@@ -225,6 +227,7 @@
             // panelLog
             // 
             this.panelLog.BackColor = System.Drawing.Color.Ivory;
+            this.panelLog.Controls.Add(this.labelProgress);
             this.panelLog.Location = new System.Drawing.Point(5, 887);
             this.panelLog.Name = "panelLog";
             this.panelLog.Size = new System.Drawing.Size(560, 92);
@@ -790,6 +793,17 @@
             this.panel6.Size = new System.Drawing.Size(181, 976);
             this.panel6.TabIndex = 0;
             // 
+            // labelProgress
+            // 
+            this.labelProgress.AutoSize = true;
+            this.labelProgress.BackColor = System.Drawing.Color.DimGray;
+            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F);
+            this.labelProgress.ForeColor = System.Drawing.Color.Black;
+            this.labelProgress.Location = new System.Drawing.Point(61, 20);
+            this.labelProgress.Name = "labelProgress";
+            this.labelProgress.Size = new System.Drawing.Size(0, 31);
+            this.labelProgress.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -809,6 +823,8 @@
             this.panel4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            this.panelLog.ResumeLayout(false);
+            this.panelLog.PerformLayout();
             this.panelVideo.ResumeLayout(false);
             this.panelVideoPart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
@@ -913,6 +929,7 @@
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Label labelProgress;
     }
 }
 
