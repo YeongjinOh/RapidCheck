@@ -50,8 +50,8 @@ namespace RapidCheck
             skinManager.ColorScheme = new ColorScheme(
                 Primary.Grey50, // tab contorol
                 Primary.Grey50, //최상단 
-                Primary.BlueGrey700, 
-                Accent.LightBlue400, 
+                Primary.BlueGrey700,
+                Accent.LightBlue400,
                 TextShade.BLACK);
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -79,7 +79,6 @@ namespace RapidCheck
         private void basicFlow(rapidModule dele)
         {
             dele();
-            progressBar1.PerformStep();
 
         }
         private void rapidFunc()
@@ -103,7 +102,6 @@ namespace RapidCheck
                 }
                 myRapidChain(myRapidModule[idx]);
             }
-            progressBar1.Value = 100;
         }
         private void VideoBtn_Click(object sender, EventArgs e)
         {
@@ -126,13 +124,6 @@ namespace RapidCheck
             tabPage2.Text = "영상";
             tabPage3.Text = "요약";
             tabPage4.Text = "라벨링";
-
-            //progress bar
-            progressBar1.Minimum = 0;
-            progressBar1.Maximum = 100;
-            progressBar1.Step = progressBar1.Maximum / 7;
-            progressBar1.Style = ProgressBarStyle.Continuous;
-            progressBar1.Enabled = true;
 
             //video player
             MaximizeBox = false;
@@ -214,7 +205,8 @@ namespace RapidCheck
             rapidCheck.resFrame = trackBar1.Value;
             rapidCheck.overlayObjIdx = 0;
         }
-        private void VideoStartBtn_Click(object sender, EventArgs e)
+        
+        private void startBtn_Click(object sender, EventArgs e)
         {
             if (startBtn.Text == "Start") { startBtn.Text = "Pause"; }
             else { startBtn.Text = "Start"; }
@@ -369,7 +361,6 @@ namespace RapidCheck
             else if( idx == 2)
             {
                 //chart
-                setChart1();
             }
         }
 
@@ -415,46 +406,6 @@ namespace RapidCheck
                 axWindowsMediaPlayer1.Ctlcontrols.play();
                 axWindowsMediaPlayer1.Ctlcontrols.currentPosition = (double)position;
             }
-        }
-        private void setChart1()
-        {
-            //Func<ChartPoint, string> labelPoint = chartPoint =>
-            //    string.Format("{0} ({1:P})", chartPoint.Y, chartPoint.Participation);
-
-            //pieChart1.Series = new SeriesCollection
-            //{
-            //    new PieSeries
-            //    {
-            //        Title = "Maria",
-            //        Values = new ChartValues<double> {3},
-            //        PushOut = 15,
-            //        DataLabels = true,
-            //        LabelPoint = labelPoint
-            //    },
-            //    new PieSeries
-            //    {
-            //        Title = "Charles",
-            //        Values = new ChartValues<double> {4},
-            //        DataLabels = true,
-            //        LabelPoint = labelPoint
-            //    },
-            //    new PieSeries
-            //    {
-            //        Title = "Frida",
-            //        Values = new ChartValues<double> {6},
-            //        DataLabels = true,
-            //        LabelPoint = labelPoint
-            //    },
-            //    new PieSeries
-            //    {
-            //        Title = "Frederic",
-            //        Values = new ChartValues<double> {2},
-            //        DataLabels = true,
-            //        LabelPoint = labelPoint
-            //    }
-            //};
-
-            //pieChart1.LegendLocation = LegendLocation.Bottom;
         }
     }
 }

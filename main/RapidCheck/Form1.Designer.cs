@@ -33,32 +33,11 @@
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.시간출력ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.onToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.조건초기화ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.방향설정ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-            this.아래ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.영진짱ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color0ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color1ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color2ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color3ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color4ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color6ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color7ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color8ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.color9ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.panelProgress = new System.Windows.Forms.Panel();
-            this.VideoBtn = new System.Windows.Forms.Button();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.panelLog = new System.Windows.Forms.Panel();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.startBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.radioButtonX4 = new System.Windows.Forms.RadioButton();
@@ -67,6 +46,33 @@
             this.panelVideoPart = new System.Windows.Forms.Panel();
             this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.panelCondition = new System.Windows.Forms.Panel();
+            this.panelColor = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.label4 = new System.Windows.Forms.Label();
+            this.panelDirection = new System.Windows.Forms.Panel();
+            this.label3 = new System.Windows.Forms.Label();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.pictureBox11 = new System.Windows.Forms.PictureBox();
+            this.pictureBox8 = new System.Windows.Forms.PictureBox();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.pictureBox10 = new System.Windows.Forms.PictureBox();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.pictureBox9 = new System.Windows.Forms.PictureBox();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.panelDensity = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.materialLabelTrackingbar = new MaterialSkin.Controls.MaterialLabel();
+            this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.panelTarget = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBoxCar = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.panelFile = new System.Windows.Forms.Panel();
+            this.VideoBtn = new MaterialSkin.Controls.MaterialRaisedButton();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
@@ -83,14 +89,32 @@
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
-            this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
-            this.panelProgress.SuspendLayout();
             this.panelVideo.SuspendLayout();
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.panelCondition.SuspendLayout();
+            this.panelColor.SuspendLayout();
+            this.panelDirection.SuspendLayout();
+            this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            this.panelDensity.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
+            this.panelTarget.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panelFile.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
@@ -109,194 +133,38 @@
             this.materialTabControl1.Depth = 0;
             this.materialTabControl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.materialTabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            this.materialTabControl1.Location = new System.Drawing.Point(0, 65);
+            this.materialTabControl1.Location = new System.Drawing.Point(0, 66);
             this.materialTabControl1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialTabControl1.Name = "materialTabControl1";
             this.materialTabControl1.SelectedIndex = 0;
-            this.materialTabControl1.Size = new System.Drawing.Size(1920, 1015);
+            this.materialTabControl1.Size = new System.Drawing.Size(1920, 1014);
             this.materialTabControl1.TabIndex = 0;
             this.materialTabControl1.SelectedIndexChanged += new System.EventHandler(this.materialTabControl1_SelectedIndexChanged);
             // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.panelObject);
-            this.tabPage2.Controls.Add(this.panelProgress);
+            this.tabPage2.Controls.Add(this.panelLog);
             this.tabPage2.Controls.Add(this.panelVideo);
-            this.tabPage2.Location = new System.Drawing.Point(4, 26);
+            this.tabPage2.Controls.Add(this.panelCondition);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1912, 985);
+            this.tabPage2.Size = new System.Drawing.Size(1912, 988);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // panelObject
             // 
-            this.panelObject.BackColor = System.Drawing.Color.White;
-            this.panelObject.Controls.Add(this.menuStrip1);
+            this.panelObject.BackColor = System.Drawing.Color.Gray;
             this.panelObject.Controls.Add(this.dataGridView1);
             this.panelObject.Controls.Add(this.dataGridView2);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelObject.Location = new System.Drawing.Point(1442, 67);
+            this.panelObject.Location = new System.Drawing.Point(1340, 3);
             this.panelObject.Name = "panelObject";
-            this.panelObject.Size = new System.Drawing.Size(467, 923);
+            this.panelObject.Size = new System.Drawing.Size(569, 880);
             this.panelObject.TabIndex = 2;
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.menuStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.시간출력ToolStripMenuItem,
-            this.조건초기화ToolStripMenuItem,
-            this.방향설정ToolStripMenuItem,
-            this.영진짱ToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(5, 3);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(371, 28);
-            this.menuStrip1.TabIndex = 19;
-            this.menuStrip1.Text = "menuStrip1";
-            // 
-            // 시간출력ToolStripMenuItem
-            // 
-            this.시간출력ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.onToolStripMenuItem,
-            this.offToolStripMenuItem});
-            this.시간출력ToolStripMenuItem.Name = "시간출력ToolStripMenuItem";
-            this.시간출력ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
-            this.시간출력ToolStripMenuItem.Text = "시간 출력";
-            // 
-            // onToolStripMenuItem
-            // 
-            this.onToolStripMenuItem.Name = "onToolStripMenuItem";
-            this.onToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
-            this.onToolStripMenuItem.Text = "On";
-            this.onToolStripMenuItem.Click += new System.EventHandler(this.onToolStripMenuItem_Click);
-            // 
-            // offToolStripMenuItem
-            // 
-            this.offToolStripMenuItem.Name = "offToolStripMenuItem";
-            this.offToolStripMenuItem.Size = new System.Drawing.Size(106, 26);
-            this.offToolStripMenuItem.Text = "Off";
-            this.offToolStripMenuItem.Click += new System.EventHandler(this.offToolStripMenuItem_Click);
-            // 
-            // 조건초기화ToolStripMenuItem
-            // 
-            this.조건초기화ToolStripMenuItem.Name = "조건초기화ToolStripMenuItem";
-            this.조건초기화ToolStripMenuItem.Size = new System.Drawing.Size(101, 24);
-            this.조건초기화ToolStripMenuItem.Text = "조건 초기화";
-            this.조건초기화ToolStripMenuItem.Click += new System.EventHandler(this.ResetToolStripMenuItem_Click);
-            // 
-            // 방향설정ToolStripMenuItem
-            // 
-            this.방향설정ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem2,
-            this.아래ToolStripMenuItem});
-            this.방향설정ToolStripMenuItem.Name = "방향설정ToolStripMenuItem";
-            this.방향설정ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
-            this.방향설정ToolStripMenuItem.Text = "방향 설정";
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(98, 26);
-            this.toolStripMenuItem2.Text = "↑";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.UpToolStripMenuItem2_Click);
-            // 
-            // 아래ToolStripMenuItem
-            // 
-            this.아래ToolStripMenuItem.Name = "아래ToolStripMenuItem";
-            this.아래ToolStripMenuItem.Size = new System.Drawing.Size(98, 26);
-            this.아래ToolStripMenuItem.Text = "↓";
-            this.아래ToolStripMenuItem.Click += new System.EventHandler(this.DownToolStripMenuItem_Click);
-            // 
-            // 영진짱ToolStripMenuItem
-            // 
-            this.영진짱ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.color0ToolStripMenuItem,
-            this.color1ToolStripMenuItem,
-            this.color2ToolStripMenuItem,
-            this.color3ToolStripMenuItem,
-            this.color4ToolStripMenuItem,
-            this.color5ToolStripMenuItem,
-            this.color6ToolStripMenuItem,
-            this.color7ToolStripMenuItem,
-            this.color8ToolStripMenuItem,
-            this.color9ToolStripMenuItem});
-            this.영진짱ToolStripMenuItem.Name = "영진짱ToolStripMenuItem";
-            this.영진짱ToolStripMenuItem.Size = new System.Drawing.Size(86, 24);
-            this.영진짱ToolStripMenuItem.Text = "색상 설정";
-            // 
-            // color0ToolStripMenuItem
-            // 
-            this.color0ToolStripMenuItem.Name = "color0ToolStripMenuItem";
-            this.color0ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color0ToolStripMenuItem.Text = "color0";
-            this.color0ToolStripMenuItem.Click += new System.EventHandler(this.color0ToolStripMenuItem_Click);
-            // 
-            // color1ToolStripMenuItem
-            // 
-            this.color1ToolStripMenuItem.Name = "color1ToolStripMenuItem";
-            this.color1ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color1ToolStripMenuItem.Text = "color1";
-            this.color1ToolStripMenuItem.Click += new System.EventHandler(this.color1ToolStripMenuItem_Click);
-            // 
-            // color2ToolStripMenuItem
-            // 
-            this.color2ToolStripMenuItem.Name = "color2ToolStripMenuItem";
-            this.color2ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color2ToolStripMenuItem.Text = "color2";
-            this.color2ToolStripMenuItem.Click += new System.EventHandler(this.color2ToolStripMenuItem_Click);
-            // 
-            // color3ToolStripMenuItem
-            // 
-            this.color3ToolStripMenuItem.Name = "color3ToolStripMenuItem";
-            this.color3ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color3ToolStripMenuItem.Text = "color3";
-            this.color3ToolStripMenuItem.Click += new System.EventHandler(this.color3ToolStripMenuItem_Click);
-            // 
-            // color4ToolStripMenuItem
-            // 
-            this.color4ToolStripMenuItem.Name = "color4ToolStripMenuItem";
-            this.color4ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color4ToolStripMenuItem.Text = "color4";
-            this.color4ToolStripMenuItem.Click += new System.EventHandler(this.color4ToolStripMenuItem_Click);
-            // 
-            // color5ToolStripMenuItem
-            // 
-            this.color5ToolStripMenuItem.Name = "color5ToolStripMenuItem";
-            this.color5ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color5ToolStripMenuItem.Text = "color5";
-            this.color5ToolStripMenuItem.Click += new System.EventHandler(this.color5ToolStripMenuItem_Click);
-            // 
-            // color6ToolStripMenuItem
-            // 
-            this.color6ToolStripMenuItem.Name = "color6ToolStripMenuItem";
-            this.color6ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color6ToolStripMenuItem.Text = "color6";
-            this.color6ToolStripMenuItem.Click += new System.EventHandler(this.color6ToolStripMenuItem_Click);
-            // 
-            // color7ToolStripMenuItem
-            // 
-            this.color7ToolStripMenuItem.Name = "color7ToolStripMenuItem";
-            this.color7ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color7ToolStripMenuItem.Text = "color7";
-            this.color7ToolStripMenuItem.Click += new System.EventHandler(this.color7ToolStripMenuItem_Click);
-            // 
-            // color8ToolStripMenuItem
-            // 
-            this.color8ToolStripMenuItem.Name = "color8ToolStripMenuItem";
-            this.color8ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color8ToolStripMenuItem.Text = "color8";
-            this.color8ToolStripMenuItem.Click += new System.EventHandler(this.color8ToolStripMenuItem_Click);
-            // 
-            // color9ToolStripMenuItem
-            // 
-            this.color9ToolStripMenuItem.Name = "color9ToolStripMenuItem";
-            this.color9ToolStripMenuItem.Size = new System.Drawing.Size(126, 26);
-            this.color9ToolStripMenuItem.Text = "color9";
-            this.color9ToolStripMenuItem.Click += new System.EventHandler(this.color9ToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
@@ -305,13 +173,14 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1});
-            this.dataGridView1.Location = new System.Drawing.Point(191, 34);
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(0, 0);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 30;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(276, 884);
+            this.dataGridView1.Size = new System.Drawing.Size(390, 880);
             this.dataGridView1.TabIndex = 20;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -330,13 +199,14 @@
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column2});
-            this.dataGridView2.Location = new System.Drawing.Point(3, 34);
+            this.dataGridView2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.dataGridView2.Location = new System.Drawing.Point(390, 0);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 23;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(184, 884);
+            this.dataGridView2.Size = new System.Drawing.Size(179, 880);
             this.dataGridView2.TabIndex = 21;
             this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
@@ -348,39 +218,18 @@
             this.Column2.Name = "Column2";
             this.Column2.ReadOnly = true;
             // 
-            // panelProgress
+            // panelLog
             // 
-            this.panelProgress.BackColor = System.Drawing.Color.Transparent;
-            this.panelProgress.Controls.Add(this.VideoBtn);
-            this.panelProgress.Controls.Add(this.progressBar1);
-            this.panelProgress.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelProgress.Location = new System.Drawing.Point(1442, 3);
-            this.panelProgress.Name = "panelProgress";
-            this.panelProgress.Size = new System.Drawing.Size(467, 64);
-            this.panelProgress.TabIndex = 1;
-            // 
-            // VideoBtn
-            // 
-            this.VideoBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VideoBtn.Location = new System.Drawing.Point(6, 15);
-            this.VideoBtn.Name = "VideoBtn";
-            this.VideoBtn.Size = new System.Drawing.Size(71, 34);
-            this.VideoBtn.TabIndex = 16;
-            this.VideoBtn.Text = "File";
-            this.VideoBtn.UseVisualStyleBackColor = true;
-            this.VideoBtn.Click += new System.EventHandler(this.VideoBtn_Click);
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.progressBar1.Location = new System.Drawing.Point(89, 15);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(357, 34);
-            this.progressBar1.TabIndex = 12;
+            this.panelLog.BackColor = System.Drawing.Color.DimGray;
+            this.panelLog.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panelLog.Location = new System.Drawing.Point(1340, 890);
+            this.panelLog.Name = "panelLog";
+            this.panelLog.Size = new System.Drawing.Size(569, 95);
+            this.panelLog.TabIndex = 1;
             // 
             // panelVideo
             // 
-            this.panelVideo.BackColor = System.Drawing.Color.White;
+            this.panelVideo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
             this.panelVideo.Controls.Add(this.startBtn);
             this.panelVideo.Controls.Add(this.radioButtonX4);
             this.panelVideo.Controls.Add(this.radioButtonX2);
@@ -388,9 +237,9 @@
             this.panelVideo.Controls.Add(this.panelVideoPart);
             this.panelVideo.Controls.Add(this.trackBar1);
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelVideo.Location = new System.Drawing.Point(3, 3);
+            this.panelVideo.Location = new System.Drawing.Point(195, 3);
             this.panelVideo.Name = "panelVideo";
-            this.panelVideo.Size = new System.Drawing.Size(1439, 979);
+            this.panelVideo.Size = new System.Drawing.Size(1145, 982);
             this.panelVideo.TabIndex = 0;
             // 
             // startBtn
@@ -398,22 +247,23 @@
             this.startBtn.AutoSize = true;
             this.startBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.startBtn.Depth = 0;
-            this.startBtn.Location = new System.Drawing.Point(658, 949);
+            this.startBtn.Location = new System.Drawing.Point(538, 926);
             this.startBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.startBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.startBtn.Name = "startBtn";
             this.startBtn.Primary = false;
-            this.startBtn.Size = new System.Drawing.Size(66, 36);
+            this.startBtn.Size = new System.Drawing.Size(55, 36);
             this.startBtn.TabIndex = 6;
             this.startBtn.Text = "Start";
             this.startBtn.UseVisualStyleBackColor = true;
+            this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
             // 
             // radioButtonX4
             // 
             this.radioButtonX4.AutoSize = true;
-            this.radioButtonX4.Location = new System.Drawing.Point(1172, 952);
+            this.radioButtonX4.Location = new System.Drawing.Point(1052, 929);
             this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX4.TabIndex = 5;
             this.radioButtonX4.TabStop = true;
             this.radioButtonX4.Text = "x4";
@@ -423,9 +273,9 @@
             // radioButtonX2
             // 
             this.radioButtonX2.AutoSize = true;
-            this.radioButtonX2.Location = new System.Drawing.Point(1123, 952);
+            this.radioButtonX2.Location = new System.Drawing.Point(1003, 929);
             this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX2.TabIndex = 5;
             this.radioButtonX2.TabStop = true;
             this.radioButtonX2.Text = "x2";
@@ -435,9 +285,9 @@
             // radioButtonX1
             // 
             this.radioButtonX1.AutoSize = true;
-            this.radioButtonX1.Location = new System.Drawing.Point(1074, 952);
+            this.radioButtonX1.Location = new System.Drawing.Point(954, 929);
             this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX1.TabIndex = 5;
             this.radioButtonX1.TabStop = true;
             this.radioButtonX1.Text = "x1";
@@ -446,11 +296,13 @@
             // 
             // panelVideoPart
             // 
+            this.panelVideoPart.BackColor = System.Drawing.Color.Maroon;
             this.panelVideoPart.Controls.Add(this.pictureBoxVideo);
             this.panelVideoPart.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelVideoPart.Location = new System.Drawing.Point(0, 0);
+            this.panelVideoPart.Margin = new System.Windows.Forms.Padding(30);
             this.panelVideoPart.Name = "panelVideoPart";
-            this.panelVideoPart.Size = new System.Drawing.Size(1439, 922);
+            this.panelVideoPart.Size = new System.Drawing.Size(1145, 877);
             this.panelVideoPart.TabIndex = 3;
             // 
             // pictureBoxVideo
@@ -458,7 +310,7 @@
             this.pictureBoxVideo.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxVideo.Location = new System.Drawing.Point(6, 3);
             this.pictureBoxVideo.Name = "pictureBoxVideo";
-            this.pictureBoxVideo.Size = new System.Drawing.Size(1427, 919);
+            this.pictureBoxVideo.Size = new System.Drawing.Size(1133, 871);
             this.pictureBoxVideo.TabIndex = 1;
             this.pictureBoxVideo.TabStop = false;
             this.pictureBoxVideo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxVideo_MouseDown);
@@ -467,21 +319,316 @@
             // 
             this.trackBar1.BackColor = System.Drawing.Color.White;
             this.trackBar1.Enabled = false;
-            this.trackBar1.Location = new System.Drawing.Point(158, 928);
+            this.trackBar1.Location = new System.Drawing.Point(38, 905);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1069, 56);
+            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
             this.trackBar1.TabIndex = 2;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseDown);
             // 
+            // panelCondition
+            // 
+            this.panelCondition.BackColor = System.Drawing.Color.PeachPuff;
+            this.panelCondition.Controls.Add(this.panelColor);
+            this.panelCondition.Controls.Add(this.panelDirection);
+            this.panelCondition.Controls.Add(this.panelDensity);
+            this.panelCondition.Controls.Add(this.panelTarget);
+            this.panelCondition.Controls.Add(this.panelFile);
+            this.panelCondition.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panelCondition.Location = new System.Drawing.Point(3, 3);
+            this.panelCondition.Name = "panelCondition";
+            this.panelCondition.Size = new System.Drawing.Size(192, 982);
+            this.panelCondition.TabIndex = 3;
+            // 
+            // panelColor
+            // 
+            this.panelColor.BackColor = System.Drawing.Color.SandyBrown;
+            this.panelColor.Controls.Add(this.panel3);
+            this.panelColor.Controls.Add(this.label4);
+            this.panelColor.Location = new System.Drawing.Point(0, 561);
+            this.panelColor.Name = "panelColor";
+            this.panelColor.Size = new System.Drawing.Size(192, 299);
+            this.panelColor.TabIndex = 23;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.Salmon;
+            this.panel3.Location = new System.Drawing.Point(3, 38);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(186, 258);
+            this.panel3.TabIndex = 3;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(71, 4);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(51, 29);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "색상";
+            // 
+            // panelDirection
+            // 
+            this.panelDirection.BackColor = System.Drawing.Color.Sienna;
+            this.panelDirection.Controls.Add(this.label3);
+            this.panelDirection.Controls.Add(this.panel2);
+            this.panelDirection.Location = new System.Drawing.Point(0, 327);
+            this.panelDirection.Name = "panelDirection";
+            this.panelDirection.Size = new System.Drawing.Size(192, 228);
+            this.panelDirection.TabIndex = 22;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(71, 3);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(51, 29);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "방향";
+            // 
+            // panel2
+            // 
+            this.panel2.BackColor = System.Drawing.Color.IndianRed;
+            this.panel2.Controls.Add(this.pictureBox11);
+            this.panel2.Controls.Add(this.pictureBox8);
+            this.panel2.Controls.Add(this.pictureBox5);
+            this.panel2.Controls.Add(this.pictureBox10);
+            this.panel2.Controls.Add(this.pictureBox7);
+            this.panel2.Controls.Add(this.pictureBox4);
+            this.panel2.Controls.Add(this.pictureBox9);
+            this.panel2.Controls.Add(this.pictureBox6);
+            this.panel2.Controls.Add(this.pictureBox3);
+            this.panel2.Location = new System.Drawing.Point(3, 35);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(186, 186);
+            this.panel2.TabIndex = 2;
+            // 
+            // pictureBox11
+            // 
+            this.pictureBox11.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox11.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox11.Image")));
+            this.pictureBox11.Location = new System.Drawing.Point(124, 124);
+            this.pictureBox11.Name = "pictureBox11";
+            this.pictureBox11.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox11.TabIndex = 0;
+            this.pictureBox11.TabStop = false;
+            // 
+            // pictureBox8
+            // 
+            this.pictureBox8.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
+            this.pictureBox8.Location = new System.Drawing.Point(124, 68);
+            this.pictureBox8.Name = "pictureBox8";
+            this.pictureBox8.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox8.TabIndex = 0;
+            this.pictureBox8.TabStop = false;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(124, 12);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox5.TabIndex = 0;
+            this.pictureBox5.TabStop = false;
+            // 
+            // pictureBox10
+            // 
+            this.pictureBox10.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox10.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox10.Image")));
+            this.pictureBox10.Location = new System.Drawing.Point(68, 124);
+            this.pictureBox10.Name = "pictureBox10";
+            this.pictureBox10.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox10.TabIndex = 0;
+            this.pictureBox10.TabStop = false;
+            // 
+            // pictureBox7
+            // 
+            this.pictureBox7.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
+            this.pictureBox7.Location = new System.Drawing.Point(68, 68);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox7.TabIndex = 0;
+            this.pictureBox7.TabStop = false;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(68, 12);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 0;
+            this.pictureBox4.TabStop = false;
+            // 
+            // pictureBox9
+            // 
+            this.pictureBox9.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox9.Image")));
+            this.pictureBox9.Location = new System.Drawing.Point(12, 124);
+            this.pictureBox9.Name = "pictureBox9";
+            this.pictureBox9.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox9.TabIndex = 0;
+            this.pictureBox9.TabStop = false;
+            // 
+            // pictureBox6
+            // 
+            this.pictureBox6.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
+            this.pictureBox6.Location = new System.Drawing.Point(12, 68);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox6.TabIndex = 0;
+            this.pictureBox6.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(50, 50);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 0;
+            this.pictureBox3.TabStop = false;
+            // 
+            // panelDensity
+            // 
+            this.panelDensity.BackColor = System.Drawing.Color.Salmon;
+            this.panelDensity.Controls.Add(this.label2);
+            this.panelDensity.Controls.Add(this.panel1);
+            this.panelDensity.Location = new System.Drawing.Point(0, 194);
+            this.panelDensity.Name = "panelDensity";
+            this.panelDensity.Size = new System.Drawing.Size(192, 127);
+            this.panelDensity.TabIndex = 21;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(71, 2);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(51, 29);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "밀도";
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.RosyBrown;
+            this.panel1.Controls.Add(this.materialLabelTrackingbar);
+            this.panel1.Controls.Add(this.trackBar2);
+            this.panel1.Location = new System.Drawing.Point(3, 34);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(186, 86);
+            this.panel1.TabIndex = 2;
+            // 
+            // materialLabelTrackingbar
+            // 
+            this.materialLabelTrackingbar.AutoSize = true;
+            this.materialLabelTrackingbar.Depth = 0;
+            this.materialLabelTrackingbar.Font = new System.Drawing.Font("Roboto", 11F);
+            this.materialLabelTrackingbar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.materialLabelTrackingbar.Location = new System.Drawing.Point(79, 9);
+            this.materialLabelTrackingbar.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabelTrackingbar.Name = "materialLabelTrackingbar";
+            this.materialLabelTrackingbar.Size = new System.Drawing.Size(25, 19);
+            this.materialLabelTrackingbar.TabIndex = 3;
+            this.materialLabelTrackingbar.Text = "15";
+            // 
+            // trackBar2
+            // 
+            this.trackBar2.Location = new System.Drawing.Point(5, 37);
+            this.trackBar2.Name = "trackBar2";
+            this.trackBar2.Size = new System.Drawing.Size(174, 45);
+            this.trackBar2.TabIndex = 2;
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
+            // 
+            // panelTarget
+            // 
+            this.panelTarget.BackColor = System.Drawing.Color.Tomato;
+            this.panelTarget.Controls.Add(this.label1);
+            this.panelTarget.Controls.Add(this.pictureBoxCar);
+            this.panelTarget.Controls.Add(this.pictureBox2);
+            this.panelTarget.Location = new System.Drawing.Point(0, 83);
+            this.panelTarget.Name = "panelTarget";
+            this.panelTarget.Size = new System.Drawing.Size(192, 105);
+            this.panelTarget.TabIndex = 20;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(71, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 29);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "대상";
+            // 
+            // pictureBoxCar
+            // 
+            this.pictureBoxCar.BackColor = System.Drawing.Color.Snow;
+            this.pictureBoxCar.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxCar.Image")));
+            this.pictureBoxCar.Location = new System.Drawing.Point(110, 35);
+            this.pictureBoxCar.Name = "pictureBoxCar";
+            this.pictureBoxCar.Size = new System.Drawing.Size(75, 64);
+            this.pictureBoxCar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxCar.TabIndex = 0;
+            this.pictureBoxCar.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackColor = System.Drawing.Color.Snow;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(8, 35);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(75, 64);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            // 
+            // panelFile
+            // 
+            this.panelFile.BackColor = System.Drawing.Color.Coral;
+            this.panelFile.Controls.Add(this.VideoBtn);
+            this.panelFile.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelFile.Location = new System.Drawing.Point(0, 0);
+            this.panelFile.Name = "panelFile";
+            this.panelFile.Size = new System.Drawing.Size(192, 77);
+            this.panelFile.TabIndex = 19;
+            // 
+            // VideoBtn
+            // 
+            this.VideoBtn.Depth = 0;
+            this.VideoBtn.Location = new System.Drawing.Point(54, 16);
+            this.VideoBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.VideoBtn.Name = "VideoBtn";
+            this.VideoBtn.Primary = true;
+            this.VideoBtn.Size = new System.Drawing.Size(79, 27);
+            this.VideoBtn.TabIndex = 18;
+            this.VideoBtn.Text = "파일";
+            this.VideoBtn.UseVisualStyleBackColor = true;
+            this.VideoBtn.Click += new System.EventHandler(this.VideoBtn_Click);
+            // 
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.videoPanel);
-            this.tabPage3.Location = new System.Drawing.Point(4, 26);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1912, 985);
+            this.tabPage3.Size = new System.Drawing.Size(1912, 988);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -492,7 +639,7 @@
             this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoPanel.Location = new System.Drawing.Point(3, 3);
             this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(1906, 979);
+            this.videoPanel.Size = new System.Drawing.Size(1906, 982);
             this.videoPanel.TabIndex = 1;
             // 
             // axWindowsMediaPlayer1
@@ -507,10 +654,10 @@
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.pictureBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1912, 985);
+            this.tabPage1.Size = new System.Drawing.Size(1912, 988);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -520,7 +667,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(3, 3);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1906, 979);
+            this.pictureBox1.Size = new System.Drawing.Size(1906, 982);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -529,10 +676,10 @@
             // 
             this.tabPage4.Controls.Add(this.panelWebbrowser);
             this.tabPage4.Controls.Add(this.webBrowser1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 26);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1912, 985);
+            this.tabPage4.Size = new System.Drawing.Size(1912, 988);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -542,7 +689,7 @@
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
             this.panelWebbrowser.Name = "panelWebbrowser";
-            this.panelWebbrowser.Size = new System.Drawing.Size(1906, 979);
+            this.panelWebbrowser.Size = new System.Drawing.Size(1906, 982);
             this.panelWebbrowser.TabIndex = 1;
             // 
             // webBrowser1
@@ -553,7 +700,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1906, 979);
+            this.webBrowser1.Size = new System.Drawing.Size(1906, 982);
             this.webBrowser1.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -598,13 +745,13 @@
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.BackColor = System.Drawing.Color.White;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.ClientSize = new System.Drawing.Size(1920, 1080);
             this.Controls.Add(this.pictureBoxLogo);
             this.Controls.Add(this.materialTabSelector1);
             this.Controls.Add(this.materialTabControl1);
             this.Font = new System.Drawing.Font("Segoe UI Symbol", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -612,17 +759,38 @@
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.panelObject.ResumeLayout(false);
-            this.panelObject.PerformLayout();
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
-            this.panelProgress.ResumeLayout(false);
             this.panelVideo.ResumeLayout(false);
             this.panelVideo.PerformLayout();
             this.panelVideoPart.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.panelCondition.ResumeLayout(false);
+            this.panelColor.ResumeLayout(false);
+            this.panelColor.PerformLayout();
+            this.panelDirection.ResumeLayout(false);
+            this.panelDirection.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            this.panelDensity.ResumeLayout(false);
+            this.panelDensity.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
+            this.panelTarget.ResumeLayout(false);
+            this.panelTarget.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panelFile.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
@@ -647,46 +815,52 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panelObject;
-        private System.Windows.Forms.Panel panelProgress;
+        private System.Windows.Forms.Panel panelLog;
         private System.Windows.Forms.Panel panelVideo;
         private System.Windows.Forms.PictureBox pictureBoxVideo;
         private System.Windows.Forms.TrackBar trackBar1;
         private System.Windows.Forms.Panel panelVideoPart;
-        private System.Windows.Forms.Button VideoBtn;
-        private System.Windows.Forms.ProgressBar progressBar1;
         private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer1;
         private System.Windows.Forms.RadioButton radioButtonX1;
         private System.Windows.Forms.RadioButton radioButtonX4;
         private System.Windows.Forms.RadioButton radioButtonX2;
-        private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem 시간출력ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem onToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem offToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 방향설정ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 아래ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem 조건초기화ToolStripMenuItem;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.WebBrowser webBrowser1;
         private System.Windows.Forms.Panel panelWebbrowser;
         private System.Windows.Forms.PictureBox pictureBoxLogo;
-        private System.Windows.Forms.ToolStripMenuItem 영진짱ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color0ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color1ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color2ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color3ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color4ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color5ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color6ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color7ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color8ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem color9ToolStripMenuItem;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridViewImageColumn Column2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private MaterialSkin.Controls.MaterialFlatButton startBtn;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Panel panelCondition;
+        private MaterialSkin.Controls.MaterialRaisedButton VideoBtn;
+        private System.Windows.Forms.Panel panelFile;
+        private System.Windows.Forms.Panel panelDirection;
+        private System.Windows.Forms.Panel panelDensity;
+        private System.Windows.Forms.Panel panelTarget;
+        private System.Windows.Forms.Panel panelColor;
+        private System.Windows.Forms.PictureBox pictureBoxCar;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.TrackBar trackBar2;
+        private MaterialSkin.Controls.MaterialLabel materialLabelTrackingbar;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBox11;
+        private System.Windows.Forms.PictureBox pictureBox8;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.PictureBox pictureBox10;
+        private System.Windows.Forms.PictureBox pictureBox7;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.PictureBox pictureBox9;
+        private System.Windows.Forms.PictureBox pictureBox6;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 
