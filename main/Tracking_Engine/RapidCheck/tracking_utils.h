@@ -173,7 +173,7 @@ void readTrajectories(vector<RCTrajectory>& trajectories, int classId);
 	@param frames list of frames to be implemented detection
 	@param segments list of segments to be built
 */
-void buildTracklets(vector<Frame>& frames, vector<Segment>& segments);
+void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId);
 
 /** Build one optimal trajectory of given mid-level segment
 	

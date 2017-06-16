@@ -14,14 +14,13 @@ using namespace rc;
 
 void initRCVariables()
 {
-	filepath = "C:/videos/tracking.mp4";
-	videoId = 622;
-	numOfFrames = 5000;
+	filepath = "C:/videos/video_716195_test.mp4";
+	videoId = 703;
 	startFrameNum = 0;
-	frameStep = 4;
-	endFrameNum = startFrameNum + numOfFrames * frameStep;
+	frameStep = 2;
+	endFrameNum = 17000;
+	numOfFrames = (endFrameNum - startFrameNum) / frameStep;
 }
-
 
 int main(int argc, char ** argv)
 {
@@ -60,7 +59,7 @@ int main(int argc, char ** argv)
 		analysisVideo();
 		return 0;
 	}
-
+	
 	switch (operationNum)
 	{
 		case 0:

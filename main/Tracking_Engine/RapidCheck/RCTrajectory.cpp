@@ -70,6 +70,11 @@ void RCTrajectory::merge(tracklet &tr)
 	targets.insert(targets.end(), tr.begin(), tr.end());
 	endSegmentNum++;
 	increaseDirectionCount(tr);
+	std::vector<float> colorRatio = getColorRatioFromTracklet(tr);
+	for (int i = 0; i < colorRatios.size(); i++)
+	{
+		colorRatios[i] += colorRatio[i];
+	}
 	cntValidTracklets++;
 }
 
@@ -143,5 +148,9 @@ void RCTrajectory::normalizeColorRatios()
 {
 	for (int i = 0; i < cntDirections.size(); i++) {
 		directionRatios[i] = (float)cntDirections[i] / cntValidTracklets;
+	}
+	for (int i = 0; i < colorRatios.size(); i++)
+	{
+		colorRatios[i] /= cntValidTracklets;
 	}
 }

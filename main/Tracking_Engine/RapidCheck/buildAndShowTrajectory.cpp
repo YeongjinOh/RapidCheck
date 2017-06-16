@@ -62,11 +62,12 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 				{
 					int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
 					double similarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
+					if (DEBUG)
+						printf("%.2lf ", similarity);
 					if (similarity > TRAJECTORY_MATCH_SIMILARITY_THRES)
 						graphSimilarity[i][j] = similarity;
 				}
-				if (DEBUG)
-					printf("%.2lf ", graphSimilarity[i][j]);
+				
 			}
 			if (DEBUG)
 				printf("\n");
@@ -203,12 +204,11 @@ void buildAndShowTrajectory()
 	// build all tracklets
 	t = clock();
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians);
-	buildTracklets(frameCars, segmentCars);
+	buildTracklets(frameCars, segmentCars, 0);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
 	t = clock() - t;
 	if (DEBUG)
 		printf("Tracklet takes %d(ms)\n", t);
-
 
 	// build trajectories
 	t = clock();
@@ -245,8 +245,8 @@ void analysisVideo()
 	
 	// build all tracklets
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians);
-	buildTracklets(frameCars, segmentCars);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
+	buildTracklets(frameCars, segmentCars, 0);
 
 	// build trajectories
 	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;
@@ -256,4 +256,6 @@ void analysisVideo()
 	// insert into DB
 	insertTrackingIntoDB(trajectoryPedestrians, trajectoryCars);
 	insertObjectInfoIntoDB(trajectoryPedestrians, trajectoryCars);
+	if (PRINT_PROGRESS)
+		printf("RapidCheck_Tracking %d\n", 1000);
 }
