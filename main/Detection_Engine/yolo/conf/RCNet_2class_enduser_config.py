@@ -1,5 +1,5 @@
 """
-only 2class classifier RCNet model config
+only 2class classifier RCNet model enduser custom training config
 	person
 	car
 	source : RapidCheck Own DataSet
@@ -20,15 +20,33 @@ model_name = 'mydata-reversed-trainval'
 ### Detected Classes Name List
 classes_name = ["car", "person"]
 
+"""
+	datacenter/
+		dataset_enduser_root/
+			annotations/
+			images/
+			trainval/
+			test/
+			infomation.json
+		video_123456/
+			annotations/
+			images/
+		video_234567/
+			annotations/
+			images/
+"""
+datacenter_root = os.path.join('dropbox', 'dataset', 'datacenter')
+dataset_enduser_root = os.path.join(datacenter_root, 'datacenter_enduser_total')
+
 ### Trainval Dataset Absolute Path
-dataset_abs_location = os.path.join('dropbox', 'dataset', 'datacenter', 'datacenter_mydata', 'trainval')
+dataset_abs_location = os.path.join(dataset_enduser_root, 'trainval')
 ann_location = os.path.join(dataset_abs_location, 'annotations')
 # ann_location = os.path.join(dataset_abs_location, 'Annotations')
 imageset_location = os.path.join(dataset_abs_location, 'images')
 # imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
 
 ### Test Dataset Absolute Path
-test_dataset_abs_location = os.path.join('dropbox', 'dataset', 'datacenter', 'datacenter_mydata', 'test')
+test_dataset_abs_location = os.path.join(dataset_enduser_root, 'test')
 test_ann_location = os.path.join(test_dataset_abs_location, 'annotations')
 test_imageset_location = os.path.join(test_dataset_abs_location, 'images')
 
