@@ -316,8 +316,8 @@ namespace RapidCheck
 
                             if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                             {
-                                int gridHeight = 150;
-                                int headlineHeight = 20;
+                                int gridHeight = 190;
+                                int headlineHeight = 30;
                                 Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight)); // crop img
                                 Bitmap headlineBox = new Bitmap(gridImg.Width, headlineHeight); // obj info
                                 
@@ -343,7 +343,7 @@ namespace RapidCheck
                                 //System.Drawing.SolidBrush bgcolor = new System.Drawing.SolidBrush(System.Drawing.Color.White);
                                 //g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
                                 g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
-                                g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("Arial", 8), Brushes.Black, rectf);
+                                g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("SpoqaHanSans", 14, FontStyle.Bold), Brushes.Black, rectf);
 
                                 if (trackingTableClassid[objid] == 0) // class id = 0 => people
                                 {
@@ -389,7 +389,7 @@ namespace RapidCheck
 
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
                         //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
-                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} {2};", videoid, maxObjectid, condition);
+                        string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} {2} {3} {4};", videoid, maxObjectid, conditionTarget, conditionColor, conditionDirection);
                         MessageBox.Show(SQL);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
                         adapter.Fill(ds, "objIds");
@@ -495,6 +495,7 @@ namespace RapidCheck
             //background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
             startBtn.Text = "Pause";
+            
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
             //overlay time

@@ -59,7 +59,10 @@ namespace RapidCheck
         private int videoid;
         private int outputFrameNum;
         private string strConn = "Server=localhost;Database=rapidcheck;Uid=root;Pwd=1234;";
-        public string condition;
+        public string conditionTarget { set; get; }
+        public string conditionDensity { set; get; }
+        public string conditionDirection { set; get; }
+        public string conditionColor { set; get; }
         private int maxFrameNum;
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
@@ -120,7 +123,10 @@ namespace RapidCheck
             gridViewList2 = new List<int>();
             videoPath = path;
             videoPath = videoPath.Replace(@"\", @"\\");
-            this.condition = "";
+            this.conditionTarget = "";
+            this.conditionDensity = "";
+            this.conditionDirection = "";
+            this.conditionColor = "";
             this.outputFrameNum = outputFrameNum;
             this.maxFrameNum = maxFrameNum;
             this.minTrackingLength = minTrackingLength;

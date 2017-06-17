@@ -36,7 +36,6 @@
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.panelLog = new System.Windows.Forms.Panel();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.panelVideoControl = new System.Windows.Forms.Panel();
@@ -90,7 +89,8 @@
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.plotView2 = new OxyPlot.WindowsForms.PlotView();
+            this.plotView1 = new OxyPlot.WindowsForms.PlotView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelWebbrowser = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
@@ -99,6 +99,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -135,7 +136,6 @@
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
@@ -163,10 +163,10 @@
             this.tabPage2.Controls.Add(this.panelObject);
             this.tabPage2.Controls.Add(this.panelVideo);
             this.tabPage2.Controls.Add(this.panelCondition);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Location = new System.Drawing.Point(4, 26);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1912, 988);
+            this.tabPage2.Size = new System.Drawing.Size(1912, 984);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
@@ -177,9 +177,9 @@
             this.panelObject.Controls.Add(this.dataGridView2);
             this.panelObject.Controls.Add(this.panelLog);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelObject.Location = new System.Drawing.Point(1340, 3);
+            this.panelObject.Location = new System.Drawing.Point(1447, 3);
             this.panelObject.Name = "panelObject";
-            this.panelObject.Size = new System.Drawing.Size(569, 982);
+            this.panelObject.Size = new System.Drawing.Size(462, 978);
             this.panelObject.TabIndex = 4;
             // 
             // dataGridView1
@@ -190,13 +190,13 @@
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column1});
-            this.dataGridView1.Location = new System.Drawing.Point(5, 3);
+            this.dataGridView1.Location = new System.Drawing.Point(11, 5);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowTemplate.Height = 30;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(375, 877);
+            this.dataGridView1.Size = new System.Drawing.Size(286, 877);
             this.dataGridView1.TabIndex = 20;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
@@ -216,30 +216,22 @@
             this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Column2});
-            this.dataGridView2.Location = new System.Drawing.Point(386, 3);
+            this.dataGridView2.Location = new System.Drawing.Point(305, 5);
             this.dataGridView2.Name = "dataGridView2";
             this.dataGridView2.ReadOnly = true;
             this.dataGridView2.RowHeadersVisible = false;
             this.dataGridView2.RowTemplate.Height = 23;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(179, 877);
+            this.dataGridView2.Size = new System.Drawing.Size(153, 877);
             this.dataGridView2.TabIndex = 21;
             this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
-            // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Column2.HeaderText = "People";
-            this.Column2.MinimumWidth = 50;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
             // 
             // panelLog
             // 
             this.panelLog.BackColor = System.Drawing.Color.Ivory;
-            this.panelLog.Location = new System.Drawing.Point(5, 887);
+            this.panelLog.Location = new System.Drawing.Point(11, 889);
             this.panelLog.Name = "panelLog";
-            this.panelLog.Size = new System.Drawing.Size(560, 92);
+            this.panelLog.Size = new System.Drawing.Size(447, 92);
             this.panelLog.TabIndex = 1;
             // 
             // panelVideo
@@ -248,9 +240,9 @@
             this.panelVideo.Controls.Add(this.panelVideoControl);
             this.panelVideo.Controls.Add(this.panelVideoPart);
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panelVideo.Location = new System.Drawing.Point(195, 3);
+            this.panelVideo.Location = new System.Drawing.Point(196, 3);
             this.panelVideo.Name = "panelVideo";
-            this.panelVideo.Size = new System.Drawing.Size(1145, 982);
+            this.panelVideo.Size = new System.Drawing.Size(1251, 978);
             this.panelVideo.TabIndex = 0;
             // 
             // panelVideoControl
@@ -263,7 +255,7 @@
             this.panelVideoControl.Controls.Add(this.trackBar1);
             this.panelVideoControl.Location = new System.Drawing.Point(6, 887);
             this.panelVideoControl.Name = "panelVideoControl";
-            this.panelVideoControl.Size = new System.Drawing.Size(1133, 92);
+            this.panelVideoControl.Size = new System.Drawing.Size(1239, 92);
             this.panelVideoControl.TabIndex = 4;
             // 
             // radioButtonX4
@@ -271,7 +263,7 @@
             this.radioButtonX4.AutoSize = true;
             this.radioButtonX4.Location = new System.Drawing.Point(1052, 48);
             this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
             this.radioButtonX4.TabIndex = 5;
             this.radioButtonX4.TabStop = true;
             this.radioButtonX4.Text = "x4";
@@ -283,7 +275,7 @@
             this.radioButtonX1.AutoSize = true;
             this.radioButtonX1.Location = new System.Drawing.Point(954, 48);
             this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
             this.radioButtonX1.TabIndex = 5;
             this.radioButtonX1.TabStop = true;
             this.radioButtonX1.Text = "x1";
@@ -295,7 +287,7 @@
             this.radioButtonX2.AutoSize = true;
             this.radioButtonX2.Location = new System.Drawing.Point(1003, 48);
             this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
             this.radioButtonX2.TabIndex = 5;
             this.radioButtonX2.TabStop = true;
             this.radioButtonX2.Text = "x2";
@@ -312,7 +304,7 @@
             this.startBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.startBtn.Name = "startBtn";
             this.startBtn.Primary = false;
-            this.startBtn.Size = new System.Drawing.Size(55, 36);
+            this.startBtn.Size = new System.Drawing.Size(66, 36);
             this.startBtn.TabIndex = 6;
             this.startBtn.Text = "Start";
             this.startBtn.UseVisualStyleBackColor = true;
@@ -324,7 +316,7 @@
             this.trackBar1.Enabled = false;
             this.trackBar1.Location = new System.Drawing.Point(38, 20);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
+            this.trackBar1.Size = new System.Drawing.Size(1198, 56);
             this.trackBar1.TabIndex = 2;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
@@ -338,7 +330,7 @@
             this.panelVideoPart.Location = new System.Drawing.Point(6, 3);
             this.panelVideoPart.Margin = new System.Windows.Forms.Padding(30);
             this.panelVideoPart.Name = "panelVideoPart";
-            this.panelVideoPart.Size = new System.Drawing.Size(1133, 874);
+            this.panelVideoPart.Size = new System.Drawing.Size(1245, 874);
             this.panelVideoPart.TabIndex = 3;
             // 
             // labelProgress
@@ -349,16 +341,16 @@
             this.labelProgress.ForeColor = System.Drawing.Color.Black;
             this.labelProgress.Location = new System.Drawing.Point(470, 562);
             this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(0, 25);
+            this.labelProgress.Size = new System.Drawing.Size(0, 29);
             this.labelProgress.TabIndex = 2;
             // 
             // pictureBoxVideo
             // 
             this.pictureBoxVideo.BackColor = System.Drawing.Color.DimGray;
             this.pictureBoxVideo.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxVideo.Image")));
-            this.pictureBoxVideo.Location = new System.Drawing.Point(3, 3);
+            this.pictureBoxVideo.Location = new System.Drawing.Point(5, 3);
             this.pictureBoxVideo.Name = "pictureBoxVideo";
-            this.pictureBoxVideo.Size = new System.Drawing.Size(1127, 868);
+            this.pictureBoxVideo.Size = new System.Drawing.Size(1236, 868);
             this.pictureBoxVideo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxVideo.TabIndex = 1;
             this.pictureBoxVideo.TabStop = false;
@@ -371,7 +363,7 @@
             this.panelCondition.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelCondition.Location = new System.Drawing.Point(3, 3);
             this.panelCondition.Name = "panelCondition";
-            this.panelCondition.Size = new System.Drawing.Size(192, 982);
+            this.panelCondition.Size = new System.Drawing.Size(193, 978);
             this.panelCondition.TabIndex = 3;
             // 
             // panelConditionModule
@@ -403,7 +395,7 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(61, 3);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(51, 29);
+            this.label3.Size = new System.Drawing.Size(65, 36);
             this.label3.TabIndex = 2;
             this.label3.Text = "방향";
             // 
@@ -549,7 +541,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(60, 3);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 29);
+            this.label1.Size = new System.Drawing.Size(65, 36);
             this.label1.TabIndex = 2;
             this.label1.Text = "대상";
             // 
@@ -593,7 +585,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(61, 2);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(51, 29);
+            this.label2.Size = new System.Drawing.Size(65, 36);
             this.label2.TabIndex = 2;
             this.label2.Text = "밀도";
             // 
@@ -616,7 +608,7 @@
             this.materialLabelTrackingbar.Location = new System.Drawing.Point(69, 9);
             this.materialLabelTrackingbar.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabelTrackingbar.Name = "materialLabelTrackingbar";
-            this.materialLabelTrackingbar.Size = new System.Drawing.Size(25, 19);
+            this.materialLabelTrackingbar.Size = new System.Drawing.Size(32, 24);
             this.materialLabelTrackingbar.TabIndex = 3;
             this.materialLabelTrackingbar.Text = "15";
             // 
@@ -624,7 +616,7 @@
             // 
             this.trackBar2.Location = new System.Drawing.Point(5, 37);
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(154, 45);
+            this.trackBar2.Size = new System.Drawing.Size(154, 56);
             this.trackBar2.TabIndex = 2;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
             // 
@@ -781,7 +773,7 @@
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.Location = new System.Drawing.Point(57, 2);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(51, 29);
+            this.label4.Size = new System.Drawing.Size(65, 36);
             this.label4.TabIndex = 2;
             this.label4.Text = "색상";
             // 
@@ -809,10 +801,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.videoPanel);
-            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Location = new System.Drawing.Point(4, 26);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1912, 988);
+            this.tabPage3.Size = new System.Drawing.Size(1912, 984);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -823,7 +815,7 @@
             this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoPanel.Location = new System.Drawing.Point(3, 3);
             this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(1906, 982);
+            this.videoPanel.Size = new System.Drawing.Size(1906, 978);
             this.videoPanel.TabIndex = 1;
             // 
             // axWindowsMediaPlayer1
@@ -837,33 +829,48 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.pictureBox1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Controls.Add(this.plotView2);
+            this.tabPage1.Controls.Add(this.plotView1);
+            this.tabPage1.Location = new System.Drawing.Point(4, 26);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1912, 988);
+            this.tabPage1.Size = new System.Drawing.Size(1912, 984);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // pictureBox1
+            // plotView2
             // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1906, 982);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.plotView2.Location = new System.Drawing.Point(1026, 53);
+            this.plotView2.Name = "plotView2";
+            this.plotView2.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotView2.Size = new System.Drawing.Size(623, 375);
+            this.plotView2.TabIndex = 1;
+            this.plotView2.Text = "plotView1";
+            this.plotView2.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotView2.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotView2.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotView1
+            // 
+            this.plotView1.Location = new System.Drawing.Point(190, 53);
+            this.plotView1.Name = "plotView1";
+            this.plotView1.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotView1.Size = new System.Drawing.Size(623, 375);
+            this.plotView1.TabIndex = 1;
+            this.plotView1.Text = "plotView1";
+            this.plotView1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotView1.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotView1.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.panelWebbrowser);
             this.tabPage4.Controls.Add(this.webBrowser1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Location = new System.Drawing.Point(4, 26);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1912, 988);
+            this.tabPage4.Size = new System.Drawing.Size(1912, 984);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -873,7 +880,7 @@
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
             this.panelWebbrowser.Name = "panelWebbrowser";
-            this.panelWebbrowser.Size = new System.Drawing.Size(1906, 982);
+            this.panelWebbrowser.Size = new System.Drawing.Size(1906, 978);
             this.panelWebbrowser.TabIndex = 1;
             // 
             // webBrowser1
@@ -884,7 +891,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1906, 982);
+            this.webBrowser1.Size = new System.Drawing.Size(1906, 978);
             this.webBrowser1.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -925,6 +932,15 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "People";
+            this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
+            this.Column2.MinimumWidth = 50;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
             // 
             // Form1
             // 
@@ -983,8 +999,6 @@
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.ResumeLayout(false);
@@ -1000,7 +1014,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Panel videoPanel;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Panel panelLog;
         private System.Windows.Forms.Panel panelVideo;
@@ -1016,7 +1029,6 @@
         private System.Windows.Forms.Panel panelWebbrowser;
         private System.Windows.Forms.PictureBox pictureBoxLogo;
         private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewImageColumn Column2;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private MaterialSkin.Controls.MaterialFlatButton startBtn;
@@ -1062,6 +1074,9 @@
         private System.Windows.Forms.Button buttonColor4;
         private System.Windows.Forms.Button buttonColor2;
         private System.Windows.Forms.Button buttonReadFile;
+        private OxyPlot.WindowsForms.PlotView plotView1;
+        private OxyPlot.WindowsForms.PlotView plotView2;
+        private System.Windows.Forms.DataGridViewImageColumn Column2;
     }
 }
 
