@@ -29,21 +29,23 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
+            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.panelLog = new System.Windows.Forms.Panel();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.panelVideoControl = new System.Windows.Forms.Panel();
-            this.radioButtonX4 = new System.Windows.Forms.RadioButton();
-            this.radioButtonX1 = new System.Windows.Forms.RadioButton();
-            this.radioButtonX2 = new System.Windows.Forms.RadioButton();
-            this.startBtn = new MaterialSkin.Controls.MaterialFlatButton();
+            this.pictureBoxStart = new System.Windows.Forms.PictureBox();
+            this.pictureBoxSpeed4 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxSpeed2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxSpeed1 = new System.Windows.Forms.PictureBox();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
             this.panelVideoPart = new System.Windows.Forms.Panel();
             this.labelProgress = new System.Windows.Forms.Label();
@@ -69,8 +71,10 @@
             this.panelDensity = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.panelDensityTable = new System.Windows.Forms.Panel();
-            this.label5 = new System.Windows.Forms.Label();
+            this.labelDensity = new System.Windows.Forms.Label();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
+            this.startBtn = new MaterialSkin.Controls.MaterialFlatButton();
+            this.radioButtonX4 = new System.Windows.Forms.RadioButton();
             this.panelColor = new System.Windows.Forms.Panel();
             this.panelColorTable = new System.Windows.Forms.Panel();
             this.buttonColor9 = new System.Windows.Forms.Button();
@@ -84,9 +88,11 @@
             this.buttonColor2 = new System.Windows.Forms.Button();
             this.buttonColor0 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.radioButtonX1 = new System.Windows.Forms.RadioButton();
             this.panelFile = new System.Windows.Forms.Panel();
             this.buttonReadFile = new System.Windows.Forms.Label();
             this.pictureBoxHead = new System.Windows.Forms.PictureBox();
+            this.radioButtonX2 = new System.Windows.Forms.RadioButton();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
@@ -101,8 +107,10 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -110,6 +118,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.panelVideo.SuspendLayout();
             this.panelVideoControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSpeed4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSpeed2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSpeed1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
@@ -142,6 +154,10 @@
             this.tabPage1.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -204,11 +220,23 @@
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView1.RowTemplate.Height = 30;
+            this.dataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.dataGridView1.Size = new System.Drawing.Size(286, 896);
             this.dataGridView1.TabIndex = 20;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-            this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // Column1
+            // 
+            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Column1.HeaderText = "Car";
+            this.Column1.Name = "Column1";
+            this.Column1.ReadOnly = true;
+            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column1.Width = 283;
             // 
             // dataGridView2
             // 
@@ -233,6 +261,21 @@
             this.dataGridView2.TabIndex = 21;
             this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle2;
+            this.Column2.Frozen = true;
+            this.Column2.HeaderText = "People";
+            this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
+            this.Column2.MinimumWidth = 50;
+            this.Column2.Name = "Column2";
+            this.Column2.ReadOnly = true;
+            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.Column2.Width = 150;
+            // 
             // panelLog
             // 
             this.panelLog.BackColor = System.Drawing.Color.Ivory;
@@ -255,77 +298,69 @@
             // panelVideoControl
             // 
             this.panelVideoControl.BackColor = System.Drawing.Color.White;
-            this.panelVideoControl.Controls.Add(this.radioButtonX4);
-            this.panelVideoControl.Controls.Add(this.radioButtonX1);
-            this.panelVideoControl.Controls.Add(this.radioButtonX2);
-            this.panelVideoControl.Controls.Add(this.startBtn);
+            this.panelVideoControl.Controls.Add(this.pictureBoxStart);
+            this.panelVideoControl.Controls.Add(this.pictureBoxSpeed4);
+            this.panelVideoControl.Controls.Add(this.pictureBoxSpeed2);
+            this.panelVideoControl.Controls.Add(this.pictureBoxSpeed1);
             this.panelVideoControl.Controls.Add(this.trackBar1);
             this.panelVideoControl.Location = new System.Drawing.Point(6, 904);
             this.panelVideoControl.Name = "panelVideoControl";
             this.panelVideoControl.Size = new System.Drawing.Size(1258, 104);
             this.panelVideoControl.TabIndex = 4;
             // 
-            // radioButtonX4
+            // pictureBoxStart
             // 
-            this.radioButtonX4.AutoSize = true;
-            this.radioButtonX4.Location = new System.Drawing.Point(1059, 60);
-            this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
-            this.radioButtonX4.TabIndex = 5;
-            this.radioButtonX4.TabStop = true;
-            this.radioButtonX4.Text = "x4";
-            this.radioButtonX4.UseVisualStyleBackColor = true;
-            this.radioButtonX4.CheckedChanged += new System.EventHandler(this.radioButtonX4_CheckedChanged);
+            this.pictureBoxStart.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxStart.Image")));
+            this.pictureBoxStart.Location = new System.Drawing.Point(594, 50);
+            this.pictureBoxStart.Name = "pictureBoxStart";
+            this.pictureBoxStart.Size = new System.Drawing.Size(42, 42);
+            this.pictureBoxStart.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxStart.TabIndex = 8;
+            this.pictureBoxStart.TabStop = false;
+            this.pictureBoxStart.Click += new System.EventHandler(this.startBtn_Click);
             // 
-            // radioButtonX1
+            // pictureBoxSpeed4
             // 
-            this.radioButtonX1.AutoSize = true;
-            this.radioButtonX1.Location = new System.Drawing.Point(961, 60);
-            this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
-            this.radioButtonX1.TabIndex = 5;
-            this.radioButtonX1.TabStop = true;
-            this.radioButtonX1.Text = "x1";
-            this.radioButtonX1.UseVisualStyleBackColor = true;
-            this.radioButtonX1.CheckedChanged += new System.EventHandler(this.radioButtonX1_CheckedChanged);
+            this.pictureBoxSpeed4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpeed4.Image")));
+            this.pictureBoxSpeed4.Location = new System.Drawing.Point(1181, 52);
+            this.pictureBoxSpeed4.Name = "pictureBoxSpeed4";
+            this.pictureBoxSpeed4.Size = new System.Drawing.Size(30, 30);
+            this.pictureBoxSpeed4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxSpeed4.TabIndex = 7;
+            this.pictureBoxSpeed4.TabStop = false;
+            this.pictureBoxSpeed4.Click += new System.EventHandler(this.pictureBoxSpeed4_Click);
             // 
-            // radioButtonX2
+            // pictureBoxSpeed2
             // 
-            this.radioButtonX2.AutoSize = true;
-            this.radioButtonX2.Location = new System.Drawing.Point(1010, 60);
-            this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
-            this.radioButtonX2.TabIndex = 5;
-            this.radioButtonX2.TabStop = true;
-            this.radioButtonX2.Text = "x2";
-            this.radioButtonX2.UseVisualStyleBackColor = true;
-            this.radioButtonX2.CheckedChanged += new System.EventHandler(this.radioButtonX2_CheckedChanged);
+            this.pictureBoxSpeed2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpeed2.Image")));
+            this.pictureBoxSpeed2.Location = new System.Drawing.Point(1135, 52);
+            this.pictureBoxSpeed2.Name = "pictureBoxSpeed2";
+            this.pictureBoxSpeed2.Size = new System.Drawing.Size(30, 30);
+            this.pictureBoxSpeed2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxSpeed2.TabIndex = 7;
+            this.pictureBoxSpeed2.TabStop = false;
+            this.pictureBoxSpeed2.Click += new System.EventHandler(this.pictureBoxSpeed2_Click);
             // 
-            // startBtn
+            // pictureBoxSpeed1
             // 
-            this.startBtn.AutoSize = true;
-            this.startBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.startBtn.Depth = 0;
-            this.startBtn.Location = new System.Drawing.Point(545, 49);
-            this.startBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.startBtn.MouseState = MaterialSkin.MouseState.HOVER;
-            this.startBtn.Name = "startBtn";
-            this.startBtn.Primary = false;
-            this.startBtn.Size = new System.Drawing.Size(66, 36);
-            this.startBtn.TabIndex = 6;
-            this.startBtn.Text = "Start";
-            this.startBtn.UseVisualStyleBackColor = true;
-            this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
+            this.pictureBoxSpeed1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpeed1.Image")));
+            this.pictureBoxSpeed1.Location = new System.Drawing.Point(1089, 52);
+            this.pictureBoxSpeed1.Name = "pictureBoxSpeed1";
+            this.pictureBoxSpeed1.Size = new System.Drawing.Size(30, 30);
+            this.pictureBoxSpeed1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxSpeed1.TabIndex = 7;
+            this.pictureBoxSpeed1.TabStop = false;
+            this.pictureBoxSpeed1.Click += new System.EventHandler(this.pictureBoxSpeed1_Click);
             // 
             // trackBar1
             // 
             this.trackBar1.BackColor = System.Drawing.Color.White;
             this.trackBar1.Enabled = false;
-            this.trackBar1.Location = new System.Drawing.Point(30, 26);
+            this.trackBar1.Location = new System.Drawing.Point(20, 12);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1214, 56);
+            this.trackBar1.Size = new System.Drawing.Size(1219, 56);
             this.trackBar1.TabIndex = 2;
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
             this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseDown);
             // 
@@ -376,11 +411,15 @@
             // panelConditionModule
             // 
             this.panelConditionModule.BackColor = System.Drawing.Color.FloralWhite;
+            this.panelConditionModule.Controls.Add(this.panelColor);
             this.panelConditionModule.Controls.Add(this.panelDirection);
             this.panelConditionModule.Controls.Add(this.panelTarget);
             this.panelConditionModule.Controls.Add(this.panelDensity);
-            this.panelConditionModule.Controls.Add(this.panelColor);
+            this.panelConditionModule.Controls.Add(this.startBtn);
+            this.panelConditionModule.Controls.Add(this.radioButtonX4);
+            this.panelConditionModule.Controls.Add(this.radioButtonX1);
             this.panelConditionModule.Controls.Add(this.panelFile);
+            this.panelConditionModule.Controls.Add(this.radioButtonX2);
             this.panelConditionModule.Location = new System.Drawing.Point(5, 3);
             this.panelConditionModule.Name = "panelConditionModule";
             this.panelConditionModule.Size = new System.Drawing.Size(185, 1005);
@@ -391,7 +430,7 @@
             this.panelDirection.BackColor = System.Drawing.Color.Sienna;
             this.panelDirection.Controls.Add(this.label3);
             this.panelDirection.Controls.Add(this.panelDirectionTable);
-            this.panelDirection.Location = new System.Drawing.Point(7, 377);
+            this.panelDirection.Location = new System.Drawing.Point(7, 454);
             this.panelDirection.Name = "panelDirection";
             this.panelDirection.Size = new System.Drawing.Size(168, 211);
             this.panelDirection.TabIndex = 22;
@@ -585,7 +624,7 @@
             this.panelDensity.Controls.Add(this.panelDensityTable);
             this.panelDensity.Location = new System.Drawing.Point(7, 222);
             this.panelDensity.Name = "panelDensity";
-            this.panelDensity.Size = new System.Drawing.Size(168, 149);
+            this.panelDensity.Size = new System.Drawing.Size(168, 226);
             this.panelDensity.TabIndex = 21;
             // 
             // label2
@@ -602,39 +641,77 @@
             // panelDensityTable
             // 
             this.panelDensityTable.BackColor = System.Drawing.Color.RosyBrown;
-            this.panelDensityTable.Controls.Add(this.label5);
+            this.panelDensityTable.Controls.Add(this.pictureBox4);
+            this.panelDensityTable.Controls.Add(this.pictureBox2);
+            this.panelDensityTable.Controls.Add(this.pictureBox3);
+            this.panelDensityTable.Controls.Add(this.pictureBox1);
+            this.panelDensityTable.Controls.Add(this.labelDensity);
             this.panelDensityTable.Controls.Add(this.trackBar2);
             this.panelDensityTable.Location = new System.Drawing.Point(3, 34);
             this.panelDensityTable.Name = "panelDensityTable";
-            this.panelDensityTable.Size = new System.Drawing.Size(162, 106);
+            this.panelDensityTable.Size = new System.Drawing.Size(162, 189);
             this.panelDensityTable.TabIndex = 2;
             // 
-            // label5
+            // labelDensity
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
-            this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(60, 7);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(46, 31);
-            this.label5.TabIndex = 3;
-            this.label5.Tag = "";
-            this.label5.Text = "15";
+            this.labelDensity.AutoSize = true;
+            this.labelDensity.Font = new System.Drawing.Font("Microsoft Sans Serif", 16F, System.Drawing.FontStyle.Bold);
+            this.labelDensity.ForeColor = System.Drawing.Color.White;
+            this.labelDensity.Location = new System.Drawing.Point(66, 7);
+            this.labelDensity.Name = "labelDensity";
+            this.labelDensity.Size = new System.Drawing.Size(30, 31);
+            this.labelDensity.TabIndex = 3;
+            this.labelDensity.Tag = "";
+            this.labelDensity.Text = "8";
             // 
             // trackBar2
             // 
-            this.trackBar2.Location = new System.Drawing.Point(5, 37);
+            this.trackBar2.Location = new System.Drawing.Point(5, 88);
+            this.trackBar2.Maximum = 20;
+            this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
             this.trackBar2.Size = new System.Drawing.Size(154, 56);
             this.trackBar2.TabIndex = 2;
-            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar2.Value = 8;
+            this.trackBar2.ValueChanged += new System.EventHandler(this.trackBar2_ValueChanged);
+            // 
+            // startBtn
+            // 
+            this.startBtn.AutoSize = true;
+            this.startBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.startBtn.Depth = 0;
+            this.startBtn.Location = new System.Drawing.Point(53, 921);
+            this.startBtn.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.startBtn.MouseState = MaterialSkin.MouseState.HOVER;
+            this.startBtn.Name = "startBtn";
+            this.startBtn.Primary = false;
+            this.startBtn.Size = new System.Drawing.Size(66, 36);
+            this.startBtn.TabIndex = 6;
+            this.startBtn.Text = "Start";
+            this.startBtn.UseVisualStyleBackColor = true;
+            this.startBtn.Visible = false;
+            this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
+            // 
+            // radioButtonX4
+            // 
+            this.radioButtonX4.AutoSize = true;
+            this.radioButtonX4.Location = new System.Drawing.Point(125, 951);
+            this.radioButtonX4.Name = "radioButtonX4";
+            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX4.TabIndex = 5;
+            this.radioButtonX4.TabStop = true;
+            this.radioButtonX4.Text = "x4";
+            this.radioButtonX4.UseVisualStyleBackColor = true;
+            this.radioButtonX4.Visible = false;
+            this.radioButtonX4.CheckedChanged += new System.EventHandler(this.radioButtonX4_CheckedChanged);
             // 
             // panelColor
             // 
             this.panelColor.BackColor = System.Drawing.Color.NavajoWhite;
             this.panelColor.Controls.Add(this.panelColorTable);
             this.panelColor.Controls.Add(this.label4);
-            this.panelColor.Location = new System.Drawing.Point(7, 596);
+            this.panelColor.Location = new System.Drawing.Point(7, 673);
             this.panelColor.Name = "panelColor";
             this.panelColor.Size = new System.Drawing.Size(168, 299);
             this.panelColor.TabIndex = 23;
@@ -660,7 +737,8 @@
             // buttonColor9
             // 
             this.buttonColor9.BackColor = System.Drawing.Color.Green;
-            this.buttonColor9.FlatAppearance.BorderColor = System.Drawing.Color.Green;
+            this.buttonColor9.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor9.FlatAppearance.BorderSize = 0;
             this.buttonColor9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor9.Location = new System.Drawing.Point(87, 203);
             this.buttonColor9.Name = "buttonColor9";
@@ -672,7 +750,8 @@
             // buttonColor7
             // 
             this.buttonColor7.BackColor = System.Drawing.Color.Cyan;
-            this.buttonColor7.FlatAppearance.BorderColor = System.Drawing.Color.Cyan;
+            this.buttonColor7.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor7.FlatAppearance.BorderSize = 0;
             this.buttonColor7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor7.Location = new System.Drawing.Point(87, 156);
             this.buttonColor7.Name = "buttonColor7";
@@ -684,7 +763,8 @@
             // buttonColor5
             // 
             this.buttonColor5.BackColor = System.Drawing.Color.Yellow;
-            this.buttonColor5.FlatAppearance.BorderColor = System.Drawing.Color.Yellow;
+            this.buttonColor5.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor5.FlatAppearance.BorderSize = 0;
             this.buttonColor5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor5.Location = new System.Drawing.Point(87, 109);
             this.buttonColor5.Name = "buttonColor5";
@@ -696,7 +776,8 @@
             // buttonColor3
             // 
             this.buttonColor3.BackColor = System.Drawing.Color.DarkOrange;
-            this.buttonColor3.FlatAppearance.BorderColor = System.Drawing.Color.DarkOrange;
+            this.buttonColor3.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor3.FlatAppearance.BorderSize = 0;
             this.buttonColor3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor3.Location = new System.Drawing.Point(87, 62);
             this.buttonColor3.Name = "buttonColor3";
@@ -708,7 +789,8 @@
             // buttonColor8
             // 
             this.buttonColor8.BackColor = System.Drawing.Color.Purple;
-            this.buttonColor8.FlatAppearance.BorderColor = System.Drawing.Color.Purple;
+            this.buttonColor8.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor8.FlatAppearance.BorderSize = 0;
             this.buttonColor8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor8.Location = new System.Drawing.Point(23, 203);
             this.buttonColor8.Name = "buttonColor8";
@@ -720,7 +802,8 @@
             // buttonColor6
             // 
             this.buttonColor6.BackColor = System.Drawing.Color.SteelBlue;
-            this.buttonColor6.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
+            this.buttonColor6.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor6.FlatAppearance.BorderSize = 0;
             this.buttonColor6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor6.Location = new System.Drawing.Point(23, 156);
             this.buttonColor6.Name = "buttonColor6";
@@ -732,7 +815,8 @@
             // buttonColor4
             // 
             this.buttonColor4.BackColor = System.Drawing.Color.Crimson;
-            this.buttonColor4.FlatAppearance.BorderColor = System.Drawing.Color.Crimson;
+            this.buttonColor4.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor4.FlatAppearance.BorderSize = 0;
             this.buttonColor4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor4.Location = new System.Drawing.Point(23, 109);
             this.buttonColor4.Name = "buttonColor4";
@@ -744,7 +828,8 @@
             // buttonColor1
             // 
             this.buttonColor1.BackColor = System.Drawing.Color.Black;
-            this.buttonColor1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor1.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonColor1.FlatAppearance.BorderSize = 0;
             this.buttonColor1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor1.Location = new System.Drawing.Point(87, 15);
             this.buttonColor1.Name = "buttonColor1";
@@ -756,7 +841,8 @@
             // buttonColor2
             // 
             this.buttonColor2.BackColor = System.Drawing.Color.Red;
-            this.buttonColor2.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.buttonColor2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor2.FlatAppearance.BorderSize = 0;
             this.buttonColor2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor2.Location = new System.Drawing.Point(23, 62);
             this.buttonColor2.Name = "buttonColor2";
@@ -768,7 +854,9 @@
             // buttonColor0
             // 
             this.buttonColor0.BackColor = System.Drawing.Color.White;
-            this.buttonColor0.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonColor0.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor0.FlatAppearance.BorderSize = 0;
+            this.buttonColor0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor0.Location = new System.Drawing.Point(23, 15);
             this.buttonColor0.Name = "buttonColor0";
             this.buttonColor0.Size = new System.Drawing.Size(52, 41);
@@ -786,6 +874,19 @@
             this.label4.Size = new System.Drawing.Size(67, 39);
             this.label4.TabIndex = 2;
             this.label4.Text = "색상";
+            // 
+            // radioButtonX1
+            // 
+            this.radioButtonX1.AutoSize = true;
+            this.radioButtonX1.Location = new System.Drawing.Point(27, 951);
+            this.radioButtonX1.Name = "radioButtonX1";
+            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX1.TabIndex = 5;
+            this.radioButtonX1.TabStop = true;
+            this.radioButtonX1.Text = "x1";
+            this.radioButtonX1.UseVisualStyleBackColor = true;
+            this.radioButtonX1.Visible = false;
+            this.radioButtonX1.CheckedChanged += new System.EventHandler(this.radioButtonX1_CheckedChanged);
             // 
             // panelFile
             // 
@@ -825,6 +926,19 @@
             this.pictureBoxHead.Click += new System.EventHandler(this.buttonReadFile_Click);
             this.pictureBoxHead.MouseLeave += new System.EventHandler(this.pictureBoxHead_MouseLeave);
             this.pictureBoxHead.MouseHover += new System.EventHandler(this.pictureBoxHead_MouseHover);
+            // 
+            // radioButtonX2
+            // 
+            this.radioButtonX2.AutoSize = true;
+            this.radioButtonX2.Location = new System.Drawing.Point(76, 951);
+            this.radioButtonX2.Name = "radioButtonX2";
+            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX2.TabIndex = 5;
+            this.radioButtonX2.TabStop = true;
+            this.radioButtonX2.Text = "x2";
+            this.radioButtonX2.UseVisualStyleBackColor = true;
+            this.radioButtonX2.Visible = false;
+            this.radioButtonX2.CheckedChanged += new System.EventHandler(this.radioButtonX2_CheckedChanged);
             // 
             // tabPage3
             // 
@@ -961,32 +1075,45 @@
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
             // 
-            // Column2
+            // pictureBox1
             // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle4;
-            this.Column2.Frozen = true;
-            this.Column2.HeaderText = "People";
-            this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
-            this.Column2.MinimumWidth = 50;
-            this.Column2.Name = "Column2";
-            this.Column2.ReadOnly = true;
-            this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column2.Width = 150;
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(115, 43);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 4;
+            this.pictureBox1.TabStop = false;
             // 
-            // Column1
+            // pictureBox2
             // 
-            this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle3.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Column1.HeaderText = "Car";
-            this.Column1.Name = "Column1";
-            this.Column1.ReadOnly = true;
-            this.Column1.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.Column1.Width = 283;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(95, 138);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(65, 40);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 4;
+            this.pictureBox2.TabStop = false;
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
+            this.pictureBox3.Location = new System.Drawing.Point(6, 42);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox3.TabIndex = 4;
+            this.pictureBox3.TabStop = false;
+            // 
+            // pictureBox4
+            // 
+            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
+            this.pictureBox4.Location = new System.Drawing.Point(6, 138);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(40, 40);
+            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox4.TabIndex = 4;
+            this.pictureBox4.TabStop = false;
             // 
             // Form1
             // 
@@ -1010,12 +1137,17 @@
             this.panelVideo.ResumeLayout(false);
             this.panelVideoControl.ResumeLayout(false);
             this.panelVideoControl.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxStart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSpeed4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSpeed2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxSpeed1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panelVideoPart.ResumeLayout(false);
             this.panelVideoPart.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             this.panelCondition.ResumeLayout(false);
             this.panelConditionModule.ResumeLayout(false);
+            this.panelConditionModule.PerformLayout();
             this.panelDirection.ResumeLayout(false);
             this.panelDirection.PerformLayout();
             this.panelDirectionTable.ResumeLayout(false);
@@ -1049,6 +1181,10 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1123,9 +1259,17 @@
         private OxyPlot.WindowsForms.PlotView plotView2;
         private System.Windows.Forms.Label buttonReadFile;
         private System.Windows.Forms.PictureBox pictureBoxHead;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label labelDensity;
         private System.Windows.Forms.DataGridViewImageColumn Column1;
         private System.Windows.Forms.DataGridViewImageColumn Column2;
+        private System.Windows.Forms.PictureBox pictureBoxSpeed4;
+        private System.Windows.Forms.PictureBox pictureBoxSpeed2;
+        private System.Windows.Forms.PictureBox pictureBoxSpeed1;
+        private System.Windows.Forms.PictureBox pictureBoxStart;
+        private System.Windows.Forms.PictureBox pictureBox4;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox3;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

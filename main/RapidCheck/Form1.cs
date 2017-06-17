@@ -73,7 +73,7 @@ namespace RapidCheck
             int maxFrameNum = 5000;
             int analysisFPS = 5; //default
             int minTrackingLength = 21;
-            int clusterNum = 8;
+            int clusterNum = trackBar2.Value;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             rapidFunc();
@@ -246,6 +246,8 @@ namespace RapidCheck
         }
         private void setOverlayUI() //UI enable = True
         {
+            startBtn.Text = "Pause";
+            pictureBoxStart.Image = overlayPause;
             //trackBar
             trackBar1.Minimum = 0;
             trackBar1.Maximum = outputFrameNum - 1;
@@ -334,10 +336,20 @@ namespace RapidCheck
             rapidCheck.resFrame = trackBar1.Value;
             rapidCheck.overlayObjIdx = 0;
         }
+        Bitmap overlayStart = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\play.png");
+        Bitmap overlayPause = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\pause.png");
         private void startBtn_Click(object sender, EventArgs e)
         {
-            if (startBtn.Text == "Start") { startBtn.Text = "Pause"; }
-            else { startBtn.Text = "Start"; }
+            if (startBtn.Text == "Start") 
+            { 
+                startBtn.Text = "Pause";
+                pictureBoxStart.Image = overlayPause;
+            }
+            else 
+            {
+                startBtn.Text = "Start";
+                pictureBoxStart.Image = overlayStart;
+            }
         }
         //------------------------------Video Click EVENT------------------------------
         private void pictureBoxVideo_MouseDown(object sender, MouseEventArgs e) //비디오 클릭하면 원본 영상 틀어주는 함수
@@ -562,22 +574,28 @@ namespace RapidCheck
             if (colorPosition == 0)
             {
                 colorPosition = -1;
+                buttonColor0.FlatStyle = FlatStyle.Flat;
             }
             else
             {
                 colorPosition = 0;
+                buttonColor0.FlatAppearance.BorderColor = Color.Black;
+                buttonColor0.FlatAppearance.BorderSize = 4;
             }
+            setTogleColorBtn();
         }
         private void buttonColor1_Click(object sender, EventArgs e)
         {
             if (colorPosition == 1)
             {
-                colorPosition = -1;
+                colorPosition = -1;                
             }
             else
             {
                 colorPosition = 1;
+
             }
+            setTogleColorBtn();
         }
         private void buttonColor2_Click(object sender, EventArgs e)
         {
@@ -589,6 +607,7 @@ namespace RapidCheck
             {
                 colorPosition = 2;
             }
+            setTogleColorBtn();
         }
         private void buttonColor3_Click(object sender, EventArgs e)
         {
@@ -600,6 +619,7 @@ namespace RapidCheck
             {
                 colorPosition = 3;
             }
+            setTogleColorBtn();
         }
         private void buttonColor4_Click(object sender, EventArgs e)
         {
@@ -611,6 +631,7 @@ namespace RapidCheck
             {
                 colorPosition = 4;
             }
+            setTogleColorBtn();
         }
         private void buttonColor5_Click(object sender, EventArgs e)
         {
@@ -622,6 +643,7 @@ namespace RapidCheck
             {
                 colorPosition = 5;
             }
+            setTogleColorBtn();
         }
         private void buttonColor6_Click(object sender, EventArgs e)
         {
@@ -633,6 +655,7 @@ namespace RapidCheck
             {
                 colorPosition = 6;
             }
+            setTogleColorBtn();
         }
         private void buttonColor7_Click(object sender, EventArgs e)
         {
@@ -644,6 +667,7 @@ namespace RapidCheck
             {
                 colorPosition = 7;
             }
+            setTogleColorBtn();
         }
         private void buttonColor8_Click(object sender, EventArgs e)
         {
@@ -655,6 +679,7 @@ namespace RapidCheck
             {
                 colorPosition = 8;
             }
+            setTogleColorBtn();
         }
         private void buttonColor9_Click(object sender, EventArgs e)
         {
@@ -666,11 +691,39 @@ namespace RapidCheck
             {
                 colorPosition = 9;
             }
+            setTogleColorBtn();
+        }
+        private void setTogleColorBtn()
+        {
+            buttonColor0.FlatAppearance.BorderSize = 0;
+            buttonColor1.FlatAppearance.BorderSize = 0;
+            buttonColor2.FlatAppearance.BorderSize = 0;
+            buttonColor3.FlatAppearance.BorderSize = 0;
+            buttonColor4.FlatAppearance.BorderSize = 0;
+            buttonColor5.FlatAppearance.BorderSize = 0;
+            buttonColor6.FlatAppearance.BorderSize = 0;
+            buttonColor7.FlatAppearance.BorderSize = 0;
+            buttonColor8.FlatAppearance.BorderSize = 0;
+            buttonColor9.FlatAppearance.BorderSize = 0;
+            switch(colorPosition)
+            {
+                case 0: buttonColor0.FlatAppearance.BorderSize = 4; break;
+                case 1: buttonColor1.FlatAppearance.BorderSize = 4; break;
+                case 2: buttonColor2.FlatAppearance.BorderSize = 4; break;
+                case 3: buttonColor3.FlatAppearance.BorderSize = 4; break;
+                case 4: buttonColor4.FlatAppearance.BorderSize = 4; break;
+                case 5: buttonColor5.FlatAppearance.BorderSize = 4; break;
+                case 6: buttonColor6.FlatAppearance.BorderSize = 4; break;
+                case 7: buttonColor7.FlatAppearance.BorderSize = 4; break;
+                case 8: buttonColor8.FlatAppearance.BorderSize = 4; break;
+                case 9: buttonColor9.FlatAppearance.BorderSize = 4; break;                    
+            }
         }
         //------------------------------Search Function------------------------------
         private void replay()
         {
             startBtn.Text = "Start";
+            pictureBoxStart.Image = overlayStart;
             //target
             if (!searchPeople && !searchCar)
             {
@@ -796,9 +849,40 @@ namespace RapidCheck
             buttonReadFile.BackColor = Color.FromArgb(76, 150, 173);
         }
 
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
 
+        Bitmap videoSpeed1on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\ff1.png");
+        Bitmap videoSpeed2on = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\play2.png");
+        Bitmap videoSpeed4on = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\play4.png");
+        Bitmap videoSpeed1off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\ff1_off.png");
+        Bitmap videoSpeed2off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\ff2_off.png");
+        Bitmap videoSpeed4off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\ff4_off.png");
+        private void pictureBoxSpeed1_Click(object sender, EventArgs e)
+        {
+            radioButtonX1.Checked = true;
+            pictureBoxSpeed1.Image = videoSpeed1on;
+            pictureBoxSpeed2.Image = videoSpeed2off;
+            pictureBoxSpeed4.Image = videoSpeed4off;
+        }
+
+        private void pictureBoxSpeed2_Click(object sender, EventArgs e)
+        {
+            radioButtonX2.Checked = true;
+            pictureBoxSpeed1.Image = videoSpeed1off;
+            pictureBoxSpeed2.Image = videoSpeed2on;
+            pictureBoxSpeed4.Image = videoSpeed4off;
+        }
+
+        private void pictureBoxSpeed4_Click(object sender, EventArgs e)
+        {
+            radioButtonX4.Checked = true;
+            pictureBoxSpeed1.Image = videoSpeed1off;
+            pictureBoxSpeed2.Image = videoSpeed2off;
+            pictureBoxSpeed4.Image = videoSpeed4on;
+        }
+
+        private void trackBar2_ValueChanged(object sender, EventArgs e)
+        {
+            labelDensity.Text = trackBar2.Value.ToString();
         }
     }
 }

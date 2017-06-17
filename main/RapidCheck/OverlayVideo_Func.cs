@@ -339,7 +339,7 @@ namespace RapidCheck
                                 }
 
 
-                                RectangleF rectf = new RectangleF(0, 0, headlineBox.Width, headlineBox.Height); // 다음 위치에 택스트를 그린다 (시간)
+                                RectangleF rectf = new RectangleF(35, 0, headlineBox.Width, headlineBox.Height); // 다음 위치에 택스트를 그린다 (시간)
 
                                 //alpha
                                 ColorMatrix matrix = new ColorMatrix();
@@ -368,11 +368,11 @@ namespace RapidCheck
                                 g.DrawImage(bit, rect);
                                 
                                 g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
+                                g.DrawImage(Direction1, new Rectangle(0,0,30,30));
                                 g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("SpoqaHanSans", 14, FontStyle.Bold), Brushes.Black, rectf);
 
                                 if (trackingTableClassid[objid] == 0) // class id = 0 => people
                                 {
-
                                     dataGridView1.Rows.Add(gridImg);
                                     dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
                                     gridViewList1.Add(objid);
@@ -520,7 +520,6 @@ namespace RapidCheck
         {
             //background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
-            startBtn.Text = "Pause";
             
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;

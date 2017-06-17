@@ -81,7 +81,15 @@ namespace RapidCheck
         Bitmap background;
         Bitmap backgroundCar;
         Bitmap backgroundPeople;
-        
+        Bitmap Direction1;
+        Bitmap Direction2;
+        Bitmap Direction3;
+        Bitmap Direction4;
+        Bitmap Direction6;
+        Bitmap Direction7;
+        Bitmap Direction8;
+        Bitmap Direction9;
+
         //UI
         PictureBox pictureBoxVideo;
         TrackBar trackingBar;
@@ -101,6 +109,14 @@ namespace RapidCheck
             drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
             backgroundPeople = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\human@1x.png");
             backgroundCar = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\Car@1x.png");
+            Direction1 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e1.png");
+            Direction2 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e2.png");
+            Direction3 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e3.png");
+            Direction4 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e4.png");
+            Direction6 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e6.png");
+            Direction7 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e7.png");
+            Direction8 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e8.png");
+            Direction9 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e9.png");
             //UI
             this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
