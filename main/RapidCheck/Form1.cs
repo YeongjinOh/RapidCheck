@@ -61,7 +61,7 @@ namespace RapidCheck
         private void Form1_Load(object sender, EventArgs e)
         {
             Cef.Initialize(new CefSettings()); // chrome initialize
-            setUI(); //ui enable false
+            //setUI(); //ui enable false
             defaultColor(); //color setting
             ChartTest(); //chart test
             ChartTest2();
@@ -70,7 +70,7 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 30000;
+            int maxFrameNum = 5000;
             int analysisFPS = 5; //default
             int minTrackingLength = 21;
             int clusterNum = 8;
@@ -99,6 +99,7 @@ namespace RapidCheck
                 if (myRapidModule[idx].Method.ToString() == "Void overlayLive()" )
                 {
                     setOverlayUI();
+
                 }
                 myRapidChain(myRapidModule[idx]);
             }
@@ -288,6 +289,8 @@ namespace RapidCheck
             buttonColor7.Enabled = true;
             buttonColor8.Enabled = true;
             buttonColor9.Enabled = true;
+            pictureBoxTargetPeople.Image = peopleImgOn;
+            pictureBoxTargetCar.Image = carImgOn;
         }
         //------------------------------Read video EVENT------------------------------
         private void buttonReadFile_Click(object sender, EventArgs e)
@@ -424,30 +427,34 @@ namespace RapidCheck
         private void radioButtonX2_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 2; }
         private void radioButtonX4_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 4; }
         //------------------------------Object type Click EVENT------------------------------
+        Bitmap peopleImgOn = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\human_on@2x.png");
+        Bitmap peopleImgOff = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\human_off@2x.png");
         private void pictureBoxTargetPeople_Click(object sender, EventArgs e) 
         {
             if (searchPeople)
             {
                 searchPeople = false;
-                pictureBoxTargetPeople.BackColor = Color.Gray;
+                pictureBoxTargetPeople.Image = peopleImgOff;
             }
             else
             {
                 searchPeople = true;
-                pictureBoxTargetPeople.BackColor = Color.FromArgb(105, 180, 203);
+                pictureBoxTargetPeople.Image = peopleImgOn;
             }
         } // 0 = people
+        Bitmap carImgOn = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\car_on@2x.png");
+        Bitmap carImgOff = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\car_off@2x.png");
         private void pictureBoxTargetCar_Click(object sender, EventArgs e)
         {
             if (searchCar)
             {
                 searchCar = false;
-                pictureBoxTargetCar.BackColor = Color.Gray;
+                pictureBoxTargetCar.Image = carImgOff;
             }
             else
             {
                 searchCar = true;
-                pictureBoxTargetCar.BackColor = Color.FromArgb(105, 180, 203);
+                pictureBoxTargetCar.Image = carImgOn;
             }
         } // 1 = car
         //------------------------------Direction Btn Click EVENT------------------------------
@@ -773,6 +780,25 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.overlayLive);
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
+        }
+
+        //%%%%%%%%%%%%%%%%%%
+        Bitmap fileImgMouseOver = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\file_mouseover@2x.png");
+        private void pictureBoxHead_MouseHover(object sender, EventArgs e)
+        {
+            pictureBoxHead.Image = fileImgMouseOver;
+            buttonReadFile.BackColor = Color.FromArgb(47, 125, 143);
+        }
+        Bitmap fileImgMouseLeave = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\file@2x.png");
+        private void pictureBoxHead_MouseLeave(object sender, EventArgs e)
+        {
+            pictureBoxHead.Image = fileImgMouseLeave;
+            buttonReadFile.BackColor = Color.FromArgb(76, 150, 173);
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }

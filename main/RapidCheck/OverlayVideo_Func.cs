@@ -316,9 +316,17 @@ namespace RapidCheck
 
                             if (ObjList[idxbyObjid[objid]].cropImages.Count == 1)
                             {
-                                int gridHeight = 190;
+                                //int gridHeight = 190;
                                 int headlineHeight = 30;
-                                Bitmap gridImg = new Bitmap(bit, new Size(bit.Width * gridHeight / bit.Height, gridHeight)); // crop img
+                                Bitmap gridImg= null;
+                                if (trackingTableClassid[objid] == 0)
+                                {
+                                    gridImg = (Bitmap)backgroundCar.Clone();
+                                }
+                                else
+                                {
+                                    gridImg = (Bitmap)backgroundPeople.Clone();
+                                }
                                 Bitmap headlineBox = new Bitmap(gridImg.Width, headlineHeight); // obj info
                                 
                                 //SET HEADLINEBOX COLOR WHITE
@@ -335,18 +343,36 @@ namespace RapidCheck
 
                                 //alpha
                                 ColorMatrix matrix = new ColorMatrix();
-                                matrix.Matrix33 = 0.5f; //0.7~0.75
+                                matrix.Matrix33 = 0.7f; //0.7~0.75
                                 ImageAttributes att = new ImageAttributes();
                                 att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
 
                                 Graphics g = Graphics.FromImage(gridImg);
                                 //System.Drawing.SolidBrush bgcolor = new System.Drawing.SolidBrush(System.Drawing.Color.White);
                                 //g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+
+                                double ratio = 1.0;
+                                if (bit.Width * gridImg.Height < gridImg.Width * bit.Height)
+                                {
+                                    ratio = (double)gridImg.Height / bit.Height;
+
+                                }
+                                else
+                                {
+                                    ratio = (double)gridImg.Width / bit.Width;
+                                }
+
+                                int width = (int)(bit.Width * ratio);
+                                int height = (int)(bit.Height * ratio);
+                                Rectangle rect = new Rectangle((gridImg.Width - width)/2, (gridImg.Height- height)/2, width, height);
+                                g.DrawImage(bit, rect);
+                                
                                 g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
                                 g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("SpoqaHanSans", 14, FontStyle.Bold), Brushes.Black, rectf);
 
                                 if (trackingTableClassid[objid] == 0) // class id = 0 => people
                                 {
+
                                     dataGridView1.Rows.Add(gridImg);
                                     dataGridView1.Rows[dataGridView1.RowCount - 1].Height = gridImg.Height;
                                     gridViewList1.Add(objid);

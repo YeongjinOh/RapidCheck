@@ -79,6 +79,8 @@ namespace RapidCheck
         System.Drawing.SolidBrush drawBrush;
         //background
         Bitmap background;
+        Bitmap backgroundCar;
+        Bitmap backgroundPeople;
         
         //UI
         PictureBox pictureBoxVideo;
@@ -97,6 +99,8 @@ namespace RapidCheck
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
             drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+            backgroundPeople = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\human@1x.png");
+            backgroundCar = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\Car@1x.png");
             //UI
             this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
