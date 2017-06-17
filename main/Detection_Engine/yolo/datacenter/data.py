@@ -7,9 +7,33 @@ import numpy as np
 import os
 import yolo.config as cfg
 
-def _video_walk(datacenter_root_path):
-	for folder, subfolders, files in os.walk(datacenter_root_path):
-		print(folder)
+def _make_datacetner_folder(new_folder_path):
+	os.mkdir(new_folder_path)
+	os.mkdir(os.path.join(new_folder_path, "annotations"))
+	os.mkdir(os.path.join(new_folder_path, "images"))
+	return new_folder_path
+
+def _video_walk():
+	from shutil import copyfile
+	
+	i = 0
+	if not os.path.exists(cfg.dataset_enduser_root):
+		# 없으면 enduser_root 를 만든다
+		_make_datacetner_folder(cfg.dataset_enduser_root)
+
+	for folder, subfolders, files in os.walk(cfg.datacenter_root):
+		folder_name = folder.split(os.sep)[-1]
+		if 'video_' in folder_name:
+			hash_id = folder_name.split('_')[1] # get video hash_id for duplicate check
+			print(hash_id)
+			each_anno_folder = os.path.join(folder, 'annotations')
+			each_image_folder = os.path.join(folder, 'images')
+
+			anno_files = [f for f in os.listdir(each_anno_folder) if f.split('.')[-1] == 'xml' or f.split('.')[-1] == 'png']
+			for anno_file in anno_files:
+				copyfile(os.path.join(src_anno_path, anno_file), os.path.join(trainval_folder_path, 'annotations', anno_file))
+				copyfile(os.path.join(src_images_path, anno_file.split('.')[0]+'.png'), os.path.join(trainval_folder_path, 'images', anno_file.split('.')[0]+'.png'))
+		i += 1
 
 def parse(exclusive = False):
 	"""
