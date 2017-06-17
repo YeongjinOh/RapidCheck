@@ -479,39 +479,43 @@ namespace RapidCheck
             {
                 directionPosition = 1;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection2_Click(object sender, EventArgs e)
         {
             if (directionPosition == 2)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 2;
+                directionPosition = 2;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection3_Click(object sender, EventArgs e)
         {
             if (directionPosition == 3)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 3;
+                directionPosition = 3;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection4_Click(object sender, EventArgs e)
         {
             if (directionPosition == 4)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 4;
+                directionPosition = 4;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection5_Click(object sender, EventArgs e)
         {
@@ -521,7 +525,7 @@ namespace RapidCheck
             }
             else
             {
-                colorPosition = 5;
+                directionPosition = 5;
             }
         } //검색 설정 초기화
         private void pictureBoxDirection6_Click(object sender, EventArgs e)
@@ -532,41 +536,45 @@ namespace RapidCheck
             }
             else
             {
-                colorPosition = 6;
+                directionPosition = 6;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection7_Click(object sender, EventArgs e)
         {
             if (directionPosition == 7)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 7;
+                directionPosition = 7;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection8_Click(object sender, EventArgs e)
         {
             if (directionPosition == 8)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 8;
+                directionPosition = 8;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection9_Click(object sender, EventArgs e)
         {
             if (directionPosition == 9)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 9;
+                directionPosition = 9;
             }
+            setTogleDirectionBtn();
         }
         //------------------------------Color Btn Click EVENT------------------------------
         private void buttonColor0_Click(object sender, EventArgs e)
@@ -720,6 +728,48 @@ namespace RapidCheck
             }
         }
         //------------------------------Search Function------------------------------
+        Bitmap direct1on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\1_on.png");
+        Bitmap direct2on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\2_on.png");
+        Bitmap direct3on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\3_on.png");
+        Bitmap direct4on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\4_on.png");
+        //Bitmap direct5on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset_\5on.png");
+        Bitmap direct6on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\6_on.png");
+        Bitmap direct7on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\7_on.png");
+        Bitmap direct8on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\8_on.png");
+        Bitmap direct9on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\9_on.png");
+        Bitmap direct1off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\1_off.png");
+        Bitmap direct2off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\2_off.png");
+        Bitmap direct3off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\3_off.png");
+        Bitmap direct4off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\4_off.png");
+        //Bitmap direct5off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset_\5off.png");
+        Bitmap direct6off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\6_off.png");
+        Bitmap direct7off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\7_off.png");
+        Bitmap direct8off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\8_off.png");
+        Bitmap direct9off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\9_off.png");
+        private void setTogleDirectionBtn()
+        {
+            pictureBoxDirection1.Image = direct1off;
+            pictureBoxDirection2.Image = direct2off;
+            pictureBoxDirection3.Image = direct3off;
+            pictureBoxDirection4.Image = direct4off;
+            //pictureBoxDirection5.Image = direct5off;
+            pictureBoxDirection6.Image = direct6off;
+            pictureBoxDirection7.Image = direct7off;
+            pictureBoxDirection8.Image = direct8off;
+            pictureBoxDirection9.Image = direct9off;
+            switch (directionPosition)
+            {
+                case 1: pictureBoxDirection1.Image = direct1on; break;
+                case 2: pictureBoxDirection2.Image = direct2on; break;
+                case 3: pictureBoxDirection3.Image = direct3on; break;
+                case 4: pictureBoxDirection4.Image = direct4on; break;
+                //case 5: pictureBoxDirection5.Image = direct5on; break;
+                case 6: pictureBoxDirection6.Image = direct6on; break;
+                case 7: pictureBoxDirection7.Image = direct7on; break;
+                case 8: pictureBoxDirection8.Image = direct8on; break;
+                case 9: pictureBoxDirection9.Image = direct9on; break;
+            }
+        }
         private void replay()
         {
             startBtn.Text = "Start";
