@@ -32,14 +32,14 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.panel4 = new System.Windows.Forms.Panel();
+            this.panelObject = new System.Windows.Forms.Panel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.panelLog = new System.Windows.Forms.Panel();
             this.panelVideo = new System.Windows.Forms.Panel();
-            this.panel5 = new System.Windows.Forms.Panel();
+            this.panelVideoControl = new System.Windows.Forms.Panel();
             this.radioButtonX4 = new System.Windows.Forms.RadioButton();
             this.radioButtonX1 = new System.Windows.Forms.RadioButton();
             this.radioButtonX2 = new System.Windows.Forms.RadioButton();
@@ -49,10 +49,10 @@
             this.labelProgress = new System.Windows.Forms.Label();
             this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
             this.panelCondition = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
+            this.panelConditionModule = new System.Windows.Forms.Panel();
             this.panelDirection = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
+            this.panelDirectionTable = new System.Windows.Forms.Panel();
             this.pictureBoxDirection9 = new System.Windows.Forms.PictureBox();
             this.pictureBoxDirection6 = new System.Windows.Forms.PictureBox();
             this.pictureBoxDirection3 = new System.Windows.Forms.PictureBox();
@@ -68,11 +68,11 @@
             this.pictureBoxTargetPeople = new System.Windows.Forms.PictureBox();
             this.panelDensity = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.panelDensityTable = new System.Windows.Forms.Panel();
             this.materialLabelTrackingbar = new MaterialSkin.Controls.MaterialLabel();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
             this.panelColor = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
+            this.panelColorTable = new System.Windows.Forms.Panel();
             this.buttonColor9 = new System.Windows.Forms.Button();
             this.buttonColor7 = new System.Windows.Forms.Button();
             this.buttonColor5 = new System.Windows.Forms.Button();
@@ -101,18 +101,18 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
-            this.panel4.SuspendLayout();
+            this.panelObject.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.panelVideo.SuspendLayout();
-            this.panel5.SuspendLayout();
+            this.panelVideoControl.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
             this.panelCondition.SuspendLayout();
-            this.panel6.SuspendLayout();
+            this.panelConditionModule.SuspendLayout();
             this.panelDirection.SuspendLayout();
-            this.panel2.SuspendLayout();
+            this.panelDirectionTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection3)).BeginInit();
@@ -126,10 +126,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetCar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetPeople)).BeginInit();
             this.panelDensity.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.panelDensityTable.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
             this.panelColor.SuspendLayout();
-            this.panel3.SuspendLayout();
+            this.panelColorTable.SuspendLayout();
             this.panelFile.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.videoPanel.SuspendLayout();
@@ -160,7 +160,7 @@
             // tabPage2
             // 
             this.tabPage2.BackColor = System.Drawing.Color.White;
-            this.tabPage2.Controls.Add(this.panel4);
+            this.tabPage2.Controls.Add(this.panelObject);
             this.tabPage2.Controls.Add(this.panelVideo);
             this.tabPage2.Controls.Add(this.panelCondition);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
@@ -170,17 +170,17 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
-            // panel4
+            // panelObject
             // 
-            this.panel4.BackColor = System.Drawing.Color.White;
-            this.panel4.Controls.Add(this.dataGridView1);
-            this.panel4.Controls.Add(this.dataGridView2);
-            this.panel4.Controls.Add(this.panelLog);
-            this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel4.Location = new System.Drawing.Point(1340, 3);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(569, 982);
-            this.panel4.TabIndex = 4;
+            this.panelObject.BackColor = System.Drawing.Color.White;
+            this.panelObject.Controls.Add(this.dataGridView1);
+            this.panelObject.Controls.Add(this.dataGridView2);
+            this.panelObject.Controls.Add(this.panelLog);
+            this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelObject.Location = new System.Drawing.Point(1340, 3);
+            this.panelObject.Name = "panelObject";
+            this.panelObject.Size = new System.Drawing.Size(569, 982);
+            this.panelObject.TabIndex = 4;
             // 
             // dataGridView1
             // 
@@ -245,7 +245,7 @@
             // panelVideo
             // 
             this.panelVideo.BackColor = System.Drawing.Color.White;
-            this.panelVideo.Controls.Add(this.panel5);
+            this.panelVideo.Controls.Add(this.panelVideoControl);
             this.panelVideo.Controls.Add(this.panelVideoPart);
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelVideo.Location = new System.Drawing.Point(195, 3);
@@ -253,18 +253,18 @@
             this.panelVideo.Size = new System.Drawing.Size(1145, 982);
             this.panelVideo.TabIndex = 0;
             // 
-            // panel5
+            // panelVideoControl
             // 
-            this.panel5.BackColor = System.Drawing.Color.White;
-            this.panel5.Controls.Add(this.radioButtonX4);
-            this.panel5.Controls.Add(this.radioButtonX1);
-            this.panel5.Controls.Add(this.radioButtonX2);
-            this.panel5.Controls.Add(this.startBtn);
-            this.panel5.Controls.Add(this.trackBar1);
-            this.panel5.Location = new System.Drawing.Point(6, 887);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1133, 92);
-            this.panel5.TabIndex = 4;
+            this.panelVideoControl.BackColor = System.Drawing.Color.White;
+            this.panelVideoControl.Controls.Add(this.radioButtonX4);
+            this.panelVideoControl.Controls.Add(this.radioButtonX1);
+            this.panelVideoControl.Controls.Add(this.radioButtonX2);
+            this.panelVideoControl.Controls.Add(this.startBtn);
+            this.panelVideoControl.Controls.Add(this.trackBar1);
+            this.panelVideoControl.Location = new System.Drawing.Point(6, 887);
+            this.panelVideoControl.Name = "panelVideoControl";
+            this.panelVideoControl.Size = new System.Drawing.Size(1133, 92);
+            this.panelVideoControl.TabIndex = 4;
             // 
             // radioButtonX4
             // 
@@ -367,31 +367,31 @@
             // panelCondition
             // 
             this.panelCondition.BackColor = System.Drawing.Color.White;
-            this.panelCondition.Controls.Add(this.panel6);
+            this.panelCondition.Controls.Add(this.panelConditionModule);
             this.panelCondition.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelCondition.Location = new System.Drawing.Point(3, 3);
             this.panelCondition.Name = "panelCondition";
             this.panelCondition.Size = new System.Drawing.Size(192, 982);
             this.panelCondition.TabIndex = 3;
             // 
-            // panel6
+            // panelConditionModule
             // 
-            this.panel6.BackColor = System.Drawing.Color.FloralWhite;
-            this.panel6.Controls.Add(this.panelDirection);
-            this.panel6.Controls.Add(this.panelTarget);
-            this.panel6.Controls.Add(this.panelDensity);
-            this.panel6.Controls.Add(this.panelColor);
-            this.panel6.Controls.Add(this.panelFile);
-            this.panel6.Location = new System.Drawing.Point(5, 3);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(181, 976);
-            this.panel6.TabIndex = 0;
+            this.panelConditionModule.BackColor = System.Drawing.Color.FloralWhite;
+            this.panelConditionModule.Controls.Add(this.panelDirection);
+            this.panelConditionModule.Controls.Add(this.panelTarget);
+            this.panelConditionModule.Controls.Add(this.panelDensity);
+            this.panelConditionModule.Controls.Add(this.panelColor);
+            this.panelConditionModule.Controls.Add(this.panelFile);
+            this.panelConditionModule.Location = new System.Drawing.Point(5, 3);
+            this.panelConditionModule.Name = "panelConditionModule";
+            this.panelConditionModule.Size = new System.Drawing.Size(181, 976);
+            this.panelConditionModule.TabIndex = 0;
             // 
             // panelDirection
             // 
             this.panelDirection.BackColor = System.Drawing.Color.Sienna;
             this.panelDirection.Controls.Add(this.label3);
-            this.panelDirection.Controls.Add(this.panel2);
+            this.panelDirection.Controls.Add(this.panelDirectionTable);
             this.panelDirection.Location = new System.Drawing.Point(7, 332);
             this.panelDirection.Name = "panelDirection";
             this.panelDirection.Size = new System.Drawing.Size(168, 211);
@@ -407,22 +407,22 @@
             this.label3.TabIndex = 2;
             this.label3.Text = "방향";
             // 
-            // panel2
+            // panelDirectionTable
             // 
-            this.panel2.BackColor = System.Drawing.Color.IndianRed;
-            this.panel2.Controls.Add(this.pictureBoxDirection9);
-            this.panel2.Controls.Add(this.pictureBoxDirection6);
-            this.panel2.Controls.Add(this.pictureBoxDirection3);
-            this.panel2.Controls.Add(this.pictureBoxDirection8);
-            this.panel2.Controls.Add(this.pictureBoxDirection5);
-            this.panel2.Controls.Add(this.pictureBoxDirection2);
-            this.panel2.Controls.Add(this.pictureBoxDirection7);
-            this.panel2.Controls.Add(this.pictureBoxDirection4);
-            this.panel2.Controls.Add(this.pictureBoxDirection1);
-            this.panel2.Location = new System.Drawing.Point(3, 36);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(162, 171);
-            this.panel2.TabIndex = 2;
+            this.panelDirectionTable.BackColor = System.Drawing.Color.IndianRed;
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection9);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection6);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection3);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection8);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection5);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection2);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection7);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection4);
+            this.panelDirectionTable.Controls.Add(this.pictureBoxDirection1);
+            this.panelDirectionTable.Location = new System.Drawing.Point(3, 36);
+            this.panelDirectionTable.Name = "panelDirectionTable";
+            this.panelDirectionTable.Size = new System.Drawing.Size(162, 171);
+            this.panelDirectionTable.TabIndex = 2;
             // 
             // pictureBoxDirection9
             // 
@@ -555,7 +555,7 @@
             // 
             // pictureBoxTargetCar
             // 
-            this.pictureBoxTargetCar.BackColor = System.Drawing.Color.Snow;
+            this.pictureBoxTargetCar.BackColor = System.Drawing.Color.White;
             this.pictureBoxTargetCar.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxTargetCar.Image")));
             this.pictureBoxTargetCar.Location = new System.Drawing.Point(90, 37);
             this.pictureBoxTargetCar.Name = "pictureBoxTargetCar";
@@ -567,7 +567,7 @@
             // 
             // pictureBoxTargetPeople
             // 
-            this.pictureBoxTargetPeople.BackColor = System.Drawing.Color.Snow;
+            this.pictureBoxTargetPeople.BackColor = System.Drawing.Color.White;
             this.pictureBoxTargetPeople.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxTargetPeople.Image")));
             this.pictureBoxTargetPeople.Location = new System.Drawing.Point(3, 37);
             this.pictureBoxTargetPeople.Name = "pictureBoxTargetPeople";
@@ -581,7 +581,7 @@
             // 
             this.panelDensity.BackColor = System.Drawing.Color.Salmon;
             this.panelDensity.Controls.Add(this.label2);
-            this.panelDensity.Controls.Add(this.panel1);
+            this.panelDensity.Controls.Add(this.panelDensityTable);
             this.panelDensity.Location = new System.Drawing.Point(7, 199);
             this.panelDensity.Name = "panelDensity";
             this.panelDensity.Size = new System.Drawing.Size(168, 127);
@@ -597,15 +597,15 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "밀도";
             // 
-            // panel1
+            // panelDensityTable
             // 
-            this.panel1.BackColor = System.Drawing.Color.RosyBrown;
-            this.panel1.Controls.Add(this.materialLabelTrackingbar);
-            this.panel1.Controls.Add(this.trackBar2);
-            this.panel1.Location = new System.Drawing.Point(3, 34);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(162, 86);
-            this.panel1.TabIndex = 2;
+            this.panelDensityTable.BackColor = System.Drawing.Color.RosyBrown;
+            this.panelDensityTable.Controls.Add(this.materialLabelTrackingbar);
+            this.panelDensityTable.Controls.Add(this.trackBar2);
+            this.panelDensityTable.Location = new System.Drawing.Point(3, 34);
+            this.panelDensityTable.Name = "panelDensityTable";
+            this.panelDensityTable.Size = new System.Drawing.Size(162, 86);
+            this.panelDensityTable.TabIndex = 2;
             // 
             // materialLabelTrackingbar
             // 
@@ -631,30 +631,30 @@
             // panelColor
             // 
             this.panelColor.BackColor = System.Drawing.Color.NavajoWhite;
-            this.panelColor.Controls.Add(this.panel3);
+            this.panelColor.Controls.Add(this.panelColorTable);
             this.panelColor.Controls.Add(this.label4);
             this.panelColor.Location = new System.Drawing.Point(7, 551);
             this.panelColor.Name = "panelColor";
             this.panelColor.Size = new System.Drawing.Size(168, 299);
             this.panelColor.TabIndex = 23;
             // 
-            // panel3
+            // panelColorTable
             // 
-            this.panel3.BackColor = System.Drawing.Color.Ivory;
-            this.panel3.Controls.Add(this.buttonColor9);
-            this.panel3.Controls.Add(this.buttonColor7);
-            this.panel3.Controls.Add(this.buttonColor5);
-            this.panel3.Controls.Add(this.buttonColor3);
-            this.panel3.Controls.Add(this.buttonColor8);
-            this.panel3.Controls.Add(this.buttonColor6);
-            this.panel3.Controls.Add(this.buttonColor4);
-            this.panel3.Controls.Add(this.buttonColor1);
-            this.panel3.Controls.Add(this.buttonColor2);
-            this.panel3.Controls.Add(this.buttonColor0);
-            this.panel3.Location = new System.Drawing.Point(3, 37);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(162, 258);
-            this.panel3.TabIndex = 3;
+            this.panelColorTable.BackColor = System.Drawing.Color.Ivory;
+            this.panelColorTable.Controls.Add(this.buttonColor9);
+            this.panelColorTable.Controls.Add(this.buttonColor7);
+            this.panelColorTable.Controls.Add(this.buttonColor5);
+            this.panelColorTable.Controls.Add(this.buttonColor3);
+            this.panelColorTable.Controls.Add(this.buttonColor8);
+            this.panelColorTable.Controls.Add(this.buttonColor6);
+            this.panelColorTable.Controls.Add(this.buttonColor4);
+            this.panelColorTable.Controls.Add(this.buttonColor1);
+            this.panelColorTable.Controls.Add(this.buttonColor2);
+            this.panelColorTable.Controls.Add(this.buttonColor0);
+            this.panelColorTable.Location = new System.Drawing.Point(3, 37);
+            this.panelColorTable.Name = "panelColorTable";
+            this.panelColorTable.Size = new System.Drawing.Size(162, 258);
+            this.panelColorTable.TabIndex = 3;
             // 
             // buttonColor9
             // 
@@ -942,21 +942,21 @@
             this.Load += new System.EventHandler(this.Form1_Load);
             this.materialTabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
-            this.panel4.ResumeLayout(false);
+            this.panelObject.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.panelVideo.ResumeLayout(false);
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
+            this.panelVideoControl.ResumeLayout(false);
+            this.panelVideoControl.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panelVideoPart.ResumeLayout(false);
             this.panelVideoPart.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
             this.panelCondition.ResumeLayout(false);
-            this.panel6.ResumeLayout(false);
+            this.panelConditionModule.ResumeLayout(false);
             this.panelDirection.ResumeLayout(false);
             this.panelDirection.PerformLayout();
-            this.panel2.ResumeLayout(false);
+            this.panelDirectionTable.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection3)).EndInit();
@@ -972,12 +972,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetPeople)).EndInit();
             this.panelDensity.ResumeLayout(false);
             this.panelDensity.PerformLayout();
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.panelDensityTable.ResumeLayout(false);
+            this.panelDensityTable.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
             this.panelColor.ResumeLayout(false);
             this.panelColor.PerformLayout();
-            this.panel3.ResumeLayout(false);
+            this.panelColorTable.ResumeLayout(false);
             this.panelFile.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.videoPanel.ResumeLayout(false);
@@ -1031,8 +1031,8 @@
         private System.Windows.Forms.PictureBox pictureBoxTargetPeople;
         private System.Windows.Forms.TrackBar trackBar2;
         private MaterialSkin.Controls.MaterialLabel materialLabelTrackingbar;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panelDensityTable;
+        private System.Windows.Forms.Panel panelDirectionTable;
         private System.Windows.Forms.PictureBox pictureBoxDirection1;
         private System.Windows.Forms.PictureBox pictureBoxDirection9;
         private System.Windows.Forms.PictureBox pictureBoxDirection6;
@@ -1042,14 +1042,14 @@
         private System.Windows.Forms.PictureBox pictureBoxDirection2;
         private System.Windows.Forms.PictureBox pictureBoxDirection7;
         private System.Windows.Forms.PictureBox pictureBoxDirection4;
-        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panelColorTable;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Panel panel4;
-        private System.Windows.Forms.Panel panel5;
-        private System.Windows.Forms.Panel panel6;
+        private System.Windows.Forms.Panel panelObject;
+        private System.Windows.Forms.Panel panelVideoControl;
+        private System.Windows.Forms.Panel panelConditionModule;
         private System.Windows.Forms.Label labelProgress;
         private System.Windows.Forms.Button buttonColor0;
         private System.Windows.Forms.Button buttonColor1;

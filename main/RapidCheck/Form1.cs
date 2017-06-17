@@ -54,12 +54,13 @@ namespace RapidCheck
         {
             Cef.Initialize(new CefSettings()); // chrome initialize
             setUI(); //ui enable false
+            defaultColor();
         }
         //------------------------------Overlay Module------------------------------
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 10000;
+            int maxFrameNum = 1000;
             int analysisFPS = 5; //default
             int minTrackingLength = 21;
             int clusterNum = 10;
@@ -117,6 +118,35 @@ namespace RapidCheck
             return hour + ":" + min;
         }
         //------------------------------UI SETTING------------------------------
+        private void defaultColor()
+        {
+            Color background = Color.FromArgb(35, 144, 182);
+            panelVideo.BackColor = background;
+            panelCondition.BackColor = background;
+            panelObject.BackColor = background;
+
+            Color module = Color.FromArgb(171, 219, 248);
+            panelConditionModule.BackColor = module;
+            panelVideoControl.BackColor = module;
+            trackBar1.BackColor = module;
+            panelLog.BackColor = module;
+            dataGridView1.BackgroundColor = module;
+            dataGridView2.BackgroundColor = module;
+
+            Color conditionModule = Color.FromArgb(64, 127, 149);
+            panelColor.BackColor = conditionModule;
+            panelDensity.BackColor = conditionModule;
+            panelDirection.BackColor = conditionModule;
+            panelFile.BackColor = conditionModule;
+            panelTarget.BackColor = conditionModule;
+
+            Color conditionModuleTable = Color.FromArgb(105, 180, 203);
+            panelDensityTable.BackColor = conditionModuleTable;
+            panelDirectionTable.BackColor = conditionModuleTable;
+            panelColorTable.BackColor = conditionModuleTable;
+            pictureBoxTargetCar.BackColor = conditionModuleTable;
+            pictureBoxTargetPeople.BackColor = conditionModuleTable;
+        }
         private void setUI() //default UI setting
         {
             //set tabkpage
@@ -212,17 +242,30 @@ namespace RapidCheck
             //{
             //    overlayModule.Abort();
             //}
-            videoFilePath = new OpenFileDialog();
-            videoFilePath.Filter = "All Files (*.*)|*.*";
-            videoFilePath.FilterIndex = 1;
-            videoFilePath.Multiselect = true;
-            videoFilePath.InitialDirectory = @"C:\videos";
-            if (videoFilePath.ShowDialog() == DialogResult.OK)
+            if(buttonReadFile.Text == "파일")
             {
-                videoPath = videoFilePath.FileName;
-                startOverlayModule();
-                labelProgress.Text = "Loading...";
+                videoFilePath = new OpenFileDialog();
+                videoFilePath.Filter = "All Files (*.*)|*.*";
+                videoFilePath.FilterIndex = 1;
+                videoFilePath.Multiselect = true;
+                videoFilePath.InitialDirectory = @"C:\videos";
+                if (videoFilePath.ShowDialog() == DialogResult.OK)
+                {
+                    videoPath = videoFilePath.FileName;
+                    startOverlayModule();
+                    labelProgress.Text = "Loading...";
+
+                    //read video file -> search로 변경
+                    buttonReadFile.Text = "검색";
+                }
             }
+            else if(buttonReadFile.Text == "검색")
+            {
+                //------------------------------검색조건으로 바꾸장 바꿔------------------------------
+            }
+            
+
+            
         }
         //------------------------------Video controler------------------------------
         private void trackBar1_MouseDown(object sender, MouseEventArgs e)
@@ -327,7 +370,18 @@ namespace RapidCheck
         private void radioButtonX2_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 2; }
         private void radioButtonX4_CheckedChanged(object sender, EventArgs e) { rapidCheck.speed = 4; }
         //------------------------------Object type Click EVENT------------------------------
-        private void pictureBoxTargetPeople_Click(object sender, EventArgs e) { rapidCheck.objType = 0; } // 0 = people
+        private void pictureBoxTargetPeople_Click(object sender, EventArgs e) 
+        {
+            if (pictureBoxTargetPeople.BackColor == Color.White) //click on
+            {
+                pictureBoxTargetPeople.BackColor = Color.Gray;
+            }
+            else //click off
+            {
+                pictureBoxTargetPeople.BackColor = Color.White;
+            }
+            //rapidCheck.objType = 0; 
+        } // 0 = people
         private void pictureBoxTargetCar_Click(object sender, EventArgs e) { rapidCheck.objType = 1; } // 1 = car
         //------------------------------Direction Btn Click EVENT------------------------------
         private void pictureBoxDirection1_Click(object sender, EventArgs e) { }
@@ -353,7 +407,7 @@ namespace RapidCheck
         //------------------------------Search Function------------------------------
         private void replay(string condition)
         {
-            rapidCheck.condition = condition;
+            //rapidCheck.condition = condition;
             overlayModule.Abort();
             Thread.Sleep(1);
             myRapidModule.Clear();
