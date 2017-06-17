@@ -39,40 +39,53 @@
             this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.panelLog = new System.Windows.Forms.Panel();
             this.panelVideo = new System.Windows.Forms.Panel();
-            this.startBtn = new MaterialSkin.Controls.MaterialFlatButton();
+            this.panel5 = new System.Windows.Forms.Panel();
             this.radioButtonX4 = new System.Windows.Forms.RadioButton();
-            this.radioButtonX2 = new System.Windows.Forms.RadioButton();
             this.radioButtonX1 = new System.Windows.Forms.RadioButton();
-            this.panelVideoPart = new System.Windows.Forms.Panel();
-            this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
+            this.radioButtonX2 = new System.Windows.Forms.RadioButton();
+            this.startBtn = new MaterialSkin.Controls.MaterialFlatButton();
             this.trackBar1 = new System.Windows.Forms.TrackBar();
+            this.panelVideoPart = new System.Windows.Forms.Panel();
+            this.labelProgress = new System.Windows.Forms.Label();
+            this.pictureBoxVideo = new System.Windows.Forms.PictureBox();
             this.panelCondition = new System.Windows.Forms.Panel();
-            this.panelColor = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.label4 = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
             this.panelDirection = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.pictureBox11 = new System.Windows.Forms.PictureBox();
-            this.pictureBox8 = new System.Windows.Forms.PictureBox();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox10 = new System.Windows.Forms.PictureBox();
-            this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
-            this.pictureBox9 = new System.Windows.Forms.PictureBox();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection9 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection6 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection3 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection8 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection5 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection7 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection4 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxDirection1 = new System.Windows.Forms.PictureBox();
+            this.panelTarget = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.pictureBoxTargetCar = new System.Windows.Forms.PictureBox();
+            this.pictureBoxTargetPeople = new System.Windows.Forms.PictureBox();
             this.panelDensity = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.materialLabelTrackingbar = new MaterialSkin.Controls.MaterialLabel();
             this.trackBar2 = new System.Windows.Forms.TrackBar();
-            this.panelTarget = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBoxCar = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.panelColor = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.buttonColor9 = new System.Windows.Forms.Button();
+            this.buttonColor7 = new System.Windows.Forms.Button();
+            this.buttonColor5 = new System.Windows.Forms.Button();
+            this.buttonColor3 = new System.Windows.Forms.Button();
+            this.buttonColor8 = new System.Windows.Forms.Button();
+            this.buttonColor6 = new System.Windows.Forms.Button();
+            this.buttonColor4 = new System.Windows.Forms.Button();
+            this.buttonColor1 = new System.Windows.Forms.Button();
+            this.buttonColor2 = new System.Windows.Forms.Button();
+            this.buttonColor0 = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             this.panelFile = new System.Windows.Forms.Panel();
-            this.VideoBtn = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.buttonReadFile = new System.Windows.Forms.Button();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
@@ -86,37 +99,37 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.labelProgress = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.panelVideo.SuspendLayout();
+            this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panelVideoPart.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panelCondition.SuspendLayout();
-            this.panelColor.SuspendLayout();
+            this.panel6.SuspendLayout();
             this.panelDirection.SuspendLayout();
             this.panel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection1)).BeginInit();
+            this.panelTarget.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetCar)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetPeople)).BeginInit();
             this.panelDensity.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
-            this.panelTarget.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCar)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.panelColor.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.panelFile.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.videoPanel.SuspendLayout();
@@ -125,8 +138,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
-            this.panel5.SuspendLayout();
-            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -230,7 +241,6 @@
             this.panelLog.Name = "panelLog";
             this.panelLog.Size = new System.Drawing.Size(560, 92);
             this.panelLog.TabIndex = 1;
-            this.panelLog.Paint += new System.Windows.Forms.PaintEventHandler(this.panelLog_Paint);
             // 
             // panelVideo
             // 
@@ -242,7 +252,55 @@
             this.panelVideo.Name = "panelVideo";
             this.panelVideo.Size = new System.Drawing.Size(1145, 982);
             this.panelVideo.TabIndex = 0;
-            this.panelVideo.Paint += new System.Windows.Forms.PaintEventHandler(this.panelVideo_Paint);
+            // 
+            // panel5
+            // 
+            this.panel5.BackColor = System.Drawing.Color.White;
+            this.panel5.Controls.Add(this.radioButtonX4);
+            this.panel5.Controls.Add(this.radioButtonX1);
+            this.panel5.Controls.Add(this.radioButtonX2);
+            this.panel5.Controls.Add(this.startBtn);
+            this.panel5.Controls.Add(this.trackBar1);
+            this.panel5.Location = new System.Drawing.Point(6, 887);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(1133, 92);
+            this.panel5.TabIndex = 4;
+            // 
+            // radioButtonX4
+            // 
+            this.radioButtonX4.AutoSize = true;
+            this.radioButtonX4.Location = new System.Drawing.Point(1052, 48);
+            this.radioButtonX4.Name = "radioButtonX4";
+            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX4.TabIndex = 5;
+            this.radioButtonX4.TabStop = true;
+            this.radioButtonX4.Text = "x4";
+            this.radioButtonX4.UseVisualStyleBackColor = true;
+            this.radioButtonX4.CheckedChanged += new System.EventHandler(this.radioButtonX4_CheckedChanged);
+            // 
+            // radioButtonX1
+            // 
+            this.radioButtonX1.AutoSize = true;
+            this.radioButtonX1.Location = new System.Drawing.Point(954, 48);
+            this.radioButtonX1.Name = "radioButtonX1";
+            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX1.TabIndex = 5;
+            this.radioButtonX1.TabStop = true;
+            this.radioButtonX1.Text = "x1";
+            this.radioButtonX1.UseVisualStyleBackColor = true;
+            this.radioButtonX1.CheckedChanged += new System.EventHandler(this.radioButtonX1_CheckedChanged);
+            // 
+            // radioButtonX2
+            // 
+            this.radioButtonX2.AutoSize = true;
+            this.radioButtonX2.Location = new System.Drawing.Point(1003, 48);
+            this.radioButtonX2.Name = "radioButtonX2";
+            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
+            this.radioButtonX2.TabIndex = 5;
+            this.radioButtonX2.TabStop = true;
+            this.radioButtonX2.Text = "x2";
+            this.radioButtonX2.UseVisualStyleBackColor = true;
+            this.radioButtonX2.CheckedChanged += new System.EventHandler(this.radioButtonX2_CheckedChanged);
             // 
             // startBtn
             // 
@@ -260,41 +318,17 @@
             this.startBtn.UseVisualStyleBackColor = true;
             this.startBtn.Click += new System.EventHandler(this.startBtn_Click);
             // 
-            // radioButtonX4
+            // trackBar1
             // 
-            this.radioButtonX4.AutoSize = true;
-            this.radioButtonX4.Location = new System.Drawing.Point(1052, 48);
-            this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
-            this.radioButtonX4.TabIndex = 5;
-            this.radioButtonX4.TabStop = true;
-            this.radioButtonX4.Text = "x4";
-            this.radioButtonX4.UseVisualStyleBackColor = true;
-            this.radioButtonX4.CheckedChanged += new System.EventHandler(this.radioButtonX4_CheckedChanged);
-            // 
-            // radioButtonX2
-            // 
-            this.radioButtonX2.AutoSize = true;
-            this.radioButtonX2.Location = new System.Drawing.Point(1003, 48);
-            this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
-            this.radioButtonX2.TabIndex = 5;
-            this.radioButtonX2.TabStop = true;
-            this.radioButtonX2.Text = "x2";
-            this.radioButtonX2.UseVisualStyleBackColor = true;
-            this.radioButtonX2.CheckedChanged += new System.EventHandler(this.radioButtonX2_CheckedChanged);
-            // 
-            // radioButtonX1
-            // 
-            this.radioButtonX1.AutoSize = true;
-            this.radioButtonX1.Location = new System.Drawing.Point(954, 48);
-            this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
-            this.radioButtonX1.TabIndex = 5;
-            this.radioButtonX1.TabStop = true;
-            this.radioButtonX1.Text = "x1";
-            this.radioButtonX1.UseVisualStyleBackColor = true;
-            this.radioButtonX1.CheckedChanged += new System.EventHandler(this.radioButtonX1_CheckedChanged);
+            this.trackBar1.BackColor = System.Drawing.Color.White;
+            this.trackBar1.Enabled = false;
+            this.trackBar1.Location = new System.Drawing.Point(38, 20);
+            this.trackBar1.Name = "trackBar1";
+            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
+            this.trackBar1.TabIndex = 2;
+            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
+            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
+            this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseDown);
             // 
             // panelVideoPart
             // 
@@ -306,6 +340,17 @@
             this.panelVideoPart.Name = "panelVideoPart";
             this.panelVideoPart.Size = new System.Drawing.Size(1133, 874);
             this.panelVideoPart.TabIndex = 3;
+            // 
+            // labelProgress
+            // 
+            this.labelProgress.AutoSize = true;
+            this.labelProgress.BackColor = System.Drawing.Color.DimGray;
+            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.labelProgress.ForeColor = System.Drawing.Color.Black;
+            this.labelProgress.Location = new System.Drawing.Point(470, 562);
+            this.labelProgress.Name = "labelProgress";
+            this.labelProgress.Size = new System.Drawing.Size(0, 25);
+            this.labelProgress.TabIndex = 2;
             // 
             // pictureBoxVideo
             // 
@@ -319,19 +364,6 @@
             this.pictureBoxVideo.TabStop = false;
             this.pictureBoxVideo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBoxVideo_MouseDown);
             // 
-            // trackBar1
-            // 
-            this.trackBar1.BackColor = System.Drawing.Color.White;
-            this.trackBar1.Enabled = false;
-            this.trackBar1.Location = new System.Drawing.Point(38, 20);
-            this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1069, 45);
-            this.trackBar1.TabIndex = 2;
-            this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
-            this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
-            this.trackBar1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseDown);
-            // 
             // panelCondition
             // 
             this.panelCondition.BackColor = System.Drawing.Color.White;
@@ -341,37 +373,19 @@
             this.panelCondition.Name = "panelCondition";
             this.panelCondition.Size = new System.Drawing.Size(192, 982);
             this.panelCondition.TabIndex = 3;
-            this.panelCondition.Paint += new System.Windows.Forms.PaintEventHandler(this.panelCondition_Paint);
             // 
-            // panelColor
+            // panel6
             // 
-            this.panelColor.BackColor = System.Drawing.Color.SandyBrown;
-            this.panelColor.Controls.Add(this.panel3);
-            this.panelColor.Controls.Add(this.label4);
-            this.panelColor.Location = new System.Drawing.Point(7, 551);
-            this.panelColor.Name = "panelColor";
-            this.panelColor.Size = new System.Drawing.Size(168, 299);
-            this.panelColor.TabIndex = 23;
-            this.panelColor.Paint += new System.Windows.Forms.PaintEventHandler(this.panelColor_Paint);
-            // 
-            // panel3
-            // 
-            this.panel3.BackColor = System.Drawing.Color.Salmon;
-            this.panel3.Location = new System.Drawing.Point(3, 36);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(162, 258);
-            this.panel3.TabIndex = 3;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(57, 2);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(51, 29);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "색상";
-            this.label4.Click += new System.EventHandler(this.label4_Click);
+            this.panel6.BackColor = System.Drawing.Color.FloralWhite;
+            this.panel6.Controls.Add(this.panelDirection);
+            this.panel6.Controls.Add(this.panelTarget);
+            this.panel6.Controls.Add(this.panelDensity);
+            this.panel6.Controls.Add(this.panelColor);
+            this.panel6.Controls.Add(this.panelFile);
+            this.panel6.Location = new System.Drawing.Point(5, 3);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(181, 976);
+            this.panel6.TabIndex = 0;
             // 
             // panelDirection
             // 
@@ -382,7 +396,6 @@
             this.panelDirection.Name = "panelDirection";
             this.panelDirection.Size = new System.Drawing.Size(168, 211);
             this.panelDirection.TabIndex = 22;
-            this.panelDirection.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDirection_Paint);
             // 
             // label3
             // 
@@ -393,133 +406,176 @@
             this.label3.Size = new System.Drawing.Size(51, 29);
             this.label3.TabIndex = 2;
             this.label3.Text = "방향";
-            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.Color.IndianRed;
-            this.panel2.Controls.Add(this.pictureBox11);
-            this.panel2.Controls.Add(this.pictureBox8);
-            this.panel2.Controls.Add(this.pictureBox5);
-            this.panel2.Controls.Add(this.pictureBox10);
-            this.panel2.Controls.Add(this.pictureBox7);
-            this.panel2.Controls.Add(this.pictureBox4);
-            this.panel2.Controls.Add(this.pictureBox9);
-            this.panel2.Controls.Add(this.pictureBox6);
-            this.panel2.Controls.Add(this.pictureBox3);
+            this.panel2.Controls.Add(this.pictureBoxDirection9);
+            this.panel2.Controls.Add(this.pictureBoxDirection6);
+            this.panel2.Controls.Add(this.pictureBoxDirection3);
+            this.panel2.Controls.Add(this.pictureBoxDirection8);
+            this.panel2.Controls.Add(this.pictureBoxDirection5);
+            this.panel2.Controls.Add(this.pictureBoxDirection2);
+            this.panel2.Controls.Add(this.pictureBoxDirection7);
+            this.panel2.Controls.Add(this.pictureBoxDirection4);
+            this.panel2.Controls.Add(this.pictureBoxDirection1);
             this.panel2.Location = new System.Drawing.Point(3, 36);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(162, 171);
             this.panel2.TabIndex = 2;
-            this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
-            // pictureBox11
+            // pictureBoxDirection9
             // 
-            this.pictureBox11.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox11.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox11.Image")));
-            this.pictureBox11.Location = new System.Drawing.Point(107, 112);
-            this.pictureBox11.Name = "pictureBox11";
-            this.pictureBox11.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox11.TabIndex = 0;
-            this.pictureBox11.TabStop = false;
-            this.pictureBox11.Click += new System.EventHandler(this.pictureBox11_Click);
+            this.pictureBoxDirection9.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection9.Image")));
+            this.pictureBoxDirection9.Location = new System.Drawing.Point(108, 112);
+            this.pictureBoxDirection9.Name = "pictureBoxDirection9";
+            this.pictureBoxDirection9.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection9.TabIndex = 0;
+            this.pictureBoxDirection9.TabStop = false;
+            this.pictureBoxDirection9.Click += new System.EventHandler(this.pictureBoxDirection9_Click);
             // 
-            // pictureBox8
+            // pictureBoxDirection6
             // 
-            this.pictureBox8.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox8.Image")));
-            this.pictureBox8.Location = new System.Drawing.Point(107, 60);
-            this.pictureBox8.Name = "pictureBox8";
-            this.pictureBox8.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox8.TabIndex = 0;
-            this.pictureBox8.TabStop = false;
-            this.pictureBox8.Click += new System.EventHandler(this.pictureBox8_Click);
+            this.pictureBoxDirection6.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection6.Image")));
+            this.pictureBoxDirection6.Location = new System.Drawing.Point(108, 60);
+            this.pictureBoxDirection6.Name = "pictureBoxDirection6";
+            this.pictureBoxDirection6.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection6.TabIndex = 0;
+            this.pictureBoxDirection6.TabStop = false;
+            this.pictureBoxDirection6.Click += new System.EventHandler(this.pictureBoxDirection6_Click);
             // 
-            // pictureBox5
+            // pictureBoxDirection3
             // 
-            this.pictureBox5.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(107, 8);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox5.TabIndex = 0;
-            this.pictureBox5.TabStop = false;
-            this.pictureBox5.Click += new System.EventHandler(this.pictureBox5_Click);
+            this.pictureBoxDirection3.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection3.Image")));
+            this.pictureBoxDirection3.Location = new System.Drawing.Point(108, 8);
+            this.pictureBoxDirection3.Name = "pictureBoxDirection3";
+            this.pictureBoxDirection3.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection3.TabIndex = 0;
+            this.pictureBoxDirection3.TabStop = false;
+            this.pictureBoxDirection3.Click += new System.EventHandler(this.pictureBoxDirection3_Click);
             // 
-            // pictureBox10
+            // pictureBoxDirection8
             // 
-            this.pictureBox10.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox10.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox10.Image")));
-            this.pictureBox10.Location = new System.Drawing.Point(55, 112);
-            this.pictureBox10.Name = "pictureBox10";
-            this.pictureBox10.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox10.TabIndex = 0;
-            this.pictureBox10.TabStop = false;
-            this.pictureBox10.Click += new System.EventHandler(this.pictureBox10_Click);
+            this.pictureBoxDirection8.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection8.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection8.Image")));
+            this.pictureBoxDirection8.Location = new System.Drawing.Point(56, 112);
+            this.pictureBoxDirection8.Name = "pictureBoxDirection8";
+            this.pictureBoxDirection8.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection8.TabIndex = 0;
+            this.pictureBoxDirection8.TabStop = false;
+            this.pictureBoxDirection8.Click += new System.EventHandler(this.pictureBoxDirection8_Click);
             // 
-            // pictureBox7
+            // pictureBoxDirection5
             // 
-            this.pictureBox7.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
-            this.pictureBox7.Location = new System.Drawing.Point(55, 60);
-            this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox7.TabIndex = 0;
-            this.pictureBox7.TabStop = false;
-            this.pictureBox7.Click += new System.EventHandler(this.pictureBox7_Click);
+            this.pictureBoxDirection5.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection5.Image")));
+            this.pictureBoxDirection5.Location = new System.Drawing.Point(56, 60);
+            this.pictureBoxDirection5.Name = "pictureBoxDirection5";
+            this.pictureBoxDirection5.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection5.TabIndex = 0;
+            this.pictureBoxDirection5.TabStop = false;
+            this.pictureBoxDirection5.Click += new System.EventHandler(this.pictureBoxDirection5_Click);
             // 
-            // pictureBox4
+            // pictureBoxDirection2
             // 
-            this.pictureBox4.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox4.Image")));
-            this.pictureBox4.Location = new System.Drawing.Point(55, 8);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox4.TabIndex = 0;
-            this.pictureBox4.TabStop = false;
-            this.pictureBox4.Click += new System.EventHandler(this.pictureBox4_Click);
+            this.pictureBoxDirection2.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection2.Image")));
+            this.pictureBoxDirection2.Location = new System.Drawing.Point(56, 8);
+            this.pictureBoxDirection2.Name = "pictureBoxDirection2";
+            this.pictureBoxDirection2.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection2.TabIndex = 0;
+            this.pictureBoxDirection2.TabStop = false;
+            this.pictureBoxDirection2.Click += new System.EventHandler(this.pictureBoxDirection2_Click);
             // 
-            // pictureBox9
+            // pictureBoxDirection7
             // 
-            this.pictureBox9.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox9.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox9.Image")));
-            this.pictureBox9.Location = new System.Drawing.Point(3, 112);
-            this.pictureBox9.Name = "pictureBox9";
-            this.pictureBox9.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox9.TabIndex = 0;
-            this.pictureBox9.TabStop = false;
-            this.pictureBox9.Click += new System.EventHandler(this.pictureBox9_Click);
+            this.pictureBoxDirection7.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection7.Image")));
+            this.pictureBoxDirection7.Location = new System.Drawing.Point(4, 112);
+            this.pictureBoxDirection7.Name = "pictureBoxDirection7";
+            this.pictureBoxDirection7.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection7.TabIndex = 0;
+            this.pictureBoxDirection7.TabStop = false;
+            this.pictureBoxDirection7.Click += new System.EventHandler(this.pictureBoxDirection7_Click);
             // 
-            // pictureBox6
+            // pictureBoxDirection4
             // 
-            this.pictureBox6.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-            this.pictureBox6.Location = new System.Drawing.Point(3, 60);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox6.TabIndex = 0;
-            this.pictureBox6.TabStop = false;
-            this.pictureBox6.Click += new System.EventHandler(this.pictureBox6_Click);
+            this.pictureBoxDirection4.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection4.Image")));
+            this.pictureBoxDirection4.Location = new System.Drawing.Point(4, 60);
+            this.pictureBoxDirection4.Name = "pictureBoxDirection4";
+            this.pictureBoxDirection4.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection4.TabIndex = 0;
+            this.pictureBoxDirection4.TabStop = false;
+            this.pictureBoxDirection4.Click += new System.EventHandler(this.pictureBoxDirection4_Click);
             // 
-            // pictureBox3
+            // pictureBoxDirection1
             // 
-            this.pictureBox3.BackColor = System.Drawing.Color.MistyRose;
-            this.pictureBox3.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox3.Image")));
-            this.pictureBox3.Location = new System.Drawing.Point(3, 8);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(50, 50);
-            this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox3.TabIndex = 0;
-            this.pictureBox3.TabStop = false;
-            this.pictureBox3.Click += new System.EventHandler(this.pictureBox3_Click);
+            this.pictureBoxDirection1.BackColor = System.Drawing.Color.MistyRose;
+            this.pictureBoxDirection1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxDirection1.Image")));
+            this.pictureBoxDirection1.Location = new System.Drawing.Point(4, 8);
+            this.pictureBoxDirection1.Name = "pictureBoxDirection1";
+            this.pictureBoxDirection1.Size = new System.Drawing.Size(50, 50);
+            this.pictureBoxDirection1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxDirection1.TabIndex = 0;
+            this.pictureBoxDirection1.TabStop = false;
+            this.pictureBoxDirection1.Click += new System.EventHandler(this.pictureBoxDirection1_Click);
+            // 
+            // panelTarget
+            // 
+            this.panelTarget.BackColor = System.Drawing.Color.Tomato;
+            this.panelTarget.Controls.Add(this.label1);
+            this.panelTarget.Controls.Add(this.pictureBoxTargetCar);
+            this.panelTarget.Controls.Add(this.pictureBoxTargetPeople);
+            this.panelTarget.Location = new System.Drawing.Point(7, 88);
+            this.panelTarget.Name = "panelTarget";
+            this.panelTarget.Size = new System.Drawing.Size(168, 105);
+            this.panelTarget.TabIndex = 20;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(60, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(51, 29);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "대상";
+            // 
+            // pictureBoxTargetCar
+            // 
+            this.pictureBoxTargetCar.BackColor = System.Drawing.Color.Snow;
+            this.pictureBoxTargetCar.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxTargetCar.Image")));
+            this.pictureBoxTargetCar.Location = new System.Drawing.Point(90, 37);
+            this.pictureBoxTargetCar.Name = "pictureBoxTargetCar";
+            this.pictureBoxTargetCar.Size = new System.Drawing.Size(75, 64);
+            this.pictureBoxTargetCar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxTargetCar.TabIndex = 0;
+            this.pictureBoxTargetCar.TabStop = false;
+            this.pictureBoxTargetCar.Click += new System.EventHandler(this.pictureBoxTargetCar_Click);
+            // 
+            // pictureBoxTargetPeople
+            // 
+            this.pictureBoxTargetPeople.BackColor = System.Drawing.Color.Snow;
+            this.pictureBoxTargetPeople.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxTargetPeople.Image")));
+            this.pictureBoxTargetPeople.Location = new System.Drawing.Point(3, 37);
+            this.pictureBoxTargetPeople.Name = "pictureBoxTargetPeople";
+            this.pictureBoxTargetPeople.Size = new System.Drawing.Size(75, 64);
+            this.pictureBoxTargetPeople.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxTargetPeople.TabIndex = 0;
+            this.pictureBoxTargetPeople.TabStop = false;
+            this.pictureBoxTargetPeople.Click += new System.EventHandler(this.pictureBoxTargetPeople_Click);
             // 
             // panelDensity
             // 
@@ -530,7 +586,6 @@
             this.panelDensity.Name = "panelDensity";
             this.panelDensity.Size = new System.Drawing.Size(168, 127);
             this.panelDensity.TabIndex = 21;
-            this.panelDensity.Paint += new System.Windows.Forms.PaintEventHandler(this.panelDensity_Paint);
             // 
             // label2
             // 
@@ -541,7 +596,6 @@
             this.label2.Size = new System.Drawing.Size(51, 29);
             this.label2.TabIndex = 2;
             this.label2.Text = "밀도";
-            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // panel1
             // 
@@ -552,7 +606,6 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(162, 86);
             this.panel1.TabIndex = 2;
-            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             // 
             // materialLabelTrackingbar
             // 
@@ -566,7 +619,6 @@
             this.materialLabelTrackingbar.Size = new System.Drawing.Size(25, 19);
             this.materialLabelTrackingbar.TabIndex = 3;
             this.materialLabelTrackingbar.Text = "15";
-            this.materialLabelTrackingbar.Click += new System.EventHandler(this.materialLabelTrackingbar_Click);
             // 
             // trackBar2
             // 
@@ -575,77 +627,184 @@
             this.trackBar2.Size = new System.Drawing.Size(154, 45);
             this.trackBar2.TabIndex = 2;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.None;
-            this.trackBar2.Scroll += new System.EventHandler(this.trackBar2_Scroll);
             // 
-            // panelTarget
+            // panelColor
             // 
-            this.panelTarget.BackColor = System.Drawing.Color.Tomato;
-            this.panelTarget.Controls.Add(this.label1);
-            this.panelTarget.Controls.Add(this.pictureBoxCar);
-            this.panelTarget.Controls.Add(this.pictureBox2);
-            this.panelTarget.Location = new System.Drawing.Point(7, 88);
-            this.panelTarget.Name = "panelTarget";
-            this.panelTarget.Size = new System.Drawing.Size(168, 105);
-            this.panelTarget.TabIndex = 20;
-            this.panelTarget.Paint += new System.Windows.Forms.PaintEventHandler(this.panelTarget_Paint);
+            this.panelColor.BackColor = System.Drawing.Color.NavajoWhite;
+            this.panelColor.Controls.Add(this.panel3);
+            this.panelColor.Controls.Add(this.label4);
+            this.panelColor.Location = new System.Drawing.Point(7, 551);
+            this.panelColor.Name = "panelColor";
+            this.panelColor.Size = new System.Drawing.Size(168, 299);
+            this.panelColor.TabIndex = 23;
             // 
-            // label1
+            // panel3
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(60, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(51, 29);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "대상";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.panel3.BackColor = System.Drawing.Color.Ivory;
+            this.panel3.Controls.Add(this.buttonColor9);
+            this.panel3.Controls.Add(this.buttonColor7);
+            this.panel3.Controls.Add(this.buttonColor5);
+            this.panel3.Controls.Add(this.buttonColor3);
+            this.panel3.Controls.Add(this.buttonColor8);
+            this.panel3.Controls.Add(this.buttonColor6);
+            this.panel3.Controls.Add(this.buttonColor4);
+            this.panel3.Controls.Add(this.buttonColor1);
+            this.panel3.Controls.Add(this.buttonColor2);
+            this.panel3.Controls.Add(this.buttonColor0);
+            this.panel3.Location = new System.Drawing.Point(3, 37);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(162, 258);
+            this.panel3.TabIndex = 3;
             // 
-            // pictureBoxCar
+            // buttonColor9
             // 
-            this.pictureBoxCar.BackColor = System.Drawing.Color.Snow;
-            this.pictureBoxCar.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxCar.Image")));
-            this.pictureBoxCar.Location = new System.Drawing.Point(90, 37);
-            this.pictureBoxCar.Name = "pictureBoxCar";
-            this.pictureBoxCar.Size = new System.Drawing.Size(75, 64);
-            this.pictureBoxCar.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBoxCar.TabIndex = 0;
-            this.pictureBoxCar.TabStop = false;
-            this.pictureBoxCar.Click += new System.EventHandler(this.pictureBoxCar_Click);
+            this.buttonColor9.BackColor = System.Drawing.Color.Green;
+            this.buttonColor9.FlatAppearance.BorderColor = System.Drawing.Color.Green;
+            this.buttonColor9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor9.Location = new System.Drawing.Point(87, 203);
+            this.buttonColor9.Name = "buttonColor9";
+            this.buttonColor9.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor9.TabIndex = 0;
+            this.buttonColor9.UseVisualStyleBackColor = false;
+            this.buttonColor9.Click += new System.EventHandler(this.buttonColor9_Click);
             // 
-            // pictureBox2
+            // buttonColor7
             // 
-            this.pictureBox2.BackColor = System.Drawing.Color.Snow;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.Location = new System.Drawing.Point(3, 37);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(75, 64);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.buttonColor7.BackColor = System.Drawing.Color.Cyan;
+            this.buttonColor7.FlatAppearance.BorderColor = System.Drawing.Color.Cyan;
+            this.buttonColor7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor7.Location = new System.Drawing.Point(87, 156);
+            this.buttonColor7.Name = "buttonColor7";
+            this.buttonColor7.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor7.TabIndex = 0;
+            this.buttonColor7.UseVisualStyleBackColor = false;
+            this.buttonColor7.Click += new System.EventHandler(this.buttonColor7_Click);
+            // 
+            // buttonColor5
+            // 
+            this.buttonColor5.BackColor = System.Drawing.Color.Yellow;
+            this.buttonColor5.FlatAppearance.BorderColor = System.Drawing.Color.Yellow;
+            this.buttonColor5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor5.Location = new System.Drawing.Point(87, 109);
+            this.buttonColor5.Name = "buttonColor5";
+            this.buttonColor5.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor5.TabIndex = 0;
+            this.buttonColor5.UseVisualStyleBackColor = false;
+            this.buttonColor5.Click += new System.EventHandler(this.buttonColor5_Click);
+            // 
+            // buttonColor3
+            // 
+            this.buttonColor3.BackColor = System.Drawing.Color.DarkOrange;
+            this.buttonColor3.FlatAppearance.BorderColor = System.Drawing.Color.DarkOrange;
+            this.buttonColor3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor3.Location = new System.Drawing.Point(87, 62);
+            this.buttonColor3.Name = "buttonColor3";
+            this.buttonColor3.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor3.TabIndex = 0;
+            this.buttonColor3.UseVisualStyleBackColor = false;
+            this.buttonColor3.Click += new System.EventHandler(this.buttonColor3_Click);
+            // 
+            // buttonColor8
+            // 
+            this.buttonColor8.BackColor = System.Drawing.Color.Purple;
+            this.buttonColor8.FlatAppearance.BorderColor = System.Drawing.Color.Purple;
+            this.buttonColor8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor8.Location = new System.Drawing.Point(23, 203);
+            this.buttonColor8.Name = "buttonColor8";
+            this.buttonColor8.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor8.TabIndex = 0;
+            this.buttonColor8.UseVisualStyleBackColor = false;
+            this.buttonColor8.Click += new System.EventHandler(this.buttonColor8_Click);
+            // 
+            // buttonColor6
+            // 
+            this.buttonColor6.BackColor = System.Drawing.Color.SteelBlue;
+            this.buttonColor6.FlatAppearance.BorderColor = System.Drawing.Color.SteelBlue;
+            this.buttonColor6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor6.Location = new System.Drawing.Point(23, 156);
+            this.buttonColor6.Name = "buttonColor6";
+            this.buttonColor6.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor6.TabIndex = 0;
+            this.buttonColor6.UseVisualStyleBackColor = false;
+            this.buttonColor6.Click += new System.EventHandler(this.buttonColor6_Click);
+            // 
+            // buttonColor4
+            // 
+            this.buttonColor4.BackColor = System.Drawing.Color.Crimson;
+            this.buttonColor4.FlatAppearance.BorderColor = System.Drawing.Color.Crimson;
+            this.buttonColor4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor4.Location = new System.Drawing.Point(23, 109);
+            this.buttonColor4.Name = "buttonColor4";
+            this.buttonColor4.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor4.TabIndex = 0;
+            this.buttonColor4.UseVisualStyleBackColor = false;
+            this.buttonColor4.Click += new System.EventHandler(this.buttonColor4_Click);
+            // 
+            // buttonColor1
+            // 
+            this.buttonColor1.BackColor = System.Drawing.Color.Black;
+            this.buttonColor1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor1.Location = new System.Drawing.Point(87, 15);
+            this.buttonColor1.Name = "buttonColor1";
+            this.buttonColor1.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor1.TabIndex = 0;
+            this.buttonColor1.UseVisualStyleBackColor = false;
+            this.buttonColor1.Click += new System.EventHandler(this.buttonColor1_Click);
+            // 
+            // buttonColor2
+            // 
+            this.buttonColor2.BackColor = System.Drawing.Color.Red;
+            this.buttonColor2.FlatAppearance.BorderColor = System.Drawing.Color.Red;
+            this.buttonColor2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonColor2.Location = new System.Drawing.Point(23, 62);
+            this.buttonColor2.Name = "buttonColor2";
+            this.buttonColor2.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor2.TabIndex = 0;
+            this.buttonColor2.UseVisualStyleBackColor = false;
+            this.buttonColor2.Click += new System.EventHandler(this.buttonColor2_Click);
+            // 
+            // buttonColor0
+            // 
+            this.buttonColor0.BackColor = System.Drawing.Color.White;
+            this.buttonColor0.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonColor0.Location = new System.Drawing.Point(23, 15);
+            this.buttonColor0.Name = "buttonColor0";
+            this.buttonColor0.Size = new System.Drawing.Size(52, 41);
+            this.buttonColor0.TabIndex = 0;
+            this.buttonColor0.UseVisualStyleBackColor = false;
+            this.buttonColor0.Click += new System.EventHandler(this.buttonColor0_Click);
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Location = new System.Drawing.Point(57, 2);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(51, 29);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "색상";
             // 
             // panelFile
             // 
             this.panelFile.BackColor = System.Drawing.Color.Coral;
-            this.panelFile.Controls.Add(this.VideoBtn);
+            this.panelFile.Controls.Add(this.buttonReadFile);
             this.panelFile.Location = new System.Drawing.Point(7, 5);
             this.panelFile.Name = "panelFile";
             this.panelFile.Size = new System.Drawing.Size(168, 77);
             this.panelFile.TabIndex = 19;
-            this.panelFile.Paint += new System.Windows.Forms.PaintEventHandler(this.panelFile_Paint);
             // 
-            // VideoBtn
+            // buttonReadFile
             // 
-            this.VideoBtn.Depth = 0;
-            this.VideoBtn.Location = new System.Drawing.Point(46, 23);
-            this.VideoBtn.MouseState = MaterialSkin.MouseState.HOVER;
-            this.VideoBtn.Name = "VideoBtn";
-            this.VideoBtn.Primary = true;
-            this.VideoBtn.Size = new System.Drawing.Size(79, 27);
-            this.VideoBtn.TabIndex = 18;
-            this.VideoBtn.Text = "파일";
-            this.VideoBtn.UseVisualStyleBackColor = true;
-            this.VideoBtn.Click += new System.EventHandler(this.VideoBtn_Click);
+            this.buttonReadFile.BackColor = System.Drawing.Color.Snow;
+            this.buttonReadFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold);
+            this.buttonReadFile.Location = new System.Drawing.Point(48, 13);
+            this.buttonReadFile.Name = "buttonReadFile";
+            this.buttonReadFile.Size = new System.Drawing.Size(73, 43);
+            this.buttonReadFile.TabIndex = 19;
+            this.buttonReadFile.Text = "파일";
+            this.buttonReadFile.UseVisualStyleBackColor = false;
+            this.buttonReadFile.Click += new System.EventHandler(this.buttonReadFile_Click);
             // 
             // tabPage3
             // 
@@ -767,43 +926,6 @@
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
             // 
-            // panel5
-            // 
-            this.panel5.BackColor = System.Drawing.Color.White;
-            this.panel5.Controls.Add(this.radioButtonX4);
-            this.panel5.Controls.Add(this.radioButtonX1);
-            this.panel5.Controls.Add(this.radioButtonX2);
-            this.panel5.Controls.Add(this.startBtn);
-            this.panel5.Controls.Add(this.trackBar1);
-            this.panel5.Location = new System.Drawing.Point(6, 887);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(1133, 92);
-            this.panel5.TabIndex = 4;
-            // 
-            // panel6
-            // 
-            this.panel6.BackColor = System.Drawing.Color.FloralWhite;
-            this.panel6.Controls.Add(this.panelDirection);
-            this.panel6.Controls.Add(this.panelTarget);
-            this.panel6.Controls.Add(this.panelDensity);
-            this.panel6.Controls.Add(this.panelColor);
-            this.panel6.Controls.Add(this.panelFile);
-            this.panel6.Location = new System.Drawing.Point(5, 3);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(181, 976);
-            this.panel6.TabIndex = 0;
-            // 
-            // labelProgress
-            // 
-            this.labelProgress.AutoSize = true;
-            this.labelProgress.BackColor = System.Drawing.Color.DimGray;
-            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.labelProgress.ForeColor = System.Drawing.Color.Black;
-            this.labelProgress.Location = new System.Drawing.Point(470, 562);
-            this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(0, 25);
-            this.labelProgress.TabIndex = 2;
-            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -824,34 +946,38 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
             this.panelVideo.ResumeLayout(false);
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panelVideoPart.ResumeLayout(false);
             this.panelVideoPart.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panelCondition.ResumeLayout(false);
-            this.panelColor.ResumeLayout(false);
-            this.panelColor.PerformLayout();
+            this.panel6.ResumeLayout(false);
             this.panelDirection.ResumeLayout(false);
             this.panelDirection.PerformLayout();
             this.panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox11)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox8)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox10)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox9)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxDirection1)).EndInit();
+            this.panelTarget.ResumeLayout(false);
+            this.panelTarget.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetCar)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTargetPeople)).EndInit();
             this.panelDensity.ResumeLayout(false);
             this.panelDensity.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
-            this.panelTarget.ResumeLayout(false);
-            this.panelTarget.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCar)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            this.panelColor.ResumeLayout(false);
+            this.panelColor.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.panelFile.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.videoPanel.ResumeLayout(false);
@@ -861,9 +987,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
-            this.panel6.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -899,27 +1022,26 @@
         private MaterialSkin.Controls.MaterialFlatButton startBtn;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Panel panelCondition;
-        private MaterialSkin.Controls.MaterialRaisedButton VideoBtn;
         private System.Windows.Forms.Panel panelFile;
         private System.Windows.Forms.Panel panelDirection;
         private System.Windows.Forms.Panel panelDensity;
         private System.Windows.Forms.Panel panelTarget;
         private System.Windows.Forms.Panel panelColor;
-        private System.Windows.Forms.PictureBox pictureBoxCar;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBoxTargetCar;
+        private System.Windows.Forms.PictureBox pictureBoxTargetPeople;
         private System.Windows.Forms.TrackBar trackBar2;
         private MaterialSkin.Controls.MaterialLabel materialLabelTrackingbar;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.PictureBox pictureBox3;
-        private System.Windows.Forms.PictureBox pictureBox11;
-        private System.Windows.Forms.PictureBox pictureBox8;
-        private System.Windows.Forms.PictureBox pictureBox5;
-        private System.Windows.Forms.PictureBox pictureBox10;
-        private System.Windows.Forms.PictureBox pictureBox7;
-        private System.Windows.Forms.PictureBox pictureBox4;
-        private System.Windows.Forms.PictureBox pictureBox9;
-        private System.Windows.Forms.PictureBox pictureBox6;
+        private System.Windows.Forms.PictureBox pictureBoxDirection1;
+        private System.Windows.Forms.PictureBox pictureBoxDirection9;
+        private System.Windows.Forms.PictureBox pictureBoxDirection6;
+        private System.Windows.Forms.PictureBox pictureBoxDirection3;
+        private System.Windows.Forms.PictureBox pictureBoxDirection8;
+        private System.Windows.Forms.PictureBox pictureBoxDirection5;
+        private System.Windows.Forms.PictureBox pictureBoxDirection2;
+        private System.Windows.Forms.PictureBox pictureBoxDirection7;
+        private System.Windows.Forms.PictureBox pictureBoxDirection4;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
@@ -929,6 +1051,17 @@
         private System.Windows.Forms.Panel panel5;
         private System.Windows.Forms.Panel panel6;
         private System.Windows.Forms.Label labelProgress;
+        private System.Windows.Forms.Button buttonColor0;
+        private System.Windows.Forms.Button buttonColor1;
+        private System.Windows.Forms.Button buttonColor9;
+        private System.Windows.Forms.Button buttonColor7;
+        private System.Windows.Forms.Button buttonColor5;
+        private System.Windows.Forms.Button buttonColor3;
+        private System.Windows.Forms.Button buttonColor8;
+        private System.Windows.Forms.Button buttonColor6;
+        private System.Windows.Forms.Button buttonColor4;
+        private System.Windows.Forms.Button buttonColor2;
+        private System.Windows.Forms.Button buttonReadFile;
     }
 }
 
