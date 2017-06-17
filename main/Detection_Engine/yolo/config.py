@@ -15,6 +15,8 @@ classes_name = c.classes_name
 
 
 datacenter_root = c.datacenter_root
+dataset_enduser_root = c.dataset_enduser_root
+
 dataset_abs_location = c.dataset_abs_location
 ann_location = c.ann_location
 imageset_location = c.imageset_location
