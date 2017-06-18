@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -39,7 +39,6 @@
             this.Column1 = new System.Windows.Forms.DataGridViewImageColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
-            this.panelLog = new System.Windows.Forms.Panel();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.panelVideoControl = new System.Windows.Forms.Panel();
             this.pictureBoxStart = new System.Windows.Forms.PictureBox();
@@ -111,6 +110,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.plotView3 = new OxyPlot.WindowsForms.PlotView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -195,7 +195,6 @@
             this.panelObject.BackColor = System.Drawing.Color.White;
             this.panelObject.Controls.Add(this.dataGridView1);
             this.panelObject.Controls.Add(this.dataGridView2);
-            this.panelObject.Controls.Add(this.panelLog);
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1460, 3);
             this.panelObject.Name = "panelObject";
@@ -222,16 +221,16 @@
             this.dataGridView1.RowTemplate.Height = 30;
             this.dataGridView1.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.dataGridView1.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView1.Size = new System.Drawing.Size(286, 896);
+            this.dataGridView1.Size = new System.Drawing.Size(286, 1008);
             this.dataGridView1.TabIndex = 20;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick);
             // 
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle15.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle15.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle15;
             this.Column1.HeaderText = "Car";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -257,16 +256,16 @@
             this.dataGridView2.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dataGridView2.RowTemplate.Height = 23;
             this.dataGridView2.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.dataGridView2.Size = new System.Drawing.Size(153, 896);
+            this.dataGridView2.Size = new System.Drawing.Size(153, 1008);
             this.dataGridView2.TabIndex = 21;
             this.dataGridView2.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView2_CellContentClick);
             // 
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle16.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle16.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle16;
             this.Column2.Frozen = true;
             this.Column2.HeaderText = "People";
             this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -275,14 +274,6 @@
             this.Column2.ReadOnly = true;
             this.Column2.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.Column2.Width = 150;
-            // 
-            // panelLog
-            // 
-            this.panelLog.BackColor = System.Drawing.Color.Ivory;
-            this.panelLog.Location = new System.Drawing.Point(7, 904);
-            this.panelLog.Name = "panelLog";
-            this.panelLog.Size = new System.Drawing.Size(447, 104);
-            this.panelLog.TabIndex = 1;
             // 
             // panelVideo
             // 
@@ -756,7 +747,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.Color.White;
-            this.label1.Location = new System.Drawing.Point(56, 1);
+            this.label1.Location = new System.Drawing.Point(56, 4);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(67, 39);
             this.label1.TabIndex = 2;
@@ -944,7 +935,7 @@
             this.buttonReadFile.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(149)))), ((int)(((byte)(172)))));
             this.buttonReadFile.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold);
             this.buttonReadFile.ForeColor = System.Drawing.Color.White;
-            this.buttonReadFile.Location = new System.Drawing.Point(60, 25);
+            this.buttonReadFile.Location = new System.Drawing.Point(57, 27);
             this.buttonReadFile.Name = "buttonReadFile";
             this.buttonReadFile.Size = new System.Drawing.Size(65, 36);
             this.buttonReadFile.TabIndex = 4;
@@ -957,9 +948,9 @@
             // 
             this.pictureBoxHead.BackColor = System.Drawing.Color.Transparent;
             this.pictureBoxHead.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxHead.Image")));
-            this.pictureBoxHead.Location = new System.Drawing.Point(13, 21);
+            this.pictureBoxHead.Location = new System.Drawing.Point(8, 22);
             this.pictureBoxHead.Name = "pictureBoxHead";
-            this.pictureBoxHead.Size = new System.Drawing.Size(151, 42);
+            this.pictureBoxHead.Size = new System.Drawing.Size(151, 40);
             this.pictureBoxHead.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxHead.TabIndex = 3;
             this.pictureBoxHead.TabStop = false;
@@ -1011,6 +1002,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.plotView3);
             this.tabPage1.Controls.Add(this.plotView2);
             this.tabPage1.Controls.Add(this.plotView1);
             this.tabPage1.Location = new System.Drawing.Point(4, 26);
@@ -1023,10 +1015,11 @@
             // 
             // plotView2
             // 
-            this.plotView2.Location = new System.Drawing.Point(1026, 53);
+            this.plotView2.Font = new System.Drawing.Font("SpoqaHanSans-Regular", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)), true);
+            this.plotView2.Location = new System.Drawing.Point(12, 164);
             this.plotView2.Name = "plotView2";
             this.plotView2.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView2.Size = new System.Drawing.Size(623, 375);
+            this.plotView2.Size = new System.Drawing.Size(1137, 451);
             this.plotView2.TabIndex = 1;
             this.plotView2.Text = "plotView1";
             this.plotView2.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -1035,10 +1028,10 @@
             // 
             // plotView1
             // 
-            this.plotView1.Location = new System.Drawing.Point(190, 53);
+            this.plotView1.Location = new System.Drawing.Point(1151, 164);
             this.plotView1.Name = "plotView1";
             this.plotView1.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView1.Size = new System.Drawing.Size(623, 375);
+            this.plotView1.Size = new System.Drawing.Size(755, 451);
             this.plotView1.TabIndex = 1;
             this.plotView1.Text = "plotView1";
             this.plotView1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
@@ -1114,6 +1107,18 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
+            // 
+            // plotView3
+            // 
+            this.plotView3.Location = new System.Drawing.Point(6, 621);
+            this.plotView3.Name = "plotView3";
+            this.plotView3.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotView3.Size = new System.Drawing.Size(1898, 363);
+            this.plotView3.TabIndex = 2;
+            this.plotView3.Text = "plotView3";
+            this.plotView3.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotView3.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotView3.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // Form1
             // 
@@ -1199,7 +1204,6 @@
         private System.Windows.Forms.Panel videoPanel;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Panel panelLog;
         private System.Windows.Forms.Panel panelVideo;
         private System.Windows.Forms.PictureBox pictureBoxVideo;
         private System.Windows.Forms.TrackBar trackBar1;
@@ -1270,6 +1274,7 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox1;
+        private OxyPlot.WindowsForms.PlotView plotView3;
     }
 }
 

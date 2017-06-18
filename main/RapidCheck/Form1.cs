@@ -20,6 +20,7 @@ using CefSharp;
 using CefSharp.WinForms;
 using OxyPlot;
 using OxyPlot.Series;
+using OxyPlot.Axes;
 
 namespace RapidCheck
 {
@@ -64,7 +65,65 @@ namespace RapidCheck
             //setUI(); //ui enable false
             defaultColor(); //color setting
             ChartTest(); //chart test
-            ChartTest2();
+            //ChartTest2();
+
+            var myModel = new PlotModel { Title = "Example 1" };
+            myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+            plotView3.Model = myModel;
+
+
+
+
+
+
+
+            var model = new PlotModel
+            {
+                Title = "BarSeries",
+                LegendPlacement = LegendPlacement.Outside,
+                LegendPosition = LegendPosition.BottomCenter,
+                LegendOrientation = LegendOrientation.Horizontal,
+                LegendBorderThickness = 0
+            };
+
+            var s1 = new ColumnSeries { Title = "Series 1", FillColor = OxyColor.FromRgb(83,164,188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth=50 };
+            s1.Items.Add(new ColumnItem { Value = 25 });
+            s1.Items.Add(new ColumnItem { Value = 137 });
+            s1.Items.Add(new ColumnItem { Value = 18 });
+            s1.Items.Add(new ColumnItem { Value = 40 });
+            s1.Items.Add(new ColumnItem { Value = 25 });
+            s1.Items.Add(new ColumnItem { Value = 137 });
+            s1.Items.Add(new ColumnItem { Value = 18 });
+            s1.Items.Add(new ColumnItem { Value = 40 });
+
+            var s2 = new ColumnSeries { Title = "Series 2",  FillColor = OxyColor.FromRgb(67,87,99),StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth=50};
+            s2.Items.Add(new ColumnItem { Value = 12 });
+            s2.Items.Add(new ColumnItem { Value = 14 });
+            s2.Items.Add(new ColumnItem { Value = 120 });
+            s2.Items.Add(new ColumnItem { Value = 26 });
+            s2.Items.Add(new ColumnItem { Value = 12 });
+            s2.Items.Add(new ColumnItem { Value = 14 });
+            s2.Items.Add(new ColumnItem { Value = 120 });
+            s2.Items.Add(new ColumnItem { Value = 26 });
+            
+
+            var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
+            categoryAxis.Labels.Add("↖↖");
+            categoryAxis.Labels.Add("↑");
+            categoryAxis.Labels.Add("↗");
+            categoryAxis.Labels.Add("→");
+            categoryAxis.Labels.Add("↘");
+            categoryAxis.Labels.Add("↓");
+            categoryAxis.Labels.Add("↙");
+            categoryAxis.Labels.Add("←");
+            var valueAxis = new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.06, AbsoluteMinimum = 0 };
+            model.Series.Add(s1);
+            model.Series.Add(s2);
+            model.Axes.Add(categoryAxis);
+            model.Axes.Add(valueAxis);
+            plotView2.Model = model;
+
+
         }
         //------------------------------Overlay Module------------------------------
         private void startOverlayModule()
@@ -184,7 +243,7 @@ namespace RapidCheck
             panelConditionModule.BackColor = module;
             panelVideoControl.BackColor = module;
             trackBar1.BackColor = module;
-            panelLog.BackColor = module;
+            //panelLog.BackColor = module;
             dataGridView1.BackgroundColor = module;
             dataGridView2.BackgroundColor = module;
 
