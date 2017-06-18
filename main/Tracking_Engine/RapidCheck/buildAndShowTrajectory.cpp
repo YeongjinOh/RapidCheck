@@ -239,14 +239,21 @@ void analysisVideo()
 	// set input video
 	VideoCapture cap(filepath);
 
+	int numOfTotalFrames = cap.get(CV_CAP_PROP_FRAME_COUNT);
+	if (numOfFrames > numOfTotalFrames)
+	{
+		numOfFrames = numOfTotalFrames;
+		endFrameNum = frameStep * numOfFrames + startFrameNum;
+	}
+
 	// build target detected frames
 	vector<Frame> framePedestrians, frameCars;
 	readTargets(cap, framePedestrians, frameCars);
 	
 	// build all tracklets
 	vector<Segment> segmentPedestrians, segmentCars;
-	buildTracklets(framePedestrians, segmentPedestrians, 1);
 	buildTracklets(frameCars, segmentCars, 0);
+	buildTracklets(framePedestrians, segmentPedestrians, 1);
 
 	// build trajectories
 	vector<RCTrajectory> trajectoryPedestrians, trajectoryCars;

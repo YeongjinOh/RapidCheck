@@ -270,6 +270,14 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 
 		}
 
+		// check jaccard continuity
+		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
+			if (selectedIndices[i] == -1)
+				return;
+		for (int i = 1; i < LOW_LEVEL_TRACKLETS; i++)
+			if ((selectedTargets[i - 1].getTargetArea() & selectedTargets[i].getTargetArea()).area() == 0)
+				return;
+
 		// compute cost
 		// cost value is linear combination of cost_appearance and cost_motion
 		double costAppearance = 0.0, costMotion = 0.0;
@@ -321,7 +329,8 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 			Target& prevTarget = selectedTargets.back();
 			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
 			double motionCost = getNormValueFromVector(motionErrVector);
-			if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR)
+			//if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR)
+			if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR || (curTarget.getTargetArea() & prevTarget.getTargetArea()).area() == 0)
 			{
 				continue;
 			}
@@ -896,7 +905,6 @@ void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId
 	int frameNum = 0, numOfSegments = (numOfFrames - 1) / LOW_LEVEL_TRACKLETS;
 	for (int segmentNumber = 0; segmentNumber < numOfSegments && frameNum + LOW_LEVEL_TRACKLETS <= frames.size(); segmentNumber++, frameNum += LOW_LEVEL_TRACKLETS)
 	{
-		printf("segmentNum:%d\n", segmentNumber);
 		Segment segment(frameNum + startFrameNum);
 
 		// create tracklet
@@ -918,9 +926,8 @@ void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId
 			}
 			else
 			{
-				int cnt = 0;
-				getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy, cnt);
-				printf("i:%d cnt:%d\n", i, cnt);
+				int fnCallCnt = 0;
+				getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy, fnCallCnt);
 			}
 			
 			
@@ -1035,12 +1042,12 @@ void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<
 	for (int i = 0; i < trajectoryPedestrians.size(); i++)
 	{
 		trajectoryPedestrians[i].normalizeColorRatios();
-		db.insertObjectInfo(videoId, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), 0.0, trajectoryPedestrians[i].getColorRatios());
+		db.insertObjectInfo(videoId, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), trajectoryPedestrians[i].calcSpeed(), trajectoryPedestrians[i].getColorRatios());
 	}
 	for (int i = 0; i < trajectoryCars.size(); i++)
 	{
 		trajectoryCars[i].normalizeColorRatios();
-		db.insertObjectInfo(videoId, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), 0.0, trajectoryCars[i].getColorRatios());
+		db.insertObjectInfo(videoId, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), trajectoryCars[i].calcSpeed(), trajectoryCars[i].getColorRatios());
 	}
 }
 

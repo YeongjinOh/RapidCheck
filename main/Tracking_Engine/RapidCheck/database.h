@@ -22,7 +22,7 @@ private:
 		int query_stat = mysql_query(connection, query);
 		if (query_stat != 0)
 		{
-			fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
+			fprintf(stderr, "Mysql query error : %s\n", mysql_error(&conn));
 			return;
 		}
 	}
@@ -32,7 +32,7 @@ private:
 		int query_stat = mysql_query(connection, query);
 		if (query_stat != 0)
 		{
-			fprintf(stderr, "Mysql query error : %s", mysql_error(&conn));
+			fprintf(stderr, "Mysql query error : %s\n", mysql_error(&conn));
 			return;
 		}
 		sql_result = mysql_store_result(connection);
@@ -103,14 +103,14 @@ public:
 			directionKeys += "direction" + std::to_string(i) + ", ";
 		string directionValues = "";
 		for (int i = 0; i < NUM_OF_DIRECTIONS; i++)
-			directionValues += std::to_string(directionRatios[i]).substr(0,5) + ", ";
+			directionValues += std::to_string(directionRatios[i]).substr(0,8) + ", ";
 		string colorKeys = "";
 		for (int i = 0; i < NUM_OF_COLOR_CLASSES; i++)
 			colorKeys += "color" + std::to_string(i) + ", ";
 		string colorValues = "";
 		for (int i = 0; i < NUM_OF_COLOR_CLASSES; i++)
-			colorValues += std::to_string(colorRatios[i]).substr(0,5) + ", ";
-		sprintf(query, "INSERT INTO objectInfo (videoId, objectId, classId, %s %s speed) VALUES (%d, %d, %d, %s %s %8lf);", directionKeys.c_str(), colorKeys.c_str(), videoId, objectId, classId, directionValues.c_str(), colorValues.c_str(), speed);
+			colorValues += std::to_string(colorRatios[i]).substr(0,8) + ", ";
+		sprintf(query, "INSERT INTO objectInfo (videoId, objectId, classId, %s %s speed) VALUES (%d, %d, %d, %s %s %10lf);", directionKeys.c_str(), colorKeys.c_str(), videoId, objectId, classId, directionValues.c_str(), colorValues.c_str(), speed);
 		insert(query);
 	}
 };
