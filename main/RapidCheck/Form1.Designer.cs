@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -103,8 +103,11 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panelPieChart = new System.Windows.Forms.Panel();
+            this.plotViewPie1 = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewPie2 = new OxyPlot.WindowsForms.PlotView();
             this.panel3 = new System.Windows.Forms.Panel();
             this.panelBarChart = new System.Windows.Forms.Panel();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.plotViewBar = new OxyPlot.WindowsForms.PlotView();
             this.panelLineChart = new System.Windows.Forms.Panel();
@@ -112,15 +115,14 @@
             this.plotViewLine = new OxyPlot.WindowsForms.PlotView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelWebbrowser = new System.Windows.Forms.Panel();
+            this.buttonTraining = new System.Windows.Forms.Button();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.materialTabSelector1 = new MaterialSkin.Controls.MaterialTabSelector();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.plotViewPie2 = new OxyPlot.WindowsForms.PlotView();
-            this.plotViewPie1 = new OxyPlot.WindowsForms.PlotView();
+            this.labelTrainLog = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -169,10 +171,11 @@
             this.panel2.SuspendLayout();
             this.panelPieChart.SuspendLayout();
             this.panelBarChart.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.panelLineChart.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.panelWebbrowser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -243,9 +246,9 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle7.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle7.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle7;
             this.Column1.HeaderText = "Car";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -278,9 +281,9 @@
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle8.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle8.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle8;
             this.Column2.Frozen = true;
             this.Column2.HeaderText = "People";
             this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -1056,6 +1059,32 @@
             this.panelPieChart.Size = new System.Drawing.Size(948, 454);
             this.panelPieChart.TabIndex = 4;
             // 
+            // plotViewPie1
+            // 
+            this.plotViewPie1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewPie1.Location = new System.Drawing.Point(0, 48);
+            this.plotViewPie1.Name = "plotViewPie1";
+            this.plotViewPie1.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewPie1.Size = new System.Drawing.Size(487, 406);
+            this.plotViewPie1.TabIndex = 4;
+            this.plotViewPie1.Text = "plotView1";
+            this.plotViewPie1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewPie1.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewPie1.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotViewPie2
+            // 
+            this.plotViewPie2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.plotViewPie2.Location = new System.Drawing.Point(487, 48);
+            this.plotViewPie2.Name = "plotViewPie2";
+            this.plotViewPie2.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewPie2.Size = new System.Drawing.Size(461, 406);
+            this.plotViewPie2.TabIndex = 3;
+            this.plotViewPie2.Text = "plotView1";
+            this.plotViewPie2.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewPie2.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewPie2.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
@@ -1074,6 +1103,16 @@
             this.panelBarChart.Name = "panelBarChart";
             this.panelBarChart.Size = new System.Drawing.Size(925, 454);
             this.panelBarChart.TabIndex = 0;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(77, 380);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(806, 63);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox5.TabIndex = 3;
+            this.pictureBox5.TabStop = false;
             // 
             // panel1
             // 
@@ -1143,11 +1182,24 @@
             // 
             // panelWebbrowser
             // 
+            this.panelWebbrowser.Controls.Add(this.labelTrainLog);
+            this.panelWebbrowser.Controls.Add(this.buttonTraining);
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
             this.panelWebbrowser.Name = "panelWebbrowser";
             this.panelWebbrowser.Size = new System.Drawing.Size(1906, 988);
             this.panelWebbrowser.TabIndex = 1;
+            // 
+            // buttonTraining
+            // 
+            this.buttonTraining.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonTraining.Location = new System.Drawing.Point(1811, 3);
+            this.buttonTraining.Name = "buttonTraining";
+            this.buttonTraining.Size = new System.Drawing.Size(90, 35);
+            this.buttonTraining.TabIndex = 0;
+            this.buttonTraining.Text = "traning";
+            this.buttonTraining.UseVisualStyleBackColor = true;
+            this.buttonTraining.Click += new System.EventHandler(this.buttonTraining_Click);
             // 
             // webBrowser1
             // 
@@ -1199,41 +1251,15 @@
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
             // 
-            // pictureBox5
+            // labelTrainLog
             // 
-            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
-            this.pictureBox5.Location = new System.Drawing.Point(77, 380);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(806, 63);
-            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox5.TabIndex = 3;
-            this.pictureBox5.TabStop = false;
-            // 
-            // plotViewPie2
-            // 
-            this.plotViewPie2.Dock = System.Windows.Forms.DockStyle.Right;
-            this.plotViewPie2.Location = new System.Drawing.Point(487, 48);
-            this.plotViewPie2.Name = "plotViewPie2";
-            this.plotViewPie2.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewPie2.Size = new System.Drawing.Size(461, 406);
-            this.plotViewPie2.TabIndex = 3;
-            this.plotViewPie2.Text = "plotView1";
-            this.plotViewPie2.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewPie2.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewPie2.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
-            // 
-            // plotViewPie1
-            // 
-            this.plotViewPie1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.plotViewPie1.Location = new System.Drawing.Point(0, 48);
-            this.plotViewPie1.Name = "plotViewPie1";
-            this.plotViewPie1.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewPie1.Size = new System.Drawing.Size(487, 406);
-            this.plotViewPie1.TabIndex = 4;
-            this.plotViewPie1.Text = "plotView1";
-            this.plotViewPie1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewPie1.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewPie1.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.labelTrainLog.AutoSize = true;
+            this.labelTrainLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
+            this.labelTrainLog.Location = new System.Drawing.Point(1450, 20);
+            this.labelTrainLog.Name = "labelTrainLog";
+            this.labelTrainLog.Size = new System.Drawing.Size(0, 24);
+            this.labelTrainLog.TabIndex = 1;
+            this.labelTrainLog.Visible = false;
             // 
             // Form1
             // 
@@ -1306,10 +1332,12 @@
             this.panel2.ResumeLayout(false);
             this.panelPieChart.ResumeLayout(false);
             this.panelBarChart.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.panelLineChart.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.panelWebbrowser.ResumeLayout(false);
+            this.panelWebbrowser.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1405,6 +1433,8 @@
         private System.Windows.Forms.PictureBox pictureBox5;
         private OxyPlot.WindowsForms.PlotView plotViewPie1;
         private OxyPlot.WindowsForms.PlotView plotViewPie2;
+        private System.Windows.Forms.Button buttonTraining;
+        private System.Windows.Forms.Label labelTrainLog;
     }
 }
 

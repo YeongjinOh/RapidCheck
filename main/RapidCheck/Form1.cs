@@ -21,6 +21,7 @@ using CefSharp.WinForms;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Axes;
+using System.Diagnostics;
 
 namespace RapidCheck
 {
@@ -346,7 +347,7 @@ namespace RapidCheck
             int idx = materialTabControl1.SelectedIndex;
             if (idx ==3) // 라벨링
             {
-                browser = new ChromiumWebBrowser("http://www.rapidcheck.co.kr:5000")
+                browser = new ChromiumWebBrowser("http://127.0.0.1:5000")
                 {
                     Dock = DockStyle.Fill,
                     Size = Size,
@@ -794,36 +795,36 @@ namespace RapidCheck
                     break;
             }
             //direction
-            double directionThres = 0.5;
+            double directionThres = 0.6;
             switch (directionPosition)
             {
                 case 1:
-                    rapidCheck.conditionDirection = "and direction6 + direction7 + direction0 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction6 + direction7  > " + directionThres;
                     break;
                 case 2:
-                    rapidCheck.conditionDirection = "and direction5 + direction6 + direction7 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction5 + direction6 > " + directionThres;
                     break;
                 case 3:
-                    rapidCheck.conditionDirection = "and direction4 + direction5 + direction6 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction4 + direction5 > " + directionThres;
                     break;
                 case 4:
 
-                    rapidCheck.conditionDirection = "and direction3 + direction4 + direction5 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction0 + direction7 > " + directionThres;
                     break;
                 case 5:
                     //ObjReset();
                     break;
                 case 6:
-                    rapidCheck.conditionDirection = "and direction2 + direction3 + direction4 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction3 + direction4 > " + directionThres;
                     break;
                 case 7:
-                    rapidCheck.conditionDirection = "and direction1 + direction2 + direction3 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction0 + direction1 > " + directionThres;
                     break;
                 case 8:
-                    rapidCheck.conditionDirection = "and direction0 + direction1 + direction2  > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction1 + direction2  > " + directionThres;
                     break;
                 case 9:
-                    rapidCheck.conditionDirection = "and direction7 + direction0 + direction1 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction2 + direction3 > " + directionThres;
                     break;
                 default:
                     rapidCheck.conditionDirection = "";
@@ -903,35 +904,50 @@ namespace RapidCheck
         {
             labelDensity.Text = trackBar2.Value.ToString();
         }
-        //------------------------------Chart SETTING------------------------------
-        
-        //private void barChart()
-        //{
-        //    var model = new PlotModel { Title = "Trigonometric functions" };
 
-        //    var start = -Math.PI;
-        //    var end = Math.PI;
-        //    var step = 0.1;
-        //    int steps = (int)((Math.Abs(start) + Math.Abs(end)) / step);
+        private void buttonTraining_Click(object sender, EventArgs e)
+        {
+            buttonTraining.Enabled = false;
+            buttonTraining.BackColor = Color.Gray;
+            panelWebbrowser.Dock = DockStyle.Left;
+            panelWebbrowser.Width = 1440;
+            labelTrainLog.Visible = true;
 
-        //    //generate points for functions
-        //    var sinData = new DataPoint[steps];
-        //    for (int i = 0; i < steps; ++i)
-        //    {
-        //        var x = (start + step * i);
-        //        sinData[i] = new DataPoint(x, Math.Sin(x));
-        //    }
+            //string dir = @"..\Detection_Engine";
+            //System.IO.Directory.SetCurrentDirectory(dir);
 
-        //    //sin(x)
-        //    var sinStemSeries = new StemSeries
-        //    {
-        //        MarkerStroke = OxyColors.Green,
-        //        MarkerType = MarkerType.Circle
-        //    };
-        //    sinStemSeries.Points.AddRange(sinData);
+            //string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
+            //string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3}", videoid, maxFrameNum, videoPath, frameStep);
+            //var p = new System.Diagnostics.Process();
+            //p.StartInfo.FileName = pro;
+            //p.StartInfo.Arguments = args;
 
-        //    model.Series.Add(sinStemSeries);
-        //    plotViewBar.Model = model;
-        //}
+            //p.StartInfo.CreateNoWindow = true;
+            //p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            //p.StartInfo.RedirectStandardOutput = true;
+            //p.StartInfo.UseShellExecute = false;
+            //p.OutputDataReceived += processOutputHandler;
+
+            //p.Start();
+            //p.BeginOutputReadLine();
+            //p.WaitForExit();
+
+            //int result = p.ExitCode;
+            //if (result == 0)
+            //{
+
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Train ERROR");
+            //}
+        }
+        private void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
+        {
+            if (outLine.Data != null)
+            {
+                labelTrainLog.Text = labelTrainLog.Text + "\n" + outLine.Data;
+            }
+        }
     }
 }
