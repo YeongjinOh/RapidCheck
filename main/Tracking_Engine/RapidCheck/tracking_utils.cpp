@@ -698,16 +698,14 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 // Read targets in MAX_FRAMES frames from DataBase
 void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Frame>& frameCars)
 {
-	// initialize variables for histogram
-	// Using 50 bins for hue and 60 for saturation
-	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
-	int histSize[] = { h_bins, s_bins };
+	int histSize[] = { NUM_OF_HUE_BINS, NUM_OF_SAT_BINS, NUM_OF_VAL_BINS };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
 	float s_ranges[] = { 0, 256 };
-	const float* ranges[] = { h_ranges, s_ranges };
+	float v_ranges[] = { 0, 256 };
+	const float* ranges[] = { h_ranges, s_ranges, v_ranges };
 	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
+	int channels[] = { 0, 1, 2 };
 
 	Mat frame, frameSkipped;
 
@@ -722,8 +720,8 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
 	
 	// TODO : use detection table
-	db.selectDetection(detectionResultsPedestrians, videoId, CLASS_ID_PEDESTRIAN, startFrameNum, endFrameNum, frameStep);
-	db.selectDetection(detectionResultsCars, videoId, CLASS_ID_CAR, startFrameNum, endFrameNum, frameStep);
+	db.selectDetection(detectionResultsPedestrians, 703, CLASS_ID_PEDESTRIAN, startFrameNum, endFrameNum, frameStep);
+	db.selectDetection(detectionResultsCars, 703, CLASS_ID_CAR, startFrameNum, endFrameNum, frameStep);
 	
 	for (int i = 0; i < detectionResultsPedestrians.size(); i++)
 	{
@@ -768,7 +766,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		double widthRatio = 0.8, heightRatio = 0.8;
 		for (int i = 0; i < pedestriansRects.size(); ++i)
 		{
-			Mat imgHSV, imgWhite, imgBlack;
+			Mat imgHSV;
 			MatND hist;
 			Rect &rectOrigin = pedestriansRects[i], rectSmall = pedestriansRects[i];
 
@@ -781,16 +779,9 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			}
 
 			cvtColor(frame(rectSmall), imgHSV, COLOR_BGR2HSV);
-			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-
-			inRange(frame(rectSmall), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
-			inRange(frame(rectSmall), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
-
-			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
-			int area = imgHSV.rows * imgHSV.cols;
-			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			pedestrianTargets.push_back(Target(rectOrigin, hist, whiteRatio, blackRatio));
+			pedestrianTargets.push_back(Target(rectOrigin, hist));
 		}
 		framePedestrians.push_back(Frame(frameNum, pedestrianTargets));
 
@@ -801,7 +792,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		vector<Target> carTargets;
 		for (int i = 0; i < carRects.size(); ++i)
 		{
-			Mat imgHSV, imgWhite, imgBlack;
+			Mat imgHSV;
 			MatND hist;
 			Rect &rectOrigin = carRects[i], rectSmall = carRects[i];
 
@@ -814,15 +805,9 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			}
 			
 			cvtColor(frame(rectSmall), imgHSV, COLOR_BGR2HSV);
-			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSize, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-
-			inRange(frame(rectSmall), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
-			inRange(frame(rectSmall), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
-			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
-			int area = imgHSV.rows * imgHSV.cols;
-			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			carTargets.push_back(Target(rectOrigin, hist, whiteRatio, blackRatio));
+			carTargets.push_back(Target(rectOrigin, hist));
 		}
 		frameCars.push_back(Frame(frameNum, carTargets));
 		int progressMod = numOfFrames / 50;

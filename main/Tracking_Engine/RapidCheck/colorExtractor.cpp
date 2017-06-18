@@ -38,14 +38,15 @@ void colorExtractor()
 {
 	// initialize variables for histogram
 	// Using 50 bins for hue and 60 for saturation
-	int h_bins = NUM_OF_HUE_BINS; int s_bins = NUM_OF_SAT_BINS;
-	int histSize[] = { h_bins, s_bins };
+	int h_bins = 12; int s_bins = 9; int v_bins = 10;
+	int histSize[] = { h_bins, s_bins, v_bins};
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
 	float s_ranges[] = { 0, 256 };
-	const float* ranges[] = { h_ranges, s_ranges };
+	float v_ranges[] = { 0, 256 };
+	const float* ranges[] = { h_ranges, s_ranges, v_ranges };
 	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
+	int channels[] = { 0, 1, 2};
 
 	int id;
 	printf("insert id:");
@@ -110,10 +111,55 @@ void colorExtractor()
 
 
 
-		calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
-		normalize(hist, hist, 0, 1, cv::NORM_MINMAX, -1, Mat());
+		calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSize, ranges, true, false);
+		//normalize(hist, hist, 0, 1, cv::NORM_MINMAX, -1, Mat());
 
 		float totalHistSum = 0.0;
+		for (int h = 0; h < h_bins; h++)
+		{
+			for (int s = 0; s < s_bins; s++)
+			{
+				for (int v = 0; v < v_bins; v++)
+				{
+					totalHistSum += hist.at<float>(h, s, v);
+				}
+			}
+		}
+		float blackRatio = 0.0, whiteRatio = 0.0;
+		vector<float> hues(h_bins, 0.);
+		
+		for (int h = 0; h < h_bins; h++)
+		{
+			for (int s = 0; s < s_bins; s++)
+			{
+				for (int v = 0; v < v_bins; v++)
+				{
+					if (v == 0)
+					{
+						blackRatio += hist.at<float>(h, s, v) / totalHistSum;
+					}
+					else if (s == 0)
+					{
+						whiteRatio += hist.at<float>(h, s, v) / totalHistSum;
+					}
+					else
+					{
+						hues[h] += hist.at<float>(h, s, v) / totalHistSum;
+					}
+				}
+			}
+		}
+		printf("b:%.2lf w:%.2lf\n", blackRatio, whiteRatio);
+		for (int i = 0; i < h_bins; i++)
+		{
+			
+			printf("%.2lf ", hues[i]);
+			
+		}
+
+
+
+		/*
 		vector<float> colorHistSum(hist.rows, 0);
 		float wb = 0.0;
 		for (int i = 0; i < hist.rows; i++)
@@ -132,6 +178,7 @@ void colorExtractor()
 					colorHistSum[i] += currentHistValue;
 				}
 			}
+			
 		//	cout << endl;
 		}
 		for (int i = 0; i < colorHistSum.size(); i++)
@@ -141,6 +188,7 @@ void colorExtractor()
 		//cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 		//cout << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl << endl;
 		cout << endl << endl << endl << endl;
+		*/
 		cvWaitKey(0);
 	}
 }
