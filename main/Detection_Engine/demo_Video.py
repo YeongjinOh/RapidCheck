@@ -39,13 +39,13 @@ if cfg.image_dim_order == 'th':
 
 is_freeze = True
 # weigths_path = 'models/train/yolo-2class-complete.h5'
-# weigths_path = os.path.join(cfg.model_folder, cfg.model_name) + '-steps8000.h5'
+weigths_path = os.path.join(cfg.model_folder, cfg.model_name) + '-steps96000.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps44000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-voc-dropout/dropout-mydata-train-steps48000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/only-video_439532-steps8000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-cell14-mydata-tracking-mydata-20000-steps8000.h5'
-weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-mydatabase-mot-person-steps16000.h5'
+# weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-mydatabase-mot-person-steps16000.h5'
 test_threshold = 0.4
 
 # weigths_path = 'models/train/yolo-2class-voc2007-train-cell28-steps40000.h5'
@@ -58,9 +58,11 @@ model.load_weights(weigths_path)
 
 # video_path = os.path.join('dropbox', 'my_testset', 'PETS09-S2L2_test.mp4')
 # video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_439532', 'video_439532.mp4')
-video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_PETS09-S2L1', 'street.avi')
+# video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_PETS09-S2L1', 'street.avi')
 # video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_716195', 'video_716195.mp4')
-frameSteps = 1
+# video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_217193', 'video_217193.mp4')
+video_path = os.path.join('dropbox', 'dataset', 'datacenter', 'video_168936', 'video_168936.mp4')
+frameSteps = 3
 frameNum = -1
 items = []
 cap = cv2.VideoCapture(video_path)

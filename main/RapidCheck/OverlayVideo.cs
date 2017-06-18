@@ -12,7 +12,9 @@ using Accord.Video.VFW;
 using Accord.Video.FFMPEG;
 
 using System.Diagnostics;
-//time
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
 namespace RapidCheck
 {
     public class objDataGridView
@@ -59,7 +61,10 @@ namespace RapidCheck
         private int videoid;
         private int outputFrameNum;
         private string strConn = "Server=localhost;Database=rapidcheck;Uid=root;Pwd=1234;";
-        public string condition;
+        public string conditionTarget { set; get; }
+        public string conditionDensity { set; get; }
+        public string conditionDirection { set; get; }
+        public string conditionColor { set; get; }
         private int maxFrameNum;
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
@@ -76,7 +81,17 @@ namespace RapidCheck
         System.Drawing.SolidBrush drawBrush;
         //background
         Bitmap background;
-        
+        Bitmap backgroundCar;
+        Bitmap backgroundPeople;
+        Bitmap Direction1;
+        Bitmap Direction2;
+        Bitmap Direction3;
+        Bitmap Direction4;
+        Bitmap Direction6;
+        Bitmap Direction7;
+        Bitmap Direction8;
+        Bitmap Direction9;
+
         //UI
         PictureBox pictureBoxVideo;
         TrackBar trackingBar;
@@ -88,12 +103,30 @@ namespace RapidCheck
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
 
+        //tabpage3
+        List<double> directionRatioPeople;
+        List<double> directionRatioCar;
+        List<double> colorRatioPeople;
+        List<double> colorRatioCar;
+        public PlotModel modelBarChart;
+        public PlotModel modelPieChartPeople;
+        public PlotModel modelPieChartCar;
         public OverlayVideo() { }
-        public OverlayVideo(Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2,  Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo( Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
             drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
+            backgroundPeople = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\human@1x.png");
+            backgroundCar = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\Car@1x.png");
+            Direction1 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e1.png");
+            Direction2 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e2.png");
+            Direction3 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e3.png");
+            Direction4 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e4.png");
+            Direction6 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e6.png");
+            Direction7 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e7.png");
+            Direction8 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e8.png");
+            Direction9 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e9.png");
             //UI
             this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
@@ -120,7 +153,10 @@ namespace RapidCheck
             gridViewList2 = new List<int>();
             videoPath = path;
             videoPath = videoPath.Replace(@"\", @"\\");
-            this.condition = "";
+            this.conditionTarget = "";
+            this.conditionDensity = "";
+            this.conditionDirection = "";
+            this.conditionColor = "";
             this.outputFrameNum = outputFrameNum;
             this.maxFrameNum = maxFrameNum;
             this.minTrackingLength = minTrackingLength;
@@ -150,6 +186,12 @@ namespace RapidCheck
                 this.maxFrameNum = (int)reader.FrameCount;
             }
             reader.Close();
+
+            //tabpage3
+            directionRatioPeople = new List<double>();
+            directionRatioCar = new List<double>();
+            colorRatioPeople = new List<double>();
+            colorRatioCar = new List<double>();
             //------------------------------/변수 초기화-----------------------------
         }
     }

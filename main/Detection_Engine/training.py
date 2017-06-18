@@ -6,9 +6,15 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 import yolo.config as cfg
 from utils.help import say, conv_weigths_flatten, save_model, plot_model_history
+from yolo.datacenter.data import collect_enduser_trainset
 
 import keras.backend as K
 from yolo.net.RCNet_thdim_net import RCNet_THdim_model, RCNet_shortdense_THdim_model, RCNet_THdim_dropout_model
+import argparse
+
+parser = argparse.ArgumentParser()
+
+args = parser.parse_args()
 
 K.set_learning_phase(1) #set learning phase
 
@@ -42,8 +48,8 @@ print(cfg.dataset_abs_location)
 sess = tf.Session()
 K.set_session(sess)
 
-# model = RCNet_THdim_model()
-model = RCNet_THdim_dropout_model()
+model = RCNet_THdim_model()
+# model = RCNet_THdim_dropout_model()
 # model = RCNet_shortdense_THdim_model()
 model.summary()
 
@@ -63,6 +69,9 @@ train_op = optimizer.apply_gradients(gradients)
 sess.run(tf.global_variables_initializer())
 	
 model.load_weights(pretrain_weight_path, by_name=True)
+
+# End User Custom Training Function
+collect_enduser_trainset()
 
 batches = shuffle()
 

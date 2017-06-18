@@ -7,9 +7,119 @@ import numpy as np
 import os
 import yolo.config as cfg
 
-def _video_walk(datacenter_root_path):
-	for folder, subfolders, files in os.walk(datacenter_root_path):
-		print(folder)
+def _make_datacetner_folder(new_folder_path):
+	os.mkdir(new_folder_path)
+	os.mkdir(os.path.join(new_folder_path, "annotations"))
+	os.mkdir(os.path.join(new_folder_path, "images"))
+	return new_folder_path
+
+def _video_walk(cached_hash_ids):
+	from shutil import copyfile
+	
+	new_hash_ids = []
+	if not os.path.exists(cfg.dataset_enduser_root):
+		# 없으면 enduser_root 를 만든다
+		_make_datacetner_folder(cfg.dataset_enduser_root)
+
+	if not os.path.exists(os.path.join(cfg.dataset_enduser_root, 'annotations')):
+		os.mkdir(os.path.join(cfg.dataset_enduser_root, 'annotations'))
+	if not os.path.exists(os.path.join(cfg.dataset_enduser_root, 'images')):
+		os.mkdir(os.path.join(cfg.dataset_enduser_root, 'images'))
+
+	for folder, subfolders, files in os.walk(cfg.datacenter_root):
+		folder_name = folder.split(os.sep)[-1]
+		if 'video_' in folder_name:
+			hash_id = folder_name.split('_')[1]
+			if hash_id in cached_hash_ids:
+				# get video hash_id for duplicate check
+				continue
+			new_hash_ids.append(hash_id)
+			each_anno_folder = os.path.join(folder, 'annotations')
+			each_image_folder = os.path.join(folder, 'images')
+
+			anno_files = [f for f in os.listdir(each_anno_folder) if f.split('.')[-1] == 'xml' or f.split('.')[-1] == 'png']
+			for anno_file in anno_files:
+				copyfile(os.path.join(each_anno_folder, anno_file), os.path.join(cfg.dataset_enduser_root, 'annotations', anno_file))
+				copyfile(os.path.join(each_image_folder, anno_file.split('.')[0]+'.png'), os.path.join(cfg.dataset_enduser_root, 'images', anno_file.split('.')[0]+'.png'))
+	
+	return new_hash_ids
+
+def split_datacenter(src_folder_path, train_rates=0.8):
+	"""
+		datacenter/
+			annotations/
+			images/
+		로 나눠져있는 데이터에 대해서 train_rates 만큼 trainval 과 test set 으로 나눠주는 기능을 담당할 것
+		src_folder_path 는 datacenter 가 올것이고
+		src_folder_path + '_trainval',
+		src_folder_path + '_test' 아래에 annotations/ 와 images/ 가 생성될 예정이다.
+		return trainval_indexs, test_indexs
+	"""
+	from shutil import copyfile, rmtree
+	
+	src_anno_path = os.path.join(src_folder_path, 'annotations')
+	src_images_path = os.path.join(src_folder_path, 'images')
+	anno_files, trainval_indexs, test_indexs = _split(src_anno_path, train_rates)
+	
+	if not os.path.exists(os.path.join(src_folder_path, 'trainval')):
+		trainval_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'trainval'))
+	else:
+		rmtree(os.path.join(src_folder_path, 'trainval'))
+		trainval_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'trainval'))
+	
+	if not os.path.exists(os.path.join(src_folder_path, 'test')):
+		test_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'test'))
+	else:
+		rmtree(os.path.join(src_folder_path, 'test'))
+		test_folder_path = _make_datacetner_folder(os.path.join(src_folder_path, 'test'))
+	
+	# Make trainval datacenter folder
+	for i in trainval_indexs:
+		print("trainval : ", i)
+		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(trainval_folder_path, 'annotations', anno_files[i]))
+		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(trainval_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
+	
+	# Make test datacenter folder
+	for i in test_indexs:
+		print("test : ", i)
+		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(test_folder_path, 'annotations', anno_files[i]))
+		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(test_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
+
+def _split(folder_path, train_rates=0.8):
+	from numpy.random import permutation as perm
+	import numpy as np
+	files = [f for f in os.listdir(folder_path) if f.split('.')[-1] == 'xml' or f.split('.')[-1] == 'png']
+	files_size = len(files)
+	shuffle_idx = perm(np.arange(files_size))
+	trainval_size = int(files_size*train_rates)
+	return files, shuffle_idx[:trainval_size], shuffle_idx[trainval_size:]
+
+def _make_datacetner_folder(new_folder_path):
+	os.mkdir(new_folder_path)
+	os.mkdir(os.path.join(new_folder_path, "annotations"))
+	os.mkdir(os.path.join(new_folder_path, "images"))
+	return new_folder_path
+
+def collect_enduser_trainset():
+	import json
+	if os.path.exists(os.path.join('yolo', 'parse-history.txt')):
+		os.remove(os.path.join('yolo', 'parse-history.txt'))
+		os.remove(os.path.join('yolo', 'enduser_custom_train.parsed'))
+	
+	infomation_file = os.path.join(cfg.dataset_enduser_root, 'infomation.json')
+	with open(infomation_file, 'r') as f:
+		infomation_json = json.load(f)
+		if infomation_json['video_ids'] is None:
+			infomation_json['video_ids'] = []
+		new_hash_ids = _video_walk(infomation_json['video_ids'])
+		infomation_json['video_ids'] += new_hash_ids
+	
+	with open(infomation_file, 'w') as f:	
+		json.dump(infomation_json, f)
+
+
+	split_datacenter(cfg.dataset_enduser_root, train_rates=0.8)
+
 
 def parse(exclusive = False):
 	"""
