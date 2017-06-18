@@ -109,8 +109,8 @@ namespace RapidCheck
         List<double> colorRatioPeople;
         List<double> colorRatioCar;
         public PlotModel modelBarChart;
-        public PlotModel modelPieChart;
-
+        public PlotModel modelPieChartPeople;
+        public PlotModel modelPieChartCar;
         public OverlayVideo() { }
         public OverlayVideo( Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {

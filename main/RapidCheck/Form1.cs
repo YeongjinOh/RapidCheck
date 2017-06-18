@@ -111,7 +111,8 @@ namespace RapidCheck
                 }
                 else if (myRapidModule[idx].Method.ToString() == "Void pieChartSetting()")
                 {
-                    plotViewPie.Model = rapidCheck.modelPieChart;
+                    plotViewPie1.Model = rapidCheck.modelPieChartPeople;
+                    plotViewPie2.Model = rapidCheck.modelPieChartCar;
                 }
             }
         }

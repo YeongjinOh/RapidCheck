@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -104,7 +104,6 @@
             this.panel4 = new System.Windows.Forms.Panel();
             this.panelPieChart = new System.Windows.Forms.Panel();
             this.panel3 = new System.Windows.Forms.Panel();
-            this.plotViewPie = new OxyPlot.WindowsForms.PlotView();
             this.panelBarChart = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.plotViewBar = new OxyPlot.WindowsForms.PlotView();
@@ -120,6 +119,8 @@
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.plotViewPie2 = new OxyPlot.WindowsForms.PlotView();
+            this.plotViewPie1 = new OxyPlot.WindowsForms.PlotView();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -242,9 +243,9 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle3.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle3.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column1.HeaderText = "Car";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -277,9 +278,9 @@
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column2.Frozen = true;
             this.Column2.HeaderText = "People";
             this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -1047,8 +1048,9 @@
             // 
             // panelPieChart
             // 
+            this.panelPieChart.Controls.Add(this.plotViewPie1);
+            this.panelPieChart.Controls.Add(this.plotViewPie2);
             this.panelPieChart.Controls.Add(this.panel3);
-            this.panelPieChart.Controls.Add(this.plotViewPie);
             this.panelPieChart.Location = new System.Drawing.Point(956, 118);
             this.panelPieChart.Name = "panelPieChart";
             this.panelPieChart.Size = new System.Drawing.Size(948, 454);
@@ -1057,24 +1059,11 @@
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
-            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(948, 48);
             this.panel3.TabIndex = 2;
-            // 
-            // plotViewPie
-            // 
-            this.plotViewPie.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.plotViewPie.Location = new System.Drawing.Point(0, 48);
-            this.plotViewPie.Name = "plotViewPie";
-            this.plotViewPie.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotViewPie.Size = new System.Drawing.Size(948, 406);
-            this.plotViewPie.TabIndex = 1;
-            this.plotViewPie.Text = "plotView1";
-            this.plotViewPie.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotViewPie.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotViewPie.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // panelBarChart
             // 
@@ -1220,6 +1209,32 @@
             this.pictureBox5.TabIndex = 3;
             this.pictureBox5.TabStop = false;
             // 
+            // plotViewPie2
+            // 
+            this.plotViewPie2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.plotViewPie2.Location = new System.Drawing.Point(487, 48);
+            this.plotViewPie2.Name = "plotViewPie2";
+            this.plotViewPie2.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewPie2.Size = new System.Drawing.Size(461, 406);
+            this.plotViewPie2.TabIndex = 3;
+            this.plotViewPie2.Text = "plotView1";
+            this.plotViewPie2.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewPie2.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewPie2.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // plotViewPie1
+            // 
+            this.plotViewPie1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.plotViewPie1.Location = new System.Drawing.Point(0, 48);
+            this.plotViewPie1.Name = "plotViewPie1";
+            this.plotViewPie1.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewPie1.Size = new System.Drawing.Size(487, 406);
+            this.plotViewPie1.TabIndex = 4;
+            this.plotViewPie1.Text = "plotView1";
+            this.plotViewPie1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewPie1.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewPie1.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1364,7 +1379,6 @@
         private System.Windows.Forms.Button buttonColor6;
         private System.Windows.Forms.Button buttonColor4;
         private System.Windows.Forms.Button buttonColor2;
-        private OxyPlot.WindowsForms.PlotView plotViewPie;
         private OxyPlot.WindowsForms.PlotView plotViewBar;
         private System.Windows.Forms.Label buttonReadFile;
         private System.Windows.Forms.PictureBox pictureBoxHead;
@@ -1389,6 +1403,8 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.PictureBox pictureBox5;
+        private OxyPlot.WindowsForms.PlotView plotViewPie1;
+        private OxyPlot.WindowsForms.PlotView plotViewPie2;
     }
 }
 

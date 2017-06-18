@@ -250,21 +250,26 @@ namespace RapidCheck
                         }
                     }
                     dt = ds.Tables["videoColorRatio"];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        colorRatioCar.Add(0.0);
+                        colorRatioPeople.Add(0.0);
+                    }
                     foreach (DataRow dr in dt.Rows)
                     {
                         int classId = Convert.ToInt32(dr["classId"]);
                         if (classId == 0)
                         {
-                            for (int i = 0; i < 16; i++)
+                            for (int i = 0; i < colorRatioCar.Count; i++)
                             {
-                                colorRatioCar.Add(Convert.ToDouble(dr["color" + i]));
+                                colorRatioCar[i] = Convert.ToDouble(dr["color" + i]);
                             }
                         }
                         else if (classId == 1)
                         {
-                            for (int i = 0; i < 16; i++)
+                            for (int i = 0; i < colorRatioPeople.Count; i++)
                             {
-                                colorRatioPeople.Add(Convert.ToDouble(dr["color" + i]));
+                                colorRatioPeople[i] = Convert.ToDouble(dr["color" + i]);
                             }
                         }
                     }
@@ -808,17 +813,24 @@ namespace RapidCheck
         }
         public void pieChartSetting()
         {
-            modelPieChart = new PlotModel { Title = "Pie Sample1" };
-
+            //People
+            modelPieChartCar = new PlotModel { Title = "Car" };
             dynamic seriesP1 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
             for (int i = 0; i < 16; i++)
             {
                 seriesP1.Slices.Add(new PieSlice("Color" + i, colorRatioCar[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i/16, 0.7, 0.9) });
             }
-                
+            modelPieChartCar.Series.Add(seriesP1);
+            //Car
+            modelPieChartPeople = new PlotModel { Title = "People" };
+            dynamic seriesP2 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
-            modelPieChart.Series.Add(seriesP1);
+            for (int i = 0; i < 16; i++)
+            {
+                seriesP2.Slices.Add(new PieSlice("Color" + i, colorRatioPeople[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i / 16, 0.7, 0.9) });
+            }
+            modelPieChartPeople.Series.Add(seriesP2);
         }
 
     }
