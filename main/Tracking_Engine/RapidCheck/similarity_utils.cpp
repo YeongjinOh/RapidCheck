@@ -59,11 +59,11 @@ double calcSimilarityAppearance(tracklet& trackletPrev, tracklet& trackletNext, 
 {
 	// Co-relation comparison
 	int compareHistMethod = 0;
-	MatND histSumPrev = trackletPrev[trackletPrev.size()-LOW_LEVEL_TRACKLETS].hist;;
+	MatND histSumPrev = trackletPrev[trackletPrev.size()-LOW_LEVEL_TRACKLETS].hist;
 	for (int j = trackletPrev.size() - LOW_LEVEL_TRACKLETS + 1; j < trackletPrev.size(); j++)
 		histSumPrev += trackletPrev[j].hist;
 	normalize(histSumPrev, histSumPrev, 0, 1, cv::NORM_MINMAX, -1, Mat());
-	MatND histSumNext = trackletNext[0].hist;;
+	MatND histSumNext = trackletNext[0].hist;
 	for (int j = 1; j < LOW_LEVEL_TRACKLETS; j++)
 		histSumNext += trackletNext[j].hist;
 	normalize(histSumNext, histSumNext, 0, 1, cv::NORM_MINMAX, -1, Mat());

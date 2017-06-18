@@ -20,7 +20,7 @@ void initRCVariables()
 	videoId = 706;
 	startFrameNum = 0;
 	frameStep = 4;
-	endFrameNum = 10000;
+	endFrameNum = 1000;
 	numOfFrames = (endFrameNum - startFrameNum) / frameStep;
 }
 
@@ -28,7 +28,7 @@ void initRCVariables()
 int main(int argc, char ** argv)
 {
 	initRCVariables();
-	int operationNum = 1;
+	int operationNum = 7;
 
 	// assign arguments
 	for (int i = 1; i < argc; i++)

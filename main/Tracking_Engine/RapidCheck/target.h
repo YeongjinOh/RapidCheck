@@ -16,16 +16,14 @@ public:
 	Target(){};
 	Target(Rect rect);
 	Target(Rect rect, MatND hist);
-	Target(Rect rect, MatND hist, float whiteRatio, float blackRatio);
+	Target(Rect rect, MatND hist, MatND histColor);
 	
-	std::vector<Point> centerPositions;
-	float blackRatio, whiteRatio;
 	bool found;
 	Point getCenterPoint();
 	Rect getTargetArea();
 
 	// Histogram for matching
-	MatND hist;
+	MatND hist, histColor;
 };
 
 

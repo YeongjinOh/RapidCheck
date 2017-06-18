@@ -21,19 +21,6 @@ void showDetection()
 	// cap.set(CV_CAP_PROP_FRAME_HEIGHT, 240);
 	cap >> frame;
 	
-	// Histogram setting
-	// Using 50 bins for hue and 60 for saturation
-	int h_bins = NUM_OF_HUE_BINS; int s_bins = NUM_OF_SAT_BINS;
-	int histSize[] = { h_bins, s_bins };
-
-	// hue varies from 0 to 179, saturation from 0 to 255
-	float h_ranges[] = { 0, 180 };
-	float s_ranges[] = { 0, 256 };
-
-	const float* ranges[] = { h_ranges, s_ranges };
-
-	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
 	int frameCnt = 0;
 	while (frameCnt < numOfFrames)
 	{

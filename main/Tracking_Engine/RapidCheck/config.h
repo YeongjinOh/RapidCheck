@@ -12,9 +12,12 @@ const int CLASS_ID_CAR = 0;
 const int CLASS_ID_PEDESTRIAN = 1;
 
 // Histogram
-const int NUM_OF_HUE_BINS = 6;
-const int NUM_OF_SAT_BINS = 3;
-const int NUM_OF_VAL_BINS = 2;
+const int NUM_OF_HUE_BINS_COLOR = 12;
+const int NUM_OF_SAT_BINS_COLOR = 15;
+const int NUM_OF_VAL_BINS_COLOR = 10;
+const int NUM_OF_HUE_BINS_CMP = 8;
+const int NUM_OF_SAT_BINS_CMP = 4;
+const int NUM_OF_VAL_BINS_CMP = 2;
 
 // Tracklet
 const double MIXTURE_CONSTANT = 0.1;
@@ -39,7 +42,7 @@ const bool INSERT_OBJECT_INFO_INTO_DB = INSERT_TRACKING_INTO_DB;
 const int WHITE_DIFF_RANGE = 80;
 const int BLACK_DIFF_RANGE = 50;
 const int NUM_OF_DIRECTIONS = 16;
-const int NUM_OF_COLOR_CLASSES = NUM_OF_HUE_BINS + 2;
+const int NUM_OF_COLOR_CLASSES = NUM_OF_HUE_BINS_COLOR + 2;
 const static double PI = 3.14159265;
 
 static int totalFrameCount;

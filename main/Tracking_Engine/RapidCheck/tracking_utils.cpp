@@ -31,7 +31,7 @@ void reconstructLeftDummy(vector<int>& selectedIndices, vector<Target>& selected
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
 	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-	Target target(rect, target1.hist);
+	Target target(rect, target1.hist, target1.histColor);
 	target.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
 	selectedIndices[idx] = targetSize - 1;
@@ -48,7 +48,7 @@ void reconstructRightDummy(vector<int>& selectedIndices, vector<Target>& selecte
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (2 * p1 - p2);
 	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-	Target target(rect, target1.hist);
+	Target target(rect, target1.hist, target1.histColor);
 	target.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
 	selectedIndices[idx] = targetSize - 1;
@@ -63,7 +63,7 @@ void reconstructMiddleOneDummy(vector<int>& selectedIndices, vector<Target>& sel
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p0 = (p1 + p2) / 2;
 	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
-	Target target(rect, target1.hist);
+	Target target(rect, target1.hist, target1.histColor);
 	target.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
 	selectedIndices[idx] = targetSize - 1;
@@ -78,7 +78,7 @@ void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& s
 	Point p1 = target1.getCenterPoint(), p2 = target2.getCenterPoint(), p_l = (2 * p1 + p2) / 3, p_r = (p1 + 2 * p2) / 3;
 	int width_l = target1.getTargetArea().width, height_l = target1.getTargetArea().height, width_r = target2.getTargetArea().width, height_r = target2.getTargetArea().height;
 	Rect rect_l(p_l.x - width_l / 2, p_l.y - height_l / 2, width_l, height_l), rect_r(p_r.x - width_r / 2, p_r.y - height_r / 2, width_r, height_r);
-	Target target_l(rect_l, target1.hist), target_r(rect_r, target2.hist);
+	Target target_l(rect_l, target1.hist, target1.histColor), target_r(rect_r, target2.hist, target2.histColor);
 	target_l.found = true;
 	target_r.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx1].addTarget(target_l);
@@ -603,17 +603,7 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 {
 	App app = App();
 
-	// initialize variables for histogram
-	// Using 50 bins for hue and 60 for saturation
-	int h_bins = NUM_OF_HUE_BINS, s_bins = NUM_OF_SAT_BINS;
-	int histSize[] = { h_bins, s_bins };
-	// hue varies from 0 to 179, saturation from 0 to 255
-	float h_ranges[] = { 0, 180 };
-	float s_ranges[] = { 0, 256 };
-	const float* ranges[] = { h_ranges, s_ranges };
-	// Use the o-th and 1-st channels
-	int channels[] = { 0, 1 };
-
+	
 	Mat frame, frameSkipped;
 	
 	int frameNum = startFrameNum;
@@ -679,16 +669,7 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 			r.y += r.height / 10;
 			r.height = r.height * 4 / 5;
 
-			cvtColor(frame(r), imgHSV, COLOR_BGR2HSV);
-			calcHist(&imgHSV, 1, channels, Mat(), hist, 2, histSize, ranges, true, false);
-			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			
-			inRange(frame(r), Scalar(255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 255 - WHITE_DIFF_RANGE, 0), Scalar(255, 255, 255, 0), imgWhite);
-			inRange(frame(r), Scalar(0, 0, 0, 0), Scalar(BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, BLACK_DIFF_RANGE, 0), imgBlack);
-			int cntWhite = cv::countNonZero(imgWhite), cntBlack = cv::countNonZero(imgBlack);
-			int area = imgHSV.rows * imgHSV.cols;
-			float whiteRatio = (float)cntWhite / area, blackRatio = (float)cntBlack / area;
-			targets.push_back(Target(r, hist, whiteRatio, blackRatio));
+			targets.push_back(Target(r, hist));
 		}
 
 		frames.push_back(Frame(frameNum, targets));
@@ -698,7 +679,8 @@ void detectTargets(VideoCapture& cap, vector<Frame>& frames)
 // Read targets in MAX_FRAMES frames from DataBase
 void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Frame>& frameCars)
 {
-	int histSize[] = { NUM_OF_HUE_BINS, NUM_OF_SAT_BINS, NUM_OF_VAL_BINS };
+	int histSizeColor[] = { NUM_OF_HUE_BINS_COLOR, NUM_OF_SAT_BINS_COLOR, NUM_OF_VAL_BINS_COLOR };
+	int histSizeCmp[] = { NUM_OF_HUE_BINS_CMP, NUM_OF_SAT_BINS_CMP, NUM_OF_VAL_BINS_CMP };
 	// hue varies from 0 to 179, saturation from 0 to 255
 	float h_ranges[] = { 0, 180 };
 	float s_ranges[] = { 0, 256 };
@@ -767,7 +749,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		for (int i = 0; i < pedestriansRects.size(); ++i)
 		{
 			Mat imgHSV;
-			MatND hist;
+			MatND hist, histColor;
 			Rect &rectOrigin = pedestriansRects[i], rectSmall = pedestriansRects[i];
 
 			if (RESIZE_DETECTION_AREA)
@@ -779,9 +761,10 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			}
 
 			cvtColor(frame(rectSmall), imgHSV, COLOR_BGR2HSV);
-			calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSize, ranges, true, false);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSizeCmp, ranges, true, false);
+			calcHist(&imgHSV, 1, channels, Mat(), histColor, 3, histSizeColor, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			pedestrianTargets.push_back(Target(rectOrigin, hist));
+			pedestrianTargets.push_back(Target(rectOrigin, hist, histColor));
 		}
 		framePedestrians.push_back(Frame(frameNum, pedestrianTargets));
 
@@ -793,7 +776,7 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 		for (int i = 0; i < carRects.size(); ++i)
 		{
 			Mat imgHSV;
-			MatND hist;
+			MatND hist, histColor;
 			Rect &rectOrigin = carRects[i], rectSmall = carRects[i];
 
 			if (RESIZE_DETECTION_AREA)
@@ -805,9 +788,10 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 			}
 			
 			cvtColor(frame(rectSmall), imgHSV, COLOR_BGR2HSV);
-			calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSize, ranges, true, false);
+			calcHist(&imgHSV, 1, channels, Mat(), hist, 3, histSizeCmp, ranges, true, false);
+			calcHist(&imgHSV, 1, channels, Mat(), histColor, 3, histSizeColor, ranges, true, false);
 			normalize(hist, hist, 0, 1, NORM_MINMAX, -1, Mat());
-			carTargets.push_back(Target(rectOrigin, hist));
+			carTargets.push_back(Target(rectOrigin, hist, histColor));
 		}
 		frameCars.push_back(Frame(frameNum, carTargets));
 		int progressMod = numOfFrames / 50;
