@@ -112,6 +112,9 @@ namespace RapidCheck
         public PlotModel modelBarChart;
         public PlotModel modelPieChartPeople;
         public PlotModel modelPieChartCar;
+        public PlotModel modelLineChart;
+        public int peopleTotal { get; set; }
+        public int carTotal { get; set; }
         public OverlayVideo() { }
         public OverlayVideo( Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
@@ -194,6 +197,8 @@ namespace RapidCheck
             directionCntCar = new List<int>();
             colorRatioPeople = new List<double>();
             colorRatioCar = new List<double>();
+            peopleTotal = 0;
+            carTotal = 0;
             //------------------------------/변수 초기화-----------------------------
         }
     }

@@ -63,10 +63,6 @@ namespace RapidCheck
             Cef.Initialize(new CefSettings()); // chrome initialize
             //setUI(); //ui enable false
             defaultColor(); //color setting
-            
-            //var myModel = new PlotModel { Title = "Example 1" };
-            //myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
-            //plotViewLine.Model = myModel;
         }
         //------------------------------Overlay Module------------------------------
         private void startOverlayModule()
@@ -88,6 +84,7 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.getMysqlObjList);
             myRapidModule.Add(rapidCheck.barChartSetting);// chart
             myRapidModule.Add(rapidCheck.pieChartSetting);// chart
+            myRapidModule.Add(rapidCheck.LineChartSetting);// chart
             myRapidModule.Add(rapidCheck.addObj);
             myRapidModule.Add(rapidCheck.imageCrop);
             myRapidModule.Add(rapidCheck.objectClustering);
@@ -113,7 +110,13 @@ namespace RapidCheck
                 else if (myRapidModule[idx].Method.ToString() == "Void pieChartSetting()")
                 {
                     plotViewPie1.Model = rapidCheck.modelPieChartPeople;
-                    plotViewPie2.Model = rapidCheck.modelPieChartCar;
+                    plotViewPie2.Model = rapidCheck.modelLineChart;
+                }
+                else if(myRapidModule[idx].Method.ToString() == "Void LineChartSetting()")
+                {
+                    plotViewLine.Model = rapidCheck.modelLineChart;
+                    labelCarCnt.Text = "Car : " + rapidCheck.carTotal;
+                    labelPeopleCnt.Text = "people : " + rapidCheck.peopleTotal;
                 }
             }
         }
