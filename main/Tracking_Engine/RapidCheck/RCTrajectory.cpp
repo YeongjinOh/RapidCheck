@@ -154,3 +154,9 @@ void RCTrajectory::normalizeColorRatios()
 		colorRatios[i] /= cntValidTracklets;
 	}
 }
+
+double RCTrajectory::calcSpeed()
+{
+	Point posDiff = targets.front().getCenterPoint() - targets.back().getCenterPoint();
+	return sqrt(posDiff.x * posDiff.x + posDiff.y * posDiff.y) / (targets.size() - 1);
+}

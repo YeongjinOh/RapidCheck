@@ -32,8 +32,11 @@ void reconstructLeftDummy(vector<int>& selectedIndices, vector<Target>& selected
 	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
+	target.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
 	selectedIndices[idx] = targetSize - 1;
+	if (selectedIndices[idx] == -1)
+		return;
 	selectedTargets[idx] = target;
 }
 
@@ -46,6 +49,7 @@ void reconstructRightDummy(vector<int>& selectedIndices, vector<Target>& selecte
 	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
+	target.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
 	selectedIndices[idx] = targetSize - 1;
 	selectedTargets[idx] = target;
@@ -60,6 +64,7 @@ void reconstructMiddleOneDummy(vector<int>& selectedIndices, vector<Target>& sel
 	int width = target1.getTargetArea().width, height = target1.getTargetArea().height;
 	Rect rect(p0.x - width / 2, p0.y - height / 2, width, height);
 	Target target(rect, target1.hist);
+	target.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx].addTarget(target);
 	selectedIndices[idx] = targetSize - 1;
 	selectedTargets[idx] = target;
@@ -74,6 +79,8 @@ void reconstructMiddleTwoDummies(vector<int>& selectedIndices, vector<Target>& s
 	int width_l = target1.getTargetArea().width, height_l = target1.getTargetArea().height, width_r = target2.getTargetArea().width, height_r = target2.getTargetArea().height;
 	Rect rect_l(p_l.x - width_l / 2, p_l.y - height_l / 2, width_l, height_l), rect_r(p_r.x - width_r / 2, p_r.y - height_r / 2, width_r, height_r);
 	Target target_l(rect_l, target1.hist), target_r(rect_r, target2.hist);
+	target_l.found = true;
+	target_r.found = true;
 	int targetSize = frames[frameNumber - LOW_LEVEL_TRACKLETS + idx1].addTarget(target_l);
 	selectedIndices[idx1] = targetSize - 1;
 	selectedTargets[idx1] = target_l;
@@ -92,8 +99,12 @@ void printIndices(vector<int>& selectedIndices)
 }
 
 // Build one optimal tracklet of given segment
-void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy)
+void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vector<Target>& selectedTargets, vector<Frame>& frames, int frameNumber, double& costMin, bool useDummy, int& fnCallCnt)
 {
+	if (fnCallCnt > MAX_TRACKLET_CALL)
+		return;
+	fnCallCnt++;
+	
 	// (n+1)-th frame
 	int n = selectedTargets.size();
 
@@ -111,7 +122,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 		}
 
 		// at least 4 inliers needed
-		if (inlierCandidates.size() < 4)
+		if (inlierCandidates.size() < 4 || (!useDummy && inlierCandidates.size() < LOW_LEVEL_TRACKLETS))
 			return;
 
 		// find the best pair of points which have
@@ -186,7 +197,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 			}
 			// TODO
 			// getTracklet(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
-			getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy);
+			getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber, costMin, useDummy, fnCallCnt);
 			
 			return;
 		}
@@ -259,9 +270,18 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 
 		}
 
+		// check jaccard continuity
+		for (int i = 0; i < LOW_LEVEL_TRACKLETS; i++)
+			if (selectedIndices[i] == -1)
+				return;
+		for (int i = 1; i < LOW_LEVEL_TRACKLETS; i++)
+			if ((selectedTargets[i - 1].getTargetArea() & selectedTargets[i].getTargetArea()).area() == 0)
+				return;
+
 		// compute cost
 		// cost value is linear combination of cost_appearance and cost_motion
 		double costAppearance = 0.0, costMotion = 0.0;
+		
 		for (int i = 0; i < n; i++)
 		{
 			for (int j = 0; j < i; j++)
@@ -309,7 +329,8 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 			Target& prevTarget = selectedTargets.back();
 			Point motionErrVector = curTarget.getCenterPoint() - prevTarget.getCenterPoint();
 			double motionCost = getNormValueFromVector(motionErrVector);
-			if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR)
+			//if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR)
+			if (motionCost > CONTINUOUS_MOTION_COST_THRE_CAR || (curTarget.getTargetArea() & prevTarget.getTargetArea()).area() == 0)
 			{
 				continue;
 			}
@@ -319,7 +340,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 		// recursive backtracking
 		selectedTargets.push_back(targets[i]);
 		selectedIndices.push_back(i);
-		getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
+		getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy, fnCallCnt);
 		selectedIndices.pop_back();
 		selectedTargets.pop_back();
 		cnt++;
@@ -331,7 +352,7 @@ void getTrackletOfCars(vector<int>& solution, vector<int>& selectedIndices, vect
 		// recursive backtracking
 		selectedTargets.push_back(Target());
 		selectedIndices.push_back(-1);
-		getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy);
+		getTrackletOfCars(solution, selectedIndices, selectedTargets, frames, frameNumber + 1, costMin, useDummy, fnCallCnt);
 		selectedIndices.pop_back();
 		selectedTargets.pop_back();
 	}
@@ -891,7 +912,8 @@ void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId
 		
 		// do not use dummy until no more solution built to optimize
 		bool useDummy = false;
-		while (true)
+		int maxRep = 100;
+		for (int i = 0; i < maxRep; i++)
 		{
 			double costMin = INFINITY;
 			solution.clear();
@@ -904,7 +926,8 @@ void buildTracklets(vector<Frame> frames, vector<Segment>& segments, int classId
 			}
 			else
 			{
-				getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy);
+				int fnCallCnt = 0;
+				getTrackletOfCars(solution, vector<int>(), vector<Target>(), frames, frameNum, costMin, useDummy, fnCallCnt);
 			}
 			
 			
@@ -1019,12 +1042,12 @@ void insertObjectInfoIntoDB(vector<RCTrajectory>& trajectoryPedestrians, vector<
 	for (int i = 0; i < trajectoryPedestrians.size(); i++)
 	{
 		trajectoryPedestrians[i].normalizeColorRatios();
-		db.insertObjectInfo(videoId, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), 0.0, trajectoryPedestrians[i].getColorRatios());
+		db.insertObjectInfo(videoId, i, CLASS_ID_PEDESTRIAN, trajectoryPedestrians[i].getDirectionRatios(), trajectoryPedestrians[i].calcSpeed(), trajectoryPedestrians[i].getColorRatios());
 	}
 	for (int i = 0; i < trajectoryCars.size(); i++)
 	{
 		trajectoryCars[i].normalizeColorRatios();
-		db.insertObjectInfo(videoId, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), 0.0, trajectoryCars[i].getColorRatios());
+		db.insertObjectInfo(videoId, trajectoryPedestrians.size() + i, CLASS_ID_CAR, trajectoryCars[i].getDirectionRatios(), trajectoryCars[i].calcSpeed(), trajectoryCars[i].getColorRatios());
 	}
 }
 

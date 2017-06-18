@@ -28,6 +28,7 @@ public:
 	std::vector<float> getDirectionRatios();
 	std::vector<float> getColorRatios();
 	void normalizeColorRatios();
+	double calcSpeed();
 };
 
 #endif

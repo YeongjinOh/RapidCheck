@@ -23,6 +23,7 @@ const int CONTINUOUS_MOTION_COST_THRE = 30;
 const int CONTINUOUS_MOTION_COST_THRE_CAR = 200;
 const bool RESIZE_DETECTION_AREA = false;
 const bool SELECT_DETECTION_RESPONSE = true;
+const int MAX_TRACKLET_CALL = 20000;
 
 // Trajectory
 const double TRAJECTORY_MATCH_COST_THRES_FOR_PEDESTRIAN = 200.0;
@@ -36,7 +37,7 @@ const bool INSERT_OBJECT_INFO_INTO_DB = false;
 // Object Information
 const int WHITE_DIFF_RANGE = 80;
 const int BLACK_DIFF_RANGE = 50;
-const int NUM_OF_DIRECTIONS = 8;
+const int NUM_OF_DIRECTIONS = 16;
 const int NUM_OF_COLOR_CLASSES = 19;
 const static double PI = 3.14159265;
 
