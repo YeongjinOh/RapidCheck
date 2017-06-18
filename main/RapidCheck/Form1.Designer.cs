@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle15 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle16 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -100,8 +100,17 @@
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.plotView2 = new OxyPlot.WindowsForms.PlotView();
-            this.plotView1 = new OxyPlot.WindowsForms.PlotView();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
+            this.panelPieChart = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.plotViewPie = new OxyPlot.WindowsForms.PlotView();
+            this.panelBarChart = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.plotViewBar = new OxyPlot.WindowsForms.PlotView();
+            this.panelLineChart = new System.Windows.Forms.Panel();
+            this.panelLineChartHeader = new System.Windows.Forms.Panel();
+            this.plotViewLine = new OxyPlot.WindowsForms.PlotView();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.panelWebbrowser = new System.Windows.Forms.Panel();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
@@ -110,7 +119,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.plotView3 = new OxyPlot.WindowsForms.PlotView();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -156,8 +165,13 @@
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.tabPage1.SuspendLayout();
+            this.panel2.SuspendLayout();
+            this.panelPieChart.SuspendLayout();
+            this.panelBarChart.SuspendLayout();
+            this.panelLineChart.SuspendLayout();
             this.tabPage4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -183,10 +197,10 @@
             this.tabPage2.Controls.Add(this.panelObject);
             this.tabPage2.Controls.Add(this.panelVideo);
             this.tabPage2.Controls.Add(this.panelCondition);
-            this.tabPage2.Location = new System.Drawing.Point(4, 26);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1912, 990);
+            this.tabPage2.Size = new System.Drawing.Size(1912, 994);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             // 
@@ -198,7 +212,7 @@
             this.panelObject.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelObject.Location = new System.Drawing.Point(1460, 3);
             this.panelObject.Name = "panelObject";
-            this.panelObject.Size = new System.Drawing.Size(449, 984);
+            this.panelObject.Size = new System.Drawing.Size(449, 988);
             this.panelObject.TabIndex = 4;
             // 
             // dataGridView1
@@ -228,9 +242,9 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle15.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle15.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle15.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle15;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle3.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column1.HeaderText = "Car";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -263,9 +277,9 @@
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle16.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle16.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle16.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle16;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle4;
             this.Column2.Frozen = true;
             this.Column2.HeaderText = "People";
             this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -283,7 +297,7 @@
             this.panelVideo.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelVideo.Location = new System.Drawing.Point(196, 3);
             this.panelVideo.Name = "panelVideo";
-            this.panelVideo.Size = new System.Drawing.Size(1264, 984);
+            this.panelVideo.Size = new System.Drawing.Size(1264, 988);
             this.panelVideo.TabIndex = 0;
             // 
             // panelVideoControl
@@ -349,7 +363,7 @@
             this.trackBar1.Enabled = false;
             this.trackBar1.Location = new System.Drawing.Point(20, 12);
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(1219, 56);
+            this.trackBar1.Size = new System.Drawing.Size(1219, 45);
             this.trackBar1.TabIndex = 2;
             this.trackBar1.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar1.ValueChanged += new System.EventHandler(this.trackBar1_ValueChanged);
@@ -374,7 +388,7 @@
             this.labelProgress.ForeColor = System.Drawing.Color.Black;
             this.labelProgress.Location = new System.Drawing.Point(470, 562);
             this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(0, 29);
+            this.labelProgress.Size = new System.Drawing.Size(0, 25);
             this.labelProgress.TabIndex = 2;
             // 
             // pictureBoxVideo
@@ -396,7 +410,7 @@
             this.panelCondition.Dock = System.Windows.Forms.DockStyle.Left;
             this.panelCondition.Location = new System.Drawing.Point(3, 3);
             this.panelCondition.Name = "panelCondition";
-            this.panelCondition.Size = new System.Drawing.Size(193, 984);
+            this.panelCondition.Size = new System.Drawing.Size(193, 988);
             this.panelCondition.TabIndex = 3;
             // 
             // panelConditionModule
@@ -581,7 +595,7 @@
             this.label4.ForeColor = System.Drawing.Color.White;
             this.label4.Location = new System.Drawing.Point(56, 1);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(67, 39);
+            this.label4.Size = new System.Drawing.Size(56, 31);
             this.label4.TabIndex = 2;
             this.label4.Text = "색상";
             // 
@@ -602,7 +616,7 @@
             this.label3.ForeColor = System.Drawing.Color.White;
             this.label3.Location = new System.Drawing.Point(56, 1);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(67, 39);
+            this.label3.Size = new System.Drawing.Size(56, 31);
             this.label3.TabIndex = 2;
             this.label3.Text = "방향";
             // 
@@ -749,7 +763,7 @@
             this.label1.ForeColor = System.Drawing.Color.White;
             this.label1.Location = new System.Drawing.Point(56, 4);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 39);
+            this.label1.Size = new System.Drawing.Size(56, 31);
             this.label1.TabIndex = 2;
             this.label1.Text = "대상";
             // 
@@ -794,7 +808,7 @@
             this.label2.ForeColor = System.Drawing.Color.White;
             this.label2.Location = new System.Drawing.Point(56, 1);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(67, 39);
+            this.label2.Size = new System.Drawing.Size(56, 31);
             this.label2.TabIndex = 2;
             this.label2.Text = "밀도";
             // 
@@ -859,7 +873,7 @@
             this.labelDensity.ForeColor = System.Drawing.Color.White;
             this.labelDensity.Location = new System.Drawing.Point(66, 7);
             this.labelDensity.Name = "labelDensity";
-            this.labelDensity.Size = new System.Drawing.Size(30, 31);
+            this.labelDensity.Size = new System.Drawing.Size(25, 26);
             this.labelDensity.TabIndex = 3;
             this.labelDensity.Tag = "";
             this.labelDensity.Text = "8";
@@ -870,7 +884,7 @@
             this.trackBar2.Maximum = 20;
             this.trackBar2.Minimum = 1;
             this.trackBar2.Name = "trackBar2";
-            this.trackBar2.Size = new System.Drawing.Size(154, 56);
+            this.trackBar2.Size = new System.Drawing.Size(154, 45);
             this.trackBar2.TabIndex = 2;
             this.trackBar2.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar2.Value = 8;
@@ -886,7 +900,7 @@
             this.startBtn.MouseState = MaterialSkin.MouseState.HOVER;
             this.startBtn.Name = "startBtn";
             this.startBtn.Primary = false;
-            this.startBtn.Size = new System.Drawing.Size(66, 36);
+            this.startBtn.Size = new System.Drawing.Size(55, 36);
             this.startBtn.TabIndex = 6;
             this.startBtn.Text = "Start";
             this.startBtn.UseVisualStyleBackColor = true;
@@ -898,7 +912,7 @@
             this.radioButtonX4.AutoSize = true;
             this.radioButtonX4.Location = new System.Drawing.Point(125, 951);
             this.radioButtonX4.Name = "radioButtonX4";
-            this.radioButtonX4.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX4.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX4.TabIndex = 5;
             this.radioButtonX4.TabStop = true;
             this.radioButtonX4.Text = "x4";
@@ -911,7 +925,7 @@
             this.radioButtonX1.AutoSize = true;
             this.radioButtonX1.Location = new System.Drawing.Point(27, 951);
             this.radioButtonX1.Name = "radioButtonX1";
-            this.radioButtonX1.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX1.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX1.TabIndex = 5;
             this.radioButtonX1.TabStop = true;
             this.radioButtonX1.Text = "x1";
@@ -937,7 +951,7 @@
             this.buttonReadFile.ForeColor = System.Drawing.Color.White;
             this.buttonReadFile.Location = new System.Drawing.Point(57, 27);
             this.buttonReadFile.Name = "buttonReadFile";
-            this.buttonReadFile.Size = new System.Drawing.Size(65, 36);
+            this.buttonReadFile.Size = new System.Drawing.Size(51, 29);
             this.buttonReadFile.TabIndex = 4;
             this.buttonReadFile.Text = "파일";
             this.buttonReadFile.Click += new System.EventHandler(this.buttonReadFile_Click);
@@ -963,7 +977,7 @@
             this.radioButtonX2.AutoSize = true;
             this.radioButtonX2.Location = new System.Drawing.Point(76, 951);
             this.radioButtonX2.Name = "radioButtonX2";
-            this.radioButtonX2.Size = new System.Drawing.Size(43, 21);
+            this.radioButtonX2.Size = new System.Drawing.Size(36, 17);
             this.radioButtonX2.TabIndex = 5;
             this.radioButtonX2.TabStop = true;
             this.radioButtonX2.Text = "x2";
@@ -974,10 +988,10 @@
             // tabPage3
             // 
             this.tabPage3.Controls.Add(this.videoPanel);
-            this.tabPage3.Location = new System.Drawing.Point(4, 26);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(1912, 990);
+            this.tabPage3.Size = new System.Drawing.Size(1912, 994);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -988,7 +1002,7 @@
             this.videoPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.videoPanel.Location = new System.Drawing.Point(3, 3);
             this.videoPanel.Name = "videoPanel";
-            this.videoPanel.Size = new System.Drawing.Size(1906, 984);
+            this.videoPanel.Size = new System.Drawing.Size(1906, 988);
             this.videoPanel.TabIndex = 1;
             // 
             // axWindowsMediaPlayer1
@@ -1002,50 +1016,138 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.plotView3);
-            this.tabPage1.Controls.Add(this.plotView2);
-            this.tabPage1.Controls.Add(this.plotView1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 26);
+            this.tabPage1.Controls.Add(this.panel2);
+            this.tabPage1.Controls.Add(this.panelPieChart);
+            this.tabPage1.Controls.Add(this.panelBarChart);
+            this.tabPage1.Controls.Add(this.panelLineChart);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(1912, 990);
+            this.tabPage1.Size = new System.Drawing.Size(1912, 994);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // plotView2
+            // panel2
             // 
-            this.plotView2.Font = new System.Drawing.Font("SpoqaHanSans-Regular", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)), true);
-            this.plotView2.Location = new System.Drawing.Point(12, 164);
-            this.plotView2.Name = "plotView2";
-            this.plotView2.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView2.Size = new System.Drawing.Size(1137, 451);
-            this.plotView2.TabIndex = 1;
-            this.plotView2.Text = "plotView1";
-            this.plotView2.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotView2.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotView2.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.panel2.Controls.Add(this.panel4);
+            this.panel2.Location = new System.Drawing.Point(12, 21);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(1892, 82);
+            this.panel2.TabIndex = 5;
             // 
-            // plotView1
+            // panel4
             // 
-            this.plotView1.Location = new System.Drawing.Point(1151, 164);
-            this.plotView1.Name = "plotView1";
-            this.plotView1.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView1.Size = new System.Drawing.Size(755, 451);
-            this.plotView1.TabIndex = 1;
-            this.plotView1.Text = "plotView1";
-            this.plotView1.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotView1.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotView1.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
+            this.panel4.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel4.Location = new System.Drawing.Point(0, 0);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(90, 82);
+            this.panel4.TabIndex = 0;
+            // 
+            // panelPieChart
+            // 
+            this.panelPieChart.Controls.Add(this.panel3);
+            this.panelPieChart.Controls.Add(this.plotViewPie);
+            this.panelPieChart.Location = new System.Drawing.Point(956, 118);
+            this.panelPieChart.Name = "panelPieChart";
+            this.panelPieChart.Size = new System.Drawing.Size(948, 454);
+            this.panelPieChart.TabIndex = 4;
+            // 
+            // panel3
+            // 
+            this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
+            this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel3.Location = new System.Drawing.Point(0, 0);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(948, 48);
+            this.panel3.TabIndex = 2;
+            // 
+            // plotViewPie
+            // 
+            this.plotViewPie.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.plotViewPie.Location = new System.Drawing.Point(0, 48);
+            this.plotViewPie.Name = "plotViewPie";
+            this.plotViewPie.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewPie.Size = new System.Drawing.Size(948, 406);
+            this.plotViewPie.TabIndex = 1;
+            this.plotViewPie.Text = "plotView1";
+            this.plotViewPie.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewPie.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewPie.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // panelBarChart
+            // 
+            this.panelBarChart.Controls.Add(this.pictureBox5);
+            this.panelBarChart.Controls.Add(this.panel1);
+            this.panelBarChart.Controls.Add(this.plotViewBar);
+            this.panelBarChart.Location = new System.Drawing.Point(12, 118);
+            this.panelBarChart.Name = "panelBarChart";
+            this.panelBarChart.Size = new System.Drawing.Size(925, 454);
+            this.panelBarChart.TabIndex = 0;
+            // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(925, 48);
+            this.panel1.TabIndex = 2;
+            // 
+            // plotViewBar
+            // 
+            this.plotViewBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.plotViewBar.Font = new System.Drawing.Font("SpoqaHanSans-Regular", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(129)), true);
+            this.plotViewBar.Location = new System.Drawing.Point(0, 48);
+            this.plotViewBar.Name = "plotViewBar";
+            this.plotViewBar.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewBar.Size = new System.Drawing.Size(925, 406);
+            this.plotViewBar.TabIndex = 1;
+            this.plotViewBar.Text = "plotView1";
+            this.plotViewBar.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewBar.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewBar.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            // 
+            // panelLineChart
+            // 
+            this.panelLineChart.Controls.Add(this.panelLineChartHeader);
+            this.panelLineChart.Controls.Add(this.plotViewLine);
+            this.panelLineChart.Location = new System.Drawing.Point(12, 589);
+            this.panelLineChart.Name = "panelLineChart";
+            this.panelLineChart.Size = new System.Drawing.Size(1892, 397);
+            this.panelLineChart.TabIndex = 3;
+            // 
+            // panelLineChartHeader
+            // 
+            this.panelLineChartHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
+            this.panelLineChartHeader.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelLineChartHeader.Location = new System.Drawing.Point(0, 0);
+            this.panelLineChartHeader.Name = "panelLineChartHeader";
+            this.panelLineChartHeader.Size = new System.Drawing.Size(1892, 48);
+            this.panelLineChartHeader.TabIndex = 3;
+            // 
+            // plotViewLine
+            // 
+            this.plotViewLine.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.plotViewLine.Location = new System.Drawing.Point(0, 48);
+            this.plotViewLine.Name = "plotViewLine";
+            this.plotViewLine.PanCursor = System.Windows.Forms.Cursors.Hand;
+            this.plotViewLine.Size = new System.Drawing.Size(1892, 349);
+            this.plotViewLine.TabIndex = 2;
+            this.plotViewLine.Text = "plotView3";
+            this.plotViewLine.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            this.plotViewLine.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            this.plotViewLine.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
             // 
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.panelWebbrowser);
             this.tabPage4.Controls.Add(this.webBrowser1);
-            this.tabPage4.Location = new System.Drawing.Point(4, 26);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(1912, 990);
+            this.tabPage4.Size = new System.Drawing.Size(1912, 994);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -1055,7 +1157,7 @@
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
             this.panelWebbrowser.Name = "panelWebbrowser";
-            this.panelWebbrowser.Size = new System.Drawing.Size(1906, 984);
+            this.panelWebbrowser.Size = new System.Drawing.Size(1906, 988);
             this.panelWebbrowser.TabIndex = 1;
             // 
             // webBrowser1
@@ -1066,7 +1168,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(3, 3);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(1906, 984);
+            this.webBrowser1.Size = new System.Drawing.Size(1906, 988);
             this.webBrowser1.TabIndex = 0;
             // 
             // materialTabSelector1
@@ -1108,17 +1210,15 @@
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
             // 
-            // plotView3
+            // pictureBox5
             // 
-            this.plotView3.Location = new System.Drawing.Point(6, 621);
-            this.plotView3.Name = "plotView3";
-            this.plotView3.PanCursor = System.Windows.Forms.Cursors.Hand;
-            this.plotView3.Size = new System.Drawing.Size(1898, 363);
-            this.plotView3.TabIndex = 2;
-            this.plotView3.Text = "plotView3";
-            this.plotView3.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
-            this.plotView3.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
-            this.plotView3.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(77, 380);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(806, 63);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox5.TabIndex = 3;
+            this.pictureBox5.TabStop = false;
             // 
             // Form1
             // 
@@ -1188,8 +1288,13 @@
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             this.tabPage1.ResumeLayout(false);
+            this.panel2.ResumeLayout(false);
+            this.panelPieChart.ResumeLayout(false);
+            this.panelBarChart.ResumeLayout(false);
+            this.panelLineChart.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1259,8 +1364,8 @@
         private System.Windows.Forms.Button buttonColor6;
         private System.Windows.Forms.Button buttonColor4;
         private System.Windows.Forms.Button buttonColor2;
-        private OxyPlot.WindowsForms.PlotView plotView1;
-        private OxyPlot.WindowsForms.PlotView plotView2;
+        private OxyPlot.WindowsForms.PlotView plotViewPie;
+        private OxyPlot.WindowsForms.PlotView plotViewBar;
         private System.Windows.Forms.Label buttonReadFile;
         private System.Windows.Forms.PictureBox pictureBoxHead;
         private System.Windows.Forms.Label labelDensity;
@@ -1274,7 +1379,16 @@
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.PictureBox pictureBox1;
-        private OxyPlot.WindowsForms.PlotView plotView3;
+        private OxyPlot.WindowsForms.PlotView plotViewLine;
+        private System.Windows.Forms.Panel panelLineChart;
+        private System.Windows.Forms.Panel panelLineChartHeader;
+        private System.Windows.Forms.Panel panelBarChart;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel panelPieChart;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel4;
+        private System.Windows.Forms.PictureBox pictureBox5;
     }
 }
 

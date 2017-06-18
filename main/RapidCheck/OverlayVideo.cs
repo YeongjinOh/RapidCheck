@@ -12,7 +12,9 @@ using Accord.Video.VFW;
 using Accord.Video.FFMPEG;
 
 using System.Diagnostics;
-//time
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
 namespace RapidCheck
 {
     public class objDataGridView
@@ -101,8 +103,16 @@ namespace RapidCheck
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
 
+        //tabpage3
+        List<double> directionRatioPeople;
+        List<double> directionRatioCar;
+        List<double> colorRatioPeople;
+        List<double> colorRatioCar;
+        public PlotModel modelBarChart;
+        public PlotModel modelPieChart;
+
         public OverlayVideo() { }
-        public OverlayVideo(Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2,  Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo( Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
@@ -176,6 +186,12 @@ namespace RapidCheck
                 this.maxFrameNum = (int)reader.FrameCount;
             }
             reader.Close();
+
+            //tabpage3
+            directionRatioPeople = new List<double>();
+            directionRatioCar = new List<double>();
+            colorRatioPeople = new List<double>();
+            colorRatioCar = new List<double>();
             //------------------------------/변수 초기화-----------------------------
         }
     }

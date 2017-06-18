@@ -26,23 +26,21 @@ namespace RapidCheck
 {
     public partial class Form1 : MaterialForm
     {
-        //***************전역변수****************************************/
-        /**/string videoPath = null;                                  /**/
-        /**/OpenFileDialog videoFilePath;                             /**/
-        /**/int outputFrameNum = 0;                                   /**/
-        /**/RapidCheck.OverlayVideo rapidCheck;                       /**/
-        /**/delegate void rapidModule();                              /**/
-        /**/delegate void rapidChain(rapidModule dele);               /**/
-        /**/Thread overlayModule;                                     /**/
-        /**/List<rapidModule> myRapidModule = new List<rapidModule>();/**/
-        /**/string createTime;                                        /**/
-        /**/int directionPosition = -1;                               /**/
-        /**/int colorPosition = -1;                                   /**/
-        /**/int classPosition = -1;                                   /**/
-        /**/bool searchPeople = true;                                 /**/
-        /**/bool searchCar = true;                                    /**/
-
-        //***************전역변수****************************************/
+        //----------------------------전역변수-----------------------------
+        string videoPath = null;
+        OpenFileDialog videoFilePath;
+        int outputFrameNum = 0;
+        RapidCheck.OverlayVideo rapidCheck;
+        delegate void rapidModule();
+        delegate void rapidChain(rapidModule dele);
+        Thread overlayModule;
+        List<rapidModule> myRapidModule = new List<rapidModule>();
+        string createTime;
+        int directionPosition = -1;
+        int colorPosition = -1;
+        int classPosition = -1;
+        bool searchPeople = true;
+        bool searchCar = true;
 
         //------------------------------Form------------------------------
         public Form1()
@@ -64,72 +62,16 @@ namespace RapidCheck
             Cef.Initialize(new CefSettings()); // chrome initialize
             //setUI(); //ui enable false
             defaultColor(); //color setting
-            ChartTest(); //chart test
-            //ChartTest2();
-
-            var myModel = new PlotModel { Title = "Example 1" };
-            myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
-            plotView3.Model = myModel;
-
-
-
-
-
-
-
-            var model = new PlotModel
-            {
-                Title = "BarSeries",
-                LegendPlacement = LegendPlacement.Outside,
-                LegendPosition = LegendPosition.BottomCenter,
-                LegendOrientation = LegendOrientation.Horizontal,
-                LegendBorderThickness = 0
-            };
-
-            var s1 = new ColumnSeries { Title = "Series 1", FillColor = OxyColor.FromRgb(83,164,188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth=50 };
-            s1.Items.Add(new ColumnItem { Value = 25 });
-            s1.Items.Add(new ColumnItem { Value = 137 });
-            s1.Items.Add(new ColumnItem { Value = 18 });
-            s1.Items.Add(new ColumnItem { Value = 40 });
-            s1.Items.Add(new ColumnItem { Value = 25 });
-            s1.Items.Add(new ColumnItem { Value = 137 });
-            s1.Items.Add(new ColumnItem { Value = 18 });
-            s1.Items.Add(new ColumnItem { Value = 40 });
-
-            var s2 = new ColumnSeries { Title = "Series 2",  FillColor = OxyColor.FromRgb(67,87,99),StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth=50};
-            s2.Items.Add(new ColumnItem { Value = 12 });
-            s2.Items.Add(new ColumnItem { Value = 14 });
-            s2.Items.Add(new ColumnItem { Value = 120 });
-            s2.Items.Add(new ColumnItem { Value = 26 });
-            s2.Items.Add(new ColumnItem { Value = 12 });
-            s2.Items.Add(new ColumnItem { Value = 14 });
-            s2.Items.Add(new ColumnItem { Value = 120 });
-            s2.Items.Add(new ColumnItem { Value = 26 });
             
-
-            var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
-            categoryAxis.Labels.Add("↖↖");
-            categoryAxis.Labels.Add("↑");
-            categoryAxis.Labels.Add("↗");
-            categoryAxis.Labels.Add("→");
-            categoryAxis.Labels.Add("↘");
-            categoryAxis.Labels.Add("↓");
-            categoryAxis.Labels.Add("↙");
-            categoryAxis.Labels.Add("←");
-            var valueAxis = new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.06, AbsoluteMinimum = 0 };
-            model.Series.Add(s1);
-            model.Series.Add(s2);
-            model.Axes.Add(categoryAxis);
-            model.Axes.Add(valueAxis);
-            plotView2.Model = model;
-
-
+            //var myModel = new PlotModel { Title = "Example 1" };
+            //myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+            //plotViewLine.Model = myModel;
         }
         //------------------------------Overlay Module------------------------------
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 5000;
+            int maxFrameNum = 10000;
             int analysisFPS = 5; //default
             int minTrackingLength = 21;
             int clusterNum = trackBar2.Value;
@@ -143,6 +85,8 @@ namespace RapidCheck
         private void rapidFunc()
         {
             myRapidModule.Add(rapidCheck.getMysqlObjList);
+            myRapidModule.Add(rapidCheck.barChartSetting);// chart
+            myRapidModule.Add(rapidCheck.pieChartSetting);// chart
             myRapidModule.Add(rapidCheck.addObj);
             myRapidModule.Add(rapidCheck.imageCrop);
             myRapidModule.Add(rapidCheck.objectClustering);
@@ -158,9 +102,17 @@ namespace RapidCheck
                 if (myRapidModule[idx].Method.ToString() == "Void overlayLive()" )
                 {
                     setOverlayUI();
-
                 }
                 myRapidChain(myRapidModule[idx]);
+
+                if (myRapidModule[idx].Method.ToString() == "Void barChartSetting()")
+                {
+                    plotViewBar.Model = rapidCheck.modelBarChart;
+                }
+                else if (myRapidModule[idx].Method.ToString() == "Void pieChartSetting()")
+                {
+                    plotViewPie.Model = rapidCheck.modelPieChart;
+                }
             }
         }
         private string setCreateTime(string folderPath, string fileName) //파일에서 시간 가져오는 함수
@@ -186,50 +138,6 @@ namespace RapidCheck
                 hour = "0";
             }
             return hour + ":" + min;
-        }
-        //------------------------------Chart SETTING------------------------------
-        private void ChartTest()
-        {
-            PlotModel modelP1 = new PlotModel { Title = "Pie Sample1" };
-
-            dynamic seriesP1 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
-
-            seriesP1.Slices.Add(new PieSlice("Africa", 1030) { IsExploded = false, Fill = OxyColors.PaleVioletRed });
-            seriesP1.Slices.Add(new PieSlice("Americas", 929) { IsExploded = true });
-            seriesP1.Slices.Add(new PieSlice("Asia", 4157) { IsExploded = true });
-            seriesP1.Slices.Add(new PieSlice("Europe", 739) { IsExploded = true });
-            seriesP1.Slices.Add(new PieSlice("Oceania", 35) { IsExploded = true });
-
-            modelP1.Series.Add(seriesP1);
-            plotView1.Model = modelP1;
-        }
-        private void ChartTest2()
-        {
-            var model = new PlotModel { Title = "Trigonometric functions" };
-
-            var start = -Math.PI;
-            var end = Math.PI;
-            var step = 0.1;
-            int steps = (int)((Math.Abs(start) + Math.Abs(end)) / step);
-
-            //generate points for functions
-            var sinData = new DataPoint[steps];
-            for (int i = 0; i < steps; ++i)
-            {
-                var x = (start + step * i);
-                sinData[i] = new DataPoint(x, Math.Sin(x));
-            }
-
-            //sin(x)
-            var sinStemSeries = new StemSeries
-            {
-                MarkerStroke = OxyColors.Green,
-                MarkerType = MarkerType.Circle
-            };
-            sinStemSeries.Points.AddRange(sinData);
-
-            model.Series.Add(sinStemSeries);
-            plotView2.Model = model;
         }
         //------------------------------UI SETTING------------------------------
         private void defaultColor()
@@ -885,35 +793,36 @@ namespace RapidCheck
                     break;
             }
             //direction
+            double directionThres = 0.5;
             switch (directionPosition)
             {
                 case 1:
-                    rapidCheck.conditionDirection = "and direction6 + direction7 + direction8 > 0.7";
+                    rapidCheck.conditionDirection = "and direction6 + direction7 + direction0 > " + directionThres;
                     break;
                 case 2:
-                    rapidCheck.conditionDirection = "and direction5 + direction6 + direction7 > 0.7";
+                    rapidCheck.conditionDirection = "and direction5 + direction6 + direction7 > " + directionThres;
                     break;
                 case 3:
-                    rapidCheck.conditionDirection = "and direction4 + direction5 + direction6 > 0.7";
+                    rapidCheck.conditionDirection = "and direction4 + direction5 + direction6 > " + directionThres;
                     break;
                 case 4:
 
-                    rapidCheck.conditionDirection = "and direction3 + direction4 + direction5 > 0.7";
+                    rapidCheck.conditionDirection = "and direction3 + direction4 + direction5 > " + directionThres;
                     break;
                 case 5:
                     //ObjReset();
                     break;
                 case 6:
-                    rapidCheck.conditionDirection = "and direction2 + direction3 + direction4 > 0.7";
+                    rapidCheck.conditionDirection = "and direction2 + direction3 + direction4 > " + directionThres;
                     break;
                 case 7:
-                    rapidCheck.conditionDirection = "and direction1 + direction2 + direction3 > 0.7";
+                    rapidCheck.conditionDirection = "and direction1 + direction2 + direction3 > " + directionThres;
                     break;
                 case 8:
-                    rapidCheck.conditionDirection = "and direction0 + direction1 + direction2  > 0.7";
+                    rapidCheck.conditionDirection = "and direction0 + direction1 + direction2  > " + directionThres;
                     break;
                 case 9:
-                    rapidCheck.conditionDirection = "and direction7 + direction0 + direction1 > 0.7";
+                    rapidCheck.conditionDirection = "and direction7 + direction0 + direction1 > " + directionThres;
                     break;
                 default:
                     rapidCheck.conditionDirection = "";
@@ -944,7 +853,7 @@ namespace RapidCheck
             overlayModule.Start();
         }
 
-        //%%%%%%%%%%%%%%%%%%
+
         Bitmap fileImgMouseOver = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\file_mouseover@2x.png");
         private void pictureBoxHead_MouseHover(object sender, EventArgs e)
         {
@@ -993,5 +902,35 @@ namespace RapidCheck
         {
             labelDensity.Text = trackBar2.Value.ToString();
         }
+        //------------------------------Chart SETTING------------------------------
+        
+        //private void barChart()
+        //{
+        //    var model = new PlotModel { Title = "Trigonometric functions" };
+
+        //    var start = -Math.PI;
+        //    var end = Math.PI;
+        //    var step = 0.1;
+        //    int steps = (int)((Math.Abs(start) + Math.Abs(end)) / step);
+
+        //    //generate points for functions
+        //    var sinData = new DataPoint[steps];
+        //    for (int i = 0; i < steps; ++i)
+        //    {
+        //        var x = (start + step * i);
+        //        sinData[i] = new DataPoint(x, Math.Sin(x));
+        //    }
+
+        //    //sin(x)
+        //    var sinStemSeries = new StemSeries
+        //    {
+        //        MarkerStroke = OxyColors.Green,
+        //        MarkerType = MarkerType.Circle
+        //    };
+        //    sinStemSeries.Points.AddRange(sinData);
+
+        //    model.Series.Add(sinStemSeries);
+        //    plotViewBar.Model = model;
+        //}
     }
 }
