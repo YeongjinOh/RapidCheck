@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle17 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle18 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -122,7 +122,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.labelTrainLog = new System.Windows.Forms.Label();
+            this.textBoxTrainLog = new System.Windows.Forms.TextBox();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -246,9 +246,9 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle7.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle17.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle17.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle17.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle17;
             this.Column1.HeaderText = "Car";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -281,9 +281,9 @@
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle8.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle18.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle18.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle18.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle18;
             this.Column2.Frozen = true;
             this.Column2.HeaderText = "People";
             this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -1171,6 +1171,7 @@
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.panelWebbrowser);
+            this.tabPage4.Controls.Add(this.textBoxTrainLog);
             this.tabPage4.Controls.Add(this.webBrowser1);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
@@ -1182,7 +1183,6 @@
             // 
             // panelWebbrowser
             // 
-            this.panelWebbrowser.Controls.Add(this.labelTrainLog);
             this.panelWebbrowser.Controls.Add(this.buttonTraining);
             this.panelWebbrowser.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelWebbrowser.Location = new System.Drawing.Point(3, 3);
@@ -1193,10 +1193,10 @@
             // buttonTraining
             // 
             this.buttonTraining.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonTraining.Location = new System.Drawing.Point(1811, 3);
+            this.buttonTraining.Location = new System.Drawing.Point(1787, 16);
             this.buttonTraining.Name = "buttonTraining";
             this.buttonTraining.Size = new System.Drawing.Size(90, 35);
-            this.buttonTraining.TabIndex = 0;
+            this.buttonTraining.TabIndex = 2;
             this.buttonTraining.Text = "traning";
             this.buttonTraining.UseVisualStyleBackColor = true;
             this.buttonTraining.Click += new System.EventHandler(this.buttonTraining_Click);
@@ -1251,15 +1251,17 @@
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
             // 
-            // labelTrainLog
+            // textBoxTrainLog
             // 
-            this.labelTrainLog.AutoSize = true;
-            this.labelTrainLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F);
-            this.labelTrainLog.Location = new System.Drawing.Point(1450, 20);
-            this.labelTrainLog.Name = "labelTrainLog";
-            this.labelTrainLog.Size = new System.Drawing.Size(0, 24);
-            this.labelTrainLog.TabIndex = 1;
-            this.labelTrainLog.Visible = false;
+            this.textBoxTrainLog.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.textBoxTrainLog.Location = new System.Drawing.Point(1450, 6);
+            this.textBoxTrainLog.Multiline = true;
+            this.textBoxTrainLog.Name = "textBoxTrainLog";
+            this.textBoxTrainLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxTrainLog.Size = new System.Drawing.Size(453, 982);
+            this.textBoxTrainLog.TabIndex = 4;
+            this.textBoxTrainLog.Text = "Log.";
+            this.textBoxTrainLog.Visible = false;
             // 
             // Form1
             // 
@@ -1335,8 +1337,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.panelLineChart.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.tabPage4.PerformLayout();
             this.panelWebbrowser.ResumeLayout(false);
-            this.panelWebbrowser.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
             this.ResumeLayout(false);
 
@@ -1434,7 +1436,7 @@
         private OxyPlot.WindowsForms.PlotView plotViewPie1;
         private OxyPlot.WindowsForms.PlotView plotViewPie2;
         private System.Windows.Forms.Button buttonTraining;
-        private System.Windows.Forms.Label labelTrainLog;
+        private System.Windows.Forms.TextBox textBoxTrainLog;
     }
 }
 

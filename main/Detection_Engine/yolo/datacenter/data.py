@@ -75,13 +75,13 @@ def split_datacenter(src_folder_path, train_rates=0.8):
 	
 	# Make trainval datacenter folder
 	for i in trainval_indexs:
-		print("trainval : ", i)
+		# print("trainval : ", i)
 		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(trainval_folder_path, 'annotations', anno_files[i]))
 		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(trainval_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
 	
 	# Make test datacenter folder
 	for i in test_indexs:
-		print("test : ", i)
+		# print("test : ", i)
 		copyfile(os.path.join(src_anno_path, anno_files[i]), os.path.join(test_folder_path, 'annotations', anno_files[i]))
 		copyfile(os.path.join(src_images_path, anno_files[i].split('.')[0]+'.png'), os.path.join(test_folder_path, 'images', anno_files[i].split('.')[0]+'.png'))
 

@@ -3,6 +3,7 @@ import os
 import json
 import matplotlib.pyplot as plt
 import numpy as np
+import sys
 
 def say(*words, verbalise=False):
 	if verbalise:

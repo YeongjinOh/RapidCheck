@@ -911,11 +911,16 @@ namespace RapidCheck
             buttonTraining.BackColor = Color.Gray;
             panelWebbrowser.Dock = DockStyle.Left;
             panelWebbrowser.Width = 1440;
-            labelTrainLog.Visible = true;
+            textBoxTrainLog.Visible = true;
 
             string dir = @"..\..\..\..\Detection_Engine\";
             System.IO.Directory.SetCurrentDirectory(dir);
 
+
+            new Thread(() => playTrainingTool()).Start();
+        }
+        private void playTrainingTool()
+        {
             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
             string args = string.Format(@"training.py");
             var p = new System.Diagnostics.Process();
@@ -931,11 +936,10 @@ namespace RapidCheck
             p.Start();
             p.BeginOutputReadLine();
             p.WaitForExit();
-
             int result = p.ExitCode;
             if (result == 0)
             {
-
+                textBoxTrainLog.AppendText("\nDone.");
             }
             else
             {
@@ -946,7 +950,9 @@ namespace RapidCheck
         {
             if (outLine.Data != null)
             {
-                labelTrainLog.Text = labelTrainLog.Text + "\n" + outLine.Data;
+                textBoxTrainLog.AppendText(outLine.Data + "\n");
+                textBoxTrainLog.SelectionStart = textBoxTrainLog.TextLength;
+                textBoxTrainLog.ScrollToCaret();
             }
         }
     }

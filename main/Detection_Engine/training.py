@@ -11,6 +11,7 @@ from yolo.datacenter.data import collect_enduser_trainset
 import keras.backend as K
 from yolo.net.RCNet_thdim_net import RCNet_THdim_model, RCNet_shortdense_THdim_model, RCNet_THdim_dropout_model
 import argparse
+import sys
 
 parser = argparse.ArgumentParser()
 
@@ -102,9 +103,15 @@ for i, (x_batch, datum) in enumerate(batches):
 		test_fetched = sess.run(fetches, feed_dict=test_feed_dict)
 		test_loss_val = test_fetched[1]
 		train_histories['val_loss'].append(test_loss_val)
-		say("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val), verbalise=True)
+		# say("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val), verbalise=True)
+		sys.stdout.write('\r')
+		sys.stdout.write("step {} - train loss {}, test loss {}".format(i, loss_val, test_loss_val))
+		sys.stdout.flush()
 	else:
-		say("step {} - train loss {}".format(i, loss_val), verbalise=True)
+		#say("step {} - train loss {}".format(i, loss_val), verbalise=True)
+		sys.stdout.write('\r')
+		sys.stdout.write("step {} - train loss {}".format(i, loss_val))
+		sys.stdout.flush()
 
 	if show_trainable_state:
 		conv1 = model.layers[0]
