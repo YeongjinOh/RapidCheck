@@ -795,36 +795,36 @@ namespace RapidCheck
                     break;
             }
             //direction
-            double directionThres = 0.6;
+            double directionThres = 0.3;
             switch (directionPosition)
             {
                 case 1:
-                    rapidCheck.conditionDirection = "and direction6 + direction7  > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction13 + direction14  > " + directionThres;
                     break;
                 case 2:
-                    rapidCheck.conditionDirection = "and direction5 + direction6 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction11 + direction12 > " + directionThres;
                     break;
                 case 3:
-                    rapidCheck.conditionDirection = "and direction4 + direction5 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction9 + direction10 > " + directionThres;
                     break;
                 case 4:
 
-                    rapidCheck.conditionDirection = "and direction0 + direction7 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction0 + direction15 > " + directionThres;
                     break;
                 case 5:
                     //ObjReset();
                     break;
                 case 6:
-                    rapidCheck.conditionDirection = "and direction3 + direction4 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction7 + direction8 > " + directionThres;
                     break;
                 case 7:
-                    rapidCheck.conditionDirection = "and direction0 + direction1 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction1 + direction2 > " + directionThres;
                     break;
                 case 8:
-                    rapidCheck.conditionDirection = "and direction1 + direction2  > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction3 + direction4  > " + directionThres;
                     break;
                 case 9:
-                    rapidCheck.conditionDirection = "and direction2 + direction3 > " + directionThres;
+                    rapidCheck.conditionDirection = "and direction5 + direction6 > " + directionThres;
                     break;
                 default:
                     rapidCheck.conditionDirection = "";

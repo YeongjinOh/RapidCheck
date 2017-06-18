@@ -158,7 +158,7 @@ namespace RapidCheck
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
 
-                    SQL = string.Format("SELECT objectId, classId  FROM rapidcheck.objectinfo where videoId = {0};", videoid);
+                    SQL = string.Format("SELECT objectId, classId, direction13+direction14 as dir0, direction12+direction11 as dir1, direction10+direction9 as dir2, direction8+direction7 as dir3, direction6+direction5 as dir4, direction4+direction3 as dir5, direction2+direction1 as dir6, direction0+direction15 as dir7 FROM rapidcheck.objectinfo where videoId = {0};", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "classid");
                     
@@ -169,10 +169,6 @@ namespace RapidCheck
                     SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} group by objectId;", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objCnt");
-                    
-                    SQL = string.Format("select classId, sum(direction0) as dir0, sum(direction1) as dir1, sum(direction2) as dir2, sum(direction3) as dir3, sum(direction4) as dir4, sum(direction5) as dir5, sum(direction6) as dir6, sum(direction7) as dir7  from rapidcheck.objectinfo where videoId = {0} group by classId;", videoid);
-                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
-                    adapter.Fill(ds, "videoDirectionRatio");
 
                     SQL = string.Format("select classId, sum(color0) as color0, sum(color1) as color1, sum(color2) as color2, sum(color3) as color3, sum(color4) as color4, sum(color5) as color5, sum(color6) as color6, sum(color7) as color7, sum(color8) as color8, sum(color9) as color9, sum(color10) as color10, sum(color11) as color11, sum(color12) as color12, sum(color13) as color13, sum(color14) as color14, sum(color15) as color15 from rapidcheck.objectinfo where videoId = {0} group by classId;", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
@@ -199,10 +195,34 @@ namespace RapidCheck
                     }
                     //set class id table
                     dt = ds.Tables["classid"];
+                    for (int i = 0; i < 8; i++)
+                    {
+                        directionCntCar.Add(0);
+                        directionCntPeople.Add(0);
+                    }
+                        
                     foreach (DataRow dr in dt.Rows) //dictionay형태이며,,, key = id, value = classid
                     {
                         //trackingTableClassid.Add(Convert.ToInt32(dr["id"]), Convert.ToInt32(dr["classId"]));
-                        trackingTableClassid[Convert.ToInt32(dr["objectId"])] = Convert.ToInt32(dr["classId"]);
+                        int classid = Convert.ToInt32(dr["classId"]), maxDirid = 0;
+                        trackingTableClassid[Convert.ToInt32(dr["objectId"])] = classid;
+                        
+                        for (int i = 1; i < 8; i++)
+                        {
+                            if (Convert.ToDouble(dr["dir" + maxDirid]) < Convert.ToDouble(dr["dir" + i]))
+                            {
+                                maxDirid = i;
+                            }
+                        }
+                        trackingTableDirectionid[Convert.ToInt32(dr["objectId"])] = maxDirid;
+                        if (classid == 0)
+                        {
+                            directionCntCar[maxDirid]++;
+                        }
+                        else if (classid == 1)
+                        {
+                            directionCntPeople[maxDirid]++;
+                        }                        
                     }
                     //set (trackingTableFrameNum, trackingTableObjid, trackingTableRectangle)
                     dt = ds.Tables["data"];
@@ -230,25 +250,7 @@ namespace RapidCheck
                             objidByFrame.Add(tempFrame, tempList);
                         }
                     }
-                    dt = ds.Tables["videoDirectionRatio"];
-                    foreach (DataRow dr in dt.Rows)
-                    {
-                        int classId = Convert.ToInt32(dr["classId"]);
-                        if (classId == 0)
-                        {
-                            for (int i = 0; i < 8; i++)
-                            {
-                                directionRatioCar.Add(Convert.ToDouble(dr["dir" + i]));
-                            }
-                        }
-                        else if (classId == 1)
-                        {
-                            for (int i = 0; i < 8; i++)
-                            {
-                                directionRatioPeople.Add(Convert.ToDouble(dr["dir" + i]));
-                            }
-                        }
-                    }
+             
                     dt = ds.Tables["videoColorRatio"];
                     for (int i = 0; i < 16; i++)
                     {
@@ -409,7 +411,37 @@ namespace RapidCheck
                                 g.DrawImage(bit, rect);
                                 
                                 g.DrawImage(headlineBox, new Rectangle(0, 0, headlineBox.Width, headlineBox.Height), 0, 0, headlineBox.Width, headlineHeight, GraphicsUnit.Pixel, att);
-                                g.DrawImage(Direction1, new Rectangle(0,0,30,30));
+                                
+                                switch (trackingTableDirectionid[objid])
+                                {
+                                    case 0:
+                                        g.DrawImage(Direction0, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 1:
+                                        g.DrawImage(Direction1, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 2:
+                                        g.DrawImage(Direction2, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 3:
+                                        g.DrawImage(Direction3, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 4:
+                                        g.DrawImage(Direction4, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 5:
+                                        g.DrawImage(Direction5, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 6:
+                                        g.DrawImage(Direction6, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                    case 7:
+                                        g.DrawImage(Direction7, new Rectangle(0, 0, 30, 30));
+                                        break;
+                                }
+                                    
+
+
                                 g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("SpoqaHanSans", 14, FontStyle.Bold), Brushes.Black, rectf);
 
                                 if (trackingTableClassid[objid] == 0) // class id = 0 => people
@@ -706,7 +738,6 @@ namespace RapidCheck
                                 
                             }
                         }
-
                             //draw
                         gr.DrawImage(diffBmp, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
                         
@@ -774,7 +805,6 @@ namespace RapidCheck
             }
             overlayOrders.Clear();
         }
-
         public void barChartSetting()
         {
 
@@ -787,14 +817,14 @@ namespace RapidCheck
                 LegendBorderThickness = 0
             };
             var s1 = new ColumnSeries { Title = "People", FillColor = OxyColor.FromRgb(83, 164, 188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
-            for (int i = 0; i < directionRatioPeople.Count; i++)
+            for (int i = 0; i < directionCntPeople.Count; i++)
             {
-                s1.Items.Add(new ColumnItem { Value = directionRatioPeople[i] });
+                s1.Items.Add(new ColumnItem { Value = directionCntPeople[i] });
             }
             var s2 = new ColumnSeries { Title = "Car", FillColor = OxyColor.FromRgb(67, 87, 99), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
-            for (int i = 0; i < directionRatioPeople.Count; i++)
+            for (int i = 0; i < directionCntCar.Count; i++)
             {
-                s2.Items.Add(new ColumnItem { Value = directionRatioCar[i] });
+                s2.Items.Add(new ColumnItem { Value = directionCntCar[i] });
             }
             var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
             categoryAxis.Labels.Add("↖");

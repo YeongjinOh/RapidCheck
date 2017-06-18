@@ -51,6 +51,7 @@ namespace RapidCheck
         private List<int> trackingTableFrameNum;
         private List<int> trackingTableObjid;
         private Dictionary<int,int> trackingTableClassid;
+        private Dictionary<int, int> trackingTableDirectionid;
         private List<Rectangle> trackingTableRectangle;
         public List<int> gridViewList1;
         public List<int> gridViewList2;
@@ -83,14 +84,14 @@ namespace RapidCheck
         Bitmap background;
         Bitmap backgroundCar;
         Bitmap backgroundPeople;
+        Bitmap Direction0;
         Bitmap Direction1;
         Bitmap Direction2;
         Bitmap Direction3;
         Bitmap Direction4;
+        Bitmap Direction5;
         Bitmap Direction6;
         Bitmap Direction7;
-        Bitmap Direction8;
-        Bitmap Direction9;
 
         //UI
         PictureBox pictureBoxVideo;
@@ -104,8 +105,8 @@ namespace RapidCheck
         public int clickFramePosition { set; get; } // mouse click frame position
 
         //tabpage3
-        List<double> directionRatioPeople;
-        List<double> directionRatioCar;
+        List<int> directionCntPeople;
+        List<int> directionCntCar;
         List<double> colorRatioPeople;
         List<double> colorRatioCar;
         public PlotModel modelBarChart;
@@ -119,14 +120,14 @@ namespace RapidCheck
             drawBrush = new System.Drawing.SolidBrush(System.Drawing.Color.White);
             backgroundPeople = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\human@1x.png");
             backgroundCar = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\back\Car@1x.png");
-            Direction1 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e1.png");
-            Direction2 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e2.png");
-            Direction3 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e3.png");
-            Direction4 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e4.png");
-            Direction6 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e6.png");
-            Direction7 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e7.png");
-            Direction8 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e8.png");
-            Direction9 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\e9.png");
+            Direction0 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir0.png");
+            Direction1 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir1.png");
+            Direction2 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir2.png");
+            Direction3 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir3.png");
+            Direction4 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir4.png");
+            Direction5 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir5.png");
+            Direction6 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir6.png");
+            Direction7 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir7.png");
             //UI
             this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
@@ -147,6 +148,7 @@ namespace RapidCheck
 
             trackingTableObjid = new List<int>();
             trackingTableClassid = new Dictionary<int, int>();
+            trackingTableDirectionid = new Dictionary<int, int>();
             trackingTableFrameNum = new List<int>();
             trackingTableRectangle = new List<Rectangle>();
             gridViewList1 = new List<int>();
@@ -181,15 +183,15 @@ namespace RapidCheck
             background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
             fps = reader.FrameRate;
             this.frameStep = fps / analysisFPS;
-            if(maxFrameNum == 0)
+            if (maxFrameNum == 0 || maxFrameNum > (int)reader.FrameCount)
             {
                 this.maxFrameNum = (int)reader.FrameCount;
             }
             reader.Close();
 
             //tabpage3
-            directionRatioPeople = new List<double>();
-            directionRatioCar = new List<double>();
+            directionCntPeople = new List<int>();
+            directionCntCar = new List<int>();
             colorRatioPeople = new List<double>();
             colorRatioCar = new List<double>();
             //------------------------------/변수 초기화-----------------------------
