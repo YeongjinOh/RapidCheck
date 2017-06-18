@@ -20,6 +20,7 @@ using CefSharp;
 using CefSharp.WinForms;
 using OxyPlot;
 using OxyPlot.Series;
+using OxyPlot.Axes;
 
 namespace RapidCheck
 {
@@ -64,7 +65,65 @@ namespace RapidCheck
             //setUI(); //ui enable false
             defaultColor(); //color setting
             ChartTest(); //chart test
-            ChartTest2();
+            //ChartTest2();
+
+            var myModel = new PlotModel { Title = "Example 1" };
+            myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+            plotView3.Model = myModel;
+
+
+
+
+
+
+
+            var model = new PlotModel
+            {
+                Title = "BarSeries",
+                LegendPlacement = LegendPlacement.Outside,
+                LegendPosition = LegendPosition.BottomCenter,
+                LegendOrientation = LegendOrientation.Horizontal,
+                LegendBorderThickness = 0
+            };
+
+            var s1 = new ColumnSeries { Title = "Series 1", FillColor = OxyColor.FromRgb(83,164,188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth=50 };
+            s1.Items.Add(new ColumnItem { Value = 25 });
+            s1.Items.Add(new ColumnItem { Value = 137 });
+            s1.Items.Add(new ColumnItem { Value = 18 });
+            s1.Items.Add(new ColumnItem { Value = 40 });
+            s1.Items.Add(new ColumnItem { Value = 25 });
+            s1.Items.Add(new ColumnItem { Value = 137 });
+            s1.Items.Add(new ColumnItem { Value = 18 });
+            s1.Items.Add(new ColumnItem { Value = 40 });
+
+            var s2 = new ColumnSeries { Title = "Series 2",  FillColor = OxyColor.FromRgb(67,87,99),StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth=50};
+            s2.Items.Add(new ColumnItem { Value = 12 });
+            s2.Items.Add(new ColumnItem { Value = 14 });
+            s2.Items.Add(new ColumnItem { Value = 120 });
+            s2.Items.Add(new ColumnItem { Value = 26 });
+            s2.Items.Add(new ColumnItem { Value = 12 });
+            s2.Items.Add(new ColumnItem { Value = 14 });
+            s2.Items.Add(new ColumnItem { Value = 120 });
+            s2.Items.Add(new ColumnItem { Value = 26 });
+            
+
+            var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
+            categoryAxis.Labels.Add("↖↖");
+            categoryAxis.Labels.Add("↑");
+            categoryAxis.Labels.Add("↗");
+            categoryAxis.Labels.Add("→");
+            categoryAxis.Labels.Add("↘");
+            categoryAxis.Labels.Add("↓");
+            categoryAxis.Labels.Add("↙");
+            categoryAxis.Labels.Add("←");
+            var valueAxis = new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.06, AbsoluteMinimum = 0 };
+            model.Series.Add(s1);
+            model.Series.Add(s2);
+            model.Axes.Add(categoryAxis);
+            model.Axes.Add(valueAxis);
+            plotView2.Model = model;
+
+
         }
         //------------------------------Overlay Module------------------------------
         private void startOverlayModule()
@@ -184,7 +243,7 @@ namespace RapidCheck
             panelConditionModule.BackColor = module;
             panelVideoControl.BackColor = module;
             trackBar1.BackColor = module;
-            panelLog.BackColor = module;
+            //panelLog.BackColor = module;
             dataGridView1.BackgroundColor = module;
             dataGridView2.BackgroundColor = module;
 
@@ -479,39 +538,43 @@ namespace RapidCheck
             {
                 directionPosition = 1;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection2_Click(object sender, EventArgs e)
         {
             if (directionPosition == 2)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 2;
+                directionPosition = 2;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection3_Click(object sender, EventArgs e)
         {
             if (directionPosition == 3)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 3;
+                directionPosition = 3;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection4_Click(object sender, EventArgs e)
         {
             if (directionPosition == 4)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 4;
+                directionPosition = 4;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection5_Click(object sender, EventArgs e)
         {
@@ -521,7 +584,7 @@ namespace RapidCheck
             }
             else
             {
-                colorPosition = 5;
+                directionPosition = 5;
             }
         } //검색 설정 초기화
         private void pictureBoxDirection6_Click(object sender, EventArgs e)
@@ -532,41 +595,45 @@ namespace RapidCheck
             }
             else
             {
-                colorPosition = 6;
+                directionPosition = 6;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection7_Click(object sender, EventArgs e)
         {
             if (directionPosition == 7)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 7;
+                directionPosition = 7;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection8_Click(object sender, EventArgs e)
         {
             if (directionPosition == 8)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 8;
+                directionPosition = 8;
             }
+            setTogleDirectionBtn();
         }
         private void pictureBoxDirection9_Click(object sender, EventArgs e)
         {
             if (directionPosition == 9)
             {
-                colorPosition = -1;
+                directionPosition = -1;
             }
             else
             {
-                colorPosition = 9;
+                directionPosition = 9;
             }
+            setTogleDirectionBtn();
         }
         //------------------------------Color Btn Click EVENT------------------------------
         private void buttonColor0_Click(object sender, EventArgs e)
@@ -720,6 +787,48 @@ namespace RapidCheck
             }
         }
         //------------------------------Search Function------------------------------
+        Bitmap direct1on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\1_on.png");
+        Bitmap direct2on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\2_on.png");
+        Bitmap direct3on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\3_on.png");
+        Bitmap direct4on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\4_on.png");
+        //Bitmap direct5on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset_\5on.png");
+        Bitmap direct6on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\6_on.png");
+        Bitmap direct7on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\7_on.png");
+        Bitmap direct8on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\8_on.png");
+        Bitmap direct9on  = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\9_on.png");
+        Bitmap direct1off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\1_off.png");
+        Bitmap direct2off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\2_off.png");
+        Bitmap direct3off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\3_off.png");
+        Bitmap direct4off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\4_off.png");
+        //Bitmap direct5off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset_\5off.png");
+        Bitmap direct6off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\6_off.png");
+        Bitmap direct7off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\7_off.png");
+        Bitmap direct8off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\8_off.png");
+        Bitmap direct9off = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\9_off.png");
+        private void setTogleDirectionBtn()
+        {
+            pictureBoxDirection1.Image = direct1off;
+            pictureBoxDirection2.Image = direct2off;
+            pictureBoxDirection3.Image = direct3off;
+            pictureBoxDirection4.Image = direct4off;
+            //pictureBoxDirection5.Image = direct5off;
+            pictureBoxDirection6.Image = direct6off;
+            pictureBoxDirection7.Image = direct7off;
+            pictureBoxDirection8.Image = direct8off;
+            pictureBoxDirection9.Image = direct9off;
+            switch (directionPosition)
+            {
+                case 1: pictureBoxDirection1.Image = direct1on; break;
+                case 2: pictureBoxDirection2.Image = direct2on; break;
+                case 3: pictureBoxDirection3.Image = direct3on; break;
+                case 4: pictureBoxDirection4.Image = direct4on; break;
+                //case 5: pictureBoxDirection5.Image = direct5on; break;
+                case 6: pictureBoxDirection6.Image = direct6on; break;
+                case 7: pictureBoxDirection7.Image = direct7on; break;
+                case 8: pictureBoxDirection8.Image = direct8on; break;
+                case 9: pictureBoxDirection9.Image = direct9on; break;
+            }
+        }
         private void replay()
         {
             startBtn.Text = "Start";
