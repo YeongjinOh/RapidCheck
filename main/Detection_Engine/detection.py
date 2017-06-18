@@ -26,6 +26,7 @@ parser.add_argument('--videoId', type=int, help='videoId for detecting works', r
 parser.add_argument('--videoPath', help='VideoPath for detecting works', required=True)
 parser.add_argument('--frameSteps', type=int, help='frameSteps for detecting works', required=True)
 parser.add_argument('--maxFrame', type=int, help='MaxFrame for detecting works', required=True)
+parser.add_argument('--modelPath', help='Model Weights Path for detecting', required=True)
 args = parser.parse_args()
 # db.delete()
 if args.videoPath and args.maxFrame and args.videoId and args.frameSteps:
@@ -33,6 +34,7 @@ if args.videoPath and args.maxFrame and args.videoId and args.frameSteps:
 	video_path = args.videoPath
 	frameSteps = args.frameSteps
 	maxFrame = args.maxFrame
+	weigths_path = args.modelPath
 	print("videoPath : ", video_path)
 	
 	# db = DB_Helper()
@@ -45,11 +47,12 @@ db.open(table_name='detection')
 
 K.set_image_dim_ordering('th')
 is_freeze = True
+
 # weigths_path = 'models/train/yolo-2class-complete.h5'
 # weigths_path = os.path.join(cfg.model_folder, cfg.model_name) + '-steps8000.h5'
 # weigths_path = 'models/train/yolo-2class-mydata-tracking-cell14-steps44000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/only-video_439532-steps8000.h5'
-weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
+# weigths_path = 'dropbox/models/train/yolo-2class-cell14-vocbase/from-cell14base-mydata-steps100000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-cell14-mydata-tracking-mydata-20000-steps8000.h5'
 # weigths_path = 'dropbox/models/train/yolo-2class-cell14-mydata100000/from-mydatabase-mot-person-steps16000.h5'
 # weigths_path = 'models/train/'+cfg.model_name+'-complete.h5'
