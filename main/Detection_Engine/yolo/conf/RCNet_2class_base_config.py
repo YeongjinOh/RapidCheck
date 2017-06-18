@@ -15,23 +15,40 @@ pretrained_model = os.path.join('dropbox', 'models', 'train', 'yolo-2class-cell1
 
 ### New Training Model Folder and Name Path
 model_folder = os.path.join('models', 'train', 'rcnet-2class-base-from-voctrain')
-model_name = 'mydata-reversed-trainval'
+model_name = 'mydata-reversed-trainval-dropout'
 
 ### Detected Classes Name List
 classes_name = ["car", "person"]
 
+"""
+	datacenter/
+		dataset_enduser_root/
+			annotations/
+			images/
+			trainval/
+			test/
+			infomation.json
+		video_123456/
+			annotations/
+			images/
+		video_234567/
+			annotations/
+			images/
+"""
+datacenter_root = os.path.join('dropbox', 'dataset', 'datacenter')
+dataset_enduser_root = os.path.join(datacenter_root, 'datacenter_mydata')
+
 ### Trainval Dataset Absolute Path
-dataset_abs_location = os.path.join('dropbox', 'dataset', 'datacenter', 'datacenter_mydata', 'trainval')
+dataset_abs_location = os.path.join(dataset_enduser_root, 'trainval')
 ann_location = os.path.join(dataset_abs_location, 'annotations')
 # ann_location = os.path.join(dataset_abs_location, 'Annotations')
 imageset_location = os.path.join(dataset_abs_location, 'images')
 # imageset_location = os.path.join(dataset_abs_location, 'JPEGImages')
 
 ### Test Dataset Absolute Path
-test_dataset_abs_location = os.path.join('dropbox', 'dataset', 'datacenter', 'datacenter_mydata', 'test')
+test_dataset_abs_location = os.path.join(dataset_enduser_root, 'test')
 test_ann_location = os.path.join(test_dataset_abs_location, 'annotations')
 test_imageset_location = os.path.join(test_dataset_abs_location, 'images')
-
 ### RCNet Model Config
 cell_size = 14
 num_classes = len(classes_name)
