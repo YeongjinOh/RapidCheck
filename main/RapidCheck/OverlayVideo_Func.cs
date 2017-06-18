@@ -12,21 +12,13 @@ using Accord.Video.VFW;
 using Accord.Video.FFMPEG;
 using Accord.MachineLearning; //knn test
 using System.Diagnostics;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.Axes;
 namespace RapidCheck
 {
     public partial class OverlayVideo
     {
-        //basic flow
-        //getMysqlObjList
-        //addObj
-        //imageCrop
-
-        //-----------여기가 분기 포인트.... 검색 조건 들어올시...---------//
-
-        //objectClustering
-        //buildOverlayOrderUsingCluster
-        //overlayLive
-
         //****************************** Main function ******************************
         public void getMysqlObjList()
         {
@@ -156,37 +148,43 @@ namespace RapidCheck
                         }
                     }
                     
+
+                    //----------------------------------------------overlay Module----------------------------------------------
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2};", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "maxid");
-
+                    
                     SQL = string.Format("SELECT objectId, frameNum, x, y, width, height FROM tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY objectId ASC, frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "data");
 
-                    SQL = string.Format("SELECT objectId, classId FROM rapidcheck.objectinfo where videoId = {0};", videoid);
+                    SQL = string.Format("SELECT objectId, classId  FROM rapidcheck.objectinfo where videoId = {0};", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "classid");
-
+                    
                     SQL = string.Format("SELECT objectId, frameNum FROM tracking WHERE videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
-
+                    
                     SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} group by objectId;", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objCnt");
+                    
+                    SQL = string.Format("select classId, sum(direction0) as dir0, sum(direction1) as dir1, sum(direction2) as dir2, sum(direction3) as dir3, sum(direction4) as dir4, sum(direction5) as dir5, sum(direction6) as dir6, sum(direction7) as dir7  from rapidcheck.objectinfo where videoId = {0} group by classId;", videoid);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "videoDirectionRatio");
 
+                    SQL = string.Format("select classId, sum(color0) as color0, sum(color1) as color1, sum(color2) as color2, sum(color3) as color3, sum(color4) as color4, sum(color5) as color5, sum(color6) as color6, sum(color7) as color7, sum(color8) as color8, sum(color9) as color9, sum(color10) as color10, sum(color11) as color11, sum(color12) as color12, sum(color13) as color13, sum(color14) as color14, sum(color15) as color15 from rapidcheck.objectinfo where videoId = {0} group by classId;", videoid);
+                    adapter.SelectCommand = new MySqlCommand(SQL, conn);
+                    adapter.Fill(ds, "videoColorRatio");
+                    
                     dt = ds.Tables["maxid"];
                     foreach (DataRow dr in dt.Rows)
                     {
                         this.maxObjectid = Convert.ToInt32(dr["maxid"]);
                     }
-
                     idxbyObjid = new List<int>();
-                    for (int i = 0; i <= maxObjectid; i++)
-                    {
-                        idxbyObjid.Add(-1);
-                    }
+                    for (int i = 0; i <= maxObjectid; i++) { idxbyObjid.Add(-1); }
                     //set ObjectidList
                     //--------잘 동작하는지 확인해볼것--- => ㅇㅇ잘동작함
                     dt = ds.Tables["objCnt"];
@@ -230,6 +228,49 @@ namespace RapidCheck
                             List<int> tempList = new List<int>();
                             tempList.Add(tempObjid);
                             objidByFrame.Add(tempFrame, tempList);
+                        }
+                    }
+                    dt = ds.Tables["videoDirectionRatio"];
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        int classId = Convert.ToInt32(dr["classId"]);
+                        if (classId == 0)
+                        {
+                            for (int i = 0; i < 8; i++)
+                            {
+                                directionRatioCar.Add(Convert.ToDouble(dr["dir" + i]));
+                            }
+                        }
+                        else if (classId == 1)
+                        {
+                            for (int i = 0; i < 8; i++)
+                            {
+                                directionRatioPeople.Add(Convert.ToDouble(dr["dir" + i]));
+                            }
+                        }
+                    }
+                    dt = ds.Tables["videoColorRatio"];
+                    for (int i = 0; i < 16; i++)
+                    {
+                        colorRatioCar.Add(0.0);
+                        colorRatioPeople.Add(0.0);
+                    }
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        int classId = Convert.ToInt32(dr["classId"]);
+                        if (classId == 0)
+                        {
+                            for (int i = 0; i < colorRatioCar.Count; i++)
+                            {
+                                colorRatioCar[i] = Convert.ToDouble(dr["color" + i]);
+                            }
+                        }
+                        else if (classId == 1)
+                        {
+                            for (int i = 0; i < colorRatioPeople.Count; i++)
+                            {
+                                colorRatioPeople[i] = Convert.ToDouble(dr["color" + i]);
+                            }
                         }
                     }
                 }
@@ -568,6 +609,7 @@ namespace RapidCheck
                     printTime = printTime.AddMinutes(frameMin);
                     frameSec = passTimeSec;
                     printTime = printTime.AddSeconds(frameSec);
+                    // TODO
                     BitCopy = combinedImage(BitCopy, ObjList[idxbyObjid[id]].getCropImage(orderingCnt), currentObjectArea, alpha, printTime.ToString("HH:mm:ss"));
                 }
                 trackingBar.Value += 1;
@@ -679,7 +721,7 @@ namespace RapidCheck
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Image combined Error");
+                Console.WriteLine(ex.ToString() + "\nImage combined Error");
                 return null;
             }
         }
@@ -732,124 +774,64 @@ namespace RapidCheck
             }
             overlayOrders.Clear();
         }
-        //******************************Not used******************************
-        //public void buildOverlayOrder() // 애를 만든다. overlayOrders;
-        //{
-        //    //일단은 모든 obj들을 0frame부터 합성
-        //    int offset = 10;
-        //    int group = 3;
-        //    for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
-        //    {
-        //        List<objIdAndOrderingCnt> temp = new List<objIdAndOrderingCnt>();
-        //        for (int objectidListIdx = 0; (objectidListIdx < objectidList.Count) && (overlayFrameNum >= (objectidListIdx / group) * offset); objectidListIdx++)
-        //        {
-        //            int id = objectidList[objectidListIdx];
-        //            int orderingCnt = ObjList[idxbyObjid[id]].OrderingCnt;
-        //            objIdAndOrderingCnt newOrder = new objIdAndOrderingCnt(id, orderingCnt);
-        //            temp.Add(newOrder);
-        //            ObjList[idxbyObjid[id]].OrderingCnt++;
-        //        }
-        //        overlayOrders.Add(temp);
-        //    }
-        //}
-        //public void addOverlayFrames(Bitmap frame)
-        //{
-        //    overlayFrames.Add(frame);
-        //}
-        //public void setResFrame(int resFrameNum) { this.resFrame = resFrameNum; }
 
-        //public void overlay()
-        //{
-        //    //Bitmap background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
-        //    VideoFileWriter writer = new VideoFileWriter();
-        //    string outputPath = string.Format(@"C:\videos\output\video{0}_{1}_{2}_{3}.avi", videoid, maxFrameNum, outputFrameNum, clusterNum);
-        //    if (System.IO.File.Exists(outputPath)) //해당 이름을 가진 파일이 존재한다면,,,,
-        //    {
-        //        outputPath = outputPath.Replace(".avi", string.Format("_{0}.avi", System.DateTime.Now.ToString("_hh시mm분")));
-        //    }
-        //    writer.Open(outputPath, videoWidth, videoHeight, frameStep, VideoCodec.H264);
-        //    for (int resFrame = 0; resFrame < outputFrameNum; resFrame++)
-        //    {
-        //        Bitmap BitCopy = (Bitmap)background.Clone();
-        //        for (int idx = 0; idx < overlayOrders[resFrame].Count; idx++)
-        //        {
-        //            int id = overlayOrders[resFrame][idx].id;
-        //            BitCopy = combinedImage(BitCopy, ObjList[idxbyObjid[id]].getNextCropImage(), ObjList[idxbyObjid[id]].getNextCropArea(), 0.75f);
-        //        }
-        //        writer.WriteVideoFrame(BitCopy);
-        //        BitCopy.Dispose();
-        //    }
-        //    writer.Close();
-        //}
+        public void barChartSetting()
+        {
 
-        //public void setObjidList()
-        //{
-        //    // TODO
-        //    return;
-        //    bool useFilter = true;
-        //    if (!useFilter)
-        //    {
-        //        objectidList.Clear();
-        //        for (int idIdx = 0; idIdx < ObjList.Count; idIdx++)
-        //        {
-        //            ObjList[idIdx].currentAreaPositionIdx = 0;
-        //            ObjList[idIdx].currentImagePositionIdx = 0;
-        //            objectidList.Add(idIdx);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        List<int> temp = new List<int>();
-        //        using (MySqlConnection conn = new MySqlConnection(strConn))
-        //        {
-        //            DataSet ds = new DataSet();
-        //            MySqlDataAdapter adapter = new MySqlDataAdapter();
-        //            DataTable dt = new DataTable();
+            modelBarChart = new PlotModel
+            {
+                Title = "방향",
+                LegendPlacement = LegendPlacement.Outside,
+                LegendPosition = LegendPosition.BottomCenter,
+                LegendOrientation = LegendOrientation.Horizontal,
+                LegendBorderThickness = 0
+            };
+            var s1 = new ColumnSeries { Title = "People", FillColor = OxyColor.FromRgb(83, 164, 188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
+            for (int i = 0; i < directionRatioPeople.Count; i++)
+            {
+                s1.Items.Add(new ColumnItem { Value = directionRatioPeople[i] });
+            }
+            var s2 = new ColumnSeries { Title = "Car", FillColor = OxyColor.FromRgb(67, 87, 99), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
+            for (int i = 0; i < directionRatioPeople.Count; i++)
+            {
+                s2.Items.Add(new ColumnItem { Value = directionRatioCar[i] });
+            }
+            var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
+            categoryAxis.Labels.Add("↖");
+            categoryAxis.Labels.Add("↑");
+            categoryAxis.Labels.Add("↗");
+            categoryAxis.Labels.Add("→");
+            categoryAxis.Labels.Add("↘");
+            categoryAxis.Labels.Add("↓");
+            categoryAxis.Labels.Add("↙");
+            categoryAxis.Labels.Add("←");
+            var valueAxis = new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.06, AbsoluteMinimum = 0 };
+            modelBarChart.Series.Add(s1);
+            modelBarChart.Series.Add(s2);
+            modelBarChart.Axes.Add(categoryAxis);
+            modelBarChart.Axes.Add(valueAxis);
+        }
+        public void pieChartSetting()
+        {
+            //People
+            modelPieChartCar = new PlotModel { Title = "Car" };
+            dynamic seriesP1 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
-        //            //string SQL = String.Format("SELECT objectId FROM rapidcheck.objectinfo where direction1 + direction2 > 0.7 and videoId={0};", videoid);
-        //            string SQL = String.Format("SELECT * FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1};", videoid, ObjList.Count);
+            for (int i = 0; i < 16; i++)
+            {
+                seriesP1.Slices.Add(new PieSlice("Color" + i, colorRatioCar[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i/16, 0.7, 0.9) });
+            }
+            modelPieChartCar.Series.Add(seriesP1);
+            //Car
+            modelPieChartPeople = new PlotModel { Title = "People" };
+            dynamic seriesP2 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
-        //            adapter.SelectCommand = new MySqlCommand(SQL, conn);
-        //            adapter.Fill(ds, "directionid");
-        //            dt = ds.Tables["directionid"];
-        //            foreach (DataRow dr in dt.Rows)
-        //            {
-        //                temp.Add(Convert.ToInt32(dr["objectId"]));
-        //            }
-        //        }
-        //        List<int> store = new List<int>();
-        //        for (int i = 0; i < objectidList.Count; i++)
-        //        {
-        //            for (int j = 0; j < temp.Count; j++)
-        //            {
-        //                if (objectidList[i] == temp[j])
-        //                {
-        //                    store.Add(objectidList[i]);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //        objectidList.Clear();
-        //        foreach (int id in store)
-        //        {
-        //            objectidList.Add(id);
-        //            ObjList[idxbyObjid[id]].currentAreaPositionIdx = 0;
-        //            ObjList[idxbyObjid[id]].currentImagePositionIdx = 0;
-        //        }
-        //    }
-        //}
-        
-        //public void saveAviFile() //삭제예정
-        //{
-        //    VideoFileWriter writer = new VideoFileWriter();
-        //    string outputPath = string.Format(@"C:\videos\output\{0}.avi", videoid);
-        //    writer.Open(outputPath, videoWidth, videoHeight, 5, VideoCodec.H264);
-        //    for (int i = 0; i < outputFrameNum; i++)
-        //    {
-        //        writer.WriteVideoFrame(overlayFrames[i]);
-        //        overlayFrames[i].Dispose();
-        //    }
-        //    writer.Close();
-        //}
+            for (int i = 0; i < 16; i++)
+            {
+                seriesP2.Slices.Add(new PieSlice("Color" + i, colorRatioPeople[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i / 16, 0.7, 0.9) });
+            }
+            modelPieChartPeople.Series.Add(seriesP2);
+        }
+
     }
 }
