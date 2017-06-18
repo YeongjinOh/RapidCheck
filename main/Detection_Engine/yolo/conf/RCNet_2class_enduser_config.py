@@ -14,8 +14,8 @@ import os
 pretrained_model = os.path.join('dropbox', 'models', 'train', 'yolo-2class-cell14-voctrain', 'yolo-2class-voc2007-train-cell14-steps40000.h5')
 
 ### New Training Model Folder and Name Path
-model_folder = os.path.join('models', 'train', 'rcnet-2class-base-from-voctrain')
-model_name = 'mydata-reversed-trainval'
+model_folder = os.path.join('models', 'train', 'rcnet-2class-enduser-from-voctrain')
+model_name = 'enduser_custom_train'
 
 ### Detected Classes Name List
 classes_name = ["car", "person"]
@@ -35,7 +35,8 @@ classes_name = ["car", "person"]
 			annotations/
 			images/
 """
-datacenter_root = os.path.join('dropbox', 'dataset', 'datacenter')
+# datacenter_root = os.path.join('dropbox', 'dataset', 'datacenter')
+datacenter_root = os.path.normpath('C:/Users/SoMa/myworkspace/RapidLabeling/app/static/datacenter')
 dataset_enduser_root = os.path.join(datacenter_root, 'datacenter_enduser_total')
 
 ### Trainval Dataset Absolute Path

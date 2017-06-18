@@ -913,34 +913,34 @@ namespace RapidCheck
             panelWebbrowser.Width = 1440;
             labelTrainLog.Visible = true;
 
-            //string dir = @"..\Detection_Engine";
-            //System.IO.Directory.SetCurrentDirectory(dir);
+            string dir = @"..\..\..\..\Detection_Engine\";
+            System.IO.Directory.SetCurrentDirectory(dir);
 
-            //string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
-            //string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3}", videoid, maxFrameNum, videoPath, frameStep);
-            //var p = new System.Diagnostics.Process();
-            //p.StartInfo.FileName = pro;
-            //p.StartInfo.Arguments = args;
+            string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
+            string args = string.Format(@"training.py");
+            var p = new System.Diagnostics.Process();
+            p.StartInfo.FileName = pro;
+            p.StartInfo.Arguments = args;
 
             //p.StartInfo.CreateNoWindow = true;
-            //p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-            //p.StartInfo.RedirectStandardOutput = true;
-            //p.StartInfo.UseShellExecute = false;
-            //p.OutputDataReceived += processOutputHandler;
+            p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.UseShellExecute = false;
+            p.OutputDataReceived += processOutputHandler;
 
-            //p.Start();
-            //p.BeginOutputReadLine();
-            //p.WaitForExit();
+            p.Start();
+            p.BeginOutputReadLine();
+            p.WaitForExit();
 
-            //int result = p.ExitCode;
-            //if (result == 0)
-            //{
+            int result = p.ExitCode;
+            if (result == 0)
+            {
 
-            //}
-            //else
-            //{
-            //    MessageBox.Show("Train ERROR");
-            //}
+            }
+            else
+            {
+                MessageBox.Show("Train ERROR");
+            }
         }
         private void processOutputHandler(object sendingProcess, DataReceivedEventArgs outLine)
         {
