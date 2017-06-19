@@ -36,9 +36,7 @@ classes_name = ["car", "person"]
 			images/
 """
 # datacenter_root = os.path.join('dropbox', 'dataset', 'datacenter')
-
-datacenter_root  = os.path.normpath('C:/Users/SoMa/myworkspace/RapidLabeling/app/static/datacenter')
-
+datacenter_root = os.path.normpath('C:/Users/SoMa/myworkspace/RapidLabeling/app/static/datacenter')
 dataset_enduser_root = os.path.join(datacenter_root, 'datacenter_enduser_total')
 
 ### Trainval Dataset Absolute Path
