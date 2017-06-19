@@ -611,6 +611,7 @@ namespace RapidCheck
                 //Bitmap BitCopy = (Bitmap)background.Clone();
                 Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
+                //for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
@@ -702,7 +703,7 @@ namespace RapidCheck
         }
         public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, string time = null)
         {
-            int min_diff = 1300;
+            int min_diff = 1200;
             try
             {
                 if ((back != null) | (front != null))
@@ -904,17 +905,29 @@ namespace RapidCheck
             }
             modelLineChart.Series.Add(people);
             modelLineChart.Series.Add(car);
-            
-            //obj cnt
-            
-            for(int i = 0 ; i < peopleCntList.Count; i++)
+        }
+        public void objCount()
+        {
+            int peopleCnt = 0;
+            int carCnt = 0;
+
+            foreach (int i in trackingTableClassid.Keys)
             {
-                peopleTotal += (int)peopleCntList[i].Y;
+                if(trackingTableClassid[i]==0)
+                {
+                    carCnt++;
+                }
+                else if (trackingTableClassid[i] == 1)
+                {
+                    peopleCnt++;
+                }
+                else
+                {
+                    MessageBox.Show("Count ERROR");
+                }
             }
-            for (int i = 0; i < carCntList.Count; i++)
-            {
-                carTotal += (int)carCntList[i].Y;
-            }
+            peopleTotal = peopleCnt;
+            carTotal = carCnt;
         }
     }
 }

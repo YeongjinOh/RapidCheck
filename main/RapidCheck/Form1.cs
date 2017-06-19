@@ -70,13 +70,14 @@ namespace RapidCheck
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
             int maxFrameNum = 10000;
             int analysisFPS = 5; //default
-            int minTrackingLength = 21;
+            int minTrackingLength = 5;
             int clusterNum = trackBar2.Value;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
+            pictureBoxProgress.Visible = true;
         }
         private void basicFlow(rapidModule dele) { dele(); }
         private void rapidFunc()
@@ -86,6 +87,7 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.pieChartSetting);// chart
             myRapidModule.Add(rapidCheck.LineChartSetting);// chart
             myRapidModule.Add(rapidCheck.addObj);
+            myRapidModule.Add(rapidCheck.objCount);// chart
             myRapidModule.Add(rapidCheck.imageCrop);
             myRapidModule.Add(rapidCheck.objectClustering);
             myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
@@ -115,6 +117,9 @@ namespace RapidCheck
                 else if(myRapidModule[idx].Method.ToString() == "Void LineChartSetting()")
                 {
                     plotViewLine.Model = rapidCheck.modelLineChart;
+                }
+                else if (myRapidModule[idx].Method.ToString() == "Void objCount()")
+                {
                     labelCarCnt.Text = "Car : " + rapidCheck.carTotal;
                     labelPeopleCnt.Text = "people : " + rapidCheck.peopleTotal;
                 }
@@ -799,7 +804,7 @@ namespace RapidCheck
                     break;
             }
             //direction
-            double directionThres = 0.3;
+            double directionThres = 0.3, speedThres = 1.5;
             switch (directionPosition)
             {
                 case 1:
@@ -834,6 +839,7 @@ namespace RapidCheck
                     rapidCheck.conditionDirection = "";
                     break;
             }
+            rapidCheck.conditionDirection += " and speed > " + speedThres;
             overlayModule.Abort();
             Thread.Sleep(1);
             myRapidModule.Clear();

@@ -107,6 +107,7 @@ namespace RapidCheck
         //tabpage3
         List<int> directionCntPeople;
         List<int> directionCntCar;
+
         List<double> colorRatioPeople;
         List<double> colorRatioCar;
         public PlotModel modelBarChart;
