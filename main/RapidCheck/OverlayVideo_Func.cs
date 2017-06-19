@@ -72,6 +72,8 @@ namespace RapidCheck
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
                             string modelPath = @"dropbox\models\train\rcnet-2class-base-from-voctrain\mydata-reversed-trainval-steps96000.h5";
                             string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3} --modelPath {4}", videoid, maxFrameNum, videoPath, frameStep, modelPath);
+                            MessageBox.Show(args);
+                            return;
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
@@ -335,8 +337,7 @@ namespace RapidCheck
                      cropMaxFrameNum = frameNum;
                  }
             }
-
-            for (int frameNum = 0; frameNum < cropMaxFrameNum/*reader.FrameCount*/; frameNum++)
+            for (int frameNum = 0; frameNum <= cropMaxFrameNum/*reader.FrameCount*/; frameNum++)
             {
                 Bitmap videoFrame = reader.ReadVideoFrame();
                 if (frameNum % frameStep != 0)
@@ -440,9 +441,6 @@ namespace RapidCheck
                                         g.DrawImage(Direction7, new Rectangle(0, 0, 30, 30));
                                         break;
                                 }
-                                    
-
-
                                 g.DrawString(ObjList[idxbyObjid[objid]].startTime.ToString("HH:mm"), new Font("SpoqaHanSans", 14, FontStyle.Bold), Brushes.Black, rectf);
 
                                 if (trackingTableClassid[objid] == 0) // class id = 0 => people
@@ -549,7 +547,7 @@ namespace RapidCheck
         }
         public void buildOverlayOrderUsingCluster() // overlayOrders;
         {
-            for (int overlayFrameNum = 0; overlayFrameNum < outputFrameNum; overlayFrameNum++)
+            for (int overlayFrameNum = 0; /*overlayFrameNum < outputFrameNum*/; overlayFrameNum++)
             {
                 List<objIdAndOrderingCnt> currentObjid = new List<objIdAndOrderingCnt>();
                 for (int groupIdx = 0; groupIdx < startingGroup.Count; groupIdx++)
@@ -562,6 +560,12 @@ namespace RapidCheck
                         currentObjid.Add(newOrder);
                         ObjList[idxbyObjid[id]].OrderingCnt++;
                     }
+                }
+                if(currentObjid.Count == 0) 
+                {
+                    MessageBox.Show(overlayFrameNum.ToString());
+                    outputFrameNum = trackingBar.Maximum = overlayFrameNum-1;
+                    break;
                 }
                 overlayOrders.Add(currentObjid);
             }
@@ -594,13 +598,12 @@ namespace RapidCheck
         {
             //background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
             Graphics gs = pictureBoxVideo.CreateGraphics();
-            
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
             //overlay time
             int frameTime = 1000 / frameStep;
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-            float alphaMin = 0.5f, alphaDiff = 0.1f;
+            float alphaMin = 0.6f, alphaDiff = 0.1f;
             //**********************DRAWING CODE**********************
             Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
@@ -611,14 +614,14 @@ namespace RapidCheck
                 //Bitmap BitCopy = (Bitmap)background.Clone();
                 Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
-                //for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
                     int orderingCnt = overlayOrders[resFrame][overlayObjIdx].orderingCnt;
                     Rectangle currentObjectArea = ObjList[idxbyObjid[id]].getCropArea(orderingCnt);
+                    
+                    //set alpha
                     float alpha = 0.8f;
-
                     for (int prevOverlayObjIdx = 0; prevOverlayObjIdx < overlayObjIdx; prevOverlayObjIdx++)
                     {
                         int previd = idxbyObjid[overlayOrders[resFrame][prevOverlayObjIdx].id];
@@ -632,6 +635,7 @@ namespace RapidCheck
                     }
                     if (alpha < alphaMin)
                         alpha = alphaMin;
+
                     int currentFrameNum = ObjList[idxbyObjid[id]].getStartFrameNum() + frameStep * orderingCnt;
                     passTimeSec = currentFrameNum / frameRate;
                     frameHour = passTimeSec / 3600;
@@ -643,14 +647,15 @@ namespace RapidCheck
                     printTime = printTime.AddMinutes(frameMin);
                     frameSec = passTimeSec;
                     printTime = printTime.AddSeconds(frameSec);
+
                     // TODO
                     BitCopy = combinedImage(BitCopy, ObjList[idxbyObjid[id]].getCropImage(orderingCnt), currentObjectArea, alpha, printTime.ToString("HH:mm:ss"));
                 }
-                trackingBar.Value += 1;
-                if (resFrame == outputFrameNum - 1)
+                if (resFrame == trackingBar.Maximum)
                 {
                     startBtn.Text = "Start";
                 }
+                trackingBar.Value += 1;
                 sw.Stop();
                 do
                 {
@@ -658,7 +663,6 @@ namespace RapidCheck
                     if (frameTime - (int)sw.ElapsedMilliseconds > 0) { System.Threading.Thread.Sleep(frameTime - (int)sw.ElapsedMilliseconds); }
                     sw.Reset();
                     frameTime = 1000 / frameStep / speed;
-
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
@@ -892,7 +896,7 @@ namespace RapidCheck
                 carCntList.Add(new DataPoint((double)i, (double)carCnt));
             }
 
-            modelLineChart = new PlotModel { Title = "Frame" };
+            modelLineChart = new PlotModel { Title = "X = Obj count, Y = Frame number" };
             var people = new LineSeries();
             for (int i = 0; i < peopleCntList.Count; i++)
             {
