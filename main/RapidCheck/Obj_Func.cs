@@ -27,12 +27,6 @@ namespace RapidCheck
             currentAreaPositionIdx = index;
             return getNextCropArea();
         }
-        //public bool emptyImage() //삭제 예정
-        //{
-        //    if (currentImagePositionIdx < cropImages.Count)
-        //        return false;
-        //    return true;
-        //}
         public void addCropArea(Rectangle cropArea)
         {
             cropAreas.Add(cropArea);

@@ -61,19 +61,19 @@ namespace RapidCheck
         private void Form1_Load(object sender, EventArgs e)
         {
             Cef.Initialize(new CefSettings()); // chrome initialize
-            //setUI(); //ui enable false
+            setUI(); //ui enable false
             defaultColor(); //color setting
         }
         //------------------------------Overlay Module------------------------------
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 10000;
+            int maxFrameNum = 5000;
             int analysisFPS = 5; //default
-            int minTrackingLength = 5;
+            int minTrackingLength = 21;
             int clusterNum = trackBar2.Value;
-            outputFrameNum = 500;
-            rapidCheck = new RapidCheck.OverlayVideo(labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            outputFrameNum = 1500;
+            rapidCheck = new RapidCheck.OverlayVideo(labelVideoInfo1, labelVideoInfo2, labelVideoInfo3, labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
@@ -121,7 +121,7 @@ namespace RapidCheck
                 else if (myRapidModule[idx].Method.ToString() == "Void objCount()")
                 {
                     labelCarCnt.Text = "Car : " + rapidCheck.carTotal;
-                    labelPeopleCnt.Text = "people : " + rapidCheck.peopleTotal;
+                    labelPeopleCnt.Text = "People : " + rapidCheck.peopleTotal;
                 }
             }
         }
@@ -223,14 +223,14 @@ namespace RapidCheck
         }
         private void setOverlayUI() //UI enable = True
         {
+            pictureBoxProgress.Visible = false;
             startBtn.Text = "Pause";
             pictureBoxStart.Image = overlayPause;
             //trackBar
             trackBar1.Minimum = 0;
-            trackBar1.Maximum = outputFrameNum - 1;
+            //trackBar1.Maximum = outputFrameNum - 1;
             trackBar1.Value = 0;
             //enable
-            trackBar1.Enabled = true;
             radioButtonX1.Enabled = true;
             radioButtonX2.Enabled = true;
             radioButtonX4.Enabled = true;
@@ -299,18 +299,17 @@ namespace RapidCheck
             {
                 replay();
             }
-            
-
-            
         }
         //------------------------------Video controler------------------------------
         private void trackBar1_MouseDown(object sender, MouseEventArgs e)
         {
-            trackBar1.Value = Convert.ToInt32(1.0 * outputFrameNum * e.Location.X / trackBar1.Width);
+            trackBar1.Value = Convert.ToInt32(1.0 * trackBar1.Maximum * e.Location.X / trackBar1.Width);
+            MessageBox.Show(trackBar1.Value.ToString());
         }
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             rapidCheck.resFrame = trackBar1.Value;
+            //rapidCheck.overlayObjIdx = trackBar1.Value;
             rapidCheck.overlayObjIdx = 0;
         }
         Bitmap overlayStart = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\play.png");
@@ -804,7 +803,7 @@ namespace RapidCheck
                     break;
             }
             //direction
-            double directionThres = 0.3, speedThres = 1.5;
+            double directionThres = 0.3, speedThres = 0.2;
             switch (directionPosition)
             {
                 case 1:
