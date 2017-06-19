@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -101,6 +101,8 @@
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.labelPeopleCnt = new System.Windows.Forms.Label();
+            this.labelCarCnt = new System.Windows.Forms.Label();
             this.panel4 = new System.Windows.Forms.Panel();
             this.panelPieChart = new System.Windows.Forms.Panel();
             this.plotViewPie1 = new OxyPlot.WindowsForms.PlotView();
@@ -123,8 +125,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.labelCarCnt = new System.Windows.Forms.Label();
-            this.labelPeopleCnt = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -248,9 +248,9 @@
             // Column1
             // 
             this.Column1.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle1.NullValue")));
-            this.Column1.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle3.NullValue")));
+            this.Column1.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column1.HeaderText = "Car";
             this.Column1.Name = "Column1";
             this.Column1.ReadOnly = true;
@@ -283,9 +283,9 @@
             // Column2
             // 
             this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle2.NullValue")));
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.NullValue = ((object)(resources.GetObject("dataGridViewCellStyle4.NullValue")));
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle4;
             this.Column2.Frozen = true;
             this.Column2.HeaderText = "People";
             this.Column2.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
@@ -466,7 +466,7 @@
             // 
             // buttonColor9
             // 
-            this.buttonColor9.BackColor = System.Drawing.Color.Green;
+            this.buttonColor9.BackColor = System.Drawing.Color.Black;
             this.buttonColor9.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor9.FlatAppearance.BorderSize = 0;
             this.buttonColor9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -479,7 +479,7 @@
             // 
             // buttonColor7
             // 
-            this.buttonColor7.BackColor = System.Drawing.Color.Cyan;
+            this.buttonColor7.BackColor = System.Drawing.Color.Red;
             this.buttonColor7.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor7.FlatAppearance.BorderSize = 0;
             this.buttonColor7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -492,7 +492,7 @@
             // 
             // buttonColor5
             // 
-            this.buttonColor5.BackColor = System.Drawing.Color.Yellow;
+            this.buttonColor5.BackColor = System.Drawing.Color.Blue;
             this.buttonColor5.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor5.FlatAppearance.BorderSize = 0;
             this.buttonColor5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -505,7 +505,7 @@
             // 
             // buttonColor3
             // 
-            this.buttonColor3.BackColor = System.Drawing.Color.DarkOrange;
+            this.buttonColor3.BackColor = System.Drawing.Color.Green;
             this.buttonColor3.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor3.FlatAppearance.BorderSize = 0;
             this.buttonColor3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -518,7 +518,7 @@
             // 
             // buttonColor8
             // 
-            this.buttonColor8.BackColor = System.Drawing.Color.Purple;
+            this.buttonColor8.BackColor = System.Drawing.Color.White;
             this.buttonColor8.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor8.FlatAppearance.BorderSize = 0;
             this.buttonColor8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -531,7 +531,7 @@
             // 
             // buttonColor6
             // 
-            this.buttonColor6.BackColor = System.Drawing.Color.SteelBlue;
+            this.buttonColor6.BackColor = System.Drawing.Color.Indigo;
             this.buttonColor6.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor6.FlatAppearance.BorderSize = 0;
             this.buttonColor6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -544,7 +544,7 @@
             // 
             // buttonColor4
             // 
-            this.buttonColor4.BackColor = System.Drawing.Color.Crimson;
+            this.buttonColor4.BackColor = System.Drawing.Color.DarkTurquoise;
             this.buttonColor4.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor4.FlatAppearance.BorderSize = 0;
             this.buttonColor4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -557,7 +557,7 @@
             // 
             // buttonColor1
             // 
-            this.buttonColor1.BackColor = System.Drawing.Color.Black;
+            this.buttonColor1.BackColor = System.Drawing.Color.Gold;
             this.buttonColor1.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.buttonColor1.FlatAppearance.BorderSize = 0;
             this.buttonColor1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -570,7 +570,7 @@
             // 
             // buttonColor2
             // 
-            this.buttonColor2.BackColor = System.Drawing.Color.Red;
+            this.buttonColor2.BackColor = System.Drawing.Color.GreenYellow;
             this.buttonColor2.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor2.FlatAppearance.BorderSize = 0;
             this.buttonColor2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -583,7 +583,7 @@
             // 
             // buttonColor0
             // 
-            this.buttonColor0.BackColor = System.Drawing.Color.White;
+            this.buttonColor0.BackColor = System.Drawing.Color.DarkOrange;
             this.buttonColor0.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor0.FlatAppearance.BorderSize = 0;
             this.buttonColor0.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
@@ -1044,6 +1044,26 @@
             this.panel2.Size = new System.Drawing.Size(1892, 82);
             this.panel2.TabIndex = 5;
             // 
+            // labelPeopleCnt
+            // 
+            this.labelPeopleCnt.AutoSize = true;
+            this.labelPeopleCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.labelPeopleCnt.Location = new System.Drawing.Point(545, 31);
+            this.labelPeopleCnt.Name = "labelPeopleCnt";
+            this.labelPeopleCnt.Size = new System.Drawing.Size(64, 25);
+            this.labelPeopleCnt.TabIndex = 1;
+            this.labelPeopleCnt.Text = "label5";
+            // 
+            // labelCarCnt
+            // 
+            this.labelCarCnt.AutoSize = true;
+            this.labelCarCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.labelCarCnt.Location = new System.Drawing.Point(257, 31);
+            this.labelCarCnt.Name = "labelCarCnt";
+            this.labelCarCnt.Size = new System.Drawing.Size(64, 25);
+            this.labelCarCnt.TabIndex = 1;
+            this.labelCarCnt.Text = "label5";
+            // 
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(103)))), ((int)(((byte)(179)))), ((int)(((byte)(202)))));
@@ -1266,26 +1286,6 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
-            // 
-            // labelCarCnt
-            // 
-            this.labelCarCnt.AutoSize = true;
-            this.labelCarCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.labelCarCnt.Location = new System.Drawing.Point(257, 31);
-            this.labelCarCnt.Name = "labelCarCnt";
-            this.labelCarCnt.Size = new System.Drawing.Size(64, 25);
-            this.labelCarCnt.TabIndex = 1;
-            this.labelCarCnt.Text = "label5";
-            // 
-            // labelPeopleCnt
-            // 
-            this.labelPeopleCnt.AutoSize = true;
-            this.labelPeopleCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.labelPeopleCnt.Location = new System.Drawing.Point(545, 31);
-            this.labelPeopleCnt.Name = "labelPeopleCnt";
-            this.labelPeopleCnt.Size = new System.Drawing.Size(64, 25);
-            this.labelPeopleCnt.TabIndex = 1;
-            this.labelPeopleCnt.Text = "label5";
             // 
             // Form1
             // 

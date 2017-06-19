@@ -761,37 +761,38 @@ namespace RapidCheck
                 rapidCheck.conditionTarget = "and classId = 0";
             }
             //color
+            double colorThres = 0.2;
             switch (colorPosition)
             {
                 case 0:
-                    rapidCheck.conditionColor =  "and color1 > 0.1";
+                    rapidCheck.conditionColor = "and color0 > " + colorThres;
                     break;
                 case 1:
-                    rapidCheck.conditionColor = "and color0 + color15 > 0.1";
+                    rapidCheck.conditionColor = "and color1 > " + colorThres;
                     break;
                 case 2:
-                    rapidCheck.conditionColor = "and color2 + color3 > 0.1";
+                    rapidCheck.conditionColor = "and color2 > " + colorThres;
                     break;
                 case 3:
-                    rapidCheck.conditionColor = "and color3 + color4 + color5 > 0.1";
+                    rapidCheck.conditionColor = "and color3 + color4 > " + colorThres;
                     break;
                 case 4:
-                    rapidCheck.conditionColor = "and color6 + color7 > 0.1";
+                    rapidCheck.conditionColor = "and color5 + color6 > " + colorThres;
                     break;
                 case 5:
-                    rapidCheck.conditionColor = "and color7 + color8 + color9 + color10 + color11> 0.2";
+                    rapidCheck.conditionColor = "and color7 > " + colorThres;
                     break;
                 case 6:
-                    rapidCheck.conditionColor = "and color12 + color13 > 0.1";
+                    rapidCheck.conditionColor = "and color8 + color9 > " + colorThres;
                     break;
                 case 7:
-                    rapidCheck.conditionColor = "and color13 + color14 > 0.1";
+                    rapidCheck.conditionColor = "and color10 + color11 > " + colorThres;
                     break;
                 case 8:
-                    rapidCheck.conditionColor = "and color16 > 0.6 and color17 > 0.15";
+                    rapidCheck.conditionColor = "and color12 > " + colorThres;
                     break;
                 case 9:
-                    rapidCheck.conditionColor = "and color16 > 0.6 and color18 > 0.3";
+                    rapidCheck.conditionColor = "and color13 > " + colorThres;
                     break;
                 default:
                     rapidCheck.conditionColor = "";
