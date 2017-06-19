@@ -31,7 +31,12 @@ double calcSimilarity(tracklet& trackletPrev, tracklet& trackletNext, int segmen
 /**
 	check if two tracklets can be merged as continuous motion model
 */
-bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext);
+bool isContinuousMotion(tracklet& trackletPrev, tracklet& trackletNext);
+
+/**
+	check if valid motion
+*/
+bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff);
 
 /**
 	check if two tracklets can be merged as valid car motion

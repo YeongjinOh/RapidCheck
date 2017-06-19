@@ -11,19 +11,9 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 
 	// build Trajectory
 	vector<RCTrajectory> trajectoriesStillBeingTracked;
-	bool useOnlineTracking = true;
-	if (!useOnlineTracking)
-	{
-		for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++)
-		{
-			vector<tracklet>& tracklets = segments[segmentNum].tracklets;
-			for (int t = 0; t < tracklets.size(); t++)
-				trajectoriesStillBeingTracked.push_back(RCTrajectory(tracklets[t], segmentNum));
-		}
-	}
-
+	
 	// build trajectories if use online tracking
-	for (int segmentNum = 0; segmentNum < segments.size() && useOnlineTracking; segmentNum++)
+	for (int segmentNum = 0; segmentNum < segments.size(); segmentNum++)
 	{
 		Segment& segment = segments[segmentNum];
 		vector<tracklet>& curSegmentTracklets = segment.getTracklets();
@@ -56,16 +46,15 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 			{
 				RCTrajectory& curTrajectory = trajectoriesStillBeingTracked[i];
 				tracklet &curTracklet = curTrajectory.getTargets(), &nextTracklet = curSegmentTracklets[j];
-				
-				//if (isValidCarMotion(curTracklet, nextTracklet))
-				if (isValidMotion(curTracklet, nextTracklet))
+				int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
+				if (isValidMotion(curTracklet, nextTracklet, diffSegmentNum))
 				{
-					int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
 					double similarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
-					if (DEBUG)
-						printf("%.2lf ", similarity);
+					
 					if (similarity > TRAJECTORY_MATCH_SIMILARITY_THRES)
 						graphSimilarity[i][j] = similarity;
+					if (DEBUG)
+						printf("%.2lf ", graphSimilarity[i][j]);
 				}
 				
 			}
@@ -123,51 +112,6 @@ void buildTrajectory(vector<Segment>& segments, vector<RCTrajectory>& trajectori
 			}
 		}
 
-		/*
-		// for each trajectory still being tracked
-		for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
-		{
-		RCTrajectory& curTrajectory = *itTrajectories;
-		int diffSegmentNum = segmentNum - curTrajectory.getEndSegmentNum();
-		tracklet& curTracklet = curTrajectory.getTargets();
-		vector<tracklet>::iterator maxTrackletIt;
-
-		double maxSimilarity = 0.0;
-		for (vector<tracklet>::iterator itTracklets = curSegmentTracklets.begin(); itTracklets != curSegmentTracklets.end(); itTracklets++)
-		{
-		tracklet& nextTracklet = *itTracklets;
-		if (!isValidCarMotion(curTracklet, nextTracklet)) continue;
-		double curSimilarity = calcSimilarity(curTracklet, nextTracklet, diffSegmentNum);
-		if (maxSimilarity < curSimilarity)
-		{
-		maxSimilarity = curSimilarity;
-		maxTrackletIt = itTracklets;
-		}
-		}
-		printf("maxSim : %.2lf\n", maxSimilarity);
-		if (maxSimilarity >= TRAJECTORY_MATCH_SIMILARITY_THRES)
-		{
-		// merge
-		if (diffSegmentNum == 1)
-		{
-		curTrajectory.merge(*maxTrackletIt);
-		}
-		else
-		{
-		curTrajectory.mergeWithSegmentGap(*maxTrackletIt, diffSegmentNum);
-		}
-		curSegmentTracklets.erase(maxTrackletIt);
-		continue;
-		}
-		}
-
-
-		// push unselected tracklets
-		for (int trackletNum = 0; trackletNum < curSegmentTracklets.size(); trackletNum++)
-		{
-		trajectoriesStillBeingTracked.push_back(RCTrajectory(curSegmentTracklets[trackletNum], segmentNum));
-		}
-		*/
 	}
 	for (vector<RCTrajectory>::iterator itTrajectories = trajectoriesStillBeingTracked.begin(); itTrajectories != trajectoriesStillBeingTracked.end(); itTrajectories++)
 	{

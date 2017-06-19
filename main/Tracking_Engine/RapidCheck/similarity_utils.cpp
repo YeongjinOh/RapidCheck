@@ -85,13 +85,34 @@ double innerProduct(Point2d p1, Point2d p2)
 	return p1.x * p2.x + p1.y + p2.y;
 }
 
-bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext)
+void enlargeRect(Rect &rect)
+{
+	rect.x -= 15;
+	rect.y -= 10;
+	rect.width += 30;
+	rect.height += 20;
+}
+bool isContinuousMotion(tracklet& trackletPrev, tracklet& trackletNext)
 {
 	Rect lastRectOfPrev = trackletPrev.back().getTargetArea(), firstRectOfNext = trackletNext.front().getTargetArea();
+	enlargeRect(lastRectOfPrev);
+	enlargeRect(firstRectOfNext);
 	int intersectionArea = (lastRectOfPrev & firstRectOfNext).area();
 	//if (DEBUG)
 	//	printf("intersection area : %d\n", intersectionArea);
 	return intersectionArea > 0;
+}
+
+bool isValidMotion(tracklet& trackletPrev, tracklet& trackletNext, int segmentIndexDiff)
+{
+	if (segmentIndexDiff == 1)
+		return isContinuousMotion(trackletPrev, trackletNext);
+	Point p1 = trackletPrev.front().getCenterPoint(), p2 = trackletPrev.back().getCenterPoint();
+	Point diff = p1 - p2;
+	int dist = diff.x * diff.x + diff.y * diff.y;
+	if (dist > 100)
+		return isValidCarMotion(trackletPrev, trackletNext);
+	return true;
 }
 
 bool isValidCarMotion(tracklet& trackletPrev, tracklet& trackletNext)

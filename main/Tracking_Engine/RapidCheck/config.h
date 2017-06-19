@@ -4,7 +4,7 @@
 // VideoCapture configuration
 
 const int NUM_OF_COLORS = 64;
-const bool DEBUG = false;
+const bool DEBUG = true;
 const bool USE_PEDESTRIANS_ONLY = true;
 const bool PRINT_PROGRESS = true;
 
@@ -16,7 +16,7 @@ const int NUM_OF_HUE_BINS_COLOR = 12;
 const int NUM_OF_SAT_BINS_COLOR = 15;
 const int NUM_OF_VAL_BINS_COLOR = 10;
 const int NUM_OF_HUE_BINS_CMP = 8;
-const int NUM_OF_SAT_BINS_CMP = 4;
+const int NUM_OF_SAT_BINS_CMP = 6;
 const int NUM_OF_VAL_BINS_CMP = 2;
 
 // Tracklet
