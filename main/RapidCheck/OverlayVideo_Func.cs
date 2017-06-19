@@ -844,14 +844,14 @@ namespace RapidCheck
         public void pieChartSetting()
         {
             //People
-            modelPieChartCar = new PlotModel { Title = "Car" };
+            modelLineChart = new PlotModel { Title = "Car" };
             dynamic seriesP1 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
             for (int i = 0; i < 16; i++)
             {
                 seriesP1.Slices.Add(new PieSlice("Color" + i, colorRatioCar[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i/16, 0.7, 0.9) });
             }
-            modelPieChartCar.Series.Add(seriesP1);
+            modelLineChart.Series.Add(seriesP1);
             //Car
             modelPieChartPeople = new PlotModel { Title = "People" };
             dynamic seriesP2 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
@@ -862,6 +862,53 @@ namespace RapidCheck
             }
             modelPieChartPeople.Series.Add(seriesP2);
         }
+        public void LineChartSetting()
+        {
+            List<DataPoint> peopleCntList = new List<DataPoint>();
+            List<DataPoint> carCntList = new List<DataPoint>();
+            foreach (int i in objidByFrame.Keys) //i =framenum
+            {
+                int peopleCnt = 0;
+                int carCnt = 0;
+                foreach(int j in objidByFrame[i]) // j = obj num
+                {
+                    if(trackingTableClassid[j] == 0)
+                    {
+                        carCnt++;
+                    }
+                    else if (trackingTableClassid[j] == 1)
+                    {
+                        peopleCnt++;
+                    }
+                }
+                peopleCntList.Add(new DataPoint((double)i, (double)peopleCnt));
+                carCntList.Add(new DataPoint((double)i, (double)carCnt));
+            }
 
+            modelLineChart = new PlotModel { Title = "Frame" };
+            var people = new LineSeries();
+            for (int i = 0; i < peopleCntList.Count; i++)
+            {
+                people.Points.Add(peopleCntList[i]);
+            }
+            var car = new LineSeries();
+            for (int i = 0; i < carCntList.Count; i++)
+            {
+                car.Points.Add(carCntList[i]);
+            }
+            modelLineChart.Series.Add(people);
+            modelLineChart.Series.Add(car);
+            
+            //obj cnt
+            
+            for(int i = 0 ; i < peopleCntList.Count; i++)
+            {
+                peopleTotal += (int)peopleCntList[i].Y;
+            }
+            for (int i = 0; i < carCntList.Count; i++)
+            {
+                carTotal += (int)carCntList[i].Y;
+            }
+        }
     }
 }
