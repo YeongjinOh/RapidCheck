@@ -100,6 +100,12 @@ namespace RapidCheck
         DataGridView dataGridView1;
         DataGridView dataGridView2;
         Label labelProgress;
+        Label labelVideoInfo1;
+        Label labelVideoInfo2;
+        Label labelVideoInfo3;
+        string strVideoInfo1;
+        string strVideoInfo2;
+        string strVideoInfo3;
         public int resFrame { get; set; }
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
@@ -117,7 +123,7 @@ namespace RapidCheck
         public int peopleTotal { get; set; }
         public int carTotal { get; set; }
         public OverlayVideo() { }
-        public OverlayVideo( Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(Label labelVideoInfo1, Label labelVideoInfo2, Label labelVideoInfo3, Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
@@ -133,6 +139,9 @@ namespace RapidCheck
             Direction6 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir6.png");
             Direction7 = new Bitmap(@"C:\Users\SoMa\Desktop\RapidCheck\main\RapidCheck\asset\dir7.png");
             //UI
+            this.labelVideoInfo1 = labelVideoInfo1;
+            this.labelVideoInfo2 = labelVideoInfo2;
+            this.labelVideoInfo3 = labelVideoInfo3;
             this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
             this.dataGridView2 = dataGridView2;
@@ -186,11 +195,17 @@ namespace RapidCheck
             videoHeight = reader.Height;
             background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
             fps = reader.FrameRate;
+            //reader.FrameCount
             this.frameStep = fps / analysisFPS;
             if (maxFrameNum == 0 || maxFrameNum > (int)reader.FrameCount)
             {
                 this.maxFrameNum = (int)reader.FrameCount;
             }
+            strVideoInfo1 = "path: " + path + "\nSize: " + reader.Width + " x " + reader.Height + "\ncodec: " + reader.CodecName;
+            labelVideoInfo1.Text = strVideoInfo1;
+            strVideoInfo2 = "FPS: " + fps + "\nCluster value: " + clusterNum + "\nFrame step: " + frameStep;
+            labelVideoInfo2.Text = strVideoInfo2;
+            strVideoInfo3 = "create Time: " + createTime + "\nVideo Frame: " + reader.FrameCount;
             reader.Close();
 
             //tabpage3

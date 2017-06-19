@@ -168,8 +168,9 @@ namespace RapidCheck
                     SQL = string.Format("SELECT objectId, frameNum FROM tracking WHERE videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} ORDER BY frameNum ASC", videoid, frameStep, maxFrameNum);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objidByframe");
-                    
-                    SQL = string.Format("SELECT objectId, count(objectId) as cnt FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} group by objectId;", videoid, frameStep, maxFrameNum);
+
+                    double speedThres = 0.2;
+                    SQL = string.Format("SELECT speed, rapidcheck.tracking.objectId, count(rapidcheck.tracking.objectId) as cnt FROM rapidcheck.tracking INNER JOIN rapidcheck.objectinfo ON rapidcheck.tracking.objectId = rapidcheck.objectinfo.objectId and objectinfo.videoId = tracking.videoId where tracking.videoId={0} AND frameNum % {1} = 0 AND frameNum < {2} AND speed > {3} group by tracking.objectId;", videoid, frameStep, maxFrameNum, speedThres);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objCnt");
 
@@ -185,7 +186,7 @@ namespace RapidCheck
                     idxbyObjid = new List<int>();
                     for (int i = 0; i <= maxObjectid; i++) { idxbyObjid.Add(-1); }
                     //set ObjectidList
-                    //--------잘 동작하는지 확인해볼것--- => ㅇㅇ잘동작함
+                    
                     dt = ds.Tables["objCnt"];
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -563,8 +564,10 @@ namespace RapidCheck
                 }
                 if(currentObjid.Count == 0) 
                 {
-                    MessageBox.Show(overlayFrameNum.ToString());
+                    //MessageBox.Show(overlayFrameNum.ToString());
                     outputFrameNum = trackingBar.Maximum = overlayFrameNum-1;
+                    strVideoInfo3 += "\nresult Frame: " + outputFrameNum;
+                    labelVideoInfo3.Text = strVideoInfo3;
                     break;
                 }
                 overlayOrders.Add(currentObjid);
@@ -822,25 +825,25 @@ namespace RapidCheck
                 LegendOrientation = LegendOrientation.Horizontal,
                 LegendBorderThickness = 0
             };
-            var s1 = new ColumnSeries { Title = "People", FillColor = OxyColor.FromRgb(83, 164, 188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
+            var s1 = new ColumnSeries { Title = "", FillColor = OxyColor.FromRgb(83, 164, 188), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
             for (int i = 0; i < directionCntPeople.Count; i++)
             {
                 s1.Items.Add(new ColumnItem { Value = directionCntPeople[i] });
             }
-            var s2 = new ColumnSeries { Title = "Car", FillColor = OxyColor.FromRgb(67, 87, 99), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
+            var s2 = new ColumnSeries { Title = "", FillColor = OxyColor.FromRgb(67, 87, 99), StrokeColor = OxyColors.Black, StrokeThickness = 1, ColumnWidth = 50 };
             for (int i = 0; i < directionCntCar.Count; i++)
             {
                 s2.Items.Add(new ColumnItem { Value = directionCntCar[i] });
             }
             var categoryAxis = new CategoryAxis { Position = AxisPosition.Bottom };
-            categoryAxis.Labels.Add("↖");
-            categoryAxis.Labels.Add("↑");
-            categoryAxis.Labels.Add("↗");
-            categoryAxis.Labels.Add("→");
-            categoryAxis.Labels.Add("↘");
-            categoryAxis.Labels.Add("↓");
-            categoryAxis.Labels.Add("↙");
-            categoryAxis.Labels.Add("←");
+            //categoryAxis.Labels.Add("↖");
+            //categoryAxis.Labels.Add("↑");
+            //categoryAxis.Labels.Add("↗");
+            //categoryAxis.Labels.Add("→");
+            //categoryAxis.Labels.Add("↘");
+            //categoryAxis.Labels.Add("↓");
+            //categoryAxis.Labels.Add("↙");
+            //categoryAxis.Labels.Add("←");
             var valueAxis = new LinearAxis { Position = AxisPosition.Left, MinimumPadding = 0, MaximumPadding = 0.06, AbsoluteMinimum = 0 };
             modelBarChart.Series.Add(s1);
             modelBarChart.Series.Add(s2);
@@ -858,7 +861,7 @@ namespace RapidCheck
             {
                 seriesP1.Slices.Add(new PieSlice("Color" + i, colorRatioCar[i]) { IsExploded = false, Fill = OxyColor.FromHsv(Hue[i]/24, 0.7, 0.9) });
             }
-            seriesP1.Slices.Add(new PieSlice("White", colorRatioCar[8]) { IsExploded = false, Fill = OxyColors.White });
+            seriesP1.Slices.Add(new PieSlice("White", colorRatioCar[8]) { IsExploded = false, Fill = OxyColors.Ivory });
             seriesP1.Slices.Add(new PieSlice("Black", colorRatioCar[9]) { IsExploded = false, Fill = OxyColors.Black });
             modelLineChart.Series.Add(seriesP1);
             //Car
@@ -869,7 +872,7 @@ namespace RapidCheck
             {
                 seriesP2.Slices.Add(new PieSlice("Color" + i, colorRatioPeople[i]) { IsExploded = false, Fill = OxyColor.FromHsv(Hue[i] / 24, 0.7, 0.9) });
             }
-            seriesP2.Slices.Add(new PieSlice("White", colorRatioPeople[8]) { IsExploded = false, Fill = OxyColors.White });
+            seriesP2.Slices.Add(new PieSlice("White", colorRatioPeople[8]) { IsExploded = false, Fill = OxyColors.Ivory });
             seriesP2.Slices.Add(new PieSlice("Black", colorRatioPeople[9]) { IsExploded = false, Fill = OxyColors.Black });
             modelPieChartPeople.Series.Add(seriesP2);
         }
