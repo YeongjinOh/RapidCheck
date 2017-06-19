@@ -34,35 +34,44 @@ RCTrajectory::RCTrajectory(std::vector<Target> &tr, int segmentNum) : targets(tr
 
 std::vector<float> RCTrajectory::getColorRatioFromTracklet(tracklet &tr)
 {
-	std::vector<float> colorHistSum(NUM_OF_COLOR_CLASSES, 0);
 	Target &representativeTargetInTracklet = tr[LOW_LEVEL_TRACKLETS / 2];
-	MatND &hist = representativeTargetInTracklet.hist;
+	MatND &hist = representativeTargetInTracklet.histColor;
 	float totalHistSum = 0.0;
-	float achromaticColorHistSum = 0.0;
-	for (int i = 0; i < hist.rows; i++)
+	for (int h = 0; h < NUM_OF_HUE_BINS_COLOR; h++)
 	{
-		for (int j = 0; j < hist.cols; j++)
+		for (int s = 0; s < NUM_OF_SAT_BINS_COLOR; s++)
 		{
-			float currentHistValue = hist.at<float>(i, j);
-			totalHistSum += currentHistValue;
-			if (j == 0)
+			for (int v = 0; v < NUM_OF_VAL_BINS_COLOR; v++)
 			{
-				achromaticColorHistSum += currentHistValue;
-			}
-			else
-			{
-				colorHistSum[i] += currentHistValue;
+				totalHistSum += hist.at<float>(h, s, v);
 			}
 		}
 	}
-	for (int i = 0; i < hist.rows; i++)
+	float blackRatio = 0.0, whiteRatio = 0.0;
+	std::vector<float> colorRatio(NUM_OF_HUE_BINS_COLOR + 2, 0.0);
+
+	for (int h = 0; h < NUM_OF_HUE_BINS_COLOR; h++)
 	{
-		colorHistSum[i] /= totalHistSum;
+		for (int s = 0; s < NUM_OF_SAT_BINS_COLOR; s++)
+		{
+			for (int v = 0; v < NUM_OF_VAL_BINS_COLOR; v++)
+			{
+				if (v == 0)
+				{
+					colorRatio[NUM_OF_HUE_BINS_COLOR + 1] += hist.at<float>(h, s, v) / totalHistSum;
+				}
+				else if (s == 0)
+				{
+					colorRatio[NUM_OF_HUE_BINS_COLOR] += hist.at<float>(h, s, v) / totalHistSum;
+				}
+				else
+				{
+					colorRatio[h] += hist.at<float>(h, s, v) / totalHistSum;
+				}
+			}
+		}
 	}
-	colorHistSum[hist.rows] = achromaticColorHistSum / totalHistSum;
-	colorHistSum[NUM_OF_COLOR_CLASSES - 2] = representativeTargetInTracklet.whiteRatio;
-	colorHistSum[NUM_OF_COLOR_CLASSES - 1] = representativeTargetInTracklet.blackRatio;
-	return colorHistSum;
+	return colorRatio;
 }
 
 void RCTrajectory::merge(tracklet &tr)
