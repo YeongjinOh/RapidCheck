@@ -702,8 +702,8 @@ void readTargets(VideoCapture& cap, vector<Frame>& framePedestrians, vector<Fram
 	map<int, vector<Rect> > mapFrameNumToPedestrians, mapFrameNumToCars;
 	
 	// TODO : use detection table
-	db.selectDetection(detectionResultsPedestrians, 703, CLASS_ID_PEDESTRIAN, startFrameNum, endFrameNum, frameStep);
-	db.selectDetection(detectionResultsCars, 703, CLASS_ID_CAR, startFrameNum, endFrameNum, frameStep);
+	db.selectDetection(detectionResultsPedestrians, videoId, CLASS_ID_PEDESTRIAN, startFrameNum, endFrameNum, frameStep);
+	db.selectDetection(detectionResultsCars, videoId, CLASS_ID_CAR, startFrameNum, endFrameNum, frameStep);
 	
 	for (int i = 0; i < detectionResultsPedestrians.size(); i++)
 	{

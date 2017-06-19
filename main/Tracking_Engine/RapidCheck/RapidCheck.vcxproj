@@ -153,6 +153,7 @@
     <ClCompile Include="colorExtractor.cpp" />
     <ClCompile Include="compareSimilarity.cpp" />
     <ClCompile Include="showDetection.cpp" />
+    <ClCompile Include="showTrackingApiResult.cpp" />
     <ClCompile Include="showTrackletClusters.cpp" />
     <ClCompile Include="frame.cpp" />
     <ClCompile Include="App.cpp" />
