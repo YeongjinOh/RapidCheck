@@ -41,6 +41,7 @@ def _video_walk(cached_hash_ids):
 			for anno_file in anno_files:
 				copyfile(os.path.join(each_anno_folder, anno_file), os.path.join(cfg.dataset_enduser_root, 'annotations', anno_file))
 				copyfile(os.path.join(each_image_folder, anno_file.split('.')[0]+'.png'), os.path.join(cfg.dataset_enduser_root, 'images', anno_file.split('.')[0]+'.png'))
+
 	
 	return new_hash_ids
 
