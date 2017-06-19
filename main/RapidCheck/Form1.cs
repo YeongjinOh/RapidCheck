@@ -70,13 +70,14 @@ namespace RapidCheck
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
             int maxFrameNum = 10000;
             int analysisFPS = 5; //default
-            int minTrackingLength = 21;
+            int minTrackingLength = 5;
             int clusterNum = trackBar2.Value;
             outputFrameNum = 500;
             rapidCheck = new RapidCheck.OverlayVideo(labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
+            pictureBoxProgress.Visible = true;
         }
         private void basicFlow(rapidModule dele) { dele(); }
         private void rapidFunc()
@@ -86,6 +87,7 @@ namespace RapidCheck
             myRapidModule.Add(rapidCheck.pieChartSetting);// chart
             myRapidModule.Add(rapidCheck.LineChartSetting);// chart
             myRapidModule.Add(rapidCheck.addObj);
+            myRapidModule.Add(rapidCheck.objCount);// chart
             myRapidModule.Add(rapidCheck.imageCrop);
             myRapidModule.Add(rapidCheck.objectClustering);
             myRapidModule.Add(rapidCheck.buildOverlayOrderUsingCluster);
@@ -115,6 +117,9 @@ namespace RapidCheck
                 else if(myRapidModule[idx].Method.ToString() == "Void LineChartSetting()")
                 {
                     plotViewLine.Model = rapidCheck.modelLineChart;
+                }
+                else if (myRapidModule[idx].Method.ToString() == "Void objCount()")
+                {
                     labelCarCnt.Text = "Car : " + rapidCheck.carTotal;
                     labelPeopleCnt.Text = "people : " + rapidCheck.peopleTotal;
                 }
@@ -761,44 +766,45 @@ namespace RapidCheck
                 rapidCheck.conditionTarget = "and classId = 0";
             }
             //color
+            double colorThres = 0.2;
             switch (colorPosition)
             {
                 case 0:
-                    rapidCheck.conditionColor =  "and color1 > 0.1";
+                    rapidCheck.conditionColor = "and color0 > " + colorThres;
                     break;
                 case 1:
-                    rapidCheck.conditionColor = "and color0 + color15 > 0.1";
+                    rapidCheck.conditionColor = "and color1 > " + colorThres;
                     break;
                 case 2:
-                    rapidCheck.conditionColor = "and color2 + color3 > 0.1";
+                    rapidCheck.conditionColor = "and color2 > " + colorThres;
                     break;
                 case 3:
-                    rapidCheck.conditionColor = "and color3 + color4 + color5 > 0.1";
+                    rapidCheck.conditionColor = "and color3 + color4 > " + colorThres;
                     break;
                 case 4:
-                    rapidCheck.conditionColor = "and color6 + color7 > 0.1";
+                    rapidCheck.conditionColor = "and color5 + color6 > " + colorThres;
                     break;
                 case 5:
-                    rapidCheck.conditionColor = "and color7 + color8 + color9 + color10 + color11> 0.2";
+                    rapidCheck.conditionColor = "and color7 > " + colorThres;
                     break;
                 case 6:
-                    rapidCheck.conditionColor = "and color12 + color13 > 0.1";
+                    rapidCheck.conditionColor = "and color8 + color9 > " + colorThres;
                     break;
                 case 7:
-                    rapidCheck.conditionColor = "and color13 + color14 > 0.1";
+                    rapidCheck.conditionColor = "and color10 + color11 > " + colorThres;
                     break;
                 case 8:
-                    rapidCheck.conditionColor = "and color16 > 0.6 and color17 > 0.15";
+                    rapidCheck.conditionColor = "and color12 > " + colorThres;
                     break;
                 case 9:
-                    rapidCheck.conditionColor = "and color16 > 0.6 and color18 > 0.3";
+                    rapidCheck.conditionColor = "and color13 > " + colorThres;
                     break;
                 default:
                     rapidCheck.conditionColor = "";
                     break;
             }
             //direction
-            double directionThres = 0.3;
+            double directionThres = 0.3, speedThres = 1.5;
             switch (directionPosition)
             {
                 case 1:
@@ -833,6 +839,7 @@ namespace RapidCheck
                     rapidCheck.conditionDirection = "";
                     break;
             }
+            rapidCheck.conditionDirection += " and speed > " + speedThres;
             overlayModule.Abort();
             Thread.Sleep(1);
             myRapidModule.Clear();

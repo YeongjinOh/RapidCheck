@@ -1,7 +1,7 @@
 # Global config variables
 import os
-import yolo.conf.RCNet_2class_enduser_config as c
-# import yolo.conf.RCNet_2class_base_config as c
+# import yolo.conf.RCNet_2class_enduser_config as c
+import yolo.conf.RCNet_2class_base_config as c
 # import yolo.conf.vgg16_2class_config as c
 # import yolo.conf.yolo_2class_base_config as c
 # import yolo.conf.yolo_2class_config as c

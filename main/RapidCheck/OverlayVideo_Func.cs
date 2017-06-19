@@ -70,7 +70,8 @@ namespace RapidCheck
                         {
                             // TODO : read config file and change file path relatively
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
-                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3}", videoid, maxFrameNum, videoPath, frameStep);
+                            string modelPath = @"dropbox\models\train\rcnet-2class-base-from-voctrain\mydata-reversed-trainval-steps96000.h5";
+                            string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3} --modelPath {4}", videoid, maxFrameNum, videoPath, frameStep, modelPath);
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
@@ -170,7 +171,7 @@ namespace RapidCheck
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "objCnt");
 
-                    SQL = string.Format("select classId, sum(color0) as color0, sum(color1) as color1, sum(color2) as color2, sum(color3) as color3, sum(color4) as color4, sum(color5) as color5, sum(color6) as color6, sum(color7) as color7, sum(color8) as color8, sum(color9) as color9, sum(color10) as color10, sum(color11) as color11, sum(color12) as color12, sum(color13) as color13, sum(color14) as color14, sum(color15) as color15 from rapidcheck.objectinfo where videoId = {0} group by classId;", videoid);
+                    SQL = string.Format("select classId, sum(color0) as color0, sum(color1) as color1, sum(color2) as color2, sum(color3)+sum(color4) as color3, sum(color5)+sum(color6) as color4, sum(color7) as color5, sum(color8)+sum(color9) as color6, sum(color10)+sum(color11) as color7, sum(color12) as color8, sum(color13) as color9 from rapidcheck.objectinfo where videoId = {0} group by classId;", videoid);
                     adapter.SelectCommand = new MySqlCommand(SQL, conn);
                     adapter.Fill(ds, "videoColorRatio");
                     
@@ -252,7 +253,7 @@ namespace RapidCheck
                     }
              
                     dt = ds.Tables["videoColorRatio"];
-                    for (int i = 0; i < 16; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         colorRatioCar.Add(0.0);
                         colorRatioPeople.Add(0.0);
@@ -610,6 +611,7 @@ namespace RapidCheck
                 //Bitmap BitCopy = (Bitmap)background.Clone();
                 Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
+                //for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
                     int id = overlayOrders[resFrame][overlayObjIdx].id;
@@ -701,7 +703,7 @@ namespace RapidCheck
         }
         public Bitmap combinedImage(Bitmap back, Bitmap front, Rectangle position, float alpha, string time = null)
         {
-            int min_diff = 1300;
+            int min_diff = 1200;
             try
             {
                 if ((back != null) | (front != null))
@@ -847,19 +849,24 @@ namespace RapidCheck
             modelLineChart = new PlotModel { Title = "Car" };
             dynamic seriesP1 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
-            for (int i = 0; i < 16; i++)
+            double[] Hue = {1.0, 3.0, 5.0, 8.0, 12.0, 15.0, 18.0, 22.0};
+            for (int i = 0; i < Hue.Length; i++)
             {
-                seriesP1.Slices.Add(new PieSlice("Color" + i, colorRatioCar[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i/16, 0.7, 0.9) });
+                seriesP1.Slices.Add(new PieSlice("Color" + i, colorRatioCar[i]) { IsExploded = false, Fill = OxyColor.FromHsv(Hue[i]/24, 0.7, 0.9) });
             }
+            seriesP1.Slices.Add(new PieSlice("White", colorRatioCar[8]) { IsExploded = false, Fill = OxyColors.White });
+            seriesP1.Slices.Add(new PieSlice("Black", colorRatioCar[9]) { IsExploded = false, Fill = OxyColors.Black });
             modelLineChart.Series.Add(seriesP1);
             //Car
             modelPieChartPeople = new PlotModel { Title = "People" };
             dynamic seriesP2 = new PieSeries { StrokeThickness = 2.0, InsideLabelPosition = 0.8, AngleSpan = 360, StartAngle = 0 };
 
-            for (int i = 0; i < 16; i++)
+            for (int i = 0; i < Hue.Length; i++)
             {
-                seriesP2.Slices.Add(new PieSlice("Color" + i, colorRatioPeople[i]) { IsExploded = false, Fill = OxyColor.FromHsv((double)i / 16, 0.7, 0.9) });
+                seriesP2.Slices.Add(new PieSlice("Color" + i, colorRatioPeople[i]) { IsExploded = false, Fill = OxyColor.FromHsv(Hue[i] / 24, 0.7, 0.9) });
             }
+            seriesP2.Slices.Add(new PieSlice("White", colorRatioPeople[8]) { IsExploded = false, Fill = OxyColors.White });
+            seriesP2.Slices.Add(new PieSlice("Black", colorRatioPeople[9]) { IsExploded = false, Fill = OxyColors.Black });
             modelPieChartPeople.Series.Add(seriesP2);
         }
         public void LineChartSetting()
@@ -898,17 +905,29 @@ namespace RapidCheck
             }
             modelLineChart.Series.Add(people);
             modelLineChart.Series.Add(car);
-            
-            //obj cnt
-            
-            for(int i = 0 ; i < peopleCntList.Count; i++)
+        }
+        public void objCount()
+        {
+            int peopleCnt = 0;
+            int carCnt = 0;
+
+            foreach (int i in trackingTableClassid.Keys)
             {
-                peopleTotal += (int)peopleCntList[i].Y;
+                if(trackingTableClassid[i]==0)
+                {
+                    carCnt++;
+                }
+                else if (trackingTableClassid[i] == 1)
+                {
+                    peopleCnt++;
+                }
+                else
+                {
+                    MessageBox.Show("Count ERROR");
+                }
             }
-            for (int i = 0; i < carCntList.Count; i++)
-            {
-                carTotal += (int)carCntList[i].Y;
-            }
+            peopleTotal = peopleCnt;
+            carTotal = carCnt;
         }
     }
 }
