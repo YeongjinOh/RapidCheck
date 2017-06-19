@@ -13,20 +13,20 @@ def _make_datacetner_folder(new_folder_path):
 	os.mkdir(os.path.join(new_folder_path, "images"))
 	return new_folder_path
 
-def _video_walk(cached_hash_ids):
+def _video_walk(cached_hash_ids, datacenter_root, dataset_enduser_root):
 	from shutil import copyfile
 	
 	new_hash_ids = []
-	if not os.path.exists(cfg.dataset_enduser_root):
+	if not os.path.exists(dataset_enduser_root):
 		# 없으면 enduser_root 를 만든다
-		_make_datacetner_folder(cfg.dataset_enduser_root)
+		_make_datacetner_folder(dataset_enduser_root)
 
-	if not os.path.exists(os.path.join(cfg.dataset_enduser_root, 'annotations')):
-		os.mkdir(os.path.join(cfg.dataset_enduser_root, 'annotations'))
-	if not os.path.exists(os.path.join(cfg.dataset_enduser_root, 'images')):
-		os.mkdir(os.path.join(cfg.dataset_enduser_root, 'images'))
+	if not os.path.exists(os.path.join(dataset_enduser_root, 'annotations')):
+		os.mkdir(os.path.join(dataset_enduser_root, 'annotations'))
+	if not os.path.exists(os.path.join(dataset_enduser_root, 'images')):
+		os.mkdir(os.path.join(dataset_enduser_root, 'images'))
 
-	for folder, subfolders, files in os.walk(cfg.datacenter_root):
+	for folder, subfolders, files in os.walk(datacenter_root):
 		folder_name = folder.split(os.sep)[-1]
 		if 'video_' in folder_name:
 			hash_id = folder_name.split('_')[1]
@@ -39,8 +39,8 @@ def _video_walk(cached_hash_ids):
 
 			anno_files = [f for f in os.listdir(each_anno_folder) if f.split('.')[-1] == 'xml' or f.split('.')[-1] == 'png']
 			for anno_file in anno_files:
-				copyfile(os.path.join(each_anno_folder, anno_file), os.path.join(cfg.dataset_enduser_root, 'annotations', anno_file))
-				copyfile(os.path.join(each_image_folder, anno_file.split('.')[0]+'.png'), os.path.join(cfg.dataset_enduser_root, 'images', anno_file.split('.')[0]+'.png'))
+				copyfile(os.path.join(each_anno_folder, anno_file), os.path.join(dataset_enduser_root, 'annotations', anno_file))
+				copyfile(os.path.join(each_image_folder, anno_file.split('.')[0]+'.png'), os.path.join(dataset_enduser_root, 'images', anno_file.split('.')[0]+'.png'))
 
 	
 	return new_hash_ids
@@ -95,11 +95,6 @@ def _split(folder_path, train_rates=0.8):
 	trainval_size = int(files_size*train_rates)
 	return files, shuffle_idx[:trainval_size], shuffle_idx[trainval_size:]
 
-def _make_datacetner_folder(new_folder_path):
-	os.mkdir(new_folder_path)
-	os.mkdir(os.path.join(new_folder_path, "annotations"))
-	os.mkdir(os.path.join(new_folder_path, "images"))
-	return new_folder_path
 
 def collect_enduser_trainset():
 	import json
@@ -112,7 +107,7 @@ def collect_enduser_trainset():
 		infomation_json = json.load(f)
 		if infomation_json['video_ids'] is None:
 			infomation_json['video_ids'] = []
-		new_hash_ids = _video_walk(infomation_json['video_ids'])
+		new_hash_ids = _video_walk(infomation_json['video_ids'], cfg.datacenter_root, cfg.dataset_enduser_root)
 		infomation_json['video_ids'] += new_hash_ids
 	
 	with open(infomation_file, 'w') as f:	
