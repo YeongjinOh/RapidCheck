@@ -42,8 +42,8 @@ print(cfg.dataset_abs_location)
 sess = tf.Session()
 K.set_session(sess)
 
-# model = RCNet_THdim_model()
-model = RCNet_THdim_dropout_model()
+model = RCNet_THdim_model()
+# model = RCNet_THdim_dropout_model()
 # model = RCNet_shortdense_THdim_model()
 model.summary()
 

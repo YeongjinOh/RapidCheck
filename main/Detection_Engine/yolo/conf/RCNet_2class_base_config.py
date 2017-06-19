@@ -15,7 +15,8 @@ pretrained_model = os.path.join('dropbox', 'models', 'train', 'yolo-2class-cell1
 
 ### New Training Model Folder and Name Path
 model_folder = os.path.join('models', 'train', 'rcnet-2class-base-from-voctrain')
-model_name = 'mydata-reversed-trainval-dropout'
+# model_name = 'mydata-reversed-trainval-dropout'
+model_name = 'trainrates07-pet7added'
 
 ### Detected Classes Name List
 classes_name = ["car", "person"]
@@ -36,7 +37,7 @@ classes_name = ["car", "person"]
 			images/
 """
 datacenter_root = os.path.join('dropbox', 'dataset', 'datacenter')
-dataset_enduser_root = os.path.join(datacenter_root, 'datacenter_mydata')
+dataset_enduser_root = os.path.join(datacenter_root, 'datacenter_enduser_total')
 
 ### Trainval Dataset Absolute Path
 dataset_abs_location = os.path.join(dataset_enduser_root, 'trainval')
@@ -69,7 +70,7 @@ trainer='adam'
 image_dim_order = 'th'
 norm_type = 'scale_down'
 
-descriptions = "2017-06-14\n\
+descriptions = "2017-06-17\n\
 cell size : {}\n\
 num_classes : {}\n\
 boxes_per_cell : {}\n\
