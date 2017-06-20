@@ -20,6 +20,26 @@
 
 ![tag](https://github.com/YeongjinOh/RapidCheck/blob/master/images_md/rcnet_arch.png)
 
+ Now, we can see how RCNet looks a target image.
+
+ ![look conv1](/images_md/vis_conv1.png)
+
+ This is a processed image of the first convolutional layer. 
+
+ ![look conv2](/images_md/vis_conv2.png)
+
+  This is a second convolutional layer output image. More brighter, more valuable to see in RCNet.
+
+![look conv3](/images_md/vis_conv3.png)
+
+ conv3
+
+![look last layer](/images_md/vis_conv_last_.png)
+
+  The last layer output. Each note include many dimensions of infomation. The role of merge these infomation is **Detection Layer** as follows:
+
+![Detection Loss](/images_md/loss_in_detection.png)
+
 ##### Dependencies
 
 * tensorflow >= 1.0
