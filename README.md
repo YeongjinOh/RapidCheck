@@ -16,7 +16,7 @@
 
  Detection engine detects people and cars in each frame.
 
- We use deep a learning algorithm to detect objects. Our CNN model is described as follows:
+ We use a deep learning algorithm to detect objects. Our CNN model is described as follows:
 
 ![tag](https://github.com/YeongjinOh/RapidCheck/blob/master/images_md/rcnet_arch.png)
 
@@ -34,6 +34,8 @@
 
  Tracking engine implements tracking algorithms and analyzes object's informations as the following pipeline.
 
+![Tracking Pipeline](/images_md/tracking_pipe.png)
+
 ```
 1. Read detection responses from database
 2. Build Tracklet for short term period
@@ -41,7 +43,7 @@
 4. Extract each object's information such as direction, speed, color
 ```
 
-
+![Tracket Result](/images_md/tracket_result.png)
 
 ##### Dependencies
 
@@ -62,9 +64,9 @@
 
  Given analysis results, original video is compressed into a short time video using overlay algorithm. User can choose class(person, car), direction, color to find a specific object.
 
+![Screen Shot](/images_md/base.png)
 
-
-##### Dependency
+##### Dependencies
 
 * OxyPlot 1.0
 * MaterialSkin 1.0
@@ -76,6 +78,16 @@
 
 
 
+
+#### References
+
+[1] Zamir AR, Dehghan A, Shah M (2012) Gmcp-tracker: Global multi-object tracking using generalized minimum clique graphs.
+
+[2] Wenhan Luo, Junliang Xing (2014) Multiple Object Tracking: A Literature Review, arXiv:1409.7618
+
+[3] Dehghan A, Shah M , Mubarak  S (2015) GMMCP Tracker: Globally Optimal Generalized Maximum Multi Clique Problem for Multiple Object Tracking 
+
+[4] Joseph Redmon, Santosh Divvala (2015), You Only Look Once: Unified, Real-Time Object Detection, https://pjreddie.com/darknet/yolo/
 
 
 
