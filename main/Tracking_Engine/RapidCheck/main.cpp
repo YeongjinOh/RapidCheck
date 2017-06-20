@@ -14,12 +14,12 @@ using namespace rc;
 
 void initRCVariables()
 {
-	int id = 3;
+	int id = 0;
 	char *filepaths[] = { "C:/videos/video_147254_test.avi", "C:/videos/video_439532_test.mp4", "C:/videos/video_166497_test.mp4", "C:/videos/video_716195_test.mp4" };
 	filepath = filepaths[id];
-	videoId = 706;
+	videoId = 700+id;
 	startFrameNum = 0;
-	frameStep = 4;
+	frameStep = 1;
 	endFrameNum = 30000;
 	numOfFrames = (endFrameNum - startFrameNum) / frameStep;
 }
@@ -28,7 +28,7 @@ void initRCVariables()
 int main(int argc, char ** argv)
 {
 	initRCVariables();
-	int operationNum = 1;
+	int operationNum = 8;
 
 	// assign arguments
 	for (int i = 1; i < argc; i++)
@@ -89,6 +89,10 @@ int main(int argc, char ** argv)
 			break;
 		case 7:
 			compareSimilarity();
+			break;
+		case 8:
+			showTrackingApiResult();
+			break;
 	}
 	return 0;
 }

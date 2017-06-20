@@ -38,7 +38,7 @@ void analysisVideo();
 void compareSimilarity();
 void showTrajectory();
 void colorExtractor();
-
+void showTrackingApiResult();
 // Database
 
 static DB db;
