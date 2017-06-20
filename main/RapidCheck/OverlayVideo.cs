@@ -124,6 +124,7 @@ namespace RapidCheck
         public PlotModel modelPieChartPeople;
         public PlotModel modelPieChartCar;
         public PlotModel modelLineChart;
+        Accord.Video.FFMPEG.VideoFileReader reader;
         public int peopleTotal { get; set; }
         public int carTotal { get; set; }
         public OverlayVideo() { }
@@ -193,7 +194,8 @@ namespace RapidCheck
             }
             
             //read video info
-            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            //Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
             frameRate = reader.FrameRate;
             videoWidth = reader.Width;
@@ -213,7 +215,7 @@ namespace RapidCheck
             labelVideoInfo2.Text = strVideoInfo2;
             strVideoInfo3 = "create Time: " + createTime + "\nVideo Frame: " + reader.FrameCount;
             videoInfo3Flag = true;
-            reader.Close();
+            //reader.Close();
 
             //tabpage3
             directionCntPeople = new List<int>();

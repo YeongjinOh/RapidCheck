@@ -72,7 +72,6 @@ namespace RapidCheck
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
                             string modelPath = @"dropbox\models\train\rcnet-2class-base-from-voctrain\mydata-reversed-trainval-steps96000.h5";
                             string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3} --modelPath {4}", videoid, maxFrameNum, videoPath, frameStep, modelPath);
-                            return;
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
                             p.StartInfo.Arguments = args;
@@ -149,7 +148,6 @@ namespace RapidCheck
                             MessageBox.Show("TRACKING ERROR");
                         }
                     }
-                    
 
                     //----------------------------------------------overlay Module----------------------------------------------
                     SQL = string.Format("SELECT max(objectId) as maxid FROM rapidcheck.tracking where videoId={0} AND frameNum % {1} = 0 AND frameNum < {2};", videoid, frameStep, maxFrameNum);
@@ -326,8 +324,9 @@ namespace RapidCheck
         }
         public void imageCrop()
         {
-            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
-            reader.Open(videoPath);
+            Accord.Video.FFMPEG.VideoFileReader reader2 = new Accord.Video.FFMPEG.VideoFileReader();
+            //reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader2.Open(videoPath);
 
             int cropMaxFrameNum = 0;
             for (int frameNum = 0; frameNum < maxFrameNum/*reader.FrameCount*/; frameNum += frameStep)
@@ -339,7 +338,7 @@ namespace RapidCheck
             }
             for (int frameNum = 0; frameNum <= cropMaxFrameNum/*reader.FrameCount*/; frameNum++)
             {
-                Bitmap videoFrame = reader.ReadVideoFrame();
+                Bitmap videoFrame = reader2.ReadVideoFrame();
                 if (frameNum % frameStep != 0)
                 {
                     videoFrame.Dispose();
@@ -382,7 +381,6 @@ namespace RapidCheck
                                         headlineBox.SetPixel(j, i, Color.White);
                                     }
                                 }
-
 
                                 RectangleF rectf = new RectangleF(35, 0, headlineBox.Width, headlineBox.Height); // 다음 위치에 택스트를 그린다 (시간)
 
@@ -463,13 +461,12 @@ namespace RapidCheck
                             }
                         }
                     }
-                    //videoFrame.Dispose();
                 }));
                 videoFrame.Dispose();
                 int percent = frameNum * 100 / cropMaxFrameNum;
                 labelProgress.Text = "Detection 100%\nTracking 100%\nOverlay " + percent + "%";
             }
-            reader.Close();
+            reader2.Close();
         }
         public void setFileterObjectidList()
         {
@@ -481,12 +478,10 @@ namespace RapidCheck
                     {
                         List<int> tempObjidList = new List<int>();
 
-                        DataSet ds = new DataSet(); //이것들 전역변수로 선언해야하나..???
+                        DataSet ds = new DataSet();
                         MySqlDataAdapter adapter = new MySqlDataAdapter();
                         DataTable dt = new DataTable();
 
-                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction1 + direction2 + direction0 > 0.7;", videoid, maxObjectid);
-                        //string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} and direction5 + direction7 + direction6 > 0.7;", videoid, maxObjectid);
                         string SQL = string.Format("SELECT objectId FROM rapidcheck.objectinfo where videoId={0} AND objectId <= {1} {2} {3} {4};", videoid, maxObjectid, conditionTarget, conditionColor, conditionDirection);
                         //MessageBox.Show(SQL);
                         adapter.SelectCommand = new MySqlCommand(SQL, conn);
@@ -576,11 +571,6 @@ namespace RapidCheck
                         ObjList[idxbyObjid[id]].OrderingCnt++;
                     }
                 }
-                //if(currentObjid.Count == 0) 
-                //{
-                //    //
-                //    break;
-                //}
                 overlayOrders.Add(currentObjid);
             }
         }
@@ -610,7 +600,7 @@ namespace RapidCheck
         }
         public void overlayLive()
         {
-            background = new Bitmap(@"C:\videos\0.png"); //*****Background는....0번째 프레임?
+            //background = new Bitmap(@"C:\videos\0.png");
             Graphics gs = pictureBoxVideo.CreateGraphics();
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
@@ -619,14 +609,14 @@ namespace RapidCheck
             System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
             float alphaMin = 0.5f, alphaDiff = 0.1f;
             //**********************DRAWING CODE**********************
-            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
-            reader.Open(videoPath);
+            //Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            //reader.Open(videoPath);
             for (resFrame = 0; resFrame < outputFrameNum; resFrame++)
             {
                 sw.Start();
                 //background = reader.ReadVideoFrame();
-                Bitmap BitCopy = (Bitmap)background.Clone();
-                //Bitmap BitCopy = reader.ReadVideoFrame();
+                //Bitmap BitCopy = (Bitmap)background.Clone();
+                Bitmap BitCopy = reader.ReadVideoFrame();
                 int passTimeSec, frameHour, frameMin, frameSec;
                 for (overlayObjIdx = 0; overlayObjIdx < overlayOrders[resFrame].Count; overlayObjIdx++)
                 {
@@ -635,7 +625,7 @@ namespace RapidCheck
                     Rectangle currentObjectArea = ObjList[idxbyObjid[id]].getCropArea(orderingCnt);
                     
                     //set alpha
-                    float alpha = 0.7f;
+                    float alpha = 0.8f;
                     for (int prevOverlayObjIdx = 0; prevOverlayObjIdx < overlayObjIdx; prevOverlayObjIdx++)
                     {
                         int previd = idxbyObjid[overlayOrders[resFrame][prevOverlayObjIdx].id];
@@ -662,7 +652,6 @@ namespace RapidCheck
                     frameSec = passTimeSec;
                     printTime = printTime.AddSeconds(frameSec);
 
-                    // TODO
                     BitCopy = combinedImage(BitCopy, ObjList[idxbyObjid[id]].getCropImage(orderingCnt), currentObjectArea, alpha, printTime.ToString("HH:mm:ss"));
                 }
                 if (resFrame == trackingBar.Maximum)
@@ -680,7 +669,6 @@ namespace RapidCheck
                 } while (startBtn.Text == "Start");
                 BitCopy.Dispose();
             }
-            // TODO
             // MessageBox.Show("Closed");
             gs.Dispose();
             reader.Close();
@@ -739,6 +727,7 @@ namespace RapidCheck
                         att.SetColorMatrix(matrix, ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
                         gr.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
                         Bitmap diffBmp = back.Clone(position, back.PixelFormat);
+                        
                         for (int y = 0; y < diffBmp.Height; y++)
                         {
                             for (int x = 0; x < diffBmp.Width; x++)
@@ -761,8 +750,9 @@ namespace RapidCheck
                                 
                             }
                         }
-                            //draw
+                        //draw
                         gr.DrawImage(diffBmp, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
+                        //gr.DrawImage(front, position, 0, 0, front.Width, front.Height, GraphicsUnit.Pixel, att);
                         
                         //drawing time(frame num)
                         if(time != null & drawTime)

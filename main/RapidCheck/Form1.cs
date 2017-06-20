@@ -68,10 +68,11 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 10000;
+            int maxFrameNum = 2000;
             int analysisFPS = 5; //default
-            int minTrackingLength = 15;
+            int minTrackingLength = 10;
             int clusterNum = trackBar2.Value;
+            //int clusterNum = 20;
             outputFrameNum = 1500;
             rapidCheck = new RapidCheck.OverlayVideo(labelEndTime, labelVideoInfo1, labelVideoInfo2, labelVideoInfo3, labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             rapidFunc();

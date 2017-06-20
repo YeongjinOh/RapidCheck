@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -41,6 +41,9 @@
             this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.panelVideoControl = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.labelCurrentTime = new System.Windows.Forms.Label();
+            this.labelEndTime = new System.Windows.Forms.Label();
             this.pictureBoxStart = new System.Windows.Forms.PictureBox();
             this.pictureBoxSpeed4 = new System.Windows.Forms.PictureBox();
             this.pictureBoxSpeed2 = new System.Windows.Forms.PictureBox();
@@ -129,9 +132,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.labelEndTime = new System.Windows.Forms.Label();
-            this.labelCurrentTime = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -333,6 +333,36 @@
             this.panelVideoControl.Name = "panelVideoControl";
             this.panelVideoControl.Size = new System.Drawing.Size(1258, 104);
             this.panelVideoControl.TabIndex = 4;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label5.Location = new System.Drawing.Point(1162, 60);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(13, 20);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "/";
+            // 
+            // labelCurrentTime
+            // 
+            this.labelCurrentTime.AutoSize = true;
+            this.labelCurrentTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.labelCurrentTime.Location = new System.Drawing.Point(1108, 60);
+            this.labelCurrentTime.Name = "labelCurrentTime";
+            this.labelCurrentTime.Size = new System.Drawing.Size(49, 20);
+            this.labelCurrentTime.TabIndex = 10;
+            this.labelCurrentTime.Text = "00:00";
+            // 
+            // labelEndTime
+            // 
+            this.labelEndTime.AutoSize = true;
+            this.labelEndTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.labelEndTime.Location = new System.Drawing.Point(1180, 60);
+            this.labelEndTime.Name = "labelEndTime";
+            this.labelEndTime.Size = new System.Drawing.Size(49, 20);
+            this.labelEndTime.TabIndex = 9;
+            this.labelEndTime.Text = "00:00";
             // 
             // pictureBoxStart
             // 
@@ -1347,36 +1377,6 @@
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
-            // 
-            // labelEndTime
-            // 
-            this.labelEndTime.AutoSize = true;
-            this.labelEndTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.labelEndTime.Location = new System.Drawing.Point(1180, 60);
-            this.labelEndTime.Name = "labelEndTime";
-            this.labelEndTime.Size = new System.Drawing.Size(49, 20);
-            this.labelEndTime.TabIndex = 9;
-            this.labelEndTime.Text = "00:00";
-            // 
-            // labelCurrentTime
-            // 
-            this.labelCurrentTime.AutoSize = true;
-            this.labelCurrentTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.labelCurrentTime.Location = new System.Drawing.Point(1108, 60);
-            this.labelCurrentTime.Name = "labelCurrentTime";
-            this.labelCurrentTime.Size = new System.Drawing.Size(49, 20);
-            this.labelCurrentTime.TabIndex = 10;
-            this.labelCurrentTime.Text = "00:00";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.label5.Location = new System.Drawing.Point(1162, 60);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(13, 20);
-            this.label5.TabIndex = 11;
-            this.label5.Text = "/";
             // 
             // Form1
             // 
