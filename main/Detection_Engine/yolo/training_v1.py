@@ -13,12 +13,6 @@ _TRAINER = dict({
 		'ftrl': tf.train.FtrlOptimizer,
 	})
 
-# def _to_tensor(x, dtype):
-# 	x = tf.convert_to_tensor(x)
-# 	if x.dtype != dtype:
-# 		x = tf.cast(x, dtype)
-# 	return x
-
 def darkeras_loss(net_out):
 	
 	sprob = float(cfg.class_scale)
