@@ -56,8 +56,10 @@ namespace RapidCheck
         public List<int> gridViewList1;
         public List<int> gridViewList2;
         private string videoPath;
+        
         public int videoWidth { get; set; }
         public int videoHeight { get; set; }
+        public int analysisFPS{get;set;}
         private int frameStep;
         private int videoid;
         private int outputFrameNum;
@@ -69,7 +71,7 @@ namespace RapidCheck
         private int maxFrameNum;
         private int minTrackingLength;
         private List<StartingGroup> startingGroup; //kmeans test
-        private int clusterNum;
+        public int clusterNum{get;set;}
         public int speed{get;set;}
         public int fps { get; set; }
         private int maxObjectid;
@@ -103,9 +105,11 @@ namespace RapidCheck
         Label labelVideoInfo1;
         Label labelVideoInfo2;
         Label labelVideoInfo3;
+        Label labelEndTime;
         string strVideoInfo1;
         string strVideoInfo2;
         string strVideoInfo3;
+        bool videoInfo3Flag;
         public int resFrame { get; set; }
         public int overlayObjIdx { set; get; }
         public int clickFramePosition { set; get; } // mouse click frame position
@@ -120,10 +124,11 @@ namespace RapidCheck
         public PlotModel modelPieChartPeople;
         public PlotModel modelPieChartCar;
         public PlotModel modelLineChart;
+        Accord.Video.FFMPEG.VideoFileReader reader;
         public int peopleTotal { get; set; }
         public int carTotal { get; set; }
         public OverlayVideo() { }
-        public OverlayVideo(Label labelVideoInfo1, Label labelVideoInfo2, Label labelVideoInfo3, Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
+        public OverlayVideo(Label labelEndTime, Label labelVideoInfo1, Label labelVideoInfo2, Label labelVideoInfo3, Label labelProgress, DataGridView dataGridView1, DataGridView dataGridView2, Button startBtn, TrackBar TrackingBar, PictureBox pictureBoxVideo, string path, string createTime, int maxFrameNum, int analysisFPS = 5, int minTrackingLength = 29, int clusterNum = 20, int outputFrameNum = 1000)
         {
             //drawing style
             drawFont = new System.Drawing.Font("Arial", 14);
@@ -142,6 +147,7 @@ namespace RapidCheck
             this.labelVideoInfo1 = labelVideoInfo1;
             this.labelVideoInfo2 = labelVideoInfo2;
             this.labelVideoInfo3 = labelVideoInfo3;
+            this.labelEndTime = labelEndTime;
             this.labelProgress = labelProgress;
             this.dataGridView1 = dataGridView1;
             this.dataGridView2 = dataGridView2;
@@ -188,7 +194,8 @@ namespace RapidCheck
             }
             
             //read video info
-            Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            //Accord.Video.FFMPEG.VideoFileReader reader = new Accord.Video.FFMPEG.VideoFileReader();
+            reader = new Accord.Video.FFMPEG.VideoFileReader();
             reader.Open(videoPath);
             frameRate = reader.FrameRate;
             videoWidth = reader.Width;
@@ -196,6 +203,7 @@ namespace RapidCheck
             background = reader.ReadVideoFrame(); // 첫번째 프레임을 백그라운드로
             fps = reader.FrameRate;
             //reader.FrameCount
+            this.analysisFPS = analysisFPS;
             this.frameStep = fps / analysisFPS;
             if (maxFrameNum == 0 || maxFrameNum > (int)reader.FrameCount)
             {
@@ -206,7 +214,8 @@ namespace RapidCheck
             strVideoInfo2 = "FPS: " + fps + "\nCluster value: " + clusterNum + "\nFrame step: " + frameStep;
             labelVideoInfo2.Text = strVideoInfo2;
             strVideoInfo3 = "create Time: " + createTime + "\nVideo Frame: " + reader.FrameCount;
-            reader.Close();
+            videoInfo3Flag = true;
+            //reader.Close();
 
             //tabpage3
             directionCntPeople = new List<int>();

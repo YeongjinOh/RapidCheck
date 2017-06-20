@@ -12,7 +12,7 @@ namespace RapidCheck
         private List<int> lengthList;
         private int currentidPosition; //0 ~ image length
         private int currentIndex; //index of id list
-
+        
 
         public StartingGroup() 
         {
@@ -40,7 +40,10 @@ namespace RapidCheck
         {
             idList.Add(id);
         }
-
+        public int getFrameLength()
+        {
+            return lengthList.Sum();
+        }
         public void sort(ref List<Obj> ObjList, ref List<int> idxbyObjid)
         {
             for (int idx=0; idx < idList.Count; idx++)

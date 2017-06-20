@@ -68,12 +68,13 @@ namespace RapidCheck
         private void startOverlayModule()
         {
             createTime = setCreateTime(System.IO.Path.GetDirectoryName(videoFilePath.FileName), System.IO.Path.GetFileName(videoFilePath.FileName));
-            int maxFrameNum = 5000;
+            int maxFrameNum = 2000;
             int analysisFPS = 5; //default
-            int minTrackingLength = 21;
+            int minTrackingLength = 10;
             int clusterNum = trackBar2.Value;
+            //int clusterNum = 20;
             outputFrameNum = 1500;
-            rapidCheck = new RapidCheck.OverlayVideo(labelVideoInfo1, labelVideoInfo2, labelVideoInfo3, labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
+            rapidCheck = new RapidCheck.OverlayVideo(labelEndTime, labelVideoInfo1, labelVideoInfo2, labelVideoInfo3, labelProgress, dataGridView1, dataGridView2, startBtn, trackBar1, pictureBoxVideo, videoPath, createTime, maxFrameNum, analysisFPS, minTrackingLength, clusterNum, outputFrameNum); //ObjList setting
             rapidFunc();
             overlayModule = new Thread(() => rapidRun());
             overlayModule.Start();
@@ -120,8 +121,8 @@ namespace RapidCheck
                 }
                 else if (myRapidModule[idx].Method.ToString() == "Void objCount()")
                 {
-                    labelCarCnt.Text = "Car : " + rapidCheck.carTotal;
-                    labelPeopleCnt.Text = "People : " + rapidCheck.peopleTotal;
+                    labelCarCnt.Text = rapidCheck.carTotal.ToString();
+                    labelPeopleCnt.Text = rapidCheck.peopleTotal.ToString();
                 }
             }
         }
@@ -268,8 +269,6 @@ namespace RapidCheck
             buttonColor7.Enabled = true;
             buttonColor8.Enabled = true;
             buttonColor9.Enabled = true;
-            pictureBoxTargetPeople.Image = peopleImgOn;
-            pictureBoxTargetCar.Image = carImgOn;
         }
         //------------------------------Read video EVENT------------------------------
         private void buttonReadFile_Click(object sender, EventArgs e)
@@ -284,7 +283,7 @@ namespace RapidCheck
                 videoFilePath.Filter = "All Files (*.*)|*.*";
                 videoFilePath.FilterIndex = 1;
                 videoFilePath.Multiselect = true;
-                videoFilePath.InitialDirectory = @"C:\videos";
+                videoFilePath.InitialDirectory = @"C:\videos\video";
                 if (videoFilePath.ShowDialog() == DialogResult.OK)
                 {
                     videoPath = videoFilePath.FileName;
@@ -304,11 +303,14 @@ namespace RapidCheck
         private void trackBar1_MouseDown(object sender, MouseEventArgs e)
         {
             trackBar1.Value = Convert.ToInt32(1.0 * trackBar1.Maximum * e.Location.X / trackBar1.Width);
-            MessageBox.Show(trackBar1.Value.ToString());
+            //MessageBox.Show(trackBar1.Value.ToString());
         }
         private void trackBar1_ValueChanged(object sender, EventArgs e)
         {
             rapidCheck.resFrame = trackBar1.Value;
+            int min = rapidCheck.resFrame / rapidCheck.analysisFPS / 60;
+            int sec = rapidCheck.resFrame / rapidCheck.analysisFPS % 60;
+            labelCurrentTime.Text =  min.ToString("00") + ":" + sec.ToString("00");
             //rapidCheck.overlayObjIdx = trackBar1.Value;
             rapidCheck.overlayObjIdx = 0;
         }
@@ -764,8 +766,12 @@ namespace RapidCheck
             {
                 rapidCheck.conditionTarget = "and classId = 0";
             }
+            else
+            {
+                rapidCheck.conditionTarget = "";
+            }
             //color
-            double colorThres = 0.2;
+            double colorThres = 0.25;
             switch (colorPosition)
             {
                 case 0:
@@ -803,7 +809,7 @@ namespace RapidCheck
                     break;
             }
             //direction
-            double directionThres = 0.3, speedThres = 0.2;
+            double directionThres = 0.2, speedThres = 0.2;
             switch (directionPosition)
             {
                 case 1:
@@ -912,6 +918,8 @@ namespace RapidCheck
         private void trackBar2_ValueChanged(object sender, EventArgs e)
         {
             labelDensity.Text = trackBar2.Value.ToString();
+            if(outputFrameNum == 1500) //임시적으로..
+                rapidCheck.clusterNum = trackBar2.Value;
         }
 
         private void buttonTraining_Click(object sender, EventArgs e)

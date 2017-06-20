@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.materialTabControl1 = new MaterialSkin.Controls.MaterialTabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.panelObject = new System.Windows.Forms.Panel();
@@ -41,6 +41,9 @@
             this.Column2 = new System.Windows.Forms.DataGridViewImageColumn();
             this.panelVideo = new System.Windows.Forms.Panel();
             this.panelVideoControl = new System.Windows.Forms.Panel();
+            this.label5 = new System.Windows.Forms.Label();
+            this.labelCurrentTime = new System.Windows.Forms.Label();
+            this.labelEndTime = new System.Windows.Forms.Label();
             this.pictureBoxStart = new System.Windows.Forms.PictureBox();
             this.pictureBoxSpeed4 = new System.Windows.Forms.PictureBox();
             this.pictureBoxSpeed2 = new System.Windows.Forms.PictureBox();
@@ -101,6 +104,17 @@
             this.videoPanel = new System.Windows.Forms.Panel();
             this.axWindowsMediaPlayer1 = new AxWMPLib.AxWindowsMediaPlayer();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.labelVideoInfo3 = new System.Windows.Forms.Label();
+            this.labelVideoInfo1 = new System.Windows.Forms.Label();
+            this.labelVideoInfo2 = new System.Windows.Forms.Label();
+            this.panel6 = new System.Windows.Forms.Panel();
+            this.labelPeopleCnt = new System.Windows.Forms.Label();
+            this.pictureBox7 = new System.Windows.Forms.PictureBox();
+            this.panel5 = new System.Windows.Forms.Panel();
+            this.labelCarCnt = new System.Windows.Forms.Label();
+            this.pictureBox6 = new System.Windows.Forms.PictureBox();
             this.panelPieChart = new System.Windows.Forms.Panel();
             this.plotViewPie1 = new OxyPlot.WindowsForms.PlotView();
             this.plotViewPie2 = new OxyPlot.WindowsForms.PlotView();
@@ -118,15 +132,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.panel5 = new System.Windows.Forms.Panel();
-            this.labelCarCnt = new System.Windows.Forms.Label();
-            this.pictureBox6 = new System.Windows.Forms.PictureBox();
-            this.pictureBox7 = new System.Windows.Forms.PictureBox();
-            this.labelPeopleCnt = new System.Windows.Forms.Label();
-            this.panel6 = new System.Windows.Forms.Panel();
-            this.labelVideoInfo1 = new System.Windows.Forms.Label();
-            this.labelVideoInfo2 = new System.Windows.Forms.Label();
-            this.labelVideoInfo3 = new System.Windows.Forms.Label();
             this.materialTabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.panelObject.SuspendLayout();
@@ -173,16 +178,18 @@
             this.videoPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).BeginInit();
             this.tabPage1.SuspendLayout();
+            this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+            this.panel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
+            this.panel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
             this.panelPieChart.SuspendLayout();
             this.panelBarChart.SuspendLayout();
             this.panelLineChart.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.panelWebbrowser.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
-            this.panel5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).BeginInit();
-            this.panel6.SuspendLayout();
             this.SuspendLayout();
             // 
             // materialTabControl1
@@ -314,6 +321,9 @@
             // panelVideoControl
             // 
             this.panelVideoControl.BackColor = System.Drawing.Color.White;
+            this.panelVideoControl.Controls.Add(this.label5);
+            this.panelVideoControl.Controls.Add(this.labelCurrentTime);
+            this.panelVideoControl.Controls.Add(this.labelEndTime);
             this.panelVideoControl.Controls.Add(this.pictureBoxStart);
             this.panelVideoControl.Controls.Add(this.pictureBoxSpeed4);
             this.panelVideoControl.Controls.Add(this.pictureBoxSpeed2);
@@ -323,6 +333,36 @@
             this.panelVideoControl.Name = "panelVideoControl";
             this.panelVideoControl.Size = new System.Drawing.Size(1258, 104);
             this.panelVideoControl.TabIndex = 4;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.label5.Location = new System.Drawing.Point(1162, 60);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(13, 20);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "/";
+            // 
+            // labelCurrentTime
+            // 
+            this.labelCurrentTime.AutoSize = true;
+            this.labelCurrentTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.labelCurrentTime.Location = new System.Drawing.Point(1108, 60);
+            this.labelCurrentTime.Name = "labelCurrentTime";
+            this.labelCurrentTime.Size = new System.Drawing.Size(49, 20);
+            this.labelCurrentTime.TabIndex = 10;
+            this.labelCurrentTime.Text = "00:00";
+            // 
+            // labelEndTime
+            // 
+            this.labelEndTime.AutoSize = true;
+            this.labelEndTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.labelEndTime.Location = new System.Drawing.Point(1180, 60);
+            this.labelEndTime.Name = "labelEndTime";
+            this.labelEndTime.Size = new System.Drawing.Size(49, 20);
+            this.labelEndTime.TabIndex = 9;
+            this.labelEndTime.Text = "00:00";
             // 
             // pictureBoxStart
             // 
@@ -338,7 +378,7 @@
             // pictureBoxSpeed4
             // 
             this.pictureBoxSpeed4.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpeed4.Image")));
-            this.pictureBoxSpeed4.Location = new System.Drawing.Point(1181, 52);
+            this.pictureBoxSpeed4.Location = new System.Drawing.Point(122, 54);
             this.pictureBoxSpeed4.Name = "pictureBoxSpeed4";
             this.pictureBoxSpeed4.Size = new System.Drawing.Size(30, 30);
             this.pictureBoxSpeed4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -349,7 +389,7 @@
             // pictureBoxSpeed2
             // 
             this.pictureBoxSpeed2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpeed2.Image")));
-            this.pictureBoxSpeed2.Location = new System.Drawing.Point(1135, 52);
+            this.pictureBoxSpeed2.Location = new System.Drawing.Point(76, 54);
             this.pictureBoxSpeed2.Name = "pictureBoxSpeed2";
             this.pictureBoxSpeed2.Size = new System.Drawing.Size(30, 30);
             this.pictureBoxSpeed2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -360,7 +400,7 @@
             // pictureBoxSpeed1
             // 
             this.pictureBoxSpeed1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxSpeed1.Image")));
-            this.pictureBoxSpeed1.Location = new System.Drawing.Point(1089, 52);
+            this.pictureBoxSpeed1.Location = new System.Drawing.Point(30, 54);
             this.pictureBoxSpeed1.Name = "pictureBoxSpeed1";
             this.pictureBoxSpeed1.Size = new System.Drawing.Size(30, 30);
             this.pictureBoxSpeed1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -395,10 +435,11 @@
             // 
             // pictureBoxProgress
             // 
+            this.pictureBoxProgress.BackColor = System.Drawing.Color.Gray;
             this.pictureBoxProgress.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxProgress.Image")));
-            this.pictureBoxProgress.Location = new System.Drawing.Point(600, 563);
+            this.pictureBoxProgress.Location = new System.Drawing.Point(595, 552);
             this.pictureBoxProgress.Name = "pictureBoxProgress";
-            this.pictureBoxProgress.Size = new System.Drawing.Size(38, 38);
+            this.pictureBoxProgress.Size = new System.Drawing.Size(60, 60);
             this.pictureBoxProgress.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBoxProgress.TabIndex = 3;
             this.pictureBoxProgress.TabStop = false;
@@ -408,11 +449,11 @@
             // 
             this.labelProgress.AutoSize = true;
             this.labelProgress.BackColor = System.Drawing.Color.DimGray;
-            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.labelProgress.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
             this.labelProgress.ForeColor = System.Drawing.Color.Black;
-            this.labelProgress.Location = new System.Drawing.Point(552, 626);
+            this.labelProgress.Location = new System.Drawing.Point(560, 626);
             this.labelProgress.Name = "labelProgress";
-            this.labelProgress.Size = new System.Drawing.Size(0, 25);
+            this.labelProgress.Size = new System.Drawing.Size(0, 22);
             this.labelProgress.TabIndex = 2;
             // 
             // pictureBoxVideo
@@ -485,7 +526,7 @@
             // buttonColor9
             // 
             this.buttonColor9.BackColor = System.Drawing.Color.Black;
-            this.buttonColor9.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.buttonColor9.FlatAppearance.BorderColor = System.Drawing.Color.White;
             this.buttonColor9.FlatAppearance.BorderSize = 0;
             this.buttonColor9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor9.Location = new System.Drawing.Point(87, 203);
@@ -576,7 +617,7 @@
             // buttonColor1
             // 
             this.buttonColor1.BackColor = System.Drawing.Color.Gold;
-            this.buttonColor1.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonColor1.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             this.buttonColor1.FlatAppearance.BorderSize = 0;
             this.buttonColor1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonColor1.Location = new System.Drawing.Point(87, 15);
@@ -1041,9 +1082,7 @@
             // tabPage1
             // 
             this.tabPage1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tabPage1.BackgroundImage")));
-            this.tabPage1.Controls.Add(this.labelVideoInfo3);
-            this.tabPage1.Controls.Add(this.labelVideoInfo2);
-            this.tabPage1.Controls.Add(this.labelVideoInfo1);
+            this.tabPage1.Controls.Add(this.panel1);
             this.tabPage1.Controls.Add(this.panel6);
             this.tabPage1.Controls.Add(this.panel5);
             this.tabPage1.Controls.Add(this.panelPieChart);
@@ -1056,6 +1095,115 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.pictureBox5);
+            this.panel1.Controls.Add(this.labelVideoInfo3);
+            this.panel1.Controls.Add(this.labelVideoInfo1);
+            this.panel1.Controls.Add(this.labelVideoInfo2);
+            this.panel1.Location = new System.Drawing.Point(963, 94);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(807, 63);
+            this.panel1.TabIndex = 9;
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pictureBox5.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox5.Image")));
+            this.pictureBox5.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(77, 63);
+            this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox5.TabIndex = 0;
+            this.pictureBox5.TabStop = false;
+            // 
+            // labelVideoInfo3
+            // 
+            this.labelVideoInfo3.AutoSize = true;
+            this.labelVideoInfo3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.labelVideoInfo3.Location = new System.Drawing.Point(581, 2);
+            this.labelVideoInfo3.Name = "labelVideoInfo3";
+            this.labelVideoInfo3.Size = new System.Drawing.Size(0, 17);
+            this.labelVideoInfo3.TabIndex = 8;
+            // 
+            // labelVideoInfo1
+            // 
+            this.labelVideoInfo1.AutoSize = true;
+            this.labelVideoInfo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.labelVideoInfo1.Location = new System.Drawing.Point(104, 0);
+            this.labelVideoInfo1.Name = "labelVideoInfo1";
+            this.labelVideoInfo1.Size = new System.Drawing.Size(0, 17);
+            this.labelVideoInfo1.TabIndex = 7;
+            // 
+            // labelVideoInfo2
+            // 
+            this.labelVideoInfo2.AutoSize = true;
+            this.labelVideoInfo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
+            this.labelVideoInfo2.Location = new System.Drawing.Point(362, 0);
+            this.labelVideoInfo2.Name = "labelVideoInfo2";
+            this.labelVideoInfo2.Size = new System.Drawing.Size(0, 17);
+            this.labelVideoInfo2.TabIndex = 7;
+            // 
+            // panel6
+            // 
+            this.panel6.Controls.Add(this.labelPeopleCnt);
+            this.panel6.Controls.Add(this.pictureBox7);
+            this.panel6.Location = new System.Drawing.Point(555, 94);
+            this.panel6.Name = "panel6";
+            this.panel6.Size = new System.Drawing.Size(191, 64);
+            this.panel6.TabIndex = 5;
+            // 
+            // labelPeopleCnt
+            // 
+            this.labelPeopleCnt.AutoSize = true;
+            this.labelPeopleCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.labelPeopleCnt.Location = new System.Drawing.Point(44, 24);
+            this.labelPeopleCnt.Name = "labelPeopleCnt";
+            this.labelPeopleCnt.Size = new System.Drawing.Size(23, 25);
+            this.labelPeopleCnt.TabIndex = 1;
+            this.labelPeopleCnt.Text = "0";
+            // 
+            // pictureBox7
+            // 
+            this.pictureBox7.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
+            this.pictureBox7.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox7.Name = "pictureBox7";
+            this.pictureBox7.Size = new System.Drawing.Size(38, 64);
+            this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox7.TabIndex = 3;
+            this.pictureBox7.TabStop = false;
+            // 
+            // panel5
+            // 
+            this.panel5.Controls.Add(this.labelCarCnt);
+            this.panel5.Controls.Add(this.pictureBox6);
+            this.panel5.Location = new System.Drawing.Point(256, 94);
+            this.panel5.Name = "panel5";
+            this.panel5.Size = new System.Drawing.Size(182, 64);
+            this.panel5.TabIndex = 6;
+            // 
+            // labelCarCnt
+            // 
+            this.labelCarCnt.AutoSize = true;
+            this.labelCarCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
+            this.labelCarCnt.Location = new System.Drawing.Point(79, 24);
+            this.labelCarCnt.Name = "labelCarCnt";
+            this.labelCarCnt.Size = new System.Drawing.Size(23, 25);
+            this.labelCarCnt.TabIndex = 1;
+            this.labelCarCnt.Text = "0";
+            // 
+            // pictureBox6
+            // 
+            this.pictureBox6.Dock = System.Windows.Forms.DockStyle.Left;
+            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
+            this.pictureBox6.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox6.Name = "pictureBox6";
+            this.pictureBox6.Size = new System.Drawing.Size(73, 64);
+            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox6.TabIndex = 2;
+            this.pictureBox6.TabStop = false;
             // 
             // panelPieChart
             // 
@@ -1230,93 +1378,6 @@
             this.imageList1.Images.SetKeyName(0, "base.png");
             this.imageList1.Images.SetKeyName(1, "base2.png");
             // 
-            // panel5
-            // 
-            this.panel5.Controls.Add(this.labelCarCnt);
-            this.panel5.Controls.Add(this.pictureBox6);
-            this.panel5.Location = new System.Drawing.Point(144, 93);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(182, 64);
-            this.panel5.TabIndex = 6;
-            // 
-            // labelCarCnt
-            // 
-            this.labelCarCnt.AutoSize = true;
-            this.labelCarCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.labelCarCnt.Location = new System.Drawing.Point(79, 24);
-            this.labelCarCnt.Name = "labelCarCnt";
-            this.labelCarCnt.Size = new System.Drawing.Size(23, 25);
-            this.labelCarCnt.TabIndex = 1;
-            this.labelCarCnt.Text = "0";
-            // 
-            // pictureBox6
-            // 
-            this.pictureBox6.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pictureBox6.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox6.Image")));
-            this.pictureBox6.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox6.Name = "pictureBox6";
-            this.pictureBox6.Size = new System.Drawing.Size(73, 64);
-            this.pictureBox6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox6.TabIndex = 2;
-            this.pictureBox6.TabStop = false;
-            // 
-            // pictureBox7
-            // 
-            this.pictureBox7.Dock = System.Windows.Forms.DockStyle.Left;
-            this.pictureBox7.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox7.Image")));
-            this.pictureBox7.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox7.Name = "pictureBox7";
-            this.pictureBox7.Size = new System.Drawing.Size(38, 64);
-            this.pictureBox7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox7.TabIndex = 3;
-            this.pictureBox7.TabStop = false;
-            // 
-            // labelPeopleCnt
-            // 
-            this.labelPeopleCnt.AutoSize = true;
-            this.labelPeopleCnt.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F);
-            this.labelPeopleCnt.Location = new System.Drawing.Point(44, 24);
-            this.labelPeopleCnt.Name = "labelPeopleCnt";
-            this.labelPeopleCnt.Size = new System.Drawing.Size(23, 25);
-            this.labelPeopleCnt.TabIndex = 1;
-            this.labelPeopleCnt.Text = "0";
-            // 
-            // panel6
-            // 
-            this.panel6.Controls.Add(this.labelPeopleCnt);
-            this.panel6.Controls.Add(this.pictureBox7);
-            this.panel6.Location = new System.Drawing.Point(357, 93);
-            this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(191, 64);
-            this.panel6.TabIndex = 5;
-            // 
-            // labelVideoInfo1
-            // 
-            this.labelVideoInfo1.AutoSize = true;
-            this.labelVideoInfo1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.labelVideoInfo1.Location = new System.Drawing.Point(667, 93);
-            this.labelVideoInfo1.Name = "labelVideoInfo1";
-            this.labelVideoInfo1.Size = new System.Drawing.Size(0, 17);
-            this.labelVideoInfo1.TabIndex = 7;
-            // 
-            // labelVideoInfo2
-            // 
-            this.labelVideoInfo2.AutoSize = true;
-            this.labelVideoInfo2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.labelVideoInfo2.Location = new System.Drawing.Point(931, 93);
-            this.labelVideoInfo2.Name = "labelVideoInfo2";
-            this.labelVideoInfo2.Size = new System.Drawing.Size(0, 17);
-            this.labelVideoInfo2.TabIndex = 7;
-            // 
-            // labelVideoInfo3
-            // 
-            this.labelVideoInfo3.AutoSize = true;
-            this.labelVideoInfo3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F);
-            this.labelVideoInfo3.Location = new System.Drawing.Point(1083, 93);
-            this.labelVideoInfo3.Name = "labelVideoInfo3";
-            this.labelVideoInfo3.Size = new System.Drawing.Size(0, 17);
-            this.labelVideoInfo3.TabIndex = 8;
-            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1386,7 +1447,15 @@
             this.videoPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer1)).EndInit();
             this.tabPage1.ResumeLayout(false);
-            this.tabPage1.PerformLayout();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+            this.panel6.ResumeLayout(false);
+            this.panel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
+            this.panel5.ResumeLayout(false);
+            this.panel5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
             this.panelPieChart.ResumeLayout(false);
             this.panelBarChart.ResumeLayout(false);
             this.panelLineChart.ResumeLayout(false);
@@ -1394,12 +1463,6 @@
             this.tabPage4.PerformLayout();
             this.panelWebbrowser.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox7)).EndInit();
-            this.panel6.ResumeLayout(false);
-            this.panel6.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1501,6 +1564,11 @@
         private System.Windows.Forms.Label labelVideoInfo2;
         private System.Windows.Forms.Label labelVideoInfo1;
         private System.Windows.Forms.Label labelVideoInfo3;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.PictureBox pictureBox5;
+        private System.Windows.Forms.Label labelEndTime;
+        private System.Windows.Forms.Label labelCurrentTime;
+        private System.Windows.Forms.Label label5;
     }
 }
 

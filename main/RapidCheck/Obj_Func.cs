@@ -33,6 +33,7 @@ namespace RapidCheck
         }
         public double[] getStartingPoint()
         {
+            //int index = cropAreas.Count-1;
             int XWidth = cropAreas[0].X + cropAreas[0].Width;
             int YHeight = cropAreas[0].Y + cropAreas[0].Height;
             double[] ret = {XWidth, YHeight};
