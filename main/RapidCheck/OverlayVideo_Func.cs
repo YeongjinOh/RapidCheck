@@ -516,7 +516,7 @@ namespace RapidCheck
             int applyClusterNum = clusterNum;
             if (applyClusterNum > objectidList.Count)
                 applyClusterNum = objectidList.Count;
-            var kmeas = new KMeans(k: applyClusterNum);
+            var kmeans = new KMeans(k: applyClusterNum);
             double[][] points = new double[objectidList.Count][];
 
             for (int i = 0; i < objectidList.Count; i++)
@@ -524,15 +524,39 @@ namespace RapidCheck
                 int id = objectidList[i];
                 points[i] = ObjList[idxbyObjid[id]].getStartingPoint();
             }
-            KMeansClusterCollection clusters = kmeas.Learn(points);
+            KMeansClusterCollection clusters = kmeans.Learn(points);
             int[] output = clusters.Decide(points);
 
             setStartingGroup();
+            int maxClusterLength = objectidList.Count / applyClusterNum;
+            MessageBox.Show(maxClusterLength.ToString());
             for (int i = 0; i < objectidList.Count; i++)
             {
                 int id = objectidList[i];
-                startingGroup[output[i]].Add(id);
+                //startingGroup[output[i]].Add(id);
+                
+                if(startingGroup[output[i]].idList.Count < maxClusterLength)
+                {
+                    startingGroup[output[i]].Add(id);
+                }
+                else
+                {
+                    for (int j = output[i]; j < applyClusterNum + output[i]; j++)
+                    {
+                        if (startingGroup[(j+1)%applyClusterNum].idList.Count < maxClusterLength)
+                        {
+                            startingGroup[(j + 1) % applyClusterNum].Add(id);
+                            break;
+                        }
+                    }
+                }
+                //^
             }
+            for ( int i = 0 ; i < startingGroup.Count ; i ++)
+            {
+                MessageBox.Show("id : " + startingGroup[i].idList.Count);
+            }
+
             //sort
             int maxFrameLength = 0;
             for (int k = 0; k < startingGroup.Count; k++)
@@ -542,9 +566,15 @@ namespace RapidCheck
                 if (maxFrameLength < curFrameLength)
                     maxFrameLength = curFrameLength;
             }
-            //set maxFrmae
-            //MessageBox.Show(overlayFrameNum.ToString());
-            outputFrameNum = trackingBar.Maximum = maxFrameLength - 1;
+
+            for (int k = 0; k < startingGroup.Count; k ++)
+            {
+                MessageBox.Show("frame lenth : " + startingGroup[k].lengthList.Sum());
+            }
+
+                //set maxFrmae
+                //MessageBox.Show(overlayFrameNum.ToString());
+                outputFrameNum = trackingBar.Maximum = maxFrameLength - 1;
             if (videoInfo3Flag == true)
                 strVideoInfo3 += "\nresult Frame: " + outputFrameNum;
             videoInfo3Flag = false;

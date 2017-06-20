@@ -8,12 +8,11 @@ namespace RapidCheck
 {
     class StartingGroup
     {
-        private List<int> idList;
-        private List<int> lengthList;
+        public List<int> idList { get; set; }
+        public List<int> lengthList{get;set;}
         private int currentidPosition; //0 ~ image length
         private int currentIndex; //index of id list
-        
-
+  
         public StartingGroup() 
         {
             idList = new List<int>();
