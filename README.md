@@ -41,7 +41,7 @@
 ![Detection Loss](/images_md/loss_in_detection.png)
 
  RapidCheck Detection Engine Result Example:
- [![Detection Compare](/images_md/RAPIDCHECK_LOGO.png)](https://youtu.be/Yrecnsmwgqg)]
+ [![Detection Compare](/images_md/detection_compare.png)](https://youtu.be/Yrecnsmwgqg)]
  Left : General VOC Data Learned model
  Right : RCNet Trained on CCTV Domain
 
