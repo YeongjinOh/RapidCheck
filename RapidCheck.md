@@ -18,7 +18,9 @@
 
  We use deep a learning algorithm to detect objects. Our CNN model is described as follows:
 
-! [CNN Architecture](http://imgur.com/a/L1bEQ)
+! [CNN Architecture](https://pasteboard.co/1RSG4VnYv.png)
+
+
 
 
 
