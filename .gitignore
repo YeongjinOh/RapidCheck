@@ -11,6 +11,8 @@
 
 *.avi
 
+!images_md/*.png
+
 # js environments
 .env
 venvOpencv/

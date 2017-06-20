@@ -18,7 +18,7 @@
 
  We use deep a learning algorithm to detect objects. Our CNN model is described as follows:
 
-! [CNN Architecture]
+! [CNN Architecture](/images_md/rcnet_arch.png)
 
 ##### Dependencies
 
