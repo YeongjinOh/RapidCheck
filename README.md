@@ -34,11 +34,16 @@
 
  conv3
 
-![look last layer](/images_md/vis_conv_last_.png)
+![look last layer](/images_md/vis_conv_last.png)
 
   The last layer output. Each note include many dimensions of infomation. The role of merge these infomation is **Detection Layer** as follows:
 
 ![Detection Loss](/images_md/loss_in_detection.png)
+
+ RapidCheck Detection Engine Result Example:
+ [![Detection Compare](/images_md/RAPIDCHECK_LOGO.png)](https://youtu.be/Yrecnsmwgqg)]
+ Left : General VOC Data Learned model
+ Right : RCNet Trained on CCTV Domain
 
 ##### Dependencies
 
