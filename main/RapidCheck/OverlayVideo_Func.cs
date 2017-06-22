@@ -70,7 +70,9 @@ namespace RapidCheck
                         {
                             // TODO : read config file and change file path relatively
                             string pro = @"C:\Users\SoMa\Anaconda3\envs\venvJupyter\python.exe";
+                            //string modelPath = @"dropbox\models\train\rcnet-2class-base-from-voctrain\578793-200-steps8000.h5";
                             string modelPath = @"dropbox\models\train\rcnet-2class-base-from-voctrain\mydata-reversed-trainval-steps96000.h5";
+                            //string modelPath = @"Dropbox\RapidCheck\models\train\rcnet-2class-base-from-voctrain\mydata-reversed-trainval-steps96000.h5";
                             string args = string.Format(@"C:\Users\SoMa\Desktop\RapidCheck\main\Detection_Engine\detection.py --videoId {0} --maxFrame {1} --videoPath {2} --frameSteps {3} --modelPath {4}", videoid, maxFrameNum, videoPath, frameStep, modelPath);
                             var p = new System.Diagnostics.Process();
                             p.StartInfo.FileName = pro;
@@ -529,7 +531,6 @@ namespace RapidCheck
 
             setStartingGroup();
             int maxClusterLength = objectidList.Count / applyClusterNum;
-            MessageBox.Show(maxClusterLength.ToString());
             for (int i = 0; i < objectidList.Count; i++)
             {
                 int id = objectidList[i];
@@ -552,10 +553,6 @@ namespace RapidCheck
                 }
                 //^
             }
-            for ( int i = 0 ; i < startingGroup.Count ; i ++)
-            {
-                MessageBox.Show("id : " + startingGroup[i].idList.Count);
-            }
 
             //sort
             int maxFrameLength = 0;
@@ -566,12 +563,6 @@ namespace RapidCheck
                 if (maxFrameLength < curFrameLength)
                     maxFrameLength = curFrameLength;
             }
-
-            for (int k = 0; k < startingGroup.Count; k ++)
-            {
-                MessageBox.Show("frame lenth : " + startingGroup[k].lengthList.Sum());
-            }
-
                 //set maxFrmae
                 //MessageBox.Show(overlayFrameNum.ToString());
                 outputFrameNum = trackingBar.Maximum = maxFrameLength - 1;
@@ -631,6 +622,7 @@ namespace RapidCheck
         public void overlayLive()
         {
             //background = new Bitmap(@"C:\videos\0.png");
+            
             Graphics gs = pictureBoxVideo.CreateGraphics();
             int drawWidth = pictureBoxVideo.Width;
             int drawHeight = pictureBoxVideo.Height;
@@ -700,8 +692,8 @@ namespace RapidCheck
                 BitCopy.Dispose();
             }
             // MessageBox.Show("Closed");
-            gs.Dispose();
-            reader.Close();
+            //gs.Dispose();
+            //reader.Close();
         }
 
         //******************************SubFunction******************************        
@@ -777,7 +769,7 @@ namespace RapidCheck
                                 {
                                     diffBmp.SetPixel(x, y, color2);
                                 }
-                                
+                              
                             }
                         }
                         //draw

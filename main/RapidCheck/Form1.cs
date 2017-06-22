@@ -153,12 +153,37 @@ namespace RapidCheck
         //------------------------------UI SETTING------------------------------
         private void defaultColor()
         {
-            Color background = Color.FromArgb(35, 144, 182);
+            int style = 1;
+            Color background;
+            Color module;
+            Color conditionModule;
+            Color conditionModuleTable;
+            if(style == 1)
+            {
+                background = Color.FromArgb(35, 144, 182);
+                module = Color.FromArgb(171, 219, 248);
+                conditionModule = Color.FromArgb(64, 127, 149);
+                conditionModuleTable = Color.FromArgb(105, 180, 203);
+            }
+            else if(style == 2)
+            {
+                background = Color.WhiteSmoke;
+                module = Color.FloralWhite;
+                conditionModule = Color.Gray;
+                conditionModuleTable = Color.DarkGray;
+            }
+            else
+            {
+                background = Color.FromArgb(45,45,48);
+                module = Color.FromArgb(37,37,38);
+                conditionModule = Color.FromArgb(51, 51, 54);
+                conditionModuleTable = Color.FromArgb(30, 30, 30);
+                //pictureBoxVideo.BackColor = Color.FromArgb(30, 30, 30);
+            }
             panelVideo.BackColor = background;
             panelCondition.BackColor = background;
             panelObject.BackColor = background;
 
-            Color module = Color.FromArgb(171, 219, 248);
             panelConditionModule.BackColor = module;
             panelVideoControl.BackColor = module;
             trackBar1.BackColor = module;
@@ -166,14 +191,12 @@ namespace RapidCheck
             dataGridView1.BackgroundColor = module;
             dataGridView2.BackgroundColor = module;
 
-            Color conditionModule = Color.FromArgb(64, 127, 149);
             panelColor.BackColor = conditionModule;
             panelDensity.BackColor = conditionModule;
             panelDirection.BackColor = conditionModule;
             panelFile.BackColor = conditionModule;
             panelTarget.BackColor = conditionModule;
 
-            Color conditionModuleTable = Color.FromArgb(105, 180, 203);
             panelDensityTable.BackColor = conditionModuleTable;
             panelDirectionTable.BackColor = conditionModuleTable;
             panelColorTable.BackColor = conditionModuleTable;
@@ -283,7 +306,7 @@ namespace RapidCheck
                 videoFilePath.Filter = "All Files (*.*)|*.*";
                 videoFilePath.FilterIndex = 1;
                 videoFilePath.Multiselect = true;
-                videoFilePath.InitialDirectory = @"C:\videos\video";
+                videoFilePath.InitialDirectory = @"C:\videos";
                 if (videoFilePath.ShowDialog() == DialogResult.OK)
                 {
                     videoPath = videoFilePath.FileName;
@@ -971,6 +994,11 @@ namespace RapidCheck
                 textBoxTrainLog.SelectionStart = textBoxTrainLog.TextLength;
                 textBoxTrainLog.ScrollToCaret();
             }
+        }
+
+        private void plotViewBar_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

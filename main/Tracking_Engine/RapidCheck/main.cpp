@@ -14,8 +14,8 @@ using namespace rc;
 
 void initRCVariables()
 {
-	int id = 0;
-	char *filepaths[] = { "C:/videos/video_147254_test.avi", "C:/videos/video_439532_test.mp4", "C:/videos/video_166497_test.mp4", "C:/videos/video_716195_test.mp4" };
+	int id = 4;
+	char *filepaths[] = { "C:/videos/video_147254_test.avi", "C:/videos/video_439532_test.mp4", "C:/videos/video_166497_test.mp4", "C:/videos/video_716195_test.mp4" , "video_578793_test.avi"};
 	filepath = filepaths[id];
 	videoId = 700+id;
 	startFrameNum = 0;
@@ -28,8 +28,7 @@ void initRCVariables()
 int main(int argc, char ** argv)
 {
 	initRCVariables();
-	int operationNum = 8;
-
+	int operationNum = 1;
 	// assign arguments
 	for (int i = 1; i < argc; i++)
 	{
