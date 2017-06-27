@@ -11,12 +11,12 @@ import os
 ### Pretrained Source Weights Model Path
 # pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14', 'from-cell14base-mydata-steps100000.h5')
 # pretrained_model = os.path.join('models', 'train', 'yolo-2class-cell14-voc-dropout', 'dropout-mydata-train-steps8000.h5')
-pretrained_model = os.path.join('dropbox', 'models', 'train', 'yolo-2class-cell14-voctrain', 'yolo-2class-voc2007-train-cell14-steps40000.h5')
+pretrained_model = os.path.join('dropbox', 'models', 'train', 'rcnet-2class-base-from-voctrain', 'mydata-reversed-trainval-steps96000.h5')
 
 ### New Training Model Folder and Name Path
 model_folder = os.path.join('models', 'train', 'rcnet-2class-base-from-voctrain')
 # model_name = 'mydata-reversed-trainval-dropout'
-model_name = 'trainrates07-pet7added'
+model_name = 'mydata-include-578793'
 
 ### Detected Classes Name List
 classes_name = ["car", "person"]
@@ -70,7 +70,7 @@ trainer='adam'
 image_dim_order = 'th'
 norm_type = 'scale_down'
 
-descriptions = "2017-06-17\n\
+descriptions = "2017-06-20\n\
 cell size : {}\n\
 num_classes : {}\n\
 boxes_per_cell : {}\n\
